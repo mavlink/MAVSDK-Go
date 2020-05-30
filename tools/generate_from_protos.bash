@@ -41,9 +41,9 @@ echo "-------------------------------"
 echo "Generating pb and grpc.pb files"
 echo "-------------------------------"
 
-GO_GEN_CMD=""
-GO_GEN_RPC_CMD=""
+GO_GEN_CMD="/go/bin/protoc-gen-go"
+GO_GEN_RPC_CMD="/go/bin/protoc-gen-gogrpc"
 
 for plugin in ${PLUGIN_LIST}; do
-    protoc ${PROTO_DIR}/${plugin}.proto -I${PROTO_DIR}/${plugin} --go_out=${OUTPUT_DIR} --gogrpc_out=${OUTPUT_DIR} --plugin=protoc-gen-go=${GO_GEN_CMD} --plugin=protoc-gen-gogrpc=${GO_GEN_RPC_CMD}
+    protoc ${plugin}.proto -I${PROTO_DIR}/${plugin} --go_out=${OUTPUT_DIR} --gogrpc_out=${OUTPUT_DIR} --plugin=protoc-gen-go=${GO_GEN_CMD} --plugin=protoc-gen-gogrpc=${GO_GEN_RPC_CMD}
 done
