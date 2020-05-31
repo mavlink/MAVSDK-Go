@@ -16,9 +16,9 @@ mkdir -p ${PROTO_DIR_TMP}
 cp -r ${PROTO_DIR}/* ${PROTO_DIR_TMP}
 
 for plugin in ${PLUGIN_LIST}; do
-    sed -i "/java_package.*/a option go_package = \".;io_mavsdk_$plugin\";" ${PROTO_DIR_TMP}/$plugin/$plugin.proto
+    sed -i "/java_package.*/a option go_package = \".;mavsdkgo\";" ${PROTO_DIR_TMP}/$plugin/$plugin.proto
     cp ${PROTO_DIR_TMP}/mavsdk_options.proto ${PROTO_DIR_TMP}/$plugin/mavsdk_options.proto 
-    sed -i "/java_package.*/a option go_package = \".;io_mavsdk_$plugin\";" ${PROTO_DIR_TMP}/$plugin/mavsdk_options.proto
+    sed -i "/java_package.*/a option go_package = \".;mavsdkgo\";" ${PROTO_DIR_TMP}/$plugin/mavsdk_options.proto
 done
 
 PROTO_DIR=${PROTO_DIR_TMP}

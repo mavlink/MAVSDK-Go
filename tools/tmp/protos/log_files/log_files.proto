@@ -5,7 +5,7 @@ package mavsdk.rpc.log_files;
 import "mavsdk_options.proto";
 
 option java_package = "io.mavsdk.log_files";
-option go_package = ".;io_mavsdk_log_files";
+option go_package = ".;mavsdkgo";
 option java_outer_classname = "LogFilesProto";
 
 // Allow to download log files from the vehicle after a flight is complete.

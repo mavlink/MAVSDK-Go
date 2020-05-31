@@ -3,7 +3,7 @@ syntax = "proto3";
 package mavsdk.rpc.core;
 
 option java_package = "io.mavsdk.core";
-option go_package = ".;io_mavsdk_core";
+option go_package = ".;mavsdkgo";
 option java_outer_classname = "CoreProto";
 
 // Access to the connection state and running plugins.

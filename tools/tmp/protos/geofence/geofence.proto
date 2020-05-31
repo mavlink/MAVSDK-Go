@@ -3,7 +3,7 @@ syntax = "proto3";
 package mavsdk.rpc.geofence;
 
 option java_package = "io.mavsdk.geofence";
-option go_package = ".;io_mavsdk_geofence";
+option go_package = ".;mavsdkgo";
 option java_outer_classname = "GeofenceProto";
 
 // Enable setting a geofence.
