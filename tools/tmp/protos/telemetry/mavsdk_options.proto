@@ -4,8 +4,7 @@ import "google/protobuf/descriptor.proto";
 
 package mavsdk.options;
 
-option java_package = "options.mavsdk";
-option go_package = ".;mavsdkgo";
+option go_package = ".;telemetry";
 
 extend google.protobuf.FieldOptions {
     string default_value = 50000;

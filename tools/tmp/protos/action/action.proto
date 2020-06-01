@@ -2,8 +2,7 @@ syntax = "proto3";
 
 package mavsdk.rpc.action;
 
-option java_package = "io.mavsdk.action";
-option go_package = ".;mavsdkgo";
+option go_package = ".;action";
 option java_outer_classname = "ActionProto";
 
 // Enable simple actions such as arming, taking off, and landing.

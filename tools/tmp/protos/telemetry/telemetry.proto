@@ -4,8 +4,7 @@ package mavsdk.rpc.telemetry;
 
 import "mavsdk_options.proto";
 
-option java_package = "io.mavsdk.telemetry";
-option go_package = ".;mavsdkgo";
+option go_package = ".;telemetry";
 option java_outer_classname = "TelemetryProto";
 
 /*

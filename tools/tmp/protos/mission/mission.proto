@@ -4,8 +4,7 @@ package mavsdk.rpc.mission;
 
 import "mavsdk_options.proto";
 
-option java_package = "io.mavsdk.mission";
-option go_package = ".;mavsdkgo";
+option go_package = ".;mission";
 option java_outer_classname = "MissionProto";
 
 // Enable waypoint missions.

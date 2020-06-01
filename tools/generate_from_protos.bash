@@ -6,7 +6,7 @@ command -v protoc || { echo >&2 "Protobuf needs to be installed (e.g. '$ apt ins
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROTO_DIR=${PROTO_DIR:-"${SCRIPT_DIR}/../proto/protos"}
-OUTPUT_DIR=${OUTPUT_DIR:-"${SCRIPT_DIR}/../Sources/MAVSDK-Go/Generated"}
+OUTPUT_DIR=${OUTPUT_DIR:-"${SCRIPT_DIR}/../Sources/"}
 PROTO_DIR_TMP=${PROTO_DIR_TMP:-"${SCRIPT_DIR}/tmp/protos"}
 
 
@@ -16,9 +16,9 @@ mkdir -p ${PROTO_DIR_TMP}
 cp -r ${PROTO_DIR}/* ${PROTO_DIR_TMP}
 
 for plugin in ${PLUGIN_LIST}; do
-    sed -i "/java_package.*/a option go_package = \".;mavsdkgo\";" ${PROTO_DIR_TMP}/$plugin/$plugin.proto
+    sed -i "/java_package.*/c option go_package = \".;${plugin}\";" ${PROTO_DIR_TMP}/$plugin/$plugin.proto
     cp ${PROTO_DIR_TMP}/mavsdk_options.proto ${PROTO_DIR_TMP}/$plugin/mavsdk_options.proto 
-    sed -i "/java_package.*/a option go_package = \".;mavsdkgo\";" ${PROTO_DIR_TMP}/$plugin/mavsdk_options.proto
+    sed -i "/java_package.*/c option go_package = \".;${plugin}\";" ${PROTO_DIR_TMP}/$plugin/mavsdk_options.proto
 done
 
 PROTO_DIR=${PROTO_DIR_TMP}
@@ -43,6 +43,6 @@ GO_GEN_CMD="/go/bin/protoc-gen-go"
 GO_GEN_RPC_CMD="/go/bin/protoc-gen-gogrpc"
 
 for plugin in ${PLUGIN_LIST}; do
-    protoc ${plugin}.proto -I${PROTO_DIR}/${plugin} --go_out=${OUTPUT_DIR} --gogrpc_out=${OUTPUT_DIR} --plugin=protoc-gen-go=${GO_GEN_CMD} --plugin=protoc-gen-gogrpc=${GO_GEN_RPC_CMD}
+    mkdir -p ${OUTPUT_DIR}/$plugin 
+    protoc ${plugin}.proto -I${PROTO_DIR}/$plugin --go_out=${OUTPUT_DIR}/$plugin --gogrpc_out=${OUTPUT_DIR}/$plugin --plugin=protoc-gen-go=${GO_GEN_CMD} --plugin=protoc-gen-gogrpc=${GO_GEN_RPC_CMD}
 done
-
