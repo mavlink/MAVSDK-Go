@@ -6,8 +6,6 @@ import (
 	"io"
 	"log"
 
-	// mavsdk "github.com/ykhedar/MAVSDK-Go/Sources/MAVSDK-Go/Generated"
-	// action "github.com/ykhedar/MAVSDK-Go/action"
 	telemetry "github.com/ykhedar/MAVSDK-Go/sources/telemetry"
 	"google.golang.org/grpc"
 )
@@ -25,7 +23,7 @@ func serverGet(cc *grpc.ClientConn) *telemetry.PositionResponse {
 	return message
 }
 
-func serverstream(cc *grpc.ClientConn) {
+func serverstream(cc *grpc.ClientConn, ch chan<- *telemetry.PositionResponse) {
 	for {
 		fmt.Println("calling server stream")
 		newTelemetryServiceClient := telemetry.NewTelemetryServiceClient(cc)
@@ -43,8 +41,7 @@ func serverstream(cc *grpc.ClientConn) {
 		if err != nil {
 			fmt.Printf("%v.ListFeatures(_) = _, %v", cc, err)
 		}
-
-		fmt.Printf("message %v", message)
+		ch <- message
 	}
 
 }
@@ -53,10 +50,9 @@ func clientStream(cc *grpc.ClientConn) {
 	fmt.Println("calling server stream")
 	newTelemetryServiceClient := telemetry.NewTelemetryServiceClient(cc)
 	ctx := context.Background()
-	requests := []telemetry.SubscribePositionRequest{
-		telemetry.SubscribePositionRequest{},
-	}
-	gpsresponseInfo, err := newTelemetryServiceClient.SubscribePosition(ctx, &requests[0])
+	requests := []*telemetry.SubscribePositionRequest{}
+	requests[0] = &telemetry.SubscribePositionRequest{}
+	gpsresponseInfo, err := newTelemetryServiceClient.SubscribePosition(ctx, requests[0])
 	if err != nil {
 		log.Fatalf("%v.RecordRoute(_) = _, %v", cc, err)
 	}
@@ -65,7 +61,7 @@ func clientStream(cc *grpc.ClientConn) {
 			if err == io.EOF {
 				break
 			}
-			log.Fatalf("%v.Send(%v) = %v", cc, r, err)
+			log.Fatalf("%v.Send(%v) = %v", cc, r.String(), err)
 		}
 	}
 	reply := gpsresponseInfo.CloseSend()
@@ -81,10 +77,9 @@ func biDirectionStream(cc *grpc.ClientConn) {
 	fmt.Println("calling server stream")
 	newTelemetryServiceClient := telemetry.NewTelemetryServiceClient(cc)
 	ctx := context.Background()
-	requests := []telemetry.SubscribePositionRequest{
-		telemetry.SubscribePositionRequest{},
-	}
-	stream, err := newTelemetryServiceClient.SubscribePosition(ctx, &requests[0])
+	requests := []*telemetry.SubscribePositionRequest{}
+	requests[0] = &telemetry.SubscribePositionRequest{}
+	stream, err := newTelemetryServiceClient.SubscribePosition(ctx, requests[0])
 	if err != nil {
 		log.Fatalf("%v.RecordRoute(_) = _, %v", cc, err)
 	}
@@ -109,7 +104,7 @@ func biDirectionStream(cc *grpc.ClientConn) {
 			if err != nil {
 				log.Fatalf("Failed to receive a note : %v", err)
 			}
-			log.Printf("&v", responseStream)
+			log.Printf("response stream %v", responseStream.String())
 		}
 	}()
 
@@ -125,18 +120,11 @@ func main() {
 		fmt.Printf("Error while dialing %v", err)
 	}
 	grpc.ConnectionTimeout(5)
-	// chanResp := make(chan telemetry.Position, 5)
+	chanResp := make(chan *telemetry.PositionResponse, 5)
 	fmt.Printf("%v\n", serverGet(cc))
 
-	serverstream(cc)
-	// count := 0
-	// for {
-	// 	count++
-	// 	if count == 5 {
-	// 		break
-	// 	}
-	// 	value := <-chanResp
-	// 	fmt.Printf("Response %v\n", value)
-	// }
-	// close(chanResp)
+	serverstream(cc, chanResp)
+	for i := range chanResp {
+		fmt.Printf("%v", i)
+	}
 }
