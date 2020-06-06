@@ -5,12 +5,11 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/ykhedar/MAVSDK-Go/sources/action"
 	"github.com/ykhedar/MAVSDK-Go/sources/core"
 	"github.com/ykhedar/MAVSDK-Go/sources/geofence"
 	"github.com/ykhedar/MAVSDK-Go/sources/log_files"
 	"github.com/ykhedar/MAVSDK-Go/sources/mission"
-	"github.com/ykhedar/MAVSDK-Go/sources/telemetry"
+	"github.com/ykhedar/MAVSDK-Go/sources/sample"
 	"google.golang.org/grpc"
 )
 
@@ -24,21 +23,19 @@ type System interface {
 
 //Drone creates a drone object to interact with drone related plugins
 type Drone struct {
-	plugins      map[string]interface{}
 	port         string
 	mavsdkServer string
-	action       action.ActionServiceClient
 	core         core.CoreServiceClient
 	geofence     geofence.GeofenceServiceClient
 	logFiles     log_files.LogFilesServiceClient
 	mission      mission.MissionServiceClient
-	telemetry    telemetry.TelemetryServiceClient
+	telemetry    sample.TelemetryServiceImpl
 }
 
 //Connect Starts a mavsdk server and create a connection to it
 func (s *Drone) Connect() {
 	//start mavsdk server
-	s.startMAVSDKServer()
+	// s.startMAVSDKServer()
 	grpcConnection := s.connectToMAVSDKServer()
 	s.initPlugins(grpcConnection)
 
@@ -46,12 +43,15 @@ func (s *Drone) Connect() {
 
 //initPlugins initializes all the plugins
 func (s *Drone) initPlugins(cc *grpc.ClientConn) {
-	s.action = action.NewActionServiceClient(cc)
+
+	s.telemetry = sample.TelemetryServiceImpl{
+		Name:   "action",
+		Client: cc,
+	}
 	s.core = core.NewCoreServiceClient(cc)
 	s.geofence = geofence.NewGeofenceServiceClient(cc)
 	s.logFiles = log_files.NewLogFilesServiceClient(cc)
 	s.mission = mission.NewMissionServiceClient(cc)
-	s.telemetry = telemetry.NewTelemetryServiceClient(cc)
 }
 
 func (s *Drone) startMAVSDKServer() {
@@ -67,7 +67,7 @@ func (s *Drone) startMAVSDKServer() {
 func (s *Drone) connectToMAVSDKServer() *grpc.ClientConn {
 	dialoption := grpc.WithInsecure()
 
-	serverAddr := s.mavsdkServer + s.port
+	serverAddr := s.mavsdkServer + ":" + s.port
 	cc, err := grpc.Dial(serverAddr, dialoption)
 	if err != nil {
 		fmt.Printf("Error while dialing %v", err)
@@ -77,6 +77,9 @@ func (s *Drone) connectToMAVSDKServer() *grpc.ClientConn {
 }
 
 func main() {
-	drone := &Drone{port: "50051", mavsdkServer: "localhost"}
+	drone := &Drone{port: "50051", mavsdkServer: "127.0.0.1"}
 	drone.Connect()
+	drone.telemetry.InitTelemetry()
+	drone.telemetry.Position()
+
 }

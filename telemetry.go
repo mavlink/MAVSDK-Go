@@ -23,25 +23,25 @@ func serverGet(cc *grpc.ClientConn) *telemetry.PositionResponse {
 	return message
 }
 
-func serverstream(cc *grpc.ClientConn, ch chan<- *telemetry.PositionResponse) {
+func serverstream(cc *grpc.ClientConn) {
+	fmt.Println("calling server stream")
+	newTelemetryServiceClient := telemetry.NewTelemetryServiceClient(cc)
+	ctx := context.Background()
+	req := &telemetry.SubscribePositionRequest{}
+	stream, err := newTelemetryServiceClient.SubscribePosition(ctx, req)
+	if err != nil {
+		fmt.Printf("%v.ListFeatures(_) = _, %v", cc, err)
+	}
 	for {
-		fmt.Println("calling server stream")
-		newTelemetryServiceClient := telemetry.NewTelemetryServiceClient(cc)
-		ctx := context.Background()
-		req := &telemetry.SubscribePositionRequest{}
-		stream, err := newTelemetryServiceClient.SubscribePosition(ctx, req)
-		if err != nil {
-			fmt.Printf("%v.ListFeatures(_) = _, %v", cc, err)
-		}
-
-		message, err := stream.Recv()
+		m := &telemetry.PositionResponse{}
+		err := stream.RecvMsg(m)
 		if err == io.EOF {
 			break
 		}
 		if err != nil {
 			fmt.Printf("%v.ListFeatures(_) = _, %v", cc, err)
 		}
-		ch <- message
+		println("message %v", m.Position.LatitudeDeg)
 	}
 
 }
@@ -120,11 +120,11 @@ func main() {
 		fmt.Printf("Error while dialing %v", err)
 	}
 	grpc.ConnectionTimeout(5)
-	chanResp := make(chan *telemetry.PositionResponse, 5)
+	// chanResp := make(chan *telemetry.PositionResponse, 5)
 	fmt.Printf("%v\n", serverGet(cc))
 
-	serverstream(cc, chanResp)
-	for i := range chanResp {
-		fmt.Printf("%v", i)
-	}
+	serverstream(cc)
+	// for i := range chanResp {
+	// 	fmt.Printf("%v", i)
+	// }
 }
