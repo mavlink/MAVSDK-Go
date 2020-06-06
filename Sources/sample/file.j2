@@ -1,0 +1,39 @@
+# -*- coding: utf-8 -*-
+
+import (
+	"context"
+	"fmt"
+	"io"
+
+	"github.com/ykhedar/MAVSDK-Go/Sources/{{ plugin_name.lower_snake_case}}"
+	"google.golang.org/grpc"
+)
+
+type {{ plugin_name.upper_camel_case }}Service interface{
+    getResult()
+    Init{{plugin_name.upper_camel_case}}(*grpc.ClientConn) {{plugin_name.upper_camel_case}}.{{plugin_name.upper_camel_case}}ServiceClient
+}
+
+type {{plugin_name.upper_camel_case}}ServiceImpl struct{
+    Name string
+    Client *grpc.ClientConn
+    {{plugin_name.upper_camel_case}}Service {{plugin_name.upper_camel_case}}.{{plugin_name.upper_camel_case}}ServiceClient
+    positionResponse {{plugin_name.upper_camel_case}}.{{plugin_name.upper_camel_case}}response
+
+}
+
+func (a *{{plugin_name.upper_camel_case}}ServiceImpl)Init{{plugin_name.upper_camel_case}}(){
+        name = "{{ plugin_name.upper_camel_case }}"
+        a.{{plugin_name.upper_camel_case}}Service = {{ plugin_name.lower_snake_case }}.New{{ plugin_name.upper_camel_case }}ServiceClient(a.Client)
+
+}
+    {% if has_result %}
+    func (a *{{plugin_name.lower_snake_case}}ServiceImpl)getResult(response *{{plugin_name.lower_snake_case}}) *{{plugin_name.lower_snake_case}}.{
+
+        return {{ plugin_name.upper_camel_case }}Result.translateFromGRPC(response.{{ plugin_name.lower_snake_case }}_result)
+    {% endif %}
+
+    {%- for method in methods -%}
+    {{ '\n' + indent(method, 1) }}
+
+    {%- endfor %}
