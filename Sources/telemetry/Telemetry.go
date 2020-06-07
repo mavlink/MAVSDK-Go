@@ -1,28 +1,25 @@
+package telemetry
+
 import (
 	"context"
 	"fmt"
 	"io"
 )
 
-type Service interface{
-    Result() TelemetryResult_Result
-
-}
-
 type ServiceImpl struct{
     Client TelemetryServiceClient
 }
 
     func (a *ServiceImpl) Position(){
-    	request := &PositionRequest{}
+    	request := &SubscribePositionRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribePosition(ctx, request)
+    		stream, err := a.Client.SubscribePosition(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &positionResponse{}
+    			m := &Position{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -36,15 +33,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) Home(){
-    	request := &HomeRequest{}
+    	request := &SubscribeHomeRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeHome(ctx, request)
+    		stream, err := a.Client.SubscribeHome(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &homeResponse{}
+    			m := &Home{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -58,15 +55,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) InAir(){
-    	request := &InAirRequest{}
+    	request := &SubscribeInAirRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeInAir(ctx, request)
+    		stream, err := a.Client.SubscribeInAir(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &in_airResponse{}
+    			m := &InAir{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -80,15 +77,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) LandedState(){
-    	request := &LandedStateRequest{}
+    	request := &SubscribeLandedStateRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeLandedState(ctx, request)
+    		stream, err := a.Client.SubscribeLandedState(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &landed_stateResponse{}
+    			m := &LandedState{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -102,15 +99,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) Armed(){
-    	request := &ArmedRequest{}
+    	request := &SubscribeArmedRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeArmed(ctx, request)
+    		stream, err := a.Client.SubscribeArmed(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &armedResponse{}
+    			m := &Armed{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -124,15 +121,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) AttitudeQuaternion(){
-    	request := &AttitudeQuaternionRequest{}
+    	request := &SubscribeAttitudeQuaternionRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeAttitudeQuaternion(ctx, request)
+    		stream, err := a.Client.SubscribeAttitudeQuaternion(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &attitude_quaternionResponse{}
+    			m := &AttitudeQuaternion{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -146,15 +143,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) AttitudeEuler(){
-    	request := &AttitudeEulerRequest{}
+    	request := &SubscribeAttitudeEulerRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeAttitudeEuler(ctx, request)
+    		stream, err := a.Client.SubscribeAttitudeEuler(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &attitude_eulerResponse{}
+    			m := &AttitudeEuler{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -168,15 +165,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) AttitudeAngularVelocityBody(){
-    	request := &AttitudeAngularVelocityBodyRequest{}
+    	request := &SubscribeAttitudeAngularVelocityBodyRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeAttitudeAngularVelocityBody(ctx, request)
+    		stream, err := a.Client.SubscribeAttitudeAngularVelocityBody(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &attitude_angular_velocity_bodyResponse{}
+    			m := &AttitudeAngularVelocityBody{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -190,15 +187,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) CameraAttitudeQuaternion(){
-    	request := &CameraAttitudeQuaternionRequest{}
+    	request := &SubscribeCameraAttitudeQuaternionRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeCameraAttitudeQuaternion(ctx, request)
+    		stream, err := a.Client.SubscribeCameraAttitudeQuaternion(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &camera_attitude_quaternionResponse{}
+    			m := &CameraAttitudeQuaternion{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -212,15 +209,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) CameraAttitudeEuler(){
-    	request := &CameraAttitudeEulerRequest{}
+    	request := &SubscribeCameraAttitudeEulerRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeCameraAttitudeEuler(ctx, request)
+    		stream, err := a.Client.SubscribeCameraAttitudeEuler(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &camera_attitude_eulerResponse{}
+    			m := &CameraAttitudeEuler{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -234,15 +231,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) VelocityNed(){
-    	request := &VelocityNedRequest{}
+    	request := &SubscribeVelocityNedRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeVelocityNed(ctx, request)
+    		stream, err := a.Client.SubscribeVelocityNed(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &velocity_nedResponse{}
+    			m := &VelocityNed{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -256,15 +253,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) GpsInfo(){
-    	request := &GpsInfoRequest{}
+    	request := &SubscribeGpsInfoRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeGpsInfo(ctx, request)
+    		stream, err := a.Client.SubscribeGpsInfo(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &gps_infoResponse{}
+    			m := &GpsInfo{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -278,15 +275,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) Battery(){
-    	request := &BatteryRequest{}
+    	request := &SubscribeBatteryRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeBattery(ctx, request)
+    		stream, err := a.Client.SubscribeBattery(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &batteryResponse{}
+    			m := &Battery{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -300,15 +297,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) FlightMode(){
-    	request := &FlightModeRequest{}
+    	request := &SubscribeFlightModeRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeFlightMode(ctx, request)
+    		stream, err := a.Client.SubscribeFlightMode(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &flight_modeResponse{}
+    			m := &FlightMode{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -322,15 +319,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) Health(){
-    	request := &HealthRequest{}
+    	request := &SubscribeHealthRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeHealth(ctx, request)
+    		stream, err := a.Client.SubscribeHealth(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &healthResponse{}
+    			m := &Health{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -344,15 +341,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) RcStatus(){
-    	request := &RcStatusRequest{}
+    	request := &SubscribeRcStatusRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeRcStatus(ctx, request)
+    		stream, err := a.Client.SubscribeRcStatus(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &rc_statusResponse{}
+    			m := &RcStatus{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -366,15 +363,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) StatusText(){
-    	request := &StatusTextRequest{}
+    	request := &SubscribeStatusTextRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeStatusText(ctx, request)
+    		stream, err := a.Client.SubscribeStatusText(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &status_textResponse{}
+    			m := &StatusText{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -388,15 +385,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) ActuatorControlTarget(){
-    	request := &ActuatorControlTargetRequest{}
+    	request := &SubscribeActuatorControlTargetRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeActuatorControlTarget(ctx, request)
+    		stream, err := a.Client.SubscribeActuatorControlTarget(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &actuator_control_targetResponse{}
+    			m := &ActuatorControlTarget{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -410,15 +407,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) ActuatorOutputStatus(){
-    	request := &ActuatorOutputStatusRequest{}
+    	request := &SubscribeActuatorOutputStatusRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeActuatorOutputStatus(ctx, request)
+    		stream, err := a.Client.SubscribeActuatorOutputStatus(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &actuator_output_statusResponse{}
+    			m := &ActuatorOutputStatus{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -432,15 +429,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) Odometry(){
-    	request := &OdometryRequest{}
+    	request := &SubscribeOdometryRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeOdometry(ctx, request)
+    		stream, err := a.Client.SubscribeOdometry(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &odometryResponse{}
+    			m := &Odometry{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -454,15 +451,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) PositionVelocityNed(){
-    	request := &PositionVelocityNedRequest{}
+    	request := &SubscribePositionVelocityNedRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribePositionVelocityNed(ctx, request)
+    		stream, err := a.Client.SubscribePositionVelocityNed(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &position_velocity_nedResponse{}
+    			m := &PositionVelocityNed{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -476,15 +473,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) GroundTruth(){
-    	request := &GroundTruthRequest{}
+    	request := &SubscribeGroundTruthRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeGroundTruth(ctx, request)
+    		stream, err := a.Client.SubscribeGroundTruth(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &ground_truthResponse{}
+    			m := &GroundTruth{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -498,15 +495,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) FixedwingMetrics(){
-    	request := &FixedwingMetricsRequest{}
+    	request := &SubscribeFixedwingMetricsRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeFixedwingMetrics(ctx, request)
+    		stream, err := a.Client.SubscribeFixedwingMetrics(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &fixedwing_metricsResponse{}
+    			m := &FixedwingMetrics{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -520,15 +517,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) Imu(){
-    	request := &ImuRequest{}
+    	request := &SubscribeImuRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeImu(ctx, request)
+    		stream, err := a.Client.SubscribeImu(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &imuResponse{}
+    			m := &Imu{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -542,15 +539,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) HealthAllOk(){
-    	request := &HealthAllOkRequest{}
+    	request := &SubscribeHealthAllOkRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeHealthAllOk(ctx, request)
+    		stream, err := a.Client.SubscribeHealthAllOk(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &health_all_okResponse{}
+    			m := &HealthAllOk{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -564,15 +561,15 @@ type ServiceImpl struct{
     }
 
     func (a *ServiceImpl) UnixEpochTime(){
-    	request := &UnixEpochTimeRequest{}
+    	request := &SubscribeUnixEpochTimeRequest{}
     		ctx := context.Background()
-    		stream, err := a.Telemetry.SubscribeUnixEpochTime(ctx, request)
+    		stream, err := a.Client.SubscribeUnixEpochTime(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &unix_epoch_timeResponse{}
+    			m := &UnixEpochTime{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -585,324 +582,360 @@ type ServiceImpl struct{
     		}	
     }
 
-    func(s *ServiceImpl)set_rate_position(self, rate_hz []*RateHz){
-     request = &SetRatePositionRequest{}
+    func(s *ServiceImpl)SetRatePosition(, rate_hz []*RateHz){
+     request := &SetRatePositionRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRatePosition(ctx, request)
+        response, err := s.Client.SetRatePosition(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRatePosition grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRatePosition")
+            fmt.Printf("Error while extracting result for SetRatePosition")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_home(self, rate_hz []*RateHz){
-     request = &SetRateHomeRequest{}
+    func(s *ServiceImpl)SetRateHome(, rate_hz []*RateHz){
+     request := &SetRateHomeRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRateHome(ctx, request)
+        response, err := s.Client.SetRateHome(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRateHome grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRateHome")
+            fmt.Printf("Error while extracting result for SetRateHome")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_in_air(self, rate_hz []*RateHz){
-     request = &SetRateInAirRequest{}
+    func(s *ServiceImpl)SetRateInAir(, rate_hz []*RateHz){
+     request := &SetRateInAirRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRateInAir(ctx, request)
+        response, err := s.Client.SetRateInAir(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRateInAir grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRateInAir")
+            fmt.Printf("Error while extracting result for SetRateInAir")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_landed_state(self, rate_hz []*RateHz){
-     request = &SetRateLandedStateRequest{}
+    func(s *ServiceImpl)SetRateLandedState(, rate_hz []*RateHz){
+     request := &SetRateLandedStateRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRateLandedState(ctx, request)
+        response, err := s.Client.SetRateLandedState(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRateLandedState grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRateLandedState")
+            fmt.Printf("Error while extracting result for SetRateLandedState")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_attitude(self, rate_hz []*RateHz){
-     request = &SetRateAttitudeRequest{}
+    func(s *ServiceImpl)SetRateAttitude(, rate_hz []*RateHz){
+     request := &SetRateAttitudeRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRateAttitude(ctx, request)
+        response, err := s.Client.SetRateAttitude(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRateAttitude grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRateAttitude")
+            fmt.Printf("Error while extracting result for SetRateAttitude")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_camera_attitude(self, rate_hz []*RateHz){
-     request = &SetRateCameraAttitudeRequest{}
+    func(s *ServiceImpl)SetRateCameraAttitude(, rate_hz []*RateHz){
+     request := &SetRateCameraAttitudeRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRateCameraAttitude(ctx, request)
+        response, err := s.Client.SetRateCameraAttitude(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRateCameraAttitude grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRateCameraAttitude")
+            fmt.Printf("Error while extracting result for SetRateCameraAttitude")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_velocity_ned(self, rate_hz []*RateHz){
-     request = &SetRateVelocityNedRequest{}
+    func(s *ServiceImpl)SetRateVelocityNed(, rate_hz []*RateHz){
+     request := &SetRateVelocityNedRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRateVelocityNed(ctx, request)
+        response, err := s.Client.SetRateVelocityNed(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRateVelocityNed grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRateVelocityNed")
+            fmt.Printf("Error while extracting result for SetRateVelocityNed")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_gps_info(self, rate_hz []*RateHz){
-     request = &SetRateGpsInfoRequest{}
+    func(s *ServiceImpl)SetRateGpsInfo(, rate_hz []*RateHz){
+     request := &SetRateGpsInfoRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRateGpsInfo(ctx, request)
+        response, err := s.Client.SetRateGpsInfo(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRateGpsInfo grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRateGpsInfo")
+            fmt.Printf("Error while extracting result for SetRateGpsInfo")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_battery(self, rate_hz []*RateHz){
-     request = &SetRateBatteryRequest{}
+    func(s *ServiceImpl)SetRateBattery(, rate_hz []*RateHz){
+     request := &SetRateBatteryRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRateBattery(ctx, request)
+        response, err := s.Client.SetRateBattery(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRateBattery grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRateBattery")
+            fmt.Printf("Error while extracting result for SetRateBattery")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_rc_status(self, rate_hz []*RateHz){
-     request = &SetRateRcStatusRequest{}
+    func(s *ServiceImpl)SetRateRcStatus(, rate_hz []*RateHz){
+     request := &SetRateRcStatusRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRateRcStatus(ctx, request)
+        response, err := s.Client.SetRateRcStatus(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRateRcStatus grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRateRcStatus")
+            fmt.Printf("Error while extracting result for SetRateRcStatus")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_actuator_control_target(self, rate_hz []*RateHz){
-     request = &SetRateActuatorControlTargetRequest{}
+    func(s *ServiceImpl)SetRateActuatorControlTarget(, rate_hz []*RateHz){
+     request := &SetRateActuatorControlTargetRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRateActuatorControlTarget(ctx, request)
+        response, err := s.Client.SetRateActuatorControlTarget(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRateActuatorControlTarget grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRateActuatorControlTarget")
+            fmt.Printf("Error while extracting result for SetRateActuatorControlTarget")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_actuator_output_status(self, rate_hz []*RateHz){
-     request = &SetRateActuatorOutputStatusRequest{}
+    func(s *ServiceImpl)SetRateActuatorOutputStatus(, rate_hz []*RateHz){
+     request := &SetRateActuatorOutputStatusRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRateActuatorOutputStatus(ctx, request)
+        response, err := s.Client.SetRateActuatorOutputStatus(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRateActuatorOutputStatus grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRateActuatorOutputStatus")
+            fmt.Printf("Error while extracting result for SetRateActuatorOutputStatus")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_odometry(self, rate_hz []*RateHz){
-     request = &SetRateOdometryRequest{}
+    func(s *ServiceImpl)SetRateOdometry(, rate_hz []*RateHz){
+     request := &SetRateOdometryRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRateOdometry(ctx, request)
+        response, err := s.Client.SetRateOdometry(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRateOdometry grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRateOdometry")
+            fmt.Printf("Error while extracting result for SetRateOdometry")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_position_velocity_ned(self, rate_hz []*RateHz){
-     request = &SetRatePositionVelocityNedRequest{}
+    func(s *ServiceImpl)SetRatePositionVelocityNed(, rate_hz []*RateHz){
+     request := &SetRatePositionVelocityNedRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRatePositionVelocityNed(ctx, request)
+        response, err := s.Client.SetRatePositionVelocityNed(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRatePositionVelocityNed grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRatePositionVelocityNed")
+            fmt.Printf("Error while extracting result for SetRatePositionVelocityNed")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_ground_truth(self, rate_hz []*RateHz){
-     request = &SetRateGroundTruthRequest{}
+    func(s *ServiceImpl)SetRateGroundTruth(, rate_hz []*RateHz){
+     request := &SetRateGroundTruthRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRateGroundTruth(ctx, request)
+        response, err := s.Client.SetRateGroundTruth(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRateGroundTruth grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRateGroundTruth")
+            fmt.Printf("Error while extracting result for SetRateGroundTruth")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_fixedwing_metrics(self, rate_hz []*RateHz){
-     request = &SetRateFixedwingMetricsRequest{}
+    func(s *ServiceImpl)SetRateFixedwingMetrics(, rate_hz []*RateHz){
+     request := &SetRateFixedwingMetricsRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRateFixedwingMetrics(ctx, request)
+        response, err := s.Client.SetRateFixedwingMetrics(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRateFixedwingMetrics grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRateFixedwingMetrics")
+            fmt.Printf("Error while extracting result for SetRateFixedwingMetrics")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_imu(self, rate_hz []*RateHz){
-     request = &SetRateImuRequest{}
+    func(s *ServiceImpl)SetRateImu(, rate_hz []*RateHz){
+     request := &SetRateImuRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRateImu(ctx, request)
+        response, err := s.Client.SetRateImu(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRateImu grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRateImu")
+            fmt.Printf("Error while extracting result for SetRateImu")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_rate_unix_epoch_time(self, rate_hz []*RateHz){
-     request = &SetRateUnixEpochTimeRequest{}
+    func(s *ServiceImpl)SetRateUnixEpochTime(, rate_hz []*RateHz){
+     request := &SetRateUnixEpochTimeRequest{}
+     ctx:= context.Background()
          request.rate_hz = rate_hz
-        response, err = s.Client.SetRateUnixEpochTime(ctx, request)
+        response, err := s.Client.SetRateUnixEpochTime(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetRateUnixEpochTime grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetTelemetryResult()
+        result := response.GetTelemetryResult()
         fmt.Printf("result %v\n", result)
         if result.Result != TelemetryResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetRateUnixEpochTime")
+            fmt.Printf("Error while extracting result for SetRateUnixEpochTime")
         }
         
     }

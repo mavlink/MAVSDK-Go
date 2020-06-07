@@ -8,6 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROTO_DIR=${PROTO_DIR:-"${SCRIPT_DIR}/../proto/protos"}
 OUTPUT_DIR=${OUTPUT_DIR:-"${SCRIPT_DIR}/../Sources/"}
 PROTO_DIR_TMP=${PROTO_DIR_TMP:-"${SCRIPT_DIR}/tmp/protos"}
+export TEMPLATE_PATH="$(pwd)/../templates/"
 
 
 PLUGIN_LIST="action core mission geofence telemetry log_files"

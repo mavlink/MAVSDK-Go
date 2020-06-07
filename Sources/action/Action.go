@@ -1,4 +1,5 @@
 package action
+
 import (
 	"context"
 	"fmt"
@@ -7,202 +8,224 @@ import (
 
 type ServiceImpl struct{
     Client ActionServiceClient
-    
 }
 
-    func(s *ServiceImpl)arm(self){
+    func(s *ServiceImpl)Arm(){
      request := &ArmRequest{}
+     ctx:= context.Background()
          response, err := s.Client.Arm(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing Arm grpc %v\n", err)
     	}
+        fmt.Printf("")
         
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading Arm")
+            fmt.Printf("Error while extracting result for Arm")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)disarm(self){
+    func(s *ServiceImpl)Disarm(){
      request := &DisarmRequest{}
+     ctx:= context.Background()
          response, err := s.Client.Disarm(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing Disarm grpc %v\n", err)
     	}
+        fmt.Printf("")
         
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading Disarm")
+            fmt.Printf("Error while extracting result for Disarm")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)takeoff(self){
+    func(s *ServiceImpl)Takeoff(){
      request := &TakeoffRequest{}
+     ctx:= context.Background()
          response, err := s.Client.Takeoff(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing Takeoff grpc %v\n", err)
     	}
+        fmt.Printf("")
         
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading Takeoff")
+            fmt.Printf("Error while extracting result for Takeoff")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)land(self){
+    func(s *ServiceImpl)Land(){
      request := &LandRequest{}
+     ctx:= context.Background()
          response, err := s.Client.Land(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing Land grpc %v\n", err)
     	}
+        fmt.Printf("")
         
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading Land")
+            fmt.Printf("Error while extracting result for Land")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)reboot(self){
+    func(s *ServiceImpl)Reboot(){
      request := &RebootRequest{}
+     ctx:= context.Background()
          response, err := s.Client.Reboot(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing Reboot grpc %v\n", err)
     	}
+        fmt.Printf("")
         
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading Reboot")
+            fmt.Printf("Error while extracting result for Reboot")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)shutdown(self){
+    func(s *ServiceImpl)Shutdown(){
      request := &ShutdownRequest{}
+     ctx:= context.Background()
          response, err := s.Client.Shutdown(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing Shutdown grpc %v\n", err)
     	}
+        fmt.Printf("")
         
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading Shutdown")
+            fmt.Printf("Error while extracting result for Shutdown")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)kill(self){
+    func(s *ServiceImpl)Kill(){
      request := &KillRequest{}
+     ctx:= context.Background()
          response, err := s.Client.Kill(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing Kill grpc %v\n", err)
     	}
+        fmt.Printf("")
         
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading Kill")
+            fmt.Printf("Error while extracting result for Kill")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)return_to_launch(self){
+    func(s *ServiceImpl)ReturnToLaunch(){
      request := &ReturnToLaunchRequest{}
+     ctx:= context.Background()
          response, err := s.Client.ReturnToLaunch(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing ReturnToLaunch grpc %v\n", err)
     	}
+        fmt.Printf("")
         
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading ReturnToLaunch")
+            fmt.Printf("Error while extracting result for ReturnToLaunch")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)goto_location(self, latitude_deg []*LatitudeDeg, longitude_deg []*LongitudeDeg, absolute_altitude_m []*AbsoluteAltitudeM, yaw_deg []*YawDeg){
+    func(s *ServiceImpl)GotoLocation(, latitude_deg []*LatitudeDeg, longitude_deg []*LongitudeDeg, absolute_altitude_m []*AbsoluteAltitudeM, yaw_deg []*YawDeg){
      request := &GotoLocationRequest{}
+     ctx:= context.Background()
          request.latitude_deg = latitude_deg
         request.longitude_deg = longitude_deg
         request.absolute_altitude_m = absolute_altitude_m
         request.yaw_deg = yaw_deg
         response, err := s.Client.GotoLocation(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing GotoLocation grpc %v\n", err)
     	}
+        fmt.Printf("")
         
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading GotoLocation")
+            fmt.Printf("Error while extracting result for GotoLocation")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)transition_to_fixedwing(self){
+    func(s *ServiceImpl)TransitionToFixedwing(){
      request := &TransitionToFixedwingRequest{}
+     ctx:= context.Background()
          response, err := s.Client.TransitionToFixedwing(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing TransitionToFixedwing grpc %v\n", err)
     	}
+        fmt.Printf("")
         
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading TransitionToFixedwing")
+            fmt.Printf("Error while extracting result for TransitionToFixedwing")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)transition_to_multicopter(self){
+    func(s *ServiceImpl)TransitionToMulticopter(){
      request := &TransitionToMulticopterRequest{}
+     ctx:= context.Background()
          response, err := s.Client.TransitionToMulticopter(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing TransitionToMulticopter grpc %v\n", err)
     	}
+        fmt.Printf("")
         
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading TransitionToMulticopter")
+            fmt.Printf("Error while extracting result for TransitionToMulticopter")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)get_takeoff_altitude(self)([]*GetTakeoffAltitude){
-     request := &GetTakeoffAltitudeRequest{}
+    func(s *ServiceImpl)GetTakeoffAltitude()([]*GetTakeoffAltitude){
+        request := &GetTakeoffAltitudeRequest{}
+        ctx:= context.Background()
          response, err := s.Client.GetTakeoffAltitude(ctx, request)
         if err != nil {
     		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
@@ -211,7 +234,7 @@ type ServiceImpl struct{
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading GetTakeoffAltitude")
+            fmt.Printf("Error while getting GetTakeoffAltitude")
         }
         
 
@@ -221,26 +244,29 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)set_takeoff_altitude(self, altitude []*Altitude){
+    func(s *ServiceImpl)SetTakeoffAltitude(, altitude []*Altitude){
      request := &SetTakeoffAltitudeRequest{}
+     ctx:= context.Background()
          request.altitude = altitude
         response, err := s.Client.SetTakeoffAltitude(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetTakeoffAltitude grpc %v\n", err)
     	}
+        fmt.Printf("")
         
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetTakeoffAltitude")
+            fmt.Printf("Error while extracting result for SetTakeoffAltitude")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)get_maximum_speed(self)([]*GetMaximumSpeed){
-     request := &GetMaximumSpeedRequest{}
+    func(s *ServiceImpl)GetMaximumSpeed()([]*GetMaximumSpeed){
+        request := &GetMaximumSpeedRequest{}
+        ctx:= context.Background()
          response, err := s.Client.GetMaximumSpeed(ctx, request)
         if err != nil {
     		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
@@ -249,7 +275,7 @@ type ServiceImpl struct{
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading GetMaximumSpeed")
+            fmt.Printf("Error while getting GetMaximumSpeed")
         }
         
 
@@ -259,26 +285,29 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)set_maximum_speed(self, speed []*Speed){
+    func(s *ServiceImpl)SetMaximumSpeed(, speed []*Speed){
      request := &SetMaximumSpeedRequest{}
+     ctx:= context.Background()
          request.speed = speed
         response, err := s.Client.SetMaximumSpeed(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetMaximumSpeed grpc %v\n", err)
     	}
+        fmt.Printf("")
         
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetMaximumSpeed")
+            fmt.Printf("Error while extracting result for SetMaximumSpeed")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)get_return_to_launch_altitude(self)([]*GetReturnToLaunchAltitude){
-     request := &GetReturnToLaunchAltitudeRequest{}
+    func(s *ServiceImpl)GetReturnToLaunchAltitude()([]*GetReturnToLaunchAltitude){
+        request := &GetReturnToLaunchAltitudeRequest{}
+        ctx:= context.Background()
          response, err := s.Client.GetReturnToLaunchAltitude(ctx, request)
         if err != nil {
     		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
@@ -287,7 +316,7 @@ type ServiceImpl struct{
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading GetReturnToLaunchAltitude")
+            fmt.Printf("Error while getting GetReturnToLaunchAltitude")
         }
         
 
@@ -297,18 +326,20 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)set_return_to_launch_altitude(self, relative_altitude_m []*RelativeAltitudeM){
+    func(s *ServiceImpl)SetReturnToLaunchAltitude(, relative_altitude_m []*RelativeAltitudeM){
      request := &SetReturnToLaunchAltitudeRequest{}
+     ctx:= context.Background()
          request.relative_altitude_m = relative_altitude_m
         response, err := s.Client.SetReturnToLaunchAltitude(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetReturnToLaunchAltitude grpc %v\n", err)
     	}
+        fmt.Printf("")
         
         result := response.GetActionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != ActionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetReturnToLaunchAltitude")
+            fmt.Printf("Error while extracting result for SetReturnToLaunchAltitude")
         }
         
     }

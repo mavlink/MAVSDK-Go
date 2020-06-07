@@ -1,3 +1,5 @@
+package mission
+
 import (
 	"context"
 	"fmt"
@@ -8,53 +10,58 @@ type ServiceImpl struct{
     Client MissionServiceClient
 }
 
-    func(s *ServiceImpl)upload_mission(self, mission_plan []*MissionPlan){
-     request = &UploadMissionRequest{}
+    func(s *ServiceImpl)UploadMission(, mission_plan []*MissionPlan){
+     request := &UploadMissionRequest{}
+     ctx:= context.Background()
          request.MissionPlan = 
             
-        response, err = s.Client.UploadMission(ctx, request)
+        response, err := s.Client.UploadMission(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing UploadMission grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetMissionResult()
+        result := response.GetMissionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != MissionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading UploadMission")
+            fmt.Printf("Error while extracting result for UploadMission")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)cancel_mission_upload(self){
-     request = &CancelMissionUploadRequest{}
-         response, err = s.Client.CancelMissionUpload(ctx, request)
+    func(s *ServiceImpl)CancelMissionUpload(){
+     request := &CancelMissionUploadRequest{}
+     ctx:= context.Background()
+         response, err := s.Client.CancelMissionUpload(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing CancelMissionUpload grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetMissionResult()
+        result := response.GetMissionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != MissionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading CancelMissionUpload")
+            fmt.Printf("Error while extracting result for CancelMissionUpload")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)download_mission(self)([]*DownloadMission){
-     request = &DownloadMissionRequest{}
-         response, err = s.Client.DownloadMission(ctx, request)
+    func(s *ServiceImpl)DownloadMission()([]*DownloadMission){
+        request := &DownloadMissionRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.DownloadMission(ctx, request)
         if err != nil {
     		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
     	}
         
-        result = response.GetMissionResult()
+        result := response.GetMissionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != MissionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading DownloadMission")
+            fmt.Printf("Error while getting DownloadMission")
         }
         
 
@@ -63,103 +70,114 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)cancel_mission_download(self){
-     request = &CancelMissionDownloadRequest{}
-         response, err = s.Client.CancelMissionDownload(ctx, request)
+    func(s *ServiceImpl)CancelMissionDownload(){
+     request := &CancelMissionDownloadRequest{}
+     ctx:= context.Background()
+         response, err := s.Client.CancelMissionDownload(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing CancelMissionDownload grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetMissionResult()
+        result := response.GetMissionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != MissionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading CancelMissionDownload")
+            fmt.Printf("Error while extracting result for CancelMissionDownload")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)start_mission(self){
-     request = &StartMissionRequest{}
-         response, err = s.Client.StartMission(ctx, request)
+    func(s *ServiceImpl)StartMission(){
+     request := &StartMissionRequest{}
+     ctx:= context.Background()
+         response, err := s.Client.StartMission(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing StartMission grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetMissionResult()
+        result := response.GetMissionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != MissionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading StartMission")
+            fmt.Printf("Error while extracting result for StartMission")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)pause_mission(self){
-     request = &PauseMissionRequest{}
-         response, err = s.Client.PauseMission(ctx, request)
+    func(s *ServiceImpl)PauseMission(){
+     request := &PauseMissionRequest{}
+     ctx:= context.Background()
+         response, err := s.Client.PauseMission(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing PauseMission grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetMissionResult()
+        result := response.GetMissionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != MissionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading PauseMission")
+            fmt.Printf("Error while extracting result for PauseMission")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)clear_mission(self){
-     request = &ClearMissionRequest{}
-         response, err = s.Client.ClearMission(ctx, request)
+    func(s *ServiceImpl)ClearMission(){
+     request := &ClearMissionRequest{}
+     ctx:= context.Background()
+         response, err := s.Client.ClearMission(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing ClearMission grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetMissionResult()
+        result := response.GetMissionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != MissionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading ClearMission")
+            fmt.Printf("Error while extracting result for ClearMission")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)set_current_mission_item(self, index []*Index){
-     request = &SetCurrentMissionItemRequest{}
+    func(s *ServiceImpl)SetCurrentMissionItem(, index []*Index){
+     request := &SetCurrentMissionItemRequest{}
+     ctx:= context.Background()
          request.index = index
-        response, err = s.Client.SetCurrentMissionItem(ctx, request)
+        response, err := s.Client.SetCurrentMissionItem(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetCurrentMissionItem grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetMissionResult()
+        result := response.GetMissionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != MissionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetCurrentMissionItem")
+            fmt.Printf("Error while extracting result for SetCurrentMissionItem")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)is_mission_finished(self)([]*IsMissionFinished){
-     request = &IsMissionFinishedRequest{}
-         response, err = s.Client.IsMissionFinished(ctx, request)
+    func(s *ServiceImpl)IsMissionFinished()([]*IsMissionFinished){
+        request := &IsMissionFinishedRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.IsMissionFinished(ctx, request)
         if err != nil {
     		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
     	}
         
-        result = response.GetMissionResult()
+        result := response.GetMissionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != MissionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading IsMissionFinished")
+            fmt.Printf("Error while getting IsMissionFinished")
         }
         
 
@@ -170,15 +188,15 @@ type ServiceImpl struct{
        
 
     func (a *ServiceImpl) MissionProgress(){
-    	request := &MissionProgressRequest{}
+    	request := &SubscribeMissionProgressRequest{}
     		ctx := context.Background()
-    		stream, err := a.Mission.SubscribeMissionProgress(ctx, request)
+    		stream, err := a.Client.SubscribeMissionProgress(ctx, request)
     		if err != nil {
     			fmt.Printf("Unable to subscribe %v\n", err)
     		}
 
     		for {
-    			m := &mission_progressResponse{}
+    			m := &MissionProgress{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -191,17 +209,18 @@ type ServiceImpl struct{
     		}	
     }
 
-    func(s *ServiceImpl)get_return_to_launch_after_mission(self)([]*GetReturnToLaunchAfterMission){
-     request = &GetReturnToLaunchAfterMissionRequest{}
-         response, err = s.Client.GetReturnToLaunchAfterMission(ctx, request)
+    func(s *ServiceImpl)GetReturnToLaunchAfterMission()([]*GetReturnToLaunchAfterMission){
+        request := &GetReturnToLaunchAfterMissionRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.GetReturnToLaunchAfterMission(ctx, request)
         if err != nil {
     		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
     	}
         
-        result = response.GetMissionResult()
+        result := response.GetMissionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != MissionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading GetReturnToLaunchAfterMission")
+            fmt.Printf("Error while getting GetReturnToLaunchAfterMission")
         }
         
 
@@ -211,36 +230,39 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)set_return_to_launch_after_mission(self, enable []*Enable){
-     request = &SetReturnToLaunchAfterMissionRequest{}
+    func(s *ServiceImpl)SetReturnToLaunchAfterMission(, enable []*Enable){
+     request := &SetReturnToLaunchAfterMissionRequest{}
+     ctx:= context.Background()
          request.enable = enable
-        response, err = s.Client.SetReturnToLaunchAfterMission(ctx, request)
+        response, err := s.Client.SetReturnToLaunchAfterMission(ctx, request)
         if err != nil {
-    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    		fmt.Printf("Error while performing SetReturnToLaunchAfterMission grpc %v\n", err)
     	}
+        fmt.Printf("")
         
-        result = response.GetMissionResult()
+        result := response.GetMissionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != MissionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading SetReturnToLaunchAfterMission")
+            fmt.Printf("Error while extracting result for SetReturnToLaunchAfterMission")
         }
         
     }
 
        
 
-    func(s *ServiceImpl)import_qgroundcontrol_mission(self, qgc_plan_path []*QgcPlanPath)([]*ImportQgroundcontrolMission){
-     request = &ImportQgroundcontrolMissionRequest{}
-         request.qgc_plan_path = qgc_plan_path
-        response, err = s.Client.ImportQgroundcontrolMission(ctx, request)
+    func(s *ServiceImpl)ImportQgroundcontrolMission(, qgc_plan_path []*QgcPlanPath)([]*ImportQgroundcontrolMission){
+        request := &ImportQgroundcontrolMissionRequest{}
+        ctx:= context.Background()
+         request.QgcPlanPath = qgc_plan_path
+        response, err := s.Client.ImportQgroundcontrolMission(ctx, request)
         if err != nil {
     		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
     	}
         
-        result = response.GetMissionResult()
+        result := response.GetMissionResult()
         fmt.Printf("result %v\n", result)
         if result.Result != MissionResult_RESULT_SUCCESS{
-            fmt.Printf("Error while uploading ImportQgroundcontrolMission")
+            fmt.Printf("Error while getting ImportQgroundcontrolMission")
         }
         
 
