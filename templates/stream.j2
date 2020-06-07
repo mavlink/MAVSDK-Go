@@ -1,22 +1,22 @@
 
-func (a *{{name.upper_camel_case}}){{ name.upper_camel_case }}({% for param in params %}, {{ param.name.lower_snake_case }}{% endfor %}):
-
-    request := &{{ plugin_name.upper_camel_case }}.Subscribe{{ name.upper_camel_case }}Request{}
-    ctx := context.Background()
-    stream, err := a.{{plugin_name.upper_camel_case}}.Subscribe{{ name.upper_camel_case }}(ctx, request)
-    if err != nil {
-		fmt.Printf("Unable to subscribe %v\n", err)
-	}
-
-    for {
-		m := &{{ plugin_name.upper_camel_case }}.{{ name.lower_snake_case }}Response{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
-		}
+func (a *ServiceImpl) {{ name.upper_camel_case }}({% for param in params %}, {{ param.name.lower_snake_case }}{% endfor %}){
+	request := &{{ name.upper_camel_case }}Request{}
+		ctx := context.Background()
+		stream, err := a.{{plugin_name.upper_camel_case}}.Subscribe{{ name.upper_camel_case }}(ctx, request)
 		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
+			fmt.Printf("Unable to subscribe %v\n", err)
 		}
-		fmt.Printf("message %v\n", a.getResult(m).String())
-	}
+
+		for {
+			m := &{{ name.lower_snake_case }}Response{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m.Get{{name.upper_camel_case}}())
+		}	
+}

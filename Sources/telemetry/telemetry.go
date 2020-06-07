@@ -16,10 +16,6 @@ type ServiceImpl struct {
 	Client TelemetryServiceClient
 }
 
-func (s *ServiceImpl) translateFromGRPC(response *TelemetryResult) TelemetryResult_Result {
-	return response.Result
-}
-
 //SubscribePosition acts as a wrapper for Position request from telemetry grpc package
 func (s *ServiceImpl) SubscribePosition() <-chan string {
 	request := &SubscribePositionRequest{}
@@ -42,6 +38,7 @@ func (s *ServiceImpl) SubscribePosition() <-chan string {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
+			m.GetPosition()
 			fmt.Printf("message %v\n", m.String())
 			// ch <- m.String()
 		}

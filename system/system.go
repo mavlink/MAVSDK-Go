@@ -85,7 +85,7 @@ func main() {
 	drone := &Drone{port: "50051", mavsdkServer: "127.0.0.1"}
 	drone.Connect()
 	// drone.core.Init()
-	// drone.core.ListRunningPlugins()
+	drone.core.ListRunningPlugins()
 	// r := <-drone.telemetry.Position()
 	// for key, value := range r {
 	// 	fmt.Printf("position key=%v value = %v\n", key, value)
@@ -93,28 +93,28 @@ func main() {
 	// drone.telemetry.SetRatePosition(60)
 
 	// drone.action.GotoLocation(54, 56, 0.5, 30)
-	lat := 47.3977508
-	lon := 8.5456074
-	p1 := &geofence.Point{
-		LatitudeDeg:  lat - 0.0001,
-		LongitudeDeg: lon - 0.0001,
-	}
-	p2 := &geofence.Point{
-		LatitudeDeg:  lat + 0.0001,
-		LongitudeDeg: lon - 0.0001,
-	}
-	p3 := &geofence.Point{
-		LatitudeDeg:  lat + 0.0001,
-		LongitudeDeg: lon + 0.0001,
-	}
-	p4 := &geofence.Point{
-		LatitudeDeg:  lat - 0.0001,
-		LongitudeDeg: lon + 0.0001,
-	}
+	// lat := 47.3977508
+	// lon := 8.5456074
+	// p1 := &geofence.Point{
+	// 	LatitudeDeg:  lat - 0.0001,
+	// 	LongitudeDeg: lon - 0.0001,
+	// }
+	// p2 := &geofence.Point{
+	// 	LatitudeDeg:  lat + 0.0001,
+	// 	LongitudeDeg: lon - 0.0001,
+	// }
+	// p3 := &geofence.Point{
+	// 	LatitudeDeg:  lat + 0.0001,
+	// 	LongitudeDeg: lon + 0.0001,
+	// }
+	// p4 := &geofence.Point{
+	// 	LatitudeDeg:  lat - 0.0001,
+	// 	LongitudeDeg: lon + 0.0001,
+	// }
 
-	polygon := &geofence.Polygon{
-		Points: []*geofence.Point{p1, p2, p3, p4},
-		Type:   geofence.Polygon_TYPE_INCLUSION}
-	drone.geofence.UploadGeofence([]*geofence.Polygon{polygon})
+	// polygon := &geofence.Polygon{
+	// 	Points: []*geofence.Point{p1, p2, p3, p4},
+	// 	Type:   geofence.Polygon_TYPE_INCLUSION}
+	// drone.geofence.UploadGeofence([]*geofence.Polygon{polygon})
 
 }

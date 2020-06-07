@@ -15,10 +15,6 @@ type ServiceImpl struct {
 	Client GeofenceServiceClient
 }
 
-func (s *ServiceImpl) translateFromGRPC(response *GeofenceResult) GeofenceResult_Result {
-	return response.Result
-}
-
 //UploadGeofence acts as a wrapper for UploadGeofence request from geofence grpc package
 func (s *ServiceImpl) UploadGeofence(polygons []*Polygon) {
 	request := &UploadGeofenceRequest{}
