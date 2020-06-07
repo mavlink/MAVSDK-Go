@@ -1,4 +1,4 @@
-package geofence
+// package geofence
 
 import (
 	"context"
@@ -10,7 +10,7 @@ type Service interface {
 	Result() GeofenceResult
 }
 
-//ServiceImpl creates client and implements telemetryService
+ServiceImpl creates client and implements telemetryService
 type ServiceImpl struct {
 	Client GeofenceServiceClient
 }

@@ -1,3 +1,5 @@
+package {{plugin_name.lower_snake_case}}
+
 import (
 	"context"
 	"fmt"
@@ -5,8 +7,6 @@ import (
 )
 
 type Service interface{
-    Result() {{plugin_name.upper_camel_case}}Result_Result
-
 }
 
 type ServiceImpl struct{

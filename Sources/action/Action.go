@@ -1,3 +1,4 @@
+package action
 import (
 	"context"
 	"fmt"
@@ -5,9 +6,8 @@ import (
 )
 
 type Service interface{
-    Result() ActionResult_Result
-
 }
+
 
 type ServiceImpl struct{
     Client ActionServiceClient
