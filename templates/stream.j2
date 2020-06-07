@@ -8,7 +8,7 @@ func (a *ServiceImpl) {{ name.upper_camel_case }}({% for param in params %} {{ p
 		}
 
 		for {
-			m := &{{ name.upper_camel_case }}{}
+			m := &{{ name.upper_camel_case }}Response{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
 				break
