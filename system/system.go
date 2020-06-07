@@ -5,11 +5,11 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/ykhedar/MAVSDK-Go/sources/core"
-	"github.com/ykhedar/MAVSDK-Go/sources/geofence"
-	"github.com/ykhedar/MAVSDK-Go/sources/log_files"
-	"github.com/ykhedar/MAVSDK-Go/sources/mission"
-	"github.com/ykhedar/MAVSDK-Go/sources/sample"
+	"github.com/ykhedar/MAVSDK-Go/Sources/core"
+	"github.com/ykhedar/MAVSDK-Go/Sources/geofence"
+	"github.com/ykhedar/MAVSDK-Go/Sources/log_files"
+	"github.com/ykhedar/MAVSDK-Go/Sources/mission"
+	"github.com/ykhedar/MAVSDK-Go/Sources/telemetry"
 	"google.golang.org/grpc"
 )
 
@@ -25,11 +25,11 @@ type System interface {
 type Drone struct {
 	port         string
 	mavsdkServer string
-	core         core.CoreServiceClient
+	core         core.ServiceImpl
 	geofence     geofence.GeofenceServiceClient
 	logFiles     log_files.LogFilesServiceClient
 	mission      mission.MissionServiceClient
-	telemetry    sample.TelemetryServiceImpl
+	telemetry    telemetry.ServiceImpl
 }
 
 //Connect Starts a mavsdk server and create a connection to it
@@ -44,11 +44,15 @@ func (s *Drone) Connect() {
 //initPlugins initializes all the plugins
 func (s *Drone) initPlugins(cc *grpc.ClientConn) {
 
-	s.telemetry = sample.TelemetryServiceImpl{
+	s.telemetry = telemetry.ServiceImpl{
 		Name:   "action",
 		Client: cc,
 	}
-	s.core = core.NewCoreServiceClient(cc)
+	s.core = core.ServiceImpl{
+		Name:   "core",
+		Client: cc,
+	}
+
 	s.geofence = geofence.NewGeofenceServiceClient(cc)
 	s.logFiles = log_files.NewLogFilesServiceClient(cc)
 	s.mission = mission.NewMissionServiceClient(cc)
@@ -79,6 +83,8 @@ func (s *Drone) connectToMAVSDKServer() *grpc.ClientConn {
 func main() {
 	drone := &Drone{port: "50051", mavsdkServer: "127.0.0.1"}
 	drone.Connect()
+	drone.core.InitCore()
+	drone.core.ListRunningPlugins()
 	drone.telemetry.InitTelemetry()
 	drone.telemetry.Position()
 
