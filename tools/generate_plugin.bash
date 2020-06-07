@@ -23,31 +23,7 @@ done
 
 PROTO_DIR=${PROTO_DIR_TMP}
 
-if [ ! -d ${PROTO_DIR} ]; then
-    echo "Script is not in the right location! It will look for the proto files in '${PROTO_DIR}', which doesn't exist!"
-
-    exit 1
-fi
-
-if [ ! -d ${OUTPUT_DIR} ]; then
-    echo "Script is not in the right location! It is made to generate the files in '${OUTPUT_DIR}', which doesn't exist!"
-
-    exit 1
-fi
-
-echo "-------------------------------"
-echo "Generating pb and grpc.pb files"
-echo "-------------------------------"
-
-GO_GEN_CMD="/go/bin/protoc-gen-go"
-GO_GEN_RPC_CMD="/go/bin/protoc-gen-gogrpc"
-
 for plugin in ${PLUGIN_LIST}; do
-    mkdir -p ${OUTPUT_DIR}/$plugin 
-    protoc ${plugin}.proto -I${PROTO_DIR}/$plugin --go_out=${OUTPUT_DIR}/$plugin --gogrpc_out=${OUTPUT_DIR}/$plugin --plugin=protoc-gen-go=${GO_GEN_CMD} --plugin=protoc-gen-gogrpc=${GO_GEN_RPC_CMD}
-done
-
-
-for plugin in ${PLUGIN_LIST}; do
+	echo "+=> Doing $plugin"
 	python3 -m grpc_tools.protoc --plugin=protoc-gen-custom=$(which protoc-gen-dcsdk) -I${PROTO_DIR}/$plugin --custom_out=${OUTPUT_DIR}/$plugin --custom_opt=file_ext=go ${plugin}.proto
 done
