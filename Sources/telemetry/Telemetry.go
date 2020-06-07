@@ -582,18 +582,17 @@ type ServiceImpl struct{
     		}	
     }
 
-    func(s *ServiceImpl)SetRatePosition(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRatePosition( rate_hz []*RateHz){
      request := &SetRatePositionRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRatePosition(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRatePosition grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRatePosition")
         }
@@ -602,18 +601,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateHome(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRateHome( rate_hz []*RateHz){
      request := &SetRateHomeRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRateHome(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateHome grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRateHome")
         }
@@ -622,18 +620,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateInAir(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRateInAir( rate_hz []*RateHz){
      request := &SetRateInAirRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRateInAir(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateInAir grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRateInAir")
         }
@@ -642,18 +639,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateLandedState(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRateLandedState( rate_hz []*RateHz){
      request := &SetRateLandedStateRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRateLandedState(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateLandedState grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRateLandedState")
         }
@@ -662,18 +658,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateAttitude(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRateAttitude( rate_hz []*RateHz){
      request := &SetRateAttitudeRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRateAttitude(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateAttitude grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRateAttitude")
         }
@@ -682,18 +677,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateCameraAttitude(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRateCameraAttitude( rate_hz []*RateHz){
      request := &SetRateCameraAttitudeRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRateCameraAttitude(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateCameraAttitude grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRateCameraAttitude")
         }
@@ -702,18 +696,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateVelocityNed(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRateVelocityNed( rate_hz []*RateHz){
      request := &SetRateVelocityNedRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRateVelocityNed(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateVelocityNed grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRateVelocityNed")
         }
@@ -722,18 +715,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateGpsInfo(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRateGpsInfo( rate_hz []*RateHz){
      request := &SetRateGpsInfoRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRateGpsInfo(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateGpsInfo grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRateGpsInfo")
         }
@@ -742,18 +734,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateBattery(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRateBattery( rate_hz []*RateHz){
      request := &SetRateBatteryRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRateBattery(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateBattery grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRateBattery")
         }
@@ -762,18 +753,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateRcStatus(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRateRcStatus( rate_hz []*RateHz){
      request := &SetRateRcStatusRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRateRcStatus(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateRcStatus grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRateRcStatus")
         }
@@ -782,18 +772,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateActuatorControlTarget(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRateActuatorControlTarget( rate_hz []*RateHz){
      request := &SetRateActuatorControlTargetRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRateActuatorControlTarget(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateActuatorControlTarget grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRateActuatorControlTarget")
         }
@@ -802,18 +791,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateActuatorOutputStatus(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRateActuatorOutputStatus( rate_hz []*RateHz){
      request := &SetRateActuatorOutputStatusRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRateActuatorOutputStatus(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateActuatorOutputStatus grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRateActuatorOutputStatus")
         }
@@ -822,18 +810,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateOdometry(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRateOdometry( rate_hz []*RateHz){
      request := &SetRateOdometryRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRateOdometry(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateOdometry grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRateOdometry")
         }
@@ -842,18 +829,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRatePositionVelocityNed(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRatePositionVelocityNed( rate_hz []*RateHz){
      request := &SetRatePositionVelocityNedRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRatePositionVelocityNed(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRatePositionVelocityNed grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRatePositionVelocityNed")
         }
@@ -862,18 +848,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateGroundTruth(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRateGroundTruth( rate_hz []*RateHz){
      request := &SetRateGroundTruthRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRateGroundTruth(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateGroundTruth grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRateGroundTruth")
         }
@@ -882,18 +867,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateFixedwingMetrics(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRateFixedwingMetrics( rate_hz []*RateHz){
      request := &SetRateFixedwingMetricsRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRateFixedwingMetrics(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateFixedwingMetrics grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRateFixedwingMetrics")
         }
@@ -902,18 +886,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateImu(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRateImu( rate_hz []*RateHz){
      request := &SetRateImuRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRateImu(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateImu grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRateImu")
         }
@@ -922,18 +905,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateUnixEpochTime(, rate_hz []*RateHz){
+    func(s *ServiceImpl)SetRateUnixEpochTime( rate_hz []*RateHz){
      request := &SetRateUnixEpochTimeRequest{}
      ctx:= context.Background()
-         request.rate_hz = rate_hz
+         request.RateHz = rate_hz
         response, err := s.Client.SetRateUnixEpochTime(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateUnixEpochTime grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetTelemetryResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != TelemetryResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetRateUnixEpochTime")
         }

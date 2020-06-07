@@ -19,7 +19,7 @@ type ServiceImpl struct{
     	}
         
         result := response.GetLogFilesResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != LogFilesResult_RESULT_SUCCESS{
             fmt.Printf("Error while getting GetEntries")
         }
@@ -30,7 +30,7 @@ type ServiceImpl struct{
 
        
 
-    func (a *ServiceImpl) DownloadLogFile(, id, path){
+    func (a *ServiceImpl) DownloadLogFile( id path){
     	request := &SubscribeDownloadLogFileRequest{}
     		ctx := context.Background()
     		stream, err := a.Client.SubscribeDownloadLogFile(ctx, request)

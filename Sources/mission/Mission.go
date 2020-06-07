@@ -10,19 +10,18 @@ type ServiceImpl struct{
     Client MissionServiceClient
 }
 
-    func(s *ServiceImpl)UploadMission(mission_plan []*MissionPlan){
+    func(s *ServiceImpl)UploadMission( mission_plan []*MissionPlan){
      request := &UploadMissionRequest{}
      ctx:= context.Background()
-         request.MissionPlan = 
+         request.MissionPlan = mission_plan
             
         response, err := s.Client.UploadMission(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing UploadMission grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetMissionResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != MissionResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for UploadMission")
         }
@@ -38,10 +37,9 @@ type ServiceImpl struct{
         if err != nil {
     		fmt.Printf("Error while performing CancelMissionUpload grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetMissionResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != MissionResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for CancelMissionUpload")
         }
@@ -59,7 +57,7 @@ type ServiceImpl struct{
     	}
         
         result := response.GetMissionResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != MissionResult_RESULT_SUCCESS{
             fmt.Printf("Error while getting DownloadMission")
         }
@@ -77,10 +75,9 @@ type ServiceImpl struct{
         if err != nil {
     		fmt.Printf("Error while performing CancelMissionDownload grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetMissionResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != MissionResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for CancelMissionDownload")
         }
@@ -96,10 +93,9 @@ type ServiceImpl struct{
         if err != nil {
     		fmt.Printf("Error while performing StartMission grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetMissionResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != MissionResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for StartMission")
         }
@@ -115,10 +111,9 @@ type ServiceImpl struct{
         if err != nil {
     		fmt.Printf("Error while performing PauseMission grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetMissionResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != MissionResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for PauseMission")
         }
@@ -134,10 +129,9 @@ type ServiceImpl struct{
         if err != nil {
     		fmt.Printf("Error while performing ClearMission grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetMissionResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != MissionResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for ClearMission")
         }
@@ -146,18 +140,17 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetCurrentMissionItem(, index []*Index){
+    func(s *ServiceImpl)SetCurrentMissionItem( index []*Index){
      request := &SetCurrentMissionItemRequest{}
      ctx:= context.Background()
-         request.index = index
+         request.Index = index
         response, err := s.Client.SetCurrentMissionItem(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetCurrentMissionItem grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetMissionResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != MissionResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetCurrentMissionItem")
         }
@@ -175,13 +168,13 @@ type ServiceImpl struct{
     	}
         
         result := response.GetMissionResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != MissionResult_RESULT_SUCCESS{
             fmt.Printf("Error while getting IsMissionFinished")
         }
         
 
-        return response.GetIsMissionFinished()
+        return response.Mission()
         
     }
 
@@ -218,30 +211,29 @@ type ServiceImpl struct{
     	}
         
         result := response.GetMissionResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != MissionResult_RESULT_SUCCESS{
             fmt.Printf("Error while getting GetReturnToLaunchAfterMission")
         }
         
 
-        return response.GetGetReturnToLaunchAfterMission()
+        return response.Mission()
         
     }
 
        
 
-    func(s *ServiceImpl)SetReturnToLaunchAfterMission(, enable []*Enable){
+    func(s *ServiceImpl)SetReturnToLaunchAfterMission( enable []*Enable){
      request := &SetReturnToLaunchAfterMissionRequest{}
      ctx:= context.Background()
-         request.enable = enable
+         request.Enable = enable
         response, err := s.Client.SetReturnToLaunchAfterMission(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetReturnToLaunchAfterMission grpc %v\n", err)
     	}
-        fmt.Printf("")
         
         result := response.GetMissionResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != MissionResult_RESULT_SUCCESS{
             fmt.Printf("Error while extracting result for SetReturnToLaunchAfterMission")
         }
@@ -250,7 +242,7 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)ImportQgroundcontrolMission(, qgc_plan_path []*QgcPlanPath)([]*ImportQgroundcontrolMission){
+    func(s *ServiceImpl)ImportQgroundcontrolMission( qgc_plan_path []*QgcPlanPath)([]*ImportQgroundcontrolMission){
         request := &ImportQgroundcontrolMissionRequest{}
         ctx:= context.Background()
          request.QgcPlanPath = qgc_plan_path
@@ -260,7 +252,7 @@ type ServiceImpl struct{
     	}
         
         result := response.GetMissionResult()
-        fmt.Printf("result %v\n", result)
+        fmt.Printf("result %v\n",  result.String())
         if result.Result != MissionResult_RESULT_SUCCESS{
             fmt.Printf("Error while getting ImportQgroundcontrolMission")
         }
