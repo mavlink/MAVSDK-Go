@@ -6,14 +6,12 @@ import (
 	"io"
 )
 
-type Service interface{
-}
-
 type ServiceImpl struct{
     Client {{plugin_name.upper_camel_case}}ServiceClient
 }
 
 {%- for method in methods -%}
+
     {{ '\n' + indent(method, 1) }}
 
-    {%- endfor %}
+{%- endfor %}

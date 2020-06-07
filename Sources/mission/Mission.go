@@ -4,11 +4,6 @@ import (
 	"io"
 )
 
-type Service interface{
-    Result() MissionResult_Result
-
-}
-
 type ServiceImpl struct{
     Client MissionServiceClient
 }

@@ -11,14 +11,14 @@ func(s *ServiceImpl){{ name.upper_camel_case }}({% for param in params %}, {{ pa
     {% endfor -%}
     response, err := s.Client.{{ name.upper_camel_case }}(ctx, request)
     if err != nil {
-		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+		fmt.Printf("Error while performing {{name.upper_camel_case}} grpc %v\n", err)
 	}
     fmt.Printf("")
     {% if has_result %}
     result := response.Get{{plugin_name.upper_camel_case}}Result()
     fmt.Printf("result %v\n", result)
     if result.Result != {{ plugin_name.upper_camel_case }}Result_RESULT_SUCCESS{
-        fmt.Printf("Error while uploading {{name.upper_camel_case}}")
+        fmt.Printf("Error while extracting result for {{name.upper_camel_case}}")
     }
     {% endif %}
 }
