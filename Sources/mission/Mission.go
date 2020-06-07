@@ -10,7 +10,7 @@ type ServiceImpl struct{
     Client MissionServiceClient
 }
 
-    func(s *ServiceImpl)UploadMission(, mission_plan []*MissionPlan){
+    func(s *ServiceImpl)UploadMission(mission_plan []*MissionPlan){
      request := &UploadMissionRequest{}
      ctx:= context.Background()
          request.MissionPlan = 

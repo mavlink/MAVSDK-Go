@@ -1,5 +1,5 @@
 
-func (a *ServiceImpl) {{ name.upper_camel_case }}({% for param in params %}, {{ param.name.lower_snake_case }}{% endfor %}){
+func (a *ServiceImpl) {{ name.upper_camel_case }}({% for param in params %} {{ param.name.lower_snake_case }}{% endfor %}){
 	request := &Subscribe{{ name.upper_camel_case }}Request{}
 		ctx := context.Background()
 		stream, err := a.Client.Subscribe{{ name.upper_camel_case }}(ctx, request)
