@@ -19,7 +19,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &ConnectionState{}
+    			m := &ConnectionStateResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -32,7 +32,7 @@ type ServiceImpl struct{
     		}	
     }
 
-    func(s *ServiceImpl)ListRunningPlugins()([]*ListRunningPlugins){
+    func(s *ServiceImpl)ListRunningPlugins() (*ListRunningPluginsResponse){
         request := &ListRunningPluginsRequest{}
         ctx:= context.Background()
          response, err := s.Client.ListRunningPlugins(ctx, request)

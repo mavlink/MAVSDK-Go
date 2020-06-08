@@ -10,9 +10,9 @@ type ServiceImpl struct{
     Client GeofenceServiceClient
 }
 
-    func(s *ServiceImpl)UploadGeofence( polygons []*Polygons){
-     request := &UploadGeofenceRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)UploadGeofence( polygons Polygons){
+        request := &UploadGeofenceRequest{}
+        ctx:= context.Background()
          request.Polygons = polygons
             
         response, err := s.Client.UploadGeofence(ctx, request)

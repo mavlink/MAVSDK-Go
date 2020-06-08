@@ -11,8 +11,8 @@ type ServiceImpl struct{
 }
 
     func(s *ServiceImpl)Arm(){
-     request := &ArmRequest{}
-     ctx:= context.Background()
+        request := &ArmRequest{}
+        ctx:= context.Background()
          response, err := s.Client.Arm(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing Arm grpc %v\n", err)
@@ -29,8 +29,8 @@ type ServiceImpl struct{
        
 
     func(s *ServiceImpl)Disarm(){
-     request := &DisarmRequest{}
-     ctx:= context.Background()
+        request := &DisarmRequest{}
+        ctx:= context.Background()
          response, err := s.Client.Disarm(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing Disarm grpc %v\n", err)
@@ -47,8 +47,8 @@ type ServiceImpl struct{
        
 
     func(s *ServiceImpl)Takeoff(){
-     request := &TakeoffRequest{}
-     ctx:= context.Background()
+        request := &TakeoffRequest{}
+        ctx:= context.Background()
          response, err := s.Client.Takeoff(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing Takeoff grpc %v\n", err)
@@ -65,8 +65,8 @@ type ServiceImpl struct{
        
 
     func(s *ServiceImpl)Land(){
-     request := &LandRequest{}
-     ctx:= context.Background()
+        request := &LandRequest{}
+        ctx:= context.Background()
          response, err := s.Client.Land(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing Land grpc %v\n", err)
@@ -83,8 +83,8 @@ type ServiceImpl struct{
        
 
     func(s *ServiceImpl)Reboot(){
-     request := &RebootRequest{}
-     ctx:= context.Background()
+        request := &RebootRequest{}
+        ctx:= context.Background()
          response, err := s.Client.Reboot(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing Reboot grpc %v\n", err)
@@ -101,8 +101,8 @@ type ServiceImpl struct{
        
 
     func(s *ServiceImpl)Shutdown(){
-     request := &ShutdownRequest{}
-     ctx:= context.Background()
+        request := &ShutdownRequest{}
+        ctx:= context.Background()
          response, err := s.Client.Shutdown(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing Shutdown grpc %v\n", err)
@@ -119,8 +119,8 @@ type ServiceImpl struct{
        
 
     func(s *ServiceImpl)Kill(){
-     request := &KillRequest{}
-     ctx:= context.Background()
+        request := &KillRequest{}
+        ctx:= context.Background()
          response, err := s.Client.Kill(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing Kill grpc %v\n", err)
@@ -137,8 +137,8 @@ type ServiceImpl struct{
        
 
     func(s *ServiceImpl)ReturnToLaunch(){
-     request := &ReturnToLaunchRequest{}
-     ctx:= context.Background()
+        request := &ReturnToLaunchRequest{}
+        ctx:= context.Background()
          response, err := s.Client.ReturnToLaunch(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing ReturnToLaunch grpc %v\n", err)
@@ -154,9 +154,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)GotoLocation( latitude_deg []*LatitudeDeg longitude_deg []*LongitudeDeg absolute_altitude_m []*AbsoluteAltitudeM yaw_deg []*YawDeg){
-     request := &GotoLocationRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)GotoLocation( latitude_deg LatitudeDeg longitude_deg LongitudeDeg absolute_altitude_m AbsoluteAltitudeM yaw_deg YawDeg){
+        request := &GotoLocationRequest{}
+        ctx:= context.Background()
          request.LatitudeDeg = latitude_deg
         request.LongitudeDeg = longitude_deg
         request.AbsoluteAltitudeM = absolute_altitude_m
@@ -177,8 +177,8 @@ type ServiceImpl struct{
        
 
     func(s *ServiceImpl)TransitionToFixedwing(){
-     request := &TransitionToFixedwingRequest{}
-     ctx:= context.Background()
+        request := &TransitionToFixedwingRequest{}
+        ctx:= context.Background()
          response, err := s.Client.TransitionToFixedwing(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing TransitionToFixedwing grpc %v\n", err)
@@ -195,8 +195,8 @@ type ServiceImpl struct{
        
 
     func(s *ServiceImpl)TransitionToMulticopter(){
-     request := &TransitionToMulticopterRequest{}
-     ctx:= context.Background()
+        request := &TransitionToMulticopterRequest{}
+        ctx:= context.Background()
          response, err := s.Client.TransitionToMulticopter(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing TransitionToMulticopter grpc %v\n", err)
@@ -212,7 +212,7 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)GetTakeoffAltitude()([]*GetTakeoffAltitude){
+    func(s *ServiceImpl)GetTakeoffAltitude() (*GetTakeoffAltitudeResponse){
         request := &GetTakeoffAltitudeRequest{}
         ctx:= context.Background()
          response, err := s.Client.GetTakeoffAltitude(ctx, request)
@@ -227,15 +227,15 @@ type ServiceImpl struct{
         }
         
 
-        return response.Action()
+        return response
         
     }
 
        
 
-    func(s *ServiceImpl)SetTakeoffAltitude( altitude []*Altitude){
-     request := &SetTakeoffAltitudeRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetTakeoffAltitude( altitude Altitude){
+        request := &SetTakeoffAltitudeRequest{}
+        ctx:= context.Background()
          request.Altitude = altitude
         response, err := s.Client.SetTakeoffAltitude(ctx, request)
         if err != nil {
@@ -252,7 +252,7 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)GetMaximumSpeed()([]*GetMaximumSpeed){
+    func(s *ServiceImpl)GetMaximumSpeed() (*GetMaximumSpeedResponse){
         request := &GetMaximumSpeedRequest{}
         ctx:= context.Background()
          response, err := s.Client.GetMaximumSpeed(ctx, request)
@@ -267,15 +267,15 @@ type ServiceImpl struct{
         }
         
 
-        return response.Action()
+        return response
         
     }
 
        
 
-    func(s *ServiceImpl)SetMaximumSpeed( speed []*Speed){
-     request := &SetMaximumSpeedRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetMaximumSpeed( speed Speed){
+        request := &SetMaximumSpeedRequest{}
+        ctx:= context.Background()
          request.Speed = speed
         response, err := s.Client.SetMaximumSpeed(ctx, request)
         if err != nil {
@@ -292,7 +292,7 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)GetReturnToLaunchAltitude()([]*GetReturnToLaunchAltitude){
+    func(s *ServiceImpl)GetReturnToLaunchAltitude() (*GetReturnToLaunchAltitudeResponse){
         request := &GetReturnToLaunchAltitudeRequest{}
         ctx:= context.Background()
          response, err := s.Client.GetReturnToLaunchAltitude(ctx, request)
@@ -307,15 +307,15 @@ type ServiceImpl struct{
         }
         
 
-        return response.Action()
+        return response
         
     }
 
        
 
-    func(s *ServiceImpl)SetReturnToLaunchAltitude( relative_altitude_m []*RelativeAltitudeM){
-     request := &SetReturnToLaunchAltitudeRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetReturnToLaunchAltitude( relative_altitude_m RelativeAltitudeM){
+        request := &SetReturnToLaunchAltitudeRequest{}
+        ctx:= context.Background()
          request.RelativeAltitudeM = relative_altitude_m
         response, err := s.Client.SetReturnToLaunchAltitude(ctx, request)
         if err != nil {

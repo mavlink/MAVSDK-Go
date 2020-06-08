@@ -10,7 +10,7 @@ type ServiceImpl struct{
     Client LogFilesServiceClient
 }
 
-    func(s *ServiceImpl)GetEntries()([]*GetEntries){
+    func(s *ServiceImpl)GetEntries() (*GetEntriesResponse){
         request := &GetEntriesRequest{}
         ctx:= context.Background()
          response, err := s.Client.GetEntries(ctx, request)
@@ -39,7 +39,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &DownloadLogFile{}
+    			m := &DownloadLogFileResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break

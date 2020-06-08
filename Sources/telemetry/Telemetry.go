@@ -19,7 +19,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &Position{}
+    			m := &PositionResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -41,7 +41,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &Home{}
+    			m := &HomeResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -63,7 +63,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &InAir{}
+    			m := &InAirResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -85,7 +85,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &LandedState{}
+    			m := &LandedStateResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -107,7 +107,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &Armed{}
+    			m := &ArmedResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -129,7 +129,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &AttitudeQuaternion{}
+    			m := &AttitudeQuaternionResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -151,7 +151,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &AttitudeEuler{}
+    			m := &AttitudeEulerResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -173,7 +173,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &AttitudeAngularVelocityBody{}
+    			m := &AttitudeAngularVelocityBodyResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -195,7 +195,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &CameraAttitudeQuaternion{}
+    			m := &CameraAttitudeQuaternionResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -217,7 +217,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &CameraAttitudeEuler{}
+    			m := &CameraAttitudeEulerResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -239,7 +239,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &VelocityNed{}
+    			m := &VelocityNedResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -261,7 +261,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &GpsInfo{}
+    			m := &GpsInfoResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -283,7 +283,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &Battery{}
+    			m := &BatteryResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -305,7 +305,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &FlightMode{}
+    			m := &FlightModeResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -327,7 +327,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &Health{}
+    			m := &HealthResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -349,7 +349,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &RcStatus{}
+    			m := &RcStatusResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -371,7 +371,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &StatusText{}
+    			m := &StatusTextResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -393,7 +393,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &ActuatorControlTarget{}
+    			m := &ActuatorControlTargetResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -415,7 +415,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &ActuatorOutputStatus{}
+    			m := &ActuatorOutputStatusResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -437,7 +437,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &Odometry{}
+    			m := &OdometryResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -459,7 +459,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &PositionVelocityNed{}
+    			m := &PositionVelocityNedResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -481,7 +481,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &GroundTruth{}
+    			m := &GroundTruthResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -503,7 +503,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &FixedwingMetrics{}
+    			m := &FixedwingMetricsResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -525,7 +525,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &Imu{}
+    			m := &ImuResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -547,7 +547,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &HealthAllOk{}
+    			m := &HealthAllOkResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -569,7 +569,7 @@ type ServiceImpl struct{
     		}
 
     		for {
-    			m := &UnixEpochTime{}
+    			m := &UnixEpochTimeResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -582,9 +582,9 @@ type ServiceImpl struct{
     		}	
     }
 
-    func(s *ServiceImpl)SetRatePosition( rate_hz []*RateHz){
-     request := &SetRatePositionRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRatePosition( rate_hz RateHz){
+        request := &SetRatePositionRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRatePosition(ctx, request)
         if err != nil {
@@ -601,9 +601,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateHome( rate_hz []*RateHz){
-     request := &SetRateHomeRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRateHome( rate_hz RateHz){
+        request := &SetRateHomeRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRateHome(ctx, request)
         if err != nil {
@@ -620,9 +620,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateInAir( rate_hz []*RateHz){
-     request := &SetRateInAirRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRateInAir( rate_hz RateHz){
+        request := &SetRateInAirRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRateInAir(ctx, request)
         if err != nil {
@@ -639,9 +639,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateLandedState( rate_hz []*RateHz){
-     request := &SetRateLandedStateRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRateLandedState( rate_hz RateHz){
+        request := &SetRateLandedStateRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRateLandedState(ctx, request)
         if err != nil {
@@ -658,9 +658,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateAttitude( rate_hz []*RateHz){
-     request := &SetRateAttitudeRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRateAttitude( rate_hz RateHz){
+        request := &SetRateAttitudeRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRateAttitude(ctx, request)
         if err != nil {
@@ -677,9 +677,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateCameraAttitude( rate_hz []*RateHz){
-     request := &SetRateCameraAttitudeRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRateCameraAttitude( rate_hz RateHz){
+        request := &SetRateCameraAttitudeRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRateCameraAttitude(ctx, request)
         if err != nil {
@@ -696,9 +696,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateVelocityNed( rate_hz []*RateHz){
-     request := &SetRateVelocityNedRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRateVelocityNed( rate_hz RateHz){
+        request := &SetRateVelocityNedRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRateVelocityNed(ctx, request)
         if err != nil {
@@ -715,9 +715,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateGpsInfo( rate_hz []*RateHz){
-     request := &SetRateGpsInfoRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRateGpsInfo( rate_hz RateHz){
+        request := &SetRateGpsInfoRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRateGpsInfo(ctx, request)
         if err != nil {
@@ -734,9 +734,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateBattery( rate_hz []*RateHz){
-     request := &SetRateBatteryRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRateBattery( rate_hz RateHz){
+        request := &SetRateBatteryRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRateBattery(ctx, request)
         if err != nil {
@@ -753,9 +753,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateRcStatus( rate_hz []*RateHz){
-     request := &SetRateRcStatusRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRateRcStatus( rate_hz RateHz){
+        request := &SetRateRcStatusRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRateRcStatus(ctx, request)
         if err != nil {
@@ -772,9 +772,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateActuatorControlTarget( rate_hz []*RateHz){
-     request := &SetRateActuatorControlTargetRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRateActuatorControlTarget( rate_hz RateHz){
+        request := &SetRateActuatorControlTargetRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRateActuatorControlTarget(ctx, request)
         if err != nil {
@@ -791,9 +791,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateActuatorOutputStatus( rate_hz []*RateHz){
-     request := &SetRateActuatorOutputStatusRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRateActuatorOutputStatus( rate_hz RateHz){
+        request := &SetRateActuatorOutputStatusRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRateActuatorOutputStatus(ctx, request)
         if err != nil {
@@ -810,9 +810,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateOdometry( rate_hz []*RateHz){
-     request := &SetRateOdometryRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRateOdometry( rate_hz RateHz){
+        request := &SetRateOdometryRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRateOdometry(ctx, request)
         if err != nil {
@@ -829,9 +829,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRatePositionVelocityNed( rate_hz []*RateHz){
-     request := &SetRatePositionVelocityNedRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRatePositionVelocityNed( rate_hz RateHz){
+        request := &SetRatePositionVelocityNedRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRatePositionVelocityNed(ctx, request)
         if err != nil {
@@ -848,9 +848,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateGroundTruth( rate_hz []*RateHz){
-     request := &SetRateGroundTruthRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRateGroundTruth( rate_hz RateHz){
+        request := &SetRateGroundTruthRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRateGroundTruth(ctx, request)
         if err != nil {
@@ -867,9 +867,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateFixedwingMetrics( rate_hz []*RateHz){
-     request := &SetRateFixedwingMetricsRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRateFixedwingMetrics( rate_hz RateHz){
+        request := &SetRateFixedwingMetricsRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRateFixedwingMetrics(ctx, request)
         if err != nil {
@@ -886,9 +886,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateImu( rate_hz []*RateHz){
-     request := &SetRateImuRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRateImu( rate_hz RateHz){
+        request := &SetRateImuRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRateImu(ctx, request)
         if err != nil {
@@ -905,9 +905,9 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateUnixEpochTime( rate_hz []*RateHz){
-     request := &SetRateUnixEpochTimeRequest{}
-     ctx:= context.Background()
+    func(s *ServiceImpl)SetRateUnixEpochTime( rate_hz RateHz){
+        request := &SetRateUnixEpochTimeRequest{}
+        ctx:= context.Background()
          request.RateHz = rate_hz
         response, err := s.Client.SetRateUnixEpochTime(ctx, request)
         if err != nil {
