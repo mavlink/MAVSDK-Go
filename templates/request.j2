@@ -20,10 +20,8 @@ func(s *ServiceImpl){{ name.upper_camel_case }}({% for param in params %} {{ par
         fmt.Printf("Error while getting {{name.upper_camel_case}}")
     }
     {% endif %}
-
-    {% if return_type.is_primitive -%}
     return response
-    {% endif %}
+
 }
 
    
