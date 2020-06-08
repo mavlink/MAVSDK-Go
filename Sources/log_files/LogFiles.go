@@ -30,7 +30,7 @@ type ServiceImpl struct{
 
        
 
-    func (a *ServiceImpl) DownloadLogFile( id path){
+    func (a *ServiceImpl) DownloadLogFile(id uint32, path string){
     	request := &SubscribeDownloadLogFileRequest{}
     		ctx := context.Background()
     		stream, err := a.Client.SubscribeDownloadLogFile(ctx, request)

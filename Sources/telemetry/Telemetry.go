@@ -582,10 +582,10 @@ type ServiceImpl struct{
     		}	
     }
 
-    func(s *ServiceImpl)SetRatePosition( rate_hz RateHz){
+    func(s *ServiceImpl)SetRatePosition(rateHz float64){
         request := &SetRatePositionRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRatePosition(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRatePosition grpc %v\n", err)
@@ -601,10 +601,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateHome( rate_hz RateHz){
+    func(s *ServiceImpl)SetRateHome(rateHz float64){
         request := &SetRateHomeRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRateHome(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateHome grpc %v\n", err)
@@ -620,10 +620,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateInAir( rate_hz RateHz){
+    func(s *ServiceImpl)SetRateInAir(rateHz float64){
         request := &SetRateInAirRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRateInAir(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateInAir grpc %v\n", err)
@@ -639,10 +639,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateLandedState( rate_hz RateHz){
+    func(s *ServiceImpl)SetRateLandedState(rateHz float64){
         request := &SetRateLandedStateRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRateLandedState(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateLandedState grpc %v\n", err)
@@ -658,10 +658,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateAttitude( rate_hz RateHz){
+    func(s *ServiceImpl)SetRateAttitude(rateHz float64){
         request := &SetRateAttitudeRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRateAttitude(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateAttitude grpc %v\n", err)
@@ -677,10 +677,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateCameraAttitude( rate_hz RateHz){
+    func(s *ServiceImpl)SetRateCameraAttitude(rateHz float64){
         request := &SetRateCameraAttitudeRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRateCameraAttitude(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateCameraAttitude grpc %v\n", err)
@@ -696,10 +696,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateVelocityNed( rate_hz RateHz){
+    func(s *ServiceImpl)SetRateVelocityNed(rateHz float64){
         request := &SetRateVelocityNedRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRateVelocityNed(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateVelocityNed grpc %v\n", err)
@@ -715,10 +715,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateGpsInfo( rate_hz RateHz){
+    func(s *ServiceImpl)SetRateGpsInfo(rateHz float64){
         request := &SetRateGpsInfoRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRateGpsInfo(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateGpsInfo grpc %v\n", err)
@@ -734,10 +734,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateBattery( rate_hz RateHz){
+    func(s *ServiceImpl)SetRateBattery(rateHz float64){
         request := &SetRateBatteryRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRateBattery(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateBattery grpc %v\n", err)
@@ -753,10 +753,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateRcStatus( rate_hz RateHz){
+    func(s *ServiceImpl)SetRateRcStatus(rateHz float64){
         request := &SetRateRcStatusRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRateRcStatus(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateRcStatus grpc %v\n", err)
@@ -772,10 +772,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateActuatorControlTarget( rate_hz RateHz){
+    func(s *ServiceImpl)SetRateActuatorControlTarget(rateHz float64){
         request := &SetRateActuatorControlTargetRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRateActuatorControlTarget(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateActuatorControlTarget grpc %v\n", err)
@@ -791,10 +791,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateActuatorOutputStatus( rate_hz RateHz){
+    func(s *ServiceImpl)SetRateActuatorOutputStatus(rateHz float64){
         request := &SetRateActuatorOutputStatusRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRateActuatorOutputStatus(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateActuatorOutputStatus grpc %v\n", err)
@@ -810,10 +810,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateOdometry( rate_hz RateHz){
+    func(s *ServiceImpl)SetRateOdometry(rateHz float64){
         request := &SetRateOdometryRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRateOdometry(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateOdometry grpc %v\n", err)
@@ -829,10 +829,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRatePositionVelocityNed( rate_hz RateHz){
+    func(s *ServiceImpl)SetRatePositionVelocityNed(rateHz float64){
         request := &SetRatePositionVelocityNedRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRatePositionVelocityNed(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRatePositionVelocityNed grpc %v\n", err)
@@ -848,10 +848,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateGroundTruth( rate_hz RateHz){
+    func(s *ServiceImpl)SetRateGroundTruth(rateHz float64){
         request := &SetRateGroundTruthRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRateGroundTruth(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateGroundTruth grpc %v\n", err)
@@ -867,10 +867,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateFixedwingMetrics( rate_hz RateHz){
+    func(s *ServiceImpl)SetRateFixedwingMetrics(rateHz float64){
         request := &SetRateFixedwingMetricsRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRateFixedwingMetrics(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateFixedwingMetrics grpc %v\n", err)
@@ -886,10 +886,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateImu( rate_hz RateHz){
+    func(s *ServiceImpl)SetRateImu(rateHz float64){
         request := &SetRateImuRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRateImu(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateImu grpc %v\n", err)
@@ -905,10 +905,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetRateUnixEpochTime( rate_hz RateHz){
+    func(s *ServiceImpl)SetRateUnixEpochTime(rateHz float64){
         request := &SetRateUnixEpochTimeRequest{}
         ctx:= context.Background()
-         request.RateHz = rate_hz
+         request.RateHz = rateHz
         response, err := s.Client.SetRateUnixEpochTime(ctx, request)
         if err != nil {
     		fmt.Printf("Error while performing SetRateUnixEpochTime grpc %v\n", err)

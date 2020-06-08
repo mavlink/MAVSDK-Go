@@ -10,10 +10,10 @@ type ServiceImpl struct{
     Client MissionServiceClient
 }
 
-    func(s *ServiceImpl)UploadMission( mission_plan MissionPlan){
+    func(s *ServiceImpl)UploadMission(missionPlan MissionPlan){
         request := &UploadMissionRequest{}
         ctx:= context.Background()
-         request.MissionPlan = mission_plan
+         request.MissionPlan = missionPlan
             
         response, err := s.Client.UploadMission(ctx, request)
         if err != nil {
@@ -140,7 +140,7 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetCurrentMissionItem( index Index){
+    func(s *ServiceImpl)SetCurrentMissionItem(index int32_t){
         request := &SetCurrentMissionItemRequest{}
         ctx:= context.Background()
          request.Index = index
@@ -221,7 +221,7 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)SetReturnToLaunchAfterMission( enable Enable){
+    func(s *ServiceImpl)SetReturnToLaunchAfterMission(enable bool){
         request := &SetReturnToLaunchAfterMissionRequest{}
         ctx:= context.Background()
          request.Enable = enable
@@ -240,10 +240,10 @@ type ServiceImpl struct{
 
        
 
-    func(s *ServiceImpl)ImportQgroundcontrolMission( qgc_plan_path QgcPlanPath) (*ImportQgroundcontrolMissionResponse){
+    func(s *ServiceImpl)ImportQgroundcontrolMission(qgcPlanPath string) (*ImportQgroundcontrolMissionResponse){
         request := &ImportQgroundcontrolMissionRequest{}
         ctx:= context.Background()
-         request.QgcPlanPath = qgc_plan_path
+         request.QgcPlanPath = qgcPlanPath
         response, err := s.Client.ImportQgroundcontrolMission(ctx, request)
         if err != nil {
     		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
