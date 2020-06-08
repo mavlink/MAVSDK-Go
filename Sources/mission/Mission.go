@@ -180,7 +180,7 @@ type ServiceImpl struct{
        
 
     func (a *ServiceImpl) MissionProgress(){
-    	request := &SubscribeMissionProgressRequest{}
+    		request := &SubscribeMissionProgressRequest{}
     		ctx := context.Background()
     		stream, err := a.Client.SubscribeMissionProgress(ctx, request)
     		if err != nil {

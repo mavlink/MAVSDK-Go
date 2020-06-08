@@ -11,7 +11,7 @@ type ServiceImpl struct{
 }
 
     func (a *ServiceImpl) ConnectionState(){
-    	request := &SubscribeConnectionStateRequest{}
+    		request := &SubscribeConnectionStateRequest{}
     		ctx := context.Background()
     		stream, err := a.Client.SubscribeConnectionState(ctx, request)
     		if err != nil {

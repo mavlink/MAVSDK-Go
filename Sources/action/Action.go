@@ -3,293 +3,328 @@ package action
 import (
 	"context"
 	"fmt"
+	"io"
 )
 
-type ServiceImpl struct {
-	Client ActionServiceClient
+type ServiceImpl struct{
+    Client ActionServiceClient
 }
 
-func (s *ServiceImpl) Arm() {
-	request := &ArmRequest{}
-	ctx := context.Background()
-	response, err := s.Client.Arm(ctx, request)
-	if err != nil {
-		fmt.Printf("Error while performing Arm grpc %v\n", err)
-	}
+    func(s *ServiceImpl)Arm(){
+        request := &ArmRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.Arm(ctx, request)
+        if err != nil {
+    		fmt.Printf("Error while performing Arm grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while extracting result for Arm")
+        }
+        
+    }
 
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while extracting result for Arm")
-	}
+       
 
-}
+    func(s *ServiceImpl)Disarm(){
+        request := &DisarmRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.Disarm(ctx, request)
+        if err != nil {
+    		fmt.Printf("Error while performing Disarm grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while extracting result for Disarm")
+        }
+        
+    }
 
-func (s *ServiceImpl) Disarm() {
-	request := &DisarmRequest{}
-	ctx := context.Background()
-	response, err := s.Client.Disarm(ctx, request)
-	if err != nil {
-		fmt.Printf("Error while performing Disarm grpc %v\n", err)
-	}
+       
 
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while extracting result for Disarm")
-	}
+    func(s *ServiceImpl)Takeoff(){
+        request := &TakeoffRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.Takeoff(ctx, request)
+        if err != nil {
+    		fmt.Printf("Error while performing Takeoff grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while extracting result for Takeoff")
+        }
+        
+    }
 
-}
+       
 
-func (s *ServiceImpl) Takeoff() {
-	request := &TakeoffRequest{}
-	ctx := context.Background()
-	response, err := s.Client.Takeoff(ctx, request)
-	if err != nil {
-		fmt.Printf("Error while performing Takeoff grpc %v\n", err)
-	}
+    func(s *ServiceImpl)Land(){
+        request := &LandRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.Land(ctx, request)
+        if err != nil {
+    		fmt.Printf("Error while performing Land grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while extracting result for Land")
+        }
+        
+    }
 
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while extracting result for Takeoff")
-	}
+       
 
-}
+    func(s *ServiceImpl)Reboot(){
+        request := &RebootRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.Reboot(ctx, request)
+        if err != nil {
+    		fmt.Printf("Error while performing Reboot grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while extracting result for Reboot")
+        }
+        
+    }
 
-func (s *ServiceImpl) Land() {
-	request := &LandRequest{}
-	ctx := context.Background()
-	response, err := s.Client.Land(ctx, request)
-	if err != nil {
-		fmt.Printf("Error while performing Land grpc %v\n", err)
-	}
+       
 
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while extracting result for Land")
-	}
+    func(s *ServiceImpl)Shutdown(){
+        request := &ShutdownRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.Shutdown(ctx, request)
+        if err != nil {
+    		fmt.Printf("Error while performing Shutdown grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while extracting result for Shutdown")
+        }
+        
+    }
 
-}
+       
 
-func (s *ServiceImpl) Reboot() {
-	request := &RebootRequest{}
-	ctx := context.Background()
-	response, err := s.Client.Reboot(ctx, request)
-	if err != nil {
-		fmt.Printf("Error while performing Reboot grpc %v\n", err)
-	}
+    func(s *ServiceImpl)Kill(){
+        request := &KillRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.Kill(ctx, request)
+        if err != nil {
+    		fmt.Printf("Error while performing Kill grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while extracting result for Kill")
+        }
+        
+    }
 
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while extracting result for Reboot")
-	}
+       
 
-}
+    func(s *ServiceImpl)ReturnToLaunch(){
+        request := &ReturnToLaunchRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.ReturnToLaunch(ctx, request)
+        if err != nil {
+    		fmt.Printf("Error while performing ReturnToLaunch grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while extracting result for ReturnToLaunch")
+        }
+        
+    }
 
-func (s *ServiceImpl) Shutdown() {
-	request := &ShutdownRequest{}
-	ctx := context.Background()
-	response, err := s.Client.Shutdown(ctx, request)
-	if err != nil {
-		fmt.Printf("Error while performing Shutdown grpc %v\n", err)
-	}
+       
 
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while extracting result for Shutdown")
-	}
+    func(s *ServiceImpl)GotoLocation(latitudeDeg float64, longitudeDeg float64, absoluteAltitudeM float32, yawDeg float32){
+        request := &GotoLocationRequest{}
+        ctx:= context.Background()
+         request.LatitudeDeg = latitudeDeg
+        request.LongitudeDeg = longitudeDeg
+        request.AbsoluteAltitudeM = absoluteAltitudeM
+        request.YawDeg = yawDeg
+        response, err := s.Client.GotoLocation(ctx, request)
+        if err != nil {
+    		fmt.Printf("Error while performing GotoLocation grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while extracting result for GotoLocation")
+        }
+        
+    }
 
-}
+       
 
-func (s *ServiceImpl) Kill() {
-	request := &KillRequest{}
-	ctx := context.Background()
-	response, err := s.Client.Kill(ctx, request)
-	if err != nil {
-		fmt.Printf("Error while performing Kill grpc %v\n", err)
-	}
+    func(s *ServiceImpl)TransitionToFixedwing(){
+        request := &TransitionToFixedwingRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.TransitionToFixedwing(ctx, request)
+        if err != nil {
+    		fmt.Printf("Error while performing TransitionToFixedwing grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while extracting result for TransitionToFixedwing")
+        }
+        
+    }
 
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while extracting result for Kill")
-	}
+       
 
-}
+    func(s *ServiceImpl)TransitionToMulticopter(){
+        request := &TransitionToMulticopterRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.TransitionToMulticopter(ctx, request)
+        if err != nil {
+    		fmt.Printf("Error while performing TransitionToMulticopter grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while extracting result for TransitionToMulticopter")
+        }
+        
+    }
 
-func (s *ServiceImpl) ReturnToLaunch() {
-	request := &ReturnToLaunchRequest{}
-	ctx := context.Background()
-	response, err := s.Client.ReturnToLaunch(ctx, request)
-	if err != nil {
-		fmt.Printf("Error while performing ReturnToLaunch grpc %v\n", err)
-	}
+       
 
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while extracting result for ReturnToLaunch")
-	}
+    func(s *ServiceImpl)GetTakeoffAltitude() (*GetTakeoffAltitudeResponse){
+        request := &GetTakeoffAltitudeRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.GetTakeoffAltitude(ctx, request)
+        if err != nil {
+    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while getting GetTakeoffAltitude")
+        }
+        
+        return response
 
-}
+    }
 
-func (s *ServiceImpl) GotoLocation(latitudeDeg float64, longitudeDeg float64, absoluteAltitudeM float32, yawDeg float32) {
-	request := &GotoLocationRequest{}
-	ctx := context.Background()
-	request.LatitudeDeg = latitudeDeg
-	request.LongitudeDeg = longitudeDeg
-	request.AbsoluteAltitudeM = absoluteAltitudeM
-	request.YawDeg = yawDeg
-	response, err := s.Client.GotoLocation(ctx, request)
-	if err != nil {
-		fmt.Printf("Error while performing GotoLocation grpc %v\n", err)
-	}
+       
 
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while extracting result for GotoLocation")
-	}
+    func(s *ServiceImpl)SetTakeoffAltitude(altitude float32){
+        request := &SetTakeoffAltitudeRequest{}
+        ctx:= context.Background()
+         request.Altitude = altitude
+        response, err := s.Client.SetTakeoffAltitude(ctx, request)
+        if err != nil {
+    		fmt.Printf("Error while performing SetTakeoffAltitude grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while extracting result for SetTakeoffAltitude")
+        }
+        
+    }
 
-}
+       
 
-func (s *ServiceImpl) TransitionToFixedwing() {
-	request := &TransitionToFixedwingRequest{}
-	ctx := context.Background()
-	response, err := s.Client.TransitionToFixedwing(ctx, request)
-	if err != nil {
-		fmt.Printf("Error while performing TransitionToFixedwing grpc %v\n", err)
-	}
+    func(s *ServiceImpl)GetMaximumSpeed() (*GetMaximumSpeedResponse){
+        request := &GetMaximumSpeedRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.GetMaximumSpeed(ctx, request)
+        if err != nil {
+    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while getting GetMaximumSpeed")
+        }
+        
+        return response
 
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while extracting result for TransitionToFixedwing")
-	}
+    }
 
-}
+       
 
-func (s *ServiceImpl) TransitionToMulticopter() {
-	request := &TransitionToMulticopterRequest{}
-	ctx := context.Background()
-	response, err := s.Client.TransitionToMulticopter(ctx, request)
-	if err != nil {
-		fmt.Printf("Error while performing TransitionToMulticopter grpc %v\n", err)
-	}
+    func(s *ServiceImpl)SetMaximumSpeed(speed float32){
+        request := &SetMaximumSpeedRequest{}
+        ctx:= context.Background()
+         request.Speed = speed
+        response, err := s.Client.SetMaximumSpeed(ctx, request)
+        if err != nil {
+    		fmt.Printf("Error while performing SetMaximumSpeed grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while extracting result for SetMaximumSpeed")
+        }
+        
+    }
 
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while extracting result for TransitionToMulticopter")
-	}
+       
 
-}
+    func(s *ServiceImpl)GetReturnToLaunchAltitude() (*GetReturnToLaunchAltitudeResponse){
+        request := &GetReturnToLaunchAltitudeRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.GetReturnToLaunchAltitude(ctx, request)
+        if err != nil {
+    		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while getting GetReturnToLaunchAltitude")
+        }
+        
+        return response
 
-func (s *ServiceImpl) GetTakeoffAltitude() *GetTakeoffAltitudeResponse {
-	request := &GetTakeoffAltitudeRequest{}
-	ctx := context.Background()
-	response, err := s.Client.GetTakeoffAltitude(ctx, request)
-	if err != nil {
-		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
-	}
+    }
 
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while getting GetTakeoffAltitude")
-	}
+       
 
-	return response
+    func(s *ServiceImpl)SetReturnToLaunchAltitude(relativeAltitudeM float32){
+        request := &SetReturnToLaunchAltitudeRequest{}
+        ctx:= context.Background()
+         request.RelativeAltitudeM = relativeAltitudeM
+        response, err := s.Client.SetReturnToLaunchAltitude(ctx, request)
+        if err != nil {
+    		fmt.Printf("Error while performing SetReturnToLaunchAltitude grpc %v\n", err)
+    	}
+        
+        result := response.GetActionResult()
+        fmt.Printf("result %v\n",  result.String())
+        if result.Result != ActionResult_RESULT_SUCCESS{
+            fmt.Printf("Error while extracting result for SetReturnToLaunchAltitude")
+        }
+        
+    }
 
-}
-
-func (s *ServiceImpl) SetTakeoffAltitude(altitude float32) {
-	request := &SetTakeoffAltitudeRequest{}
-	ctx := context.Background()
-	request.Altitude = altitude
-	response, err := s.Client.SetTakeoffAltitude(ctx, request)
-	if err != nil {
-		fmt.Printf("Error while performing SetTakeoffAltitude grpc %v\n", err)
-	}
-
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while extracting result for SetTakeoffAltitude")
-	}
-
-}
-
-func (s *ServiceImpl) GetMaximumSpeed() *GetMaximumSpeedResponse {
-	request := &GetMaximumSpeedRequest{}
-	ctx := context.Background()
-	response, err := s.Client.GetMaximumSpeed(ctx, request)
-	if err != nil {
-		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
-	}
-
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while getting GetMaximumSpeed")
-	}
-
-	return response
-
-}
-
-func (s *ServiceImpl) SetMaximumSpeed(speed float32) {
-	request := &SetMaximumSpeedRequest{}
-	ctx := context.Background()
-	request.Speed = speed
-	response, err := s.Client.SetMaximumSpeed(ctx, request)
-	if err != nil {
-		fmt.Printf("Error while performing SetMaximumSpeed grpc %v\n", err)
-	}
-
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while extracting result for SetMaximumSpeed")
-	}
-
-}
-
-func (s *ServiceImpl) GetReturnToLaunchAltitude() *GetReturnToLaunchAltitudeResponse {
-	request := &GetReturnToLaunchAltitudeRequest{}
-	ctx := context.Background()
-	response, err := s.Client.GetReturnToLaunchAltitude(ctx, request)
-	if err != nil {
-		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
-	}
-
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while getting GetReturnToLaunchAltitude")
-	}
-
-	return response
-
-}
-
-func (s *ServiceImpl) SetReturnToLaunchAltitude(relativeAltitudeM float32) {
-	request := &SetReturnToLaunchAltitudeRequest{}
-	ctx := context.Background()
-	request.RelativeAltitudeM = relativeAltitudeM
-	response, err := s.Client.SetReturnToLaunchAltitude(ctx, request)
-	if err != nil {
-		fmt.Printf("Error while performing SetReturnToLaunchAltitude grpc %v\n", err)
-	}
-
-	result := response.GetActionResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != ActionResult_RESULT_SUCCESS {
-		fmt.Printf("Error while extracting result for SetReturnToLaunchAltitude")
-	}
-
-}
+       
