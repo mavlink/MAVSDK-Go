@@ -9,7 +9,9 @@
 
      {%- endif %}
 */
-func (a *ServiceImpl) {{ name.upper_camel_case }}({% for param in params %}{%- if param.type_info.is_primitive -%}{{ param.name.lower_camel_case }} {{ param.type_info.name }}{%- elif param.type_info.is_repeated -%} {{ param.name.lower_camel_case }} {{ param.type_info.name }} {%- else -%} {{ param.name.lower_camel_case }} *{{ param.type_info.name }} {% endif %}{{ ", " if not loop.last }}{% endfor %}){
+
+func (a *ServiceImpl) {{ name.upper_camel_case }}({% for param in params %}{%- if param.type_info.is_primitive -%}{{ param.name.lower_camel_case }} {{ param.type_info.name }}{%- elif param.type_info.is_repeated -%} {{ param.name.lower_camel_case }} {{ param.type_info.name }} {%- else -%} {{ param.name.lower_camel_case }} *{{ param.type_info.name }} {% endif %}{{ ", " if not loop.last }}{% endfor %}) <-chan {% if return_type.is_repeated or return_type.is_primitive  %}  {{ return_type.name }}  {% else %} *{{ return_type.name }} {% endif %}{
+		ch := make(chan {% if return_type.is_repeated or return_type.is_primitive  %}  {{ return_type.name }}  {% else %} *{{ return_type.name }} {% endif %})
 		request := &Subscribe{{ name.upper_camel_case }}Request{}
 		{% for param in params %}
         {%- if param.type_info.is_primitive -%}
@@ -23,8 +25,9 @@ func (a *ServiceImpl) {{ name.upper_camel_case }}({% for param in params %}{%- i
 		if err != nil {
 			fmt.Printf("Unable to subscribe %v\n", err)
 		}
-
+	go func() {
 		for {
+			defer close(ch)
 			m := &{{ name.upper_camel_case }}Response{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -35,5 +38,7 @@ func (a *ServiceImpl) {{ name.upper_camel_case }}({% for param in params %}{%- i
 				break
 			}
 			fmt.Printf("message %v\n", m)
-		}	
+		}
+	}()	
+	return ch
 }

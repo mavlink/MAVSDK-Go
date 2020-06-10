@@ -15,26 +15,31 @@ type ServiceImpl struct {
 
 
 */
-func (a *ServiceImpl) Position() {
+
+func (a *ServiceImpl) Position() <-chan *Position {
+	ch := make(chan *Position)
 	request := &SubscribePositionRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribePosition(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &PositionResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &PositionResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -42,26 +47,31 @@ func (a *ServiceImpl) Position() {
 
 
 */
-func (a *ServiceImpl) Home() {
+
+func (a *ServiceImpl) Home() <-chan *Position {
+	ch := make(chan *Position)
 	request := &SubscribeHomeRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeHome(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &HomeResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &HomeResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -69,26 +79,31 @@ func (a *ServiceImpl) Home() {
 
 
 */
-func (a *ServiceImpl) InAir() {
+
+func (a *ServiceImpl) InAir() <-chan bool {
+	ch := make(chan bool)
 	request := &SubscribeInAirRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeInAir(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &InAirResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &InAirResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -96,26 +111,31 @@ func (a *ServiceImpl) InAir() {
 
 
 */
-func (a *ServiceImpl) LandedState() {
+
+func (a *ServiceImpl) LandedState() <-chan *LandedState {
+	ch := make(chan *LandedState)
 	request := &SubscribeLandedStateRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeLandedState(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &LandedStateResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &LandedStateResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -123,26 +143,31 @@ func (a *ServiceImpl) LandedState() {
 
 
 */
-func (a *ServiceImpl) Armed() {
+
+func (a *ServiceImpl) Armed() <-chan bool {
+	ch := make(chan bool)
 	request := &SubscribeArmedRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeArmed(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &ArmedResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &ArmedResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -150,26 +175,31 @@ func (a *ServiceImpl) Armed() {
 
 
 */
-func (a *ServiceImpl) AttitudeQuaternion() {
+
+func (a *ServiceImpl) AttitudeQuaternion() <-chan *Quaternion {
+	ch := make(chan *Quaternion)
 	request := &SubscribeAttitudeQuaternionRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeAttitudeQuaternion(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &AttitudeQuaternionResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &AttitudeQuaternionResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -177,26 +207,31 @@ func (a *ServiceImpl) AttitudeQuaternion() {
 
 
 */
-func (a *ServiceImpl) AttitudeEuler() {
+
+func (a *ServiceImpl) AttitudeEuler() <-chan *EulerAngle {
+	ch := make(chan *EulerAngle)
 	request := &SubscribeAttitudeEulerRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeAttitudeEuler(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &AttitudeEulerResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &AttitudeEulerResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -204,26 +239,31 @@ func (a *ServiceImpl) AttitudeEuler() {
 
 
 */
-func (a *ServiceImpl) AttitudeAngularVelocityBody() {
+
+func (a *ServiceImpl) AttitudeAngularVelocityBody() <-chan *AngularVelocityBody {
+	ch := make(chan *AngularVelocityBody)
 	request := &SubscribeAttitudeAngularVelocityBodyRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeAttitudeAngularVelocityBody(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &AttitudeAngularVelocityBodyResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &AttitudeAngularVelocityBodyResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -231,26 +271,31 @@ func (a *ServiceImpl) AttitudeAngularVelocityBody() {
 
 
 */
-func (a *ServiceImpl) CameraAttitudeQuaternion() {
+
+func (a *ServiceImpl) CameraAttitudeQuaternion() <-chan *Quaternion {
+	ch := make(chan *Quaternion)
 	request := &SubscribeCameraAttitudeQuaternionRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeCameraAttitudeQuaternion(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &CameraAttitudeQuaternionResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &CameraAttitudeQuaternionResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -258,26 +303,31 @@ func (a *ServiceImpl) CameraAttitudeQuaternion() {
 
 
 */
-func (a *ServiceImpl) CameraAttitudeEuler() {
+
+func (a *ServiceImpl) CameraAttitudeEuler() <-chan *EulerAngle {
+	ch := make(chan *EulerAngle)
 	request := &SubscribeCameraAttitudeEulerRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeCameraAttitudeEuler(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &CameraAttitudeEulerResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &CameraAttitudeEulerResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -285,26 +335,31 @@ func (a *ServiceImpl) CameraAttitudeEuler() {
 
 
 */
-func (a *ServiceImpl) VelocityNed() {
+
+func (a *ServiceImpl) VelocityNed() <-chan *VelocityNed {
+	ch := make(chan *VelocityNed)
 	request := &SubscribeVelocityNedRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeVelocityNed(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &VelocityNedResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &VelocityNedResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -312,26 +367,31 @@ func (a *ServiceImpl) VelocityNed() {
 
 
 */
-func (a *ServiceImpl) GpsInfo() {
+
+func (a *ServiceImpl) GpsInfo() <-chan *GpsInfo {
+	ch := make(chan *GpsInfo)
 	request := &SubscribeGpsInfoRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeGpsInfo(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &GpsInfoResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &GpsInfoResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -339,26 +399,31 @@ func (a *ServiceImpl) GpsInfo() {
 
 
 */
-func (a *ServiceImpl) Battery() {
+
+func (a *ServiceImpl) Battery() <-chan *Battery {
+	ch := make(chan *Battery)
 	request := &SubscribeBatteryRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeBattery(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &BatteryResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &BatteryResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -366,26 +431,31 @@ func (a *ServiceImpl) Battery() {
 
 
 */
-func (a *ServiceImpl) FlightMode() {
+
+func (a *ServiceImpl) FlightMode() <-chan *FlightMode {
+	ch := make(chan *FlightMode)
 	request := &SubscribeFlightModeRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeFlightMode(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &FlightModeResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &FlightModeResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -393,26 +463,31 @@ func (a *ServiceImpl) FlightMode() {
 
 
 */
-func (a *ServiceImpl) Health() {
+
+func (a *ServiceImpl) Health() <-chan *Health {
+	ch := make(chan *Health)
 	request := &SubscribeHealthRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeHealth(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &HealthResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &HealthResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -420,26 +495,31 @@ func (a *ServiceImpl) Health() {
 
 
 */
-func (a *ServiceImpl) RcStatus() {
+
+func (a *ServiceImpl) RcStatus() <-chan *RcStatus {
+	ch := make(chan *RcStatus)
 	request := &SubscribeRcStatusRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeRcStatus(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &RcStatusResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &RcStatusResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -447,26 +527,31 @@ func (a *ServiceImpl) RcStatus() {
 
 
 */
-func (a *ServiceImpl) StatusText() {
+
+func (a *ServiceImpl) StatusText() <-chan *StatusText {
+	ch := make(chan *StatusText)
 	request := &SubscribeStatusTextRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeStatusText(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &StatusTextResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &StatusTextResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -474,26 +559,31 @@ func (a *ServiceImpl) StatusText() {
 
 
 */
-func (a *ServiceImpl) ActuatorControlTarget() {
+
+func (a *ServiceImpl) ActuatorControlTarget() <-chan *ActuatorControlTarget {
+	ch := make(chan *ActuatorControlTarget)
 	request := &SubscribeActuatorControlTargetRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeActuatorControlTarget(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &ActuatorControlTargetResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &ActuatorControlTargetResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -501,26 +591,31 @@ func (a *ServiceImpl) ActuatorControlTarget() {
 
 
 */
-func (a *ServiceImpl) ActuatorOutputStatus() {
+
+func (a *ServiceImpl) ActuatorOutputStatus() <-chan *ActuatorOutputStatus {
+	ch := make(chan *ActuatorOutputStatus)
 	request := &SubscribeActuatorOutputStatusRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeActuatorOutputStatus(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &ActuatorOutputStatusResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &ActuatorOutputStatusResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -528,26 +623,31 @@ func (a *ServiceImpl) ActuatorOutputStatus() {
 
 
 */
-func (a *ServiceImpl) Odometry() {
+
+func (a *ServiceImpl) Odometry() <-chan *Odometry {
+	ch := make(chan *Odometry)
 	request := &SubscribeOdometryRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeOdometry(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &OdometryResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &OdometryResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -555,26 +655,31 @@ func (a *ServiceImpl) Odometry() {
 
 
 */
-func (a *ServiceImpl) PositionVelocityNed() {
+
+func (a *ServiceImpl) PositionVelocityNed() <-chan *PositionVelocityNed {
+	ch := make(chan *PositionVelocityNed)
 	request := &SubscribePositionVelocityNedRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribePositionVelocityNed(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &PositionVelocityNedResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &PositionVelocityNedResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -582,26 +687,31 @@ func (a *ServiceImpl) PositionVelocityNed() {
 
 
 */
-func (a *ServiceImpl) GroundTruth() {
+
+func (a *ServiceImpl) GroundTruth() <-chan *GroundTruth {
+	ch := make(chan *GroundTruth)
 	request := &SubscribeGroundTruthRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeGroundTruth(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &GroundTruthResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &GroundTruthResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -609,26 +719,31 @@ func (a *ServiceImpl) GroundTruth() {
 
 
 */
-func (a *ServiceImpl) FixedwingMetrics() {
+
+func (a *ServiceImpl) FixedwingMetrics() <-chan *FixedwingMetrics {
+	ch := make(chan *FixedwingMetrics)
 	request := &SubscribeFixedwingMetricsRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeFixedwingMetrics(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &FixedwingMetricsResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &FixedwingMetricsResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -636,26 +751,31 @@ func (a *ServiceImpl) FixedwingMetrics() {
 
 
 */
-func (a *ServiceImpl) Imu() {
+
+func (a *ServiceImpl) Imu() <-chan *Imu {
+	ch := make(chan *Imu)
 	request := &SubscribeImuRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeImu(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &ImuResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &ImuResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -663,26 +783,31 @@ func (a *ServiceImpl) Imu() {
 
 
 */
-func (a *ServiceImpl) HealthAllOk() {
+
+func (a *ServiceImpl) HealthAllOk() <-chan bool {
+	ch := make(chan bool)
 	request := &SubscribeHealthAllOkRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeHealthAllOk(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &HealthAllOkResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &HealthAllOkResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*
@@ -690,26 +815,31 @@ func (a *ServiceImpl) HealthAllOk() {
 
 
 */
-func (a *ServiceImpl) UnixEpochTime() {
+
+func (a *ServiceImpl) UnixEpochTime() <-chan uint64 {
+	ch := make(chan uint64)
 	request := &SubscribeUnixEpochTimeRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeUnixEpochTime(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &UnixEpochTimeResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &UnixEpochTimeResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*

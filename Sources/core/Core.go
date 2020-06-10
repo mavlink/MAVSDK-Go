@@ -15,26 +15,31 @@ type ServiceImpl struct {
 
 
 */
-func (a *ServiceImpl) ConnectionState() {
+
+func (a *ServiceImpl) ConnectionState() <-chan *ConnectionState {
+	ch := make(chan *ConnectionState)
 	request := &SubscribeConnectionStateRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeConnectionState(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &ConnectionStateResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &ConnectionStateResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*

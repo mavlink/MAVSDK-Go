@@ -8,6 +8,7 @@
     "bool": "bool",
     "bytes": "[]byte",
     "uint32_t":"uint32",
+    "uint64_t":"uint64",
     "std::string":"string",
     "uint32":"uint32",
     "repeated": { "prefix": "[]*", "suffix": "" }

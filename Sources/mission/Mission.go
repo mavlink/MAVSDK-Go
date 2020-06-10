@@ -271,26 +271,31 @@ func (s *ServiceImpl) IsMissionFinished() bool {
 
 
 */
-func (a *ServiceImpl) MissionProgress() {
+
+func (a *ServiceImpl) MissionProgress() <-chan *MissionProgress {
+	ch := make(chan *MissionProgress)
 	request := &SubscribeMissionProgressRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeMissionProgress(ctx, request)
 	if err != nil {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
-
-	for {
-		m := &MissionProgressResponse{}
-		err := stream.RecvMsg(m)
-		if err == io.EOF {
-			break
+	go func() {
+		for {
+			defer close(ch)
+			m := &MissionProgressResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			fmt.Printf("message %v\n", m)
 		}
-		if err != nil {
-			fmt.Printf("Unable to receive message %v", err)
-			break
-		}
-		fmt.Printf("message %v\n", m)
-	}
+	}()
+	return ch
 }
 
 /*

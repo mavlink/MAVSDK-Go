@@ -12,14 +12,6 @@ import (
 	"google.golang.org/grpc"
 )
 
-//System provides interface to interract with a drone
-type System interface {
-	Connect()
-	InitPlugins()
-	startMAVSDKServer()
-	connectToMAVSDKServer() *grpc.ClientConn
-}
-
 //Drone creates a drone object to interact with drone related plugins
 type Drone struct {
 	port         string
@@ -82,10 +74,16 @@ func (s *Drone) connectToMAVSDKServer() *grpc.ClientConn {
 }
 
 func main() {
-	drone := &Drone{port: "50051", mavsdkServer: "127.0.0.1"}
+	drone := &Drone{port: "50051", mavsdkServer: "192.168.0.119"}
 	drone.Connect()
 	// drone.core.Init()
-	drone.core.ListRunningPlugins()
+	x := drone.core.ListRunningPlugins()
+	fmt.Printf("%v\n", x)
+	ch := drone.telemetry.PositionVelocityNed()
+	for x := range ch {
+		fmt.Printf("%v\n", x)
+	}
+
 	// r := <-drone.telemetry.Position()
 	// for key, value := range r {
 	// 	fmt.Printf("position key=%v value = %v\n", key, value)
