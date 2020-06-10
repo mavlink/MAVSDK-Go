@@ -1,5 +1,24 @@
+/*
+ {{ indent(method_description, 1) }}
+
+     {% if params -%}
+     Parameters
+     ----------
+     {% for param in params %}
+        {%- if param.type_info.is_primitive -%}
+            {{ param.name.lower_camel_case }} {{ param.type_info.name }}
+        {%- elif param.type_info.is_repeated -%}
+            {{ param.name.lower_camel_case }} {{ param.type_info.name }} 
+        {%- else -%} 
+            {{ param.name.lower_camel_case }} *{{ param.type_info.name }} 
+        {% endif %}
+
+     {% endfor %}
+     {%- endif %}
+*/
 
 func(s *ServiceImpl){{ name.upper_camel_case }}({% for param in params %}{%- if param.type_info.is_primitive -%}{{ param.name.lower_camel_case }} {{ param.type_info.name }}{%- elif param.type_info.is_repeated -%} {{ param.name.lower_camel_case }} {{ param.type_info.name }} {%- else -%} {{ param.name.lower_camel_case }} *{{ param.type_info.name }} {% endif %}{{ ", " if not loop.last }}{% endfor %}){
+    
     request := &{{ name.upper_camel_case }}Request{}
     ctx:= context.Background()
      {% for param in params %}

@@ -10,6 +10,11 @@ type ServiceImpl struct {
 	Client CoreServiceClient
 }
 
+/*
+   Subscribe to 'connection state' updates.
+
+
+*/
 func (a *ServiceImpl) ConnectionState() {
 	request := &SubscribeConnectionStateRequest{}
 	ctx := context.Background()
@@ -32,7 +37,21 @@ func (a *ServiceImpl) ConnectionState() {
 	}
 }
 
-func (s *ServiceImpl) ListRunningPlugins() *ListRunningPluginsResponse {
+/*
+   Get a list of currently running plugins.
+
+
+
+   Returns
+   -------
+   True
+   PluginInfo : []*PluginInfo
+        Plugin info
+
+
+*/
+
+func (s *ServiceImpl) ListRunningPlugins() []*PluginInfo {
 	request := &ListRunningPluginsRequest{}
 	ctx := context.Background()
 	response, err := s.Client.ListRunningPlugins(ctx, request)
@@ -40,6 +59,6 @@ func (s *ServiceImpl) ListRunningPlugins() *ListRunningPluginsResponse {
 		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
 	}
 
-	return response
+	return response.GetPluginInfo()
 
 }

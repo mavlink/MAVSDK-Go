@@ -10,6 +10,11 @@ type ServiceImpl struct {
 	Client TelemetryServiceClient
 }
 
+/*
+   Subscribe to 'position' updates.
+
+
+*/
 func (a *ServiceImpl) Position() {
 	request := &SubscribePositionRequest{}
 	ctx := context.Background()
@@ -32,6 +37,11 @@ func (a *ServiceImpl) Position() {
 	}
 }
 
+/*
+   Subscribe to 'home position' updates.
+
+
+*/
 func (a *ServiceImpl) Home() {
 	request := &SubscribeHomeRequest{}
 	ctx := context.Background()
@@ -54,6 +64,11 @@ func (a *ServiceImpl) Home() {
 	}
 }
 
+/*
+   Subscribe to in-air updates.
+
+
+*/
 func (a *ServiceImpl) InAir() {
 	request := &SubscribeInAirRequest{}
 	ctx := context.Background()
@@ -76,6 +91,11 @@ func (a *ServiceImpl) InAir() {
 	}
 }
 
+/*
+   Subscribe to landed state updates
+
+
+*/
 func (a *ServiceImpl) LandedState() {
 	request := &SubscribeLandedStateRequest{}
 	ctx := context.Background()
@@ -98,6 +118,11 @@ func (a *ServiceImpl) LandedState() {
 	}
 }
 
+/*
+   Subscribe to armed updates.
+
+
+*/
 func (a *ServiceImpl) Armed() {
 	request := &SubscribeArmedRequest{}
 	ctx := context.Background()
@@ -120,6 +145,11 @@ func (a *ServiceImpl) Armed() {
 	}
 }
 
+/*
+   Subscribe to 'attitude' updates (quaternion).
+
+
+*/
 func (a *ServiceImpl) AttitudeQuaternion() {
 	request := &SubscribeAttitudeQuaternionRequest{}
 	ctx := context.Background()
@@ -142,6 +172,11 @@ func (a *ServiceImpl) AttitudeQuaternion() {
 	}
 }
 
+/*
+   Subscribe to 'attitude' updates (Euler).
+
+
+*/
 func (a *ServiceImpl) AttitudeEuler() {
 	request := &SubscribeAttitudeEulerRequest{}
 	ctx := context.Background()
@@ -164,6 +199,11 @@ func (a *ServiceImpl) AttitudeEuler() {
 	}
 }
 
+/*
+   Subscribe to 'attitude' updates (angular velocity)
+
+
+*/
 func (a *ServiceImpl) AttitudeAngularVelocityBody() {
 	request := &SubscribeAttitudeAngularVelocityBodyRequest{}
 	ctx := context.Background()
@@ -186,6 +226,11 @@ func (a *ServiceImpl) AttitudeAngularVelocityBody() {
 	}
 }
 
+/*
+   Subscribe to 'camera attitude' updates (quaternion).
+
+
+*/
 func (a *ServiceImpl) CameraAttitudeQuaternion() {
 	request := &SubscribeCameraAttitudeQuaternionRequest{}
 	ctx := context.Background()
@@ -208,6 +253,11 @@ func (a *ServiceImpl) CameraAttitudeQuaternion() {
 	}
 }
 
+/*
+   Subscribe to 'camera attitude' updates (Euler).
+
+
+*/
 func (a *ServiceImpl) CameraAttitudeEuler() {
 	request := &SubscribeCameraAttitudeEulerRequest{}
 	ctx := context.Background()
@@ -230,6 +280,11 @@ func (a *ServiceImpl) CameraAttitudeEuler() {
 	}
 }
 
+/*
+   Subscribe to 'ground speed' updates (NED).
+
+
+*/
 func (a *ServiceImpl) VelocityNed() {
 	request := &SubscribeVelocityNedRequest{}
 	ctx := context.Background()
@@ -252,6 +307,11 @@ func (a *ServiceImpl) VelocityNed() {
 	}
 }
 
+/*
+   Subscribe to 'GPS info' updates.
+
+
+*/
 func (a *ServiceImpl) GpsInfo() {
 	request := &SubscribeGpsInfoRequest{}
 	ctx := context.Background()
@@ -274,6 +334,11 @@ func (a *ServiceImpl) GpsInfo() {
 	}
 }
 
+/*
+   Subscribe to 'battery' updates.
+
+
+*/
 func (a *ServiceImpl) Battery() {
 	request := &SubscribeBatteryRequest{}
 	ctx := context.Background()
@@ -296,6 +361,11 @@ func (a *ServiceImpl) Battery() {
 	}
 }
 
+/*
+   Subscribe to 'flight mode' updates.
+
+
+*/
 func (a *ServiceImpl) FlightMode() {
 	request := &SubscribeFlightModeRequest{}
 	ctx := context.Background()
@@ -318,6 +388,11 @@ func (a *ServiceImpl) FlightMode() {
 	}
 }
 
+/*
+   Subscribe to 'health' updates.
+
+
+*/
 func (a *ServiceImpl) Health() {
 	request := &SubscribeHealthRequest{}
 	ctx := context.Background()
@@ -340,6 +415,11 @@ func (a *ServiceImpl) Health() {
 	}
 }
 
+/*
+   Subscribe to 'RC status' updates.
+
+
+*/
 func (a *ServiceImpl) RcStatus() {
 	request := &SubscribeRcStatusRequest{}
 	ctx := context.Background()
@@ -362,6 +442,11 @@ func (a *ServiceImpl) RcStatus() {
 	}
 }
 
+/*
+   Subscribe to 'status text' updates.
+
+
+*/
 func (a *ServiceImpl) StatusText() {
 	request := &SubscribeStatusTextRequest{}
 	ctx := context.Background()
@@ -384,6 +469,11 @@ func (a *ServiceImpl) StatusText() {
 	}
 }
 
+/*
+   Subscribe to 'actuator control target' updates.
+
+
+*/
 func (a *ServiceImpl) ActuatorControlTarget() {
 	request := &SubscribeActuatorControlTargetRequest{}
 	ctx := context.Background()
@@ -406,6 +496,11 @@ func (a *ServiceImpl) ActuatorControlTarget() {
 	}
 }
 
+/*
+   Subscribe to 'actuator output status' updates.
+
+
+*/
 func (a *ServiceImpl) ActuatorOutputStatus() {
 	request := &SubscribeActuatorOutputStatusRequest{}
 	ctx := context.Background()
@@ -428,6 +523,11 @@ func (a *ServiceImpl) ActuatorOutputStatus() {
 	}
 }
 
+/*
+   Subscribe to 'odometry' updates.
+
+
+*/
 func (a *ServiceImpl) Odometry() {
 	request := &SubscribeOdometryRequest{}
 	ctx := context.Background()
@@ -450,6 +550,11 @@ func (a *ServiceImpl) Odometry() {
 	}
 }
 
+/*
+   Subscribe to 'position velocity' updates.
+
+
+*/
 func (a *ServiceImpl) PositionVelocityNed() {
 	request := &SubscribePositionVelocityNedRequest{}
 	ctx := context.Background()
@@ -472,6 +577,11 @@ func (a *ServiceImpl) PositionVelocityNed() {
 	}
 }
 
+/*
+   Subscribe to 'ground truth' updates.
+
+
+*/
 func (a *ServiceImpl) GroundTruth() {
 	request := &SubscribeGroundTruthRequest{}
 	ctx := context.Background()
@@ -494,6 +604,11 @@ func (a *ServiceImpl) GroundTruth() {
 	}
 }
 
+/*
+   Subscribe to 'fixedwing metrics' updates.
+
+
+*/
 func (a *ServiceImpl) FixedwingMetrics() {
 	request := &SubscribeFixedwingMetricsRequest{}
 	ctx := context.Background()
@@ -516,6 +631,11 @@ func (a *ServiceImpl) FixedwingMetrics() {
 	}
 }
 
+/*
+   Subscribe to 'IMU' updates.
+
+
+*/
 func (a *ServiceImpl) Imu() {
 	request := &SubscribeImuRequest{}
 	ctx := context.Background()
@@ -538,6 +658,11 @@ func (a *ServiceImpl) Imu() {
 	}
 }
 
+/*
+   Subscribe to 'HealthAllOk' updates.
+
+
+*/
 func (a *ServiceImpl) HealthAllOk() {
 	request := &SubscribeHealthAllOkRequest{}
 	ctx := context.Background()
@@ -560,6 +685,11 @@ func (a *ServiceImpl) HealthAllOk() {
 	}
 }
 
+/*
+   Subscribe to 'unix epoch time' updates.
+
+
+*/
 func (a *ServiceImpl) UnixEpochTime() {
 	request := &SubscribeUnixEpochTimeRequest{}
 	ctx := context.Background()
@@ -582,7 +712,18 @@ func (a *ServiceImpl) UnixEpochTime() {
 	}
 }
 
+/*
+   Set rate to 'position' updates.
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRatePosition(rateHz float64) {
+
 	request := &SetRatePositionRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -599,7 +740,18 @@ func (s *ServiceImpl) SetRatePosition(rateHz float64) {
 
 }
 
+/*
+   Set rate to 'home position' updates.
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRateHome(rateHz float64) {
+
 	request := &SetRateHomeRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -616,7 +768,18 @@ func (s *ServiceImpl) SetRateHome(rateHz float64) {
 
 }
 
+/*
+   Set rate to in-air updates.
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRateInAir(rateHz float64) {
+
 	request := &SetRateInAirRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -633,7 +796,18 @@ func (s *ServiceImpl) SetRateInAir(rateHz float64) {
 
 }
 
+/*
+   Set rate to landed state updates
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRateLandedState(rateHz float64) {
+
 	request := &SetRateLandedStateRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -650,7 +824,18 @@ func (s *ServiceImpl) SetRateLandedState(rateHz float64) {
 
 }
 
+/*
+   Set rate to 'attitude' updates.
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRateAttitude(rateHz float64) {
+
 	request := &SetRateAttitudeRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -667,7 +852,18 @@ func (s *ServiceImpl) SetRateAttitude(rateHz float64) {
 
 }
 
+/*
+   Set rate of camera attitude updates.
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRateCameraAttitude(rateHz float64) {
+
 	request := &SetRateCameraAttitudeRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -684,7 +880,18 @@ func (s *ServiceImpl) SetRateCameraAttitude(rateHz float64) {
 
 }
 
+/*
+   Set rate to 'ground speed' updates (NED).
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRateVelocityNed(rateHz float64) {
+
 	request := &SetRateVelocityNedRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -701,7 +908,18 @@ func (s *ServiceImpl) SetRateVelocityNed(rateHz float64) {
 
 }
 
+/*
+   Set rate to 'GPS info' updates.
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRateGpsInfo(rateHz float64) {
+
 	request := &SetRateGpsInfoRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -718,7 +936,18 @@ func (s *ServiceImpl) SetRateGpsInfo(rateHz float64) {
 
 }
 
+/*
+   Set rate to 'battery' updates.
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRateBattery(rateHz float64) {
+
 	request := &SetRateBatteryRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -735,7 +964,18 @@ func (s *ServiceImpl) SetRateBattery(rateHz float64) {
 
 }
 
+/*
+   Set rate to 'RC status' updates.
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRateRcStatus(rateHz float64) {
+
 	request := &SetRateRcStatusRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -752,7 +992,18 @@ func (s *ServiceImpl) SetRateRcStatus(rateHz float64) {
 
 }
 
+/*
+   Set rate to 'actuator control target' updates.
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRateActuatorControlTarget(rateHz float64) {
+
 	request := &SetRateActuatorControlTargetRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -769,7 +1020,18 @@ func (s *ServiceImpl) SetRateActuatorControlTarget(rateHz float64) {
 
 }
 
+/*
+   Set rate to 'actuator output status' updates.
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRateActuatorOutputStatus(rateHz float64) {
+
 	request := &SetRateActuatorOutputStatusRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -786,7 +1048,18 @@ func (s *ServiceImpl) SetRateActuatorOutputStatus(rateHz float64) {
 
 }
 
+/*
+   Set rate to 'odometry' updates.
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRateOdometry(rateHz float64) {
+
 	request := &SetRateOdometryRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -803,7 +1076,18 @@ func (s *ServiceImpl) SetRateOdometry(rateHz float64) {
 
 }
 
+/*
+   Set rate to 'position velocity' updates.
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRatePositionVelocityNed(rateHz float64) {
+
 	request := &SetRatePositionVelocityNedRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -820,7 +1104,18 @@ func (s *ServiceImpl) SetRatePositionVelocityNed(rateHz float64) {
 
 }
 
+/*
+   Set rate to 'ground truth' updates.
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRateGroundTruth(rateHz float64) {
+
 	request := &SetRateGroundTruthRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -837,7 +1132,18 @@ func (s *ServiceImpl) SetRateGroundTruth(rateHz float64) {
 
 }
 
+/*
+   Set rate to 'fixedwing metrics' updates.
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRateFixedwingMetrics(rateHz float64) {
+
 	request := &SetRateFixedwingMetricsRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -854,7 +1160,18 @@ func (s *ServiceImpl) SetRateFixedwingMetrics(rateHz float64) {
 
 }
 
+/*
+   Set rate to 'IMU' updates.
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRateImu(rateHz float64) {
+
 	request := &SetRateImuRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz
@@ -871,7 +1188,18 @@ func (s *ServiceImpl) SetRateImu(rateHz float64) {
 
 }
 
+/*
+   Set rate to 'unix epoch time' updates.
+
+   Parameters
+   ----------
+   rateHz float64
+
+
+*/
+
 func (s *ServiceImpl) SetRateUnixEpochTime(rateHz float64) {
+
 	request := &SetRateUnixEpochTimeRequest{}
 	ctx := context.Background()
 	request.RateHz = rateHz

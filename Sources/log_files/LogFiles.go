@@ -10,7 +10,21 @@ type ServiceImpl struct {
 	Client LogFilesServiceClient
 }
 
-func (s *ServiceImpl) GetEntries() *GetEntriesResponse {
+/*
+   Get List of log files.
+
+
+
+   Returns
+   -------
+   True
+   Entries : []*Entry
+        List of entries
+
+
+*/
+
+func (s *ServiceImpl) GetEntries() []*Entry {
 	request := &GetEntriesRequest{}
 	ctx := context.Background()
 	response, err := s.Client.GetEntries(ctx, request)
@@ -24,10 +38,17 @@ func (s *ServiceImpl) GetEntries() *GetEntriesResponse {
 		fmt.Printf("Error while getting GetEntries")
 	}
 
-	return response
+	return response.GetEntries()
 
 }
 
+/*
+   Download log file.
+
+   Parameters
+   ----------
+   id uint32, path string
+*/
 func (a *ServiceImpl) DownloadLogFile(id uint32, path string) {
 	request := &SubscribeDownloadLogFileRequest{}
 	request.Id = id
