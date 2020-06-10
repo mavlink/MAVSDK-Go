@@ -26,8 +26,8 @@ func (a *ServiceImpl) {{ name.upper_camel_case }}({% for param in params %}{%- i
 			fmt.Printf("Unable to subscribe %v\n", err)
 		}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &{{ name.upper_camel_case }}Response{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {

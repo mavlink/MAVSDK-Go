@@ -25,8 +25,8 @@ func (a *ServiceImpl) Position() <-chan *Position {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &PositionResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -57,8 +57,8 @@ func (a *ServiceImpl) Home() <-chan *Position {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &HomeResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -89,8 +89,8 @@ func (a *ServiceImpl) InAir() <-chan bool {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &InAirResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -121,8 +121,8 @@ func (a *ServiceImpl) LandedState() <-chan *LandedState {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &LandedStateResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -153,8 +153,8 @@ func (a *ServiceImpl) Armed() <-chan bool {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &ArmedResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -185,8 +185,8 @@ func (a *ServiceImpl) AttitudeQuaternion() <-chan *Quaternion {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &AttitudeQuaternionResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -217,8 +217,8 @@ func (a *ServiceImpl) AttitudeEuler() <-chan *EulerAngle {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &AttitudeEulerResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -249,8 +249,8 @@ func (a *ServiceImpl) AttitudeAngularVelocityBody() <-chan *AngularVelocityBody 
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &AttitudeAngularVelocityBodyResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -281,8 +281,8 @@ func (a *ServiceImpl) CameraAttitudeQuaternion() <-chan *Quaternion {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &CameraAttitudeQuaternionResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -313,8 +313,8 @@ func (a *ServiceImpl) CameraAttitudeEuler() <-chan *EulerAngle {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &CameraAttitudeEulerResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -345,8 +345,8 @@ func (a *ServiceImpl) VelocityNed() <-chan *VelocityNed {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &VelocityNedResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -377,8 +377,8 @@ func (a *ServiceImpl) GpsInfo() <-chan *GpsInfo {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &GpsInfoResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -409,8 +409,8 @@ func (a *ServiceImpl) Battery() <-chan *Battery {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &BatteryResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -441,8 +441,8 @@ func (a *ServiceImpl) FlightMode() <-chan *FlightMode {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &FlightModeResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -473,8 +473,8 @@ func (a *ServiceImpl) Health() <-chan *Health {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &HealthResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -505,8 +505,8 @@ func (a *ServiceImpl) RcStatus() <-chan *RcStatus {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &RcStatusResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -537,8 +537,8 @@ func (a *ServiceImpl) StatusText() <-chan *StatusText {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &StatusTextResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -569,8 +569,8 @@ func (a *ServiceImpl) ActuatorControlTarget() <-chan *ActuatorControlTarget {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &ActuatorControlTargetResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -601,8 +601,8 @@ func (a *ServiceImpl) ActuatorOutputStatus() <-chan *ActuatorOutputStatus {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &ActuatorOutputStatusResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -633,8 +633,8 @@ func (a *ServiceImpl) Odometry() <-chan *Odometry {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &OdometryResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -665,8 +665,8 @@ func (a *ServiceImpl) PositionVelocityNed() <-chan *PositionVelocityNed {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &PositionVelocityNedResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -697,8 +697,8 @@ func (a *ServiceImpl) GroundTruth() <-chan *GroundTruth {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &GroundTruthResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -729,8 +729,8 @@ func (a *ServiceImpl) FixedwingMetrics() <-chan *FixedwingMetrics {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &FixedwingMetricsResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -761,8 +761,8 @@ func (a *ServiceImpl) Imu() <-chan *Imu {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &ImuResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -793,8 +793,8 @@ func (a *ServiceImpl) HealthAllOk() <-chan bool {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &HealthAllOkResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
@@ -825,8 +825,8 @@ func (a *ServiceImpl) UnixEpochTime() <-chan uint64 {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &UnixEpochTimeResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {

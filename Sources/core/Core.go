@@ -25,8 +25,8 @@ func (a *ServiceImpl) ConnectionState() <-chan *ConnectionState {
 		fmt.Printf("Unable to subscribe %v\n", err)
 	}
 	go func() {
+		defer close(ch)
 		for {
-			defer close(ch)
 			m := &ConnectionStateResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
