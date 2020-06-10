@@ -8,6 +8,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROTO_DIR=${PROTO_DIR:-"${SCRIPT_DIR}/../proto/protos"}
 OUTPUT_DIR=${OUTPUT_DIR:-"${SCRIPT_DIR}/../Sources/"}
 PROTO_DIR_TMP=${PROTO_DIR_TMP:-"${SCRIPT_DIR}/tmp/protos"}
+export TEMPLATE_PATH="$(pwd)/../templates/"
+
 
 
 PLUGIN_LIST="action core mission geofence telemetry log_files"
@@ -42,12 +44,18 @@ echo "-------------------------------"
 GO_GEN_CMD="/go/bin/protoc-gen-go"
 GO_GEN_RPC_CMD="/go/bin/protoc-gen-gogrpc"
 
+# Generate the message and service definitions using grpc plugins.
 for plugin in ${PLUGIN_LIST}; do
     mkdir -p ${OUTPUT_DIR}/$plugin 
     protoc ${plugin}.proto -I${PROTO_DIR}/$plugin --go_out=${OUTPUT_DIR}/$plugin --gogrpc_out=${OUTPUT_DIR}/$plugin --plugin=protoc-gen-go=${GO_GEN_CMD} --plugin=protoc-gen-gogrpc=${GO_GEN_RPC_CMD}
 done
 
 
+# Generate the final plugins
 for plugin in ${PLUGIN_LIST}; do
+	echo "+=> Doing $plugin"
 	python3 -m grpc_tools.protoc --plugin=protoc-gen-custom=$(which protoc-gen-dcsdk) -I${PROTO_DIR}/$plugin --custom_out=${OUTPUT_DIR}/$plugin --custom_opt=file_ext=go ${plugin}.proto
 done
+
+# Remove the temp directory.
+rm ${PROTO_DIR_TMP}

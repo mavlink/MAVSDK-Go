@@ -1,27 +1,30 @@
 # MAVSDK-Go
-This package contains the GoLang Plugin for the MAVSDK. This is still work in progress so use at your own descretion.
+This package contains the Go wrapper based on gRPC for the MAVSDK. This is still work in progress so use at your own descretion.
+MAVSDK server (also called backend) needs to be running on the same system as this plugin. The Go Wrapper communicates using gRPC to the server.
 
-## generating the protobuf files.
-Steps to generate:
+MAVSDK uses Google Protobuf based message definitions in the protobuf files. [MAVSDK-ProtoBuf](https://github.com/mavlink/MAVSDK-Proto)
+
+The wrapper can be used directly using the generated files in Source folder.
+A example file is provided in the example folder which contains example for take-off, land, geofence upload and telemetry data.
 
 
-Generate the .pb.go and .pb.rpc.go files using the plugins: proto-gen-go and proto-gen-gorpc respectively.
-These require the use of the protoc compiler and also the protobuf files.
+## Contributing
+For general users, it is enough to use the generated files as such. But in order to keep the sources updated based on the latest proto definitions it is required to generate the source file again.
+This can be done using the instructions from ```Contributing.md```
 
 
-## List of Protobuf Message Support
+## Supported Plugins
+
+Currently only the following plugins are supported.
 1. Action: action.proto
 2. Telemetry: telemetry.proto
 3. Geofence: geofence.proto
 4. Mission: mission.proto
 5. Log Files: log_files.proto 
 6. Core: core.proto
- 
 
-## generate plugin classes from Jinja
 
-Now the proto-gen-dcsdk can be used to generate the MAVSDK language related files using the jinja2 templates.
-In order to generate the plugin classes run the following command from the root of the MAVSDK-Go
+## Issues/Questions
+For any problems with the wrapper please create an issue.
 
-export TEMPLATE_PATH="$(pwd)/templates/"
-protoc --plugin=protoc-gen-custom=$(which protoc-gen-dcsdk) -I./proto/protos/action --custom_out=. --custom_opt=file-ext=go ./proto/protos/action/action.proto
+Happy flying :)

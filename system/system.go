@@ -52,7 +52,7 @@ func (s *Drone) InitPlugins(cc *grpc.ClientConn) {
 }
 
 func (s *Drone) startMAVSDKServer() {
-	cmd := exec.Command("C:\\Users\\iffdronelab\\Downloads\\mavsdk_server_win32", "-p", "50051")
+	cmd := exec.Command("C:\\Users\\ykhedar\\Downloads\\mavsdk_server_win32", "-p", "50051")
 	print("Command [%s]", cmd)
 	cmd.Stdout = os.Stdout
 	err := cmd.Start()
@@ -79,11 +79,13 @@ func main() {
 	// drone.core.Init()
 	// x := drone.core.ListRunningPlugins()
 	// fmt.Printf("%v\n", x)
-	ch := drone.telemetry.Position()
-	for x := range ch {
-		fmt.Printf("%v\n", x)
-	}
-
+	//ch := drone.telemetry.Position()
+	//for x := range ch {
+	//	fmt.Printf("%v\n", x)
+	//}
+	drone.action.Arm()
+	drone.action.Takeoff()
+	drone.action.Land()
 	// drone.telemetry.SetRatePosition(60)
 
 	// drone.action.GotoLocation(54, 56, 0.5, 30)
