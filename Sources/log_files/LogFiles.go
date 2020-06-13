@@ -72,7 +72,7 @@ func (a *ServiceImpl) DownloadLogFile(id uint32, path string) <-chan *ProgressDa
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetProgress()
 		}
 	}()
 	return ch

@@ -292,7 +292,7 @@ func (a *ServiceImpl) MissionProgress() <-chan *MissionProgress {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetMissionProgress()
 		}
 	}()
 	return ch

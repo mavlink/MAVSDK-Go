@@ -36,7 +36,7 @@ func (a *ServiceImpl) Position() <-chan *Position {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetPosition()
 		}
 	}()
 	return ch
@@ -68,7 +68,7 @@ func (a *ServiceImpl) Home() <-chan *Position {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetHome()
 		}
 	}()
 	return ch
@@ -100,7 +100,7 @@ func (a *ServiceImpl) InAir() <-chan bool {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetIsInAir()
 		}
 	}()
 	return ch
@@ -112,8 +112,8 @@ func (a *ServiceImpl) InAir() <-chan bool {
 
 */
 
-func (a *ServiceImpl) LandedState() <-chan *LandedState {
-	ch := make(chan *LandedState)
+func (a *ServiceImpl) LandedState() <-chan LandedState {
+	ch := make(chan LandedState)
 	request := &SubscribeLandedStateRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeLandedState(ctx, request)
@@ -132,7 +132,7 @@ func (a *ServiceImpl) LandedState() <-chan *LandedState {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetLandedState()
 		}
 	}()
 	return ch
@@ -164,7 +164,7 @@ func (a *ServiceImpl) Armed() <-chan bool {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetIsArmed()
 		}
 	}()
 	return ch
@@ -196,7 +196,7 @@ func (a *ServiceImpl) AttitudeQuaternion() <-chan *Quaternion {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetAttitudeQuaternion()
 		}
 	}()
 	return ch
@@ -228,7 +228,7 @@ func (a *ServiceImpl) AttitudeEuler() <-chan *EulerAngle {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetAttitudeEuler()
 		}
 	}()
 	return ch
@@ -260,7 +260,7 @@ func (a *ServiceImpl) AttitudeAngularVelocityBody() <-chan *AngularVelocityBody 
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetAttitudeAngularVelocityBody()
 		}
 	}()
 	return ch
@@ -292,7 +292,7 @@ func (a *ServiceImpl) CameraAttitudeQuaternion() <-chan *Quaternion {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetAttitudeQuaternion()
 		}
 	}()
 	return ch
@@ -324,7 +324,7 @@ func (a *ServiceImpl) CameraAttitudeEuler() <-chan *EulerAngle {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetAttitudeEuler()
 		}
 	}()
 	return ch
@@ -356,7 +356,7 @@ func (a *ServiceImpl) VelocityNed() <-chan *VelocityNed {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetVelocityNed()
 		}
 	}()
 	return ch
@@ -388,7 +388,7 @@ func (a *ServiceImpl) GpsInfo() <-chan *GpsInfo {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetGpsInfo()
 		}
 	}()
 	return ch
@@ -420,7 +420,7 @@ func (a *ServiceImpl) Battery() <-chan *Battery {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetBattery()
 		}
 	}()
 	return ch
@@ -432,8 +432,8 @@ func (a *ServiceImpl) Battery() <-chan *Battery {
 
 */
 
-func (a *ServiceImpl) FlightMode() <-chan *FlightMode {
-	ch := make(chan *FlightMode)
+func (a *ServiceImpl) FlightMode() <-chan FlightMode {
+	ch := make(chan FlightMode)
 	request := &SubscribeFlightModeRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeFlightMode(ctx, request)
@@ -452,7 +452,7 @@ func (a *ServiceImpl) FlightMode() <-chan *FlightMode {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetFlightMode()
 		}
 	}()
 	return ch
@@ -484,7 +484,7 @@ func (a *ServiceImpl) Health() <-chan *Health {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetHealth()
 		}
 	}()
 	return ch
@@ -516,7 +516,7 @@ func (a *ServiceImpl) RcStatus() <-chan *RcStatus {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetRcStatus()
 		}
 	}()
 	return ch
@@ -548,7 +548,7 @@ func (a *ServiceImpl) StatusText() <-chan *StatusText {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetStatusText()
 		}
 	}()
 	return ch
@@ -580,7 +580,7 @@ func (a *ServiceImpl) ActuatorControlTarget() <-chan *ActuatorControlTarget {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetActuatorControlTarget()
 		}
 	}()
 	return ch
@@ -612,7 +612,7 @@ func (a *ServiceImpl) ActuatorOutputStatus() <-chan *ActuatorOutputStatus {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetActuatorOutputStatus()
 		}
 	}()
 	return ch
@@ -644,7 +644,7 @@ func (a *ServiceImpl) Odometry() <-chan *Odometry {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetOdometry()
 		}
 	}()
 	return ch
@@ -676,7 +676,7 @@ func (a *ServiceImpl) PositionVelocityNed() <-chan *PositionVelocityNed {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetPositionVelocityNed()
 		}
 	}()
 	return ch
@@ -708,7 +708,7 @@ func (a *ServiceImpl) GroundTruth() <-chan *GroundTruth {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetGroundTruth()
 		}
 	}()
 	return ch
@@ -740,7 +740,7 @@ func (a *ServiceImpl) FixedwingMetrics() <-chan *FixedwingMetrics {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetFixedwingMetrics()
 		}
 	}()
 	return ch
@@ -772,7 +772,7 @@ func (a *ServiceImpl) Imu() <-chan *Imu {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetImu()
 		}
 	}()
 	return ch
@@ -804,7 +804,7 @@ func (a *ServiceImpl) HealthAllOk() <-chan bool {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetIsHealthAllOk()
 		}
 	}()
 	return ch
@@ -836,7 +836,7 @@ func (a *ServiceImpl) UnixEpochTime() <-chan uint64 {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetTimeUs()
 		}
 	}()
 	return ch

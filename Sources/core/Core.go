@@ -36,7 +36,7 @@ func (a *ServiceImpl) ConnectionState() <-chan *ConnectionState {
 				fmt.Printf("Unable to receive message %v", err)
 				break
 			}
-			fmt.Printf("message %v\n", m)
+			ch <- m.GetConnectionState()
 		}
 	}()
 	return ch
