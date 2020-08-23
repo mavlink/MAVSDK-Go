@@ -7,8 +7,10 @@ FROM shifty21/golang_mav
 # Step 3: Setup the go paths.
 
 # Step 4: Install the python protoc-gendcsdk plugin to generate the class 
+RUN apt-get update
 RUN apt install -y -q python3-pip git
 RUN cd / && git clone https://github.com/mavlink/MAVSDK-Proto.git
-RUN cd /MAVSDK-Proto/pb_plugins && pip3 install -r requirements.txt && pip3 -e .
+RUN cd /MAVSDK-Proto/pb_plugins && pip3 install -r requirements.txt && pip3 install -e .
+RUN pip3 install grpcio-tools
 
 ENTRYPOINT [ "/bin/bash"]

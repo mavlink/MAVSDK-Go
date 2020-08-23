@@ -16,13 +16,13 @@ type ServiceImpl struct {
 
 */
 
-func (a *ServiceImpl) ConnectionState() <-chan *ConnectionState {
+func (a *ServiceImpl) ConnectionState() (<-chan *ConnectionState, error) {
 	ch := make(chan *ConnectionState)
 	request := &SubscribeConnectionStateRequest{}
 	ctx := context.Background()
 	stream, err := a.Client.SubscribeConnectionState(ctx, request)
 	if err != nil {
-		fmt.Printf("Unable to subscribe %v\n", err)
+		return nil, err
 	}
 	go func() {
 		defer close(ch)
@@ -39,7 +39,7 @@ func (a *ServiceImpl) ConnectionState() <-chan *ConnectionState {
 			ch <- m.GetConnectionState()
 		}
 	}()
-	return ch
+	return ch, nil
 }
 
 /*
@@ -56,14 +56,13 @@ func (a *ServiceImpl) ConnectionState() <-chan *ConnectionState {
 
 */
 
-func (s *ServiceImpl) ListRunningPlugins() []*PluginInfo {
+func (s *ServiceImpl) ListRunningPlugins() (*ListRunningPluginsResponse, error) {
 	request := &ListRunningPluginsRequest{}
 	ctx := context.Background()
 	response, err := s.Client.ListRunningPlugins(ctx, request)
 	if err != nil {
-		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+		return nil, err
 	}
-
-	return response.GetPluginInfo()
+	return response, nil
 
 }

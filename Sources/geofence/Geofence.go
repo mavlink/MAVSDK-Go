@@ -2,7 +2,6 @@ package geofence
 
 import (
 	"context"
-	"fmt"
 )
 
 type ServiceImpl struct {
@@ -22,7 +21,7 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) UploadGeofence(polygons []*Polygon) {
+func (s *ServiceImpl) UploadGeofence(polygons []*Polygon) (*UploadGeofenceResponse, error) {
 
 	request := &UploadGeofenceRequest{}
 	ctx := context.Background()
@@ -30,13 +29,7 @@ func (s *ServiceImpl) UploadGeofence(polygons []*Polygon) {
 
 	response, err := s.Client.UploadGeofence(ctx, request)
 	if err != nil {
-		fmt.Printf("Error while performing UploadGeofence grpc %v\n", err)
+		return nil, err
 	}
-
-	result := response.GetGeofenceResult()
-	fmt.Printf("result %v\n", result.String())
-	if result.Result != GeofenceResult_RESULT_SUCCESS {
-		fmt.Printf("Error while extracting result for UploadGeofence")
-	}
-
+	return response, nil
 }

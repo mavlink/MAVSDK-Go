@@ -25,7 +25,7 @@
 */
 
 
-func(s *ServiceImpl){{ name.upper_camel_case }}({% for param in params %}{%- if param.type_info.is_primitive -%}{{ param.name.lower_camel_case }} {{ param.type_info.name }}{%- elif param.type_info.is_repeated -%} {{ param.name.lower_camel_case }} {{ param.type_info.name }} {%- else -%} {{ param.name.lower_camel_case }} *{{ param.type_info.name }} {% endif %}{{ ", " if not loop.last }}{% endfor %}) ({%- if return_type.is_repeated -%}{{ return_type.name }} {%- elif return_type.is_primitive -%} {{ return_type.name }}  {%- else -%} *{{ return_type.name }} {%endif%}){
+func(s *ServiceImpl){{ name.upper_camel_case }}({% for param in params %}{%- if param.type_info.is_primitive -%}{{ param.name.lower_camel_case }} {{ param.type_info.name }}{%- elif param.type_info.is_repeated -%} {{ param.name.lower_camel_case }} {{ param.type_info.name }} {%- else -%} {{ param.name.lower_camel_case }} *{{ param.type_info.name }} {% endif %}{{ ", " if not loop.last }}{% endfor %}) (*{{ name.upper_camel_case }}Response, error){
     request := &{{ name.upper_camel_case }}Request{}
     ctx:= context.Background()
      {% for param in params %}
@@ -37,16 +37,9 @@ func(s *ServiceImpl){{ name.upper_camel_case }}({% for param in params %}{%- if 
     {% endfor -%}
     response, err := s.Client.{{ name.upper_camel_case }}(ctx, request)
     if err != nil {
-		fmt.Printf("Unable to subscribe to position grpc %v\n", err)
+		return nil, err
 	}
-    {% if has_result %}
-    result := response.Get{{plugin_name.upper_camel_case}}Result()
-    fmt.Printf("result %v\n",  result.String())
-    if result.Result != {{ plugin_name.upper_camel_case }}Result_RESULT_SUCCESS{
-        fmt.Printf("Error while getting {{name.upper_camel_case}}")
-    }
-    {% endif %}
-    return response.Get{{ return_name.upper_camel_case }}()
+    return response, nil
 
 }
 

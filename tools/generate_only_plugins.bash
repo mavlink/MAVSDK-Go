@@ -26,5 +26,5 @@ PROTO_DIR=${PROTO_DIR_TMP}
 
 for plugin in ${PLUGIN_LIST}; do
 	echo "+=> Doing $plugin"
-	python3 -m grpc_tools.protoc --plugin=protoc-gen-custom=$(which protoc-gen-dcsdk) -I${PROTO_DIR}/$plugin --custom_out=${OUTPUT_DIR}/$plugin --custom_opt=file_ext=go ${plugin}.proto
+	python3 -m grpc_tools.protoc --plugin=protoc-gen-custom=$(which protoc-gen-mavsdk) -I${PROTO_DIR}/$plugin --custom_out=${OUTPUT_DIR}/$plugin --custom_opt=file_ext=go ${plugin}.proto
 done
