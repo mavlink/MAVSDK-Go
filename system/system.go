@@ -5,10 +5,10 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/ykhedar/MAVSDK-Go/Sources/action"
-	"github.com/ykhedar/MAVSDK-Go/Sources/core"
-	"github.com/ykhedar/MAVSDK-Go/Sources/geofence"
-	"github.com/ykhedar/MAVSDK-Go/Sources/telemetry"
+	"github.com/mavlink/MAVSDK-Go/Sources/action"
+	"github.com/mavlink/MAVSDK-Go/Sources/core"
+	"github.com/mavlink/MAVSDK-Go/Sources/geofence"
+	"github.com/mavlink/MAVSDK-Go/Sources/telemetry"
 	"google.golang.org/grpc"
 )
 
