@@ -16,10 +16,9 @@ type ServiceImpl struct {
 
 */
 
-func (a *ServiceImpl) ConnectionState() (<-chan *ConnectionState, error) {
+func (a *ServiceImpl) ConnectionState(ctx context.Context) (<-chan *ConnectionState, error) {
 	ch := make(chan *ConnectionState)
 	request := &SubscribeConnectionStateRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeConnectionState(ctx, request)
 	if err != nil {
 		return nil, err
@@ -56,9 +55,8 @@ func (a *ServiceImpl) ConnectionState() (<-chan *ConnectionState, error) {
 
 */
 
-func (s *ServiceImpl) ListRunningPlugins() (*ListRunningPluginsResponse, error) {
+func (s *ServiceImpl) ListRunningPlugins(ctx context.Context) (*ListRunningPluginsResponse, error) {
 	request := &ListRunningPluginsRequest{}
-	ctx := context.Background()
 	response, err := s.Client.ListRunningPlugins(ctx, request)
 	if err != nil {
 		return nil, err

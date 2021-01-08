@@ -22,9 +22,8 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) GetFlightInformation() (*GetFlightInformationResponse, error) {
+func (s *ServiceImpl) GetFlightInformation(ctx context.Context) (*GetFlightInformationResponse, error) {
 	request := &GetFlightInformationRequest{}
-	ctx := context.Background()
 	response, err := s.Client.GetFlightInformation(ctx, request)
 	if err != nil {
 		return nil, err
@@ -47,9 +46,8 @@ func (s *ServiceImpl) GetFlightInformation() (*GetFlightInformationResponse, err
 
 */
 
-func (s *ServiceImpl) GetIdentification() (*GetIdentificationResponse, error) {
+func (s *ServiceImpl) GetIdentification(ctx context.Context) (*GetIdentificationResponse, error) {
 	request := &GetIdentificationRequest{}
-	ctx := context.Background()
 	response, err := s.Client.GetIdentification(ctx, request)
 	if err != nil {
 		return nil, err
@@ -72,9 +70,8 @@ func (s *ServiceImpl) GetIdentification() (*GetIdentificationResponse, error) {
 
 */
 
-func (s *ServiceImpl) GetProduct() (*GetProductResponse, error) {
+func (s *ServiceImpl) GetProduct(ctx context.Context) (*GetProductResponse, error) {
 	request := &GetProductRequest{}
-	ctx := context.Background()
 	response, err := s.Client.GetProduct(ctx, request)
 	if err != nil {
 		return nil, err
@@ -97,9 +94,8 @@ func (s *ServiceImpl) GetProduct() (*GetProductResponse, error) {
 
 */
 
-func (s *ServiceImpl) GetVersion() (*GetVersionResponse, error) {
+func (s *ServiceImpl) GetVersion(ctx context.Context) (*GetVersionResponse, error) {
 	request := &GetVersionRequest{}
-	ctx := context.Background()
 	response, err := s.Client.GetVersion(ctx, request)
 	if err != nil {
 		return nil, err
@@ -122,9 +118,8 @@ func (s *ServiceImpl) GetVersion() (*GetVersionResponse, error) {
 
 */
 
-func (s *ServiceImpl) GetSpeedFactor() (*GetSpeedFactorResponse, error) {
+func (s *ServiceImpl) GetSpeedFactor(ctx context.Context) (*GetSpeedFactorResponse, error) {
 	request := &GetSpeedFactorRequest{}
-	ctx := context.Background()
 	response, err := s.Client.GetSpeedFactor(ctx, request)
 	if err != nil {
 		return nil, err

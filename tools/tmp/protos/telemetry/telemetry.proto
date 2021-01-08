@@ -64,6 +64,8 @@ service TelemetryService {
     rpc SubscribeHealthAllOk(SubscribeHealthAllOkRequest) returns(stream HealthAllOkResponse) {}
     // Subscribe to 'unix epoch time' updates.
     rpc SubscribeUnixEpochTime(SubscribeUnixEpochTimeRequest) returns(stream UnixEpochTimeResponse) {}
+        // Subscribe to 'Distance Sensor' updates.
+    rpc SubscribeDistanceSensor(SubscribeDistanceSensorRequest) returns(stream DistanceSensorResponse) {}
 
     // Set rate to 'position' updates.
     rpc SetRatePosition(SetRatePositionRequest) returns(SetRatePositionResponse) {}
@@ -101,6 +103,11 @@ service TelemetryService {
     rpc SetRateImu(SetRateImuRequest) returns(SetRateImuResponse) {}
     // Set rate to 'unix epoch time' updates.
     rpc SetRateUnixEpochTime(SetRateUnixEpochTimeRequest) returns(SetRateUnixEpochTimeResponse) {}
+    // Set rate to 'Distance Sensor' updates.
+    rpc SetRateDistanceSensor(SetRateDistanceSensorRequest) returns(SetRateDistanceSensorResponse) {}
+
+    // Get the GPS location of where the estimator has been initialized.
+    rpc GetGpsGlobalOrigin(GetGpsGlobalOriginRequest) returns(GetGpsGlobalOriginResponse) {}
 }
 
 message SubscribePositionRequest {}
@@ -231,6 +238,11 @@ message HealthAllOkResponse {
 message SubscribeUnixEpochTimeRequest {}
 message UnixEpochTimeResponse {
     uint64 time_us = 1; // The next 'unix epoch time' status
+}
+
+message SubscribeDistanceSensorRequest {}
+message DistanceSensorResponse {
+    DistanceSensor distance_sensor = 1; // The next Distance Sensor status
 }
 
 message SetRatePositionRequest {
@@ -373,6 +385,19 @@ message SetRateUnixEpochTimeResponse {
     TelemetryResult telemetry_result = 1;
 }
 
+message SetRateDistanceSensorRequest {
+    double rate_hz = 1; // The requested rate (in Hertz)
+}
+message SetRateDistanceSensorResponse {
+    TelemetryResult telemetry_result = 1;
+}
+
+message GetGpsGlobalOriginRequest {}
+message GetGpsGlobalOriginResponse {
+    TelemetryResult telemetry_result = 1;
+    GpsGlobalOrigin gps_global_origin = 2;
+}
+
 // Position type in global coordinates.
 message Position {
     double latitude_deg = 1 [(mavsdk.options.default_value)="NaN"]; // Latitude in degrees (range: -90 to +90)
@@ -486,9 +511,14 @@ message RcStatus {
 
 // Status types.
 enum StatusTextType {
-    STATUS_TEXT_TYPE_INFO = 0; // Information or other
-    STATUS_TEXT_TYPE_WARNING = 1; // Warning
-    STATUS_TEXT_TYPE_CRITICAL = 2; // Critical
+    STATUS_TEXT_TYPE_DEBUG = 0; // Debug
+    STATUS_TEXT_TYPE_INFO = 1; // Information
+    STATUS_TEXT_TYPE_NOTICE = 2; // Notice
+    STATUS_TEXT_TYPE_WARNING = 3; // Warning
+    STATUS_TEXT_TYPE_ERROR = 4; // Error
+    STATUS_TEXT_TYPE_CRITICAL = 5; // Critical
+    STATUS_TEXT_TYPE_ALERT = 6; // Alert
+    STATUS_TEXT_TYPE_EMERGENCY = 7; // Emergency
 }
 
 // StatusText information type.
@@ -564,6 +594,13 @@ message Odometry {
     Covariance velocity_covariance = 9; // Velocity cross-covariance matrix.
 }
 
+// DistanceSensor message type.
+message DistanceSensor {
+    float minimum_distance_m = 1 [(mavsdk.options.default_value)="NaN"]; // Minimum distance the sensor can measure, NaN if unknown.
+    float maximum_distance_m = 2 [(mavsdk.options.default_value)="NaN"]; // Maximum distance the sensor can measure, NaN if unknown.
+    float current_distance_m = 3 [(mavsdk.options.default_value)="NaN"]; // Current distance reading, NaN if unknown.
+}
+
 // PositionNed message type.
 message PositionNed {
     float north_m = 1 [(mavsdk.options.default_value)="NaN"]; // Position along north direction in metres
@@ -625,6 +662,13 @@ message Imu {
     AngularVelocityFrd angular_velocity_frd = 2; // Angular velocity
     MagneticFieldFrd magnetic_field_frd = 3; // Magnetic field
     float temperature_degc = 4 [(mavsdk.options.default_value)="NaN"]; // Temperature
+}
+
+// Gps global origin type.
+message GpsGlobalOrigin {
+    double latitude_deg = 1 [(mavsdk.options.default_value)="NaN"]; // Latitude of the origin
+    double longitude_deg = 2 [(mavsdk.options.default_value)="NaN"]; // Longitude of the origin
+    float altitude_m = 3 [(mavsdk.options.default_value)="NaN"]; // Altitude AMSL (above mean sea level) in metres
 }
 
 // Result type.

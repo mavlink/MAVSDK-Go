@@ -5,7 +5,7 @@ set -e
 command -v protoc || { echo >&2 "Protobuf needs to be installed (e.g. '$ apt install protobuf-compiler') for this script to run!"; exit 1; }
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROTO_DIR=${PROTO_DIR:-"${SCRIPT_DIR}/../proto/protos"}
+PROTO_DIR=${PROTO_DIR:-"${SCRIPT_DIR}/../protos/"}
 OUTPUT_DIR=${OUTPUT_DIR:-"${SCRIPT_DIR}/../Sources/"}
 PROTO_DIR_TMP=${PROTO_DIR_TMP:-"${SCRIPT_DIR}/tmp/protos"}
 export TEMPLATE_PATH="$(pwd)/../templates/"

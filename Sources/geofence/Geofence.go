@@ -21,10 +21,9 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) UploadGeofence(polygons []*Polygon) (*UploadGeofenceResponse, error) {
+func (s *ServiceImpl) UploadGeofence(ctx context.Context, polygons []*Polygon) (*UploadGeofenceResponse, error) {
 
 	request := &UploadGeofenceRequest{}
-	ctx := context.Background()
 	request.Polygons = polygons
 
 	response, err := s.Client.UploadGeofence(ctx, request)

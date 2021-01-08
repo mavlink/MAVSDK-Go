@@ -55,6 +55,11 @@ type ActionServiceClient interface {
 	// reject it if they are not already ready to shut down.
 	Shutdown(ctx context.Context, in *ShutdownRequest, opts ...grpc.CallOption) (*ShutdownResponse, error)
 	//
+	// Send command to terminate the drone.
+	//
+	// This will run the terminate routine as configured on the drone (e.g. disarm and open the parachute).
+	Terminate(ctx context.Context, in *TerminateRequest, opts ...grpc.CallOption) (*TerminateResponse, error)
+	//
 	// Send command to kill the drone.
 	//
 	// This will disarm a drone irrespective of whether it is landed or flying.
@@ -165,6 +170,15 @@ func (c *actionServiceClient) Reboot(ctx context.Context, in *RebootRequest, opt
 func (c *actionServiceClient) Shutdown(ctx context.Context, in *ShutdownRequest, opts ...grpc.CallOption) (*ShutdownResponse, error) {
 	out := new(ShutdownResponse)
 	err := c.cc.Invoke(ctx, "/mavsdk.rpc.action.ActionService/Shutdown", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *actionServiceClient) Terminate(ctx context.Context, in *TerminateRequest, opts ...grpc.CallOption) (*TerminateResponse, error) {
+	out := new(TerminateResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.action.ActionService/Terminate", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -310,6 +324,11 @@ type ActionServiceServer interface {
 	// reject it if they are not already ready to shut down.
 	Shutdown(context.Context, *ShutdownRequest) (*ShutdownResponse, error)
 	//
+	// Send command to terminate the drone.
+	//
+	// This will run the terminate routine as configured on the drone (e.g. disarm and open the parachute).
+	Terminate(context.Context, *TerminateRequest) (*TerminateResponse, error)
+	//
 	// Send command to kill the drone.
 	//
 	// This will disarm a drone irrespective of whether it is landed or flying.
@@ -385,6 +404,9 @@ func (*UnimplementedActionServiceServer) Reboot(context.Context, *RebootRequest)
 }
 func (*UnimplementedActionServiceServer) Shutdown(context.Context, *ShutdownRequest) (*ShutdownResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Shutdown not implemented")
+}
+func (*UnimplementedActionServiceServer) Terminate(context.Context, *TerminateRequest) (*TerminateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Terminate not implemented")
 }
 func (*UnimplementedActionServiceServer) Kill(context.Context, *KillRequest) (*KillResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Kill not implemented")
@@ -528,6 +550,24 @@ func _ActionService_Shutdown_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ActionServiceServer).Shutdown(ctx, req.(*ShutdownRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ActionService_Terminate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TerminateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActionServiceServer).Terminate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.action.ActionService/Terminate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActionServiceServer).Terminate(ctx, req.(*TerminateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -757,6 +797,10 @@ var _ActionService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Shutdown",
 			Handler:    _ActionService_Shutdown_Handler,
+		},
+		{
+			MethodName: "Terminate",
+			Handler:    _ActionService_Terminate_Handler,
 		},
 		{
 			MethodName: "Kill",

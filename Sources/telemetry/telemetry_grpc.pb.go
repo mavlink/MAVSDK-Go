@@ -69,6 +69,8 @@ type TelemetryServiceClient interface {
 	SubscribeHealthAllOk(ctx context.Context, in *SubscribeHealthAllOkRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeHealthAllOkClient, error)
 	// Subscribe to 'unix epoch time' updates.
 	SubscribeUnixEpochTime(ctx context.Context, in *SubscribeUnixEpochTimeRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeUnixEpochTimeClient, error)
+	// Subscribe to 'Distance Sensor' updates.
+	SubscribeDistanceSensor(ctx context.Context, in *SubscribeDistanceSensorRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeDistanceSensorClient, error)
 	// Set rate to 'position' updates.
 	SetRatePosition(ctx context.Context, in *SetRatePositionRequest, opts ...grpc.CallOption) (*SetRatePositionResponse, error)
 	// Set rate to 'home position' updates.
@@ -105,6 +107,10 @@ type TelemetryServiceClient interface {
 	SetRateImu(ctx context.Context, in *SetRateImuRequest, opts ...grpc.CallOption) (*SetRateImuResponse, error)
 	// Set rate to 'unix epoch time' updates.
 	SetRateUnixEpochTime(ctx context.Context, in *SetRateUnixEpochTimeRequest, opts ...grpc.CallOption) (*SetRateUnixEpochTimeResponse, error)
+	// Set rate to 'Distance Sensor' updates.
+	SetRateDistanceSensor(ctx context.Context, in *SetRateDistanceSensorRequest, opts ...grpc.CallOption) (*SetRateDistanceSensorResponse, error)
+	// Get the GPS location of where the estimator has been initialized.
+	GetGpsGlobalOrigin(ctx context.Context, in *GetGpsGlobalOriginRequest, opts ...grpc.CallOption) (*GetGpsGlobalOriginResponse, error)
 }
 
 type telemetryServiceClient struct {
@@ -947,6 +953,38 @@ func (x *telemetryServiceSubscribeUnixEpochTimeClient) Recv() (*UnixEpochTimeRes
 	return m, nil
 }
 
+func (c *telemetryServiceClient) SubscribeDistanceSensor(ctx context.Context, in *SubscribeDistanceSensorRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeDistanceSensorClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_TelemetryService_serviceDesc.Streams[26], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeDistanceSensor", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &telemetryServiceSubscribeDistanceSensorClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type TelemetryService_SubscribeDistanceSensorClient interface {
+	Recv() (*DistanceSensorResponse, error)
+	grpc.ClientStream
+}
+
+type telemetryServiceSubscribeDistanceSensorClient struct {
+	grpc.ClientStream
+}
+
+func (x *telemetryServiceSubscribeDistanceSensorClient) Recv() (*DistanceSensorResponse, error) {
+	m := new(DistanceSensorResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (c *telemetryServiceClient) SetRatePosition(ctx context.Context, in *SetRatePositionRequest, opts ...grpc.CallOption) (*SetRatePositionResponse, error) {
 	out := new(SetRatePositionResponse)
 	err := c.cc.Invoke(ctx, "/mavsdk.rpc.telemetry.TelemetryService/SetRatePosition", in, out, opts...)
@@ -1109,6 +1147,24 @@ func (c *telemetryServiceClient) SetRateUnixEpochTime(ctx context.Context, in *S
 	return out, nil
 }
 
+func (c *telemetryServiceClient) SetRateDistanceSensor(ctx context.Context, in *SetRateDistanceSensorRequest, opts ...grpc.CallOption) (*SetRateDistanceSensorResponse, error) {
+	out := new(SetRateDistanceSensorResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.telemetry.TelemetryService/SetRateDistanceSensor", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *telemetryServiceClient) GetGpsGlobalOrigin(ctx context.Context, in *GetGpsGlobalOriginRequest, opts ...grpc.CallOption) (*GetGpsGlobalOriginResponse, error) {
+	out := new(GetGpsGlobalOriginResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.telemetry.TelemetryService/GetGpsGlobalOrigin", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TelemetryServiceServer is the server API for TelemetryService service.
 type TelemetryServiceServer interface {
 	// Subscribe to 'position' updates.
@@ -1163,6 +1219,8 @@ type TelemetryServiceServer interface {
 	SubscribeHealthAllOk(*SubscribeHealthAllOkRequest, TelemetryService_SubscribeHealthAllOkServer) error
 	// Subscribe to 'unix epoch time' updates.
 	SubscribeUnixEpochTime(*SubscribeUnixEpochTimeRequest, TelemetryService_SubscribeUnixEpochTimeServer) error
+	// Subscribe to 'Distance Sensor' updates.
+	SubscribeDistanceSensor(*SubscribeDistanceSensorRequest, TelemetryService_SubscribeDistanceSensorServer) error
 	// Set rate to 'position' updates.
 	SetRatePosition(context.Context, *SetRatePositionRequest) (*SetRatePositionResponse, error)
 	// Set rate to 'home position' updates.
@@ -1199,6 +1257,10 @@ type TelemetryServiceServer interface {
 	SetRateImu(context.Context, *SetRateImuRequest) (*SetRateImuResponse, error)
 	// Set rate to 'unix epoch time' updates.
 	SetRateUnixEpochTime(context.Context, *SetRateUnixEpochTimeRequest) (*SetRateUnixEpochTimeResponse, error)
+	// Set rate to 'Distance Sensor' updates.
+	SetRateDistanceSensor(context.Context, *SetRateDistanceSensorRequest) (*SetRateDistanceSensorResponse, error)
+	// Get the GPS location of where the estimator has been initialized.
+	GetGpsGlobalOrigin(context.Context, *GetGpsGlobalOriginRequest) (*GetGpsGlobalOriginResponse, error)
 }
 
 // UnimplementedTelemetryServiceServer can be embedded to have forward compatible implementations.
@@ -1283,6 +1345,9 @@ func (*UnimplementedTelemetryServiceServer) SubscribeHealthAllOk(*SubscribeHealt
 func (*UnimplementedTelemetryServiceServer) SubscribeUnixEpochTime(*SubscribeUnixEpochTimeRequest, TelemetryService_SubscribeUnixEpochTimeServer) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeUnixEpochTime not implemented")
 }
+func (*UnimplementedTelemetryServiceServer) SubscribeDistanceSensor(*SubscribeDistanceSensorRequest, TelemetryService_SubscribeDistanceSensorServer) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeDistanceSensor not implemented")
+}
 func (*UnimplementedTelemetryServiceServer) SetRatePosition(context.Context, *SetRatePositionRequest) (*SetRatePositionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetRatePosition not implemented")
 }
@@ -1336,6 +1401,12 @@ func (*UnimplementedTelemetryServiceServer) SetRateImu(context.Context, *SetRate
 }
 func (*UnimplementedTelemetryServiceServer) SetRateUnixEpochTime(context.Context, *SetRateUnixEpochTimeRequest) (*SetRateUnixEpochTimeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetRateUnixEpochTime not implemented")
+}
+func (*UnimplementedTelemetryServiceServer) SetRateDistanceSensor(context.Context, *SetRateDistanceSensorRequest) (*SetRateDistanceSensorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetRateDistanceSensor not implemented")
+}
+func (*UnimplementedTelemetryServiceServer) GetGpsGlobalOrigin(context.Context, *GetGpsGlobalOriginRequest) (*GetGpsGlobalOriginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGpsGlobalOrigin not implemented")
 }
 
 func RegisterTelemetryServiceServer(s *grpc.Server, srv TelemetryServiceServer) {
@@ -1888,6 +1959,27 @@ func (x *telemetryServiceSubscribeUnixEpochTimeServer) Send(m *UnixEpochTimeResp
 	return x.ServerStream.SendMsg(m)
 }
 
+func _TelemetryService_SubscribeDistanceSensor_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeDistanceSensorRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TelemetryServiceServer).SubscribeDistanceSensor(m, &telemetryServiceSubscribeDistanceSensorServer{stream})
+}
+
+type TelemetryService_SubscribeDistanceSensorServer interface {
+	Send(*DistanceSensorResponse) error
+	grpc.ServerStream
+}
+
+type telemetryServiceSubscribeDistanceSensorServer struct {
+	grpc.ServerStream
+}
+
+func (x *telemetryServiceSubscribeDistanceSensorServer) Send(m *DistanceSensorResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 func _TelemetryService_SetRatePosition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetRatePositionRequest)
 	if err := dec(in); err != nil {
@@ -2212,6 +2304,42 @@ func _TelemetryService_SetRateUnixEpochTime_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TelemetryService_SetRateDistanceSensor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetRateDistanceSensorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TelemetryServiceServer).SetRateDistanceSensor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.telemetry.TelemetryService/SetRateDistanceSensor",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TelemetryServiceServer).SetRateDistanceSensor(ctx, req.(*SetRateDistanceSensorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TelemetryService_GetGpsGlobalOrigin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetGpsGlobalOriginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TelemetryServiceServer).GetGpsGlobalOrigin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.telemetry.TelemetryService/GetGpsGlobalOrigin",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TelemetryServiceServer).GetGpsGlobalOrigin(ctx, req.(*GetGpsGlobalOriginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _TelemetryService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "mavsdk.rpc.telemetry.TelemetryService",
 	HandlerType: (*TelemetryServiceServer)(nil),
@@ -2287,6 +2415,14 @@ var _TelemetryService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetRateUnixEpochTime",
 			Handler:    _TelemetryService_SetRateUnixEpochTime_Handler,
+		},
+		{
+			MethodName: "SetRateDistanceSensor",
+			Handler:    _TelemetryService_SetRateDistanceSensor_Handler,
+		},
+		{
+			MethodName: "GetGpsGlobalOrigin",
+			Handler:    _TelemetryService_GetGpsGlobalOrigin_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
@@ -2418,6 +2554,11 @@ var _TelemetryService_serviceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "SubscribeUnixEpochTime",
 			Handler:       _TelemetryService_SubscribeUnixEpochTime_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "SubscribeDistanceSensor",
+			Handler:       _TelemetryService_SubscribeDistanceSensor_Handler,
 			ServerStreams: true,
 		},
 	},
