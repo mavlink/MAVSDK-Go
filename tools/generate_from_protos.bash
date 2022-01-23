@@ -10,10 +10,12 @@ OUTPUT_DIR=${OUTPUT_DIR:-"${SCRIPT_DIR}/../Sources/"}
 PROTO_DIR_TMP=${PROTO_DIR_TMP:-"${SCRIPT_DIR}/tmp/protos"}
 export TEMPLATE_PATH="$(pwd)/../templates/"
 
+PLUGIN_LIST="action calibration camera core failure follow_me ftp geofence gimbal info log_files manual_control mission mission_raw
+             mocap offboard param shell telemetry transponder tune"
+#             action_server mission_raw_server param_server telemetry_server tracking_server"
 
-
-PLUGIN_LIST="action core mission geofence telemetry log_files"
-
+echo "Plugin List consist of: " ${PLUGIN_LIST}
+rm -rf ${PROTO_DIR_TMP}
 mkdir -p ${PROTO_DIR_TMP}
 cp -r ${PROTO_DIR}/* ${PROTO_DIR_TMP}
 
@@ -41,16 +43,17 @@ echo "-------------------------------"
 echo "Generating pb and grpc.pb files"
 echo "-------------------------------"
 
-GO_GEN_CMD="/go/bin/protoc-gen-go"
-GO_GEN_RPC_CMD="/go/bin/protoc-gen-gogrpc"
+GO_GEN_CMD="/root/go/bin/protoc-gen-go"
+GO_GEN_RPC_CMD="/root/go/bin/protoc-gen-go-grpc"
 
+echo "Generating proto definitions."
 # Generate the message and service definitions using grpc plugins.
 for plugin in ${PLUGIN_LIST}; do
     mkdir -p ${OUTPUT_DIR}/$plugin 
     protoc ${plugin}.proto -I${PROTO_DIR}/$plugin --go_out=${OUTPUT_DIR}/$plugin --gogrpc_out=${OUTPUT_DIR}/$plugin --plugin=protoc-gen-go=${GO_GEN_CMD} --plugin=protoc-gen-gogrpc=${GO_GEN_RPC_CMD}
 done
 
-
+echo "Generating final plugins."
 # Generate the final plugins
 for plugin in ${PLUGIN_LIST}; do
 	echo "+=> Doing $plugin"
@@ -58,4 +61,4 @@ for plugin in ${PLUGIN_LIST}; do
 done
 
 # Remove the temp directory.
-rm ${PROTO_DIR_TMP}
+rm -rf ${PROTO_DIR_TMP}
