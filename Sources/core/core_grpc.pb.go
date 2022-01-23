@@ -22,10 +22,17 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CoreServiceClient interface {
+	//
 	// Subscribe to 'connection state' updates.
 	SubscribeConnectionState(ctx context.Context, in *SubscribeConnectionStateRequest, opts ...grpc.CallOption) (CoreService_SubscribeConnectionStateClient, error)
-	// Get a list of currently running plugins.
-	ListRunningPlugins(ctx context.Context, in *ListRunningPluginsRequest, opts ...grpc.CallOption) (*ListRunningPluginsResponse, error)
+	//
+	// Set timeout of MAVLink transfers.
+	//
+	// The default timeout used is generally (0.5 seconds) seconds.
+	// If MAVSDK is used on the same host this timeout can be reduced, while
+	// if MAVSDK has to communicate over links with high latency it might
+	// need to be increased to prevent timeouts.
+	SetMavlinkTimeout(ctx context.Context, in *SetMavlinkTimeoutRequest, opts ...grpc.CallOption) (*SetMavlinkTimeoutResponse, error)
 }
 
 type coreServiceClient struct {
@@ -68,9 +75,9 @@ func (x *coreServiceSubscribeConnectionStateClient) Recv() (*ConnectionStateResp
 	return m, nil
 }
 
-func (c *coreServiceClient) ListRunningPlugins(ctx context.Context, in *ListRunningPluginsRequest, opts ...grpc.CallOption) (*ListRunningPluginsResponse, error) {
-	out := new(ListRunningPluginsResponse)
-	err := c.cc.Invoke(ctx, "/mavsdk.rpc.core.CoreService/ListRunningPlugins", in, out, opts...)
+func (c *coreServiceClient) SetMavlinkTimeout(ctx context.Context, in *SetMavlinkTimeoutRequest, opts ...grpc.CallOption) (*SetMavlinkTimeoutResponse, error) {
+	out := new(SetMavlinkTimeoutResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.core.CoreService/SetMavlinkTimeout", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -81,10 +88,17 @@ func (c *coreServiceClient) ListRunningPlugins(ctx context.Context, in *ListRunn
 // All implementations must embed UnimplementedCoreServiceServer
 // for forward compatibility
 type CoreServiceServer interface {
+	//
 	// Subscribe to 'connection state' updates.
 	SubscribeConnectionState(*SubscribeConnectionStateRequest, CoreService_SubscribeConnectionStateServer) error
-	// Get a list of currently running plugins.
-	ListRunningPlugins(context.Context, *ListRunningPluginsRequest) (*ListRunningPluginsResponse, error)
+	//
+	// Set timeout of MAVLink transfers.
+	//
+	// The default timeout used is generally (0.5 seconds) seconds.
+	// If MAVSDK is used on the same host this timeout can be reduced, while
+	// if MAVSDK has to communicate over links with high latency it might
+	// need to be increased to prevent timeouts.
+	SetMavlinkTimeout(context.Context, *SetMavlinkTimeoutRequest) (*SetMavlinkTimeoutResponse, error)
 	mustEmbedUnimplementedCoreServiceServer()
 }
 
@@ -95,8 +109,8 @@ type UnimplementedCoreServiceServer struct {
 func (UnimplementedCoreServiceServer) SubscribeConnectionState(*SubscribeConnectionStateRequest, CoreService_SubscribeConnectionStateServer) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeConnectionState not implemented")
 }
-func (UnimplementedCoreServiceServer) ListRunningPlugins(context.Context, *ListRunningPluginsRequest) (*ListRunningPluginsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListRunningPlugins not implemented")
+func (UnimplementedCoreServiceServer) SetMavlinkTimeout(context.Context, *SetMavlinkTimeoutRequest) (*SetMavlinkTimeoutResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetMavlinkTimeout not implemented")
 }
 func (UnimplementedCoreServiceServer) mustEmbedUnimplementedCoreServiceServer() {}
 
@@ -132,20 +146,20 @@ func (x *coreServiceSubscribeConnectionStateServer) Send(m *ConnectionStateRespo
 	return x.ServerStream.SendMsg(m)
 }
 
-func _CoreService_ListRunningPlugins_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListRunningPluginsRequest)
+func _CoreService_SetMavlinkTimeout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetMavlinkTimeoutRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CoreServiceServer).ListRunningPlugins(ctx, in)
+		return srv.(CoreServiceServer).SetMavlinkTimeout(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/mavsdk.rpc.core.CoreService/ListRunningPlugins",
+		FullMethod: "/mavsdk.rpc.core.CoreService/SetMavlinkTimeout",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CoreServiceServer).ListRunningPlugins(ctx, req.(*ListRunningPluginsRequest))
+		return srv.(CoreServiceServer).SetMavlinkTimeout(ctx, req.(*SetMavlinkTimeoutRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -158,8 +172,8 @@ var CoreService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*CoreServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ListRunningPlugins",
-			Handler:    _CoreService_ListRunningPlugins_Handler,
+			MethodName: "SetMavlinkTimeout",
+			Handler:    _CoreService_SetMavlinkTimeout_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

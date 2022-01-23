@@ -28,6 +28,9 @@ type GeofenceServiceClient interface {
 	// Polygons are uploaded to a drone. Once uploaded, the geofence will remain
 	// on the drone even if a connection is lost.
 	UploadGeofence(ctx context.Context, in *UploadGeofenceRequest, opts ...grpc.CallOption) (*UploadGeofenceResponse, error)
+	//
+	// Clear all geofences saved on the vehicle.
+	ClearGeofence(ctx context.Context, in *ClearGeofenceRequest, opts ...grpc.CallOption) (*ClearGeofenceResponse, error)
 }
 
 type geofenceServiceClient struct {
@@ -47,6 +50,15 @@ func (c *geofenceServiceClient) UploadGeofence(ctx context.Context, in *UploadGe
 	return out, nil
 }
 
+func (c *geofenceServiceClient) ClearGeofence(ctx context.Context, in *ClearGeofenceRequest, opts ...grpc.CallOption) (*ClearGeofenceResponse, error) {
+	out := new(ClearGeofenceResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.geofence.GeofenceService/ClearGeofence", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GeofenceServiceServer is the server API for GeofenceService service.
 // All implementations must embed UnimplementedGeofenceServiceServer
 // for forward compatibility
@@ -57,6 +69,9 @@ type GeofenceServiceServer interface {
 	// Polygons are uploaded to a drone. Once uploaded, the geofence will remain
 	// on the drone even if a connection is lost.
 	UploadGeofence(context.Context, *UploadGeofenceRequest) (*UploadGeofenceResponse, error)
+	//
+	// Clear all geofences saved on the vehicle.
+	ClearGeofence(context.Context, *ClearGeofenceRequest) (*ClearGeofenceResponse, error)
 	mustEmbedUnimplementedGeofenceServiceServer()
 }
 
@@ -66,6 +81,9 @@ type UnimplementedGeofenceServiceServer struct {
 
 func (UnimplementedGeofenceServiceServer) UploadGeofence(context.Context, *UploadGeofenceRequest) (*UploadGeofenceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadGeofence not implemented")
+}
+func (UnimplementedGeofenceServiceServer) ClearGeofence(context.Context, *ClearGeofenceRequest) (*ClearGeofenceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ClearGeofence not implemented")
 }
 func (UnimplementedGeofenceServiceServer) mustEmbedUnimplementedGeofenceServiceServer() {}
 
@@ -98,6 +116,24 @@ func _GeofenceService_UploadGeofence_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GeofenceService_ClearGeofence_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ClearGeofenceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GeofenceServiceServer).ClearGeofence(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.geofence.GeofenceService/ClearGeofence",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GeofenceServiceServer).ClearGeofence(ctx, req.(*ClearGeofenceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GeofenceService_ServiceDesc is the grpc.ServiceDesc for GeofenceService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -108,6 +144,10 @@ var GeofenceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UploadGeofence",
 			Handler:    _GeofenceService_UploadGeofence_Handler,
+		},
+		{
+			MethodName: "ClearGeofence",
+			Handler:    _GeofenceService_ClearGeofence_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

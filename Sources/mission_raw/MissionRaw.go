@@ -256,3 +256,39 @@ type ServiceImpl struct{
     	}()	
     	return ch, nil
     }
+    /*
+         Import a QGroundControl missions in JSON .plan format.
+
+         Supported:
+         - Waypoints
+         - Survey
+         Not supported:
+         - Structure Scan
+
+         Parameters
+         ----------
+         qgcPlanPath string
+
+         Returns
+         -------
+         False
+         MissionImportData : MissionImportData
+              The imported mission data
+
+         
+    */
+
+
+    func(s *ServiceImpl)ImportQgroundcontrolMission(qgcPlanPath string) (*ImportQgroundcontrolMissionResponse, error){
+        request := &ImportQgroundcontrolMissionRequest{}
+        ctx:= context.Background()
+         request.QgcPlanPath = qgcPlanPath
+        response, err := s.Client.ImportQgroundcontrolMission(ctx, request)
+        if err != nil {
+    		return nil, err
+    	}
+        return response, nil
+
+    }
+
+       

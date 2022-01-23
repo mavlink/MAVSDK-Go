@@ -29,6 +29,12 @@ type MissionServiceClient interface {
 	// executed even if the connection is lost.
 	UploadMission(ctx context.Context, in *UploadMissionRequest, opts ...grpc.CallOption) (*UploadMissionResponse, error)
 	//
+	// Upload a list of mission items to the system and report upload progress.
+	//
+	// The mission items are uploaded to a drone. Once uploaded the mission can be started and
+	// executed even if the connection is lost.
+	SubscribeUploadMissionWithProgress(ctx context.Context, in *SubscribeUploadMissionWithProgressRequest, opts ...grpc.CallOption) (MissionService_SubscribeUploadMissionWithProgressClient, error)
+	//
 	// Cancel an ongoing mission upload.
 	CancelMissionUpload(ctx context.Context, in *CancelMissionUploadRequest, opts ...grpc.CallOption) (*CancelMissionUploadResponse, error)
 	//
@@ -37,6 +43,12 @@ type MissionServiceClient interface {
 	// Will fail if any of the downloaded mission items are not supported
 	// by the MAVSDK API.
 	DownloadMission(ctx context.Context, in *DownloadMissionRequest, opts ...grpc.CallOption) (*DownloadMissionResponse, error)
+	//
+	// Download a list of mission items from the system (asynchronous) and report progress.
+	//
+	// Will fail if any of the downloaded mission items are not supported
+	// by the MAVSDK API.
+	SubscribeDownloadMissionWithProgress(ctx context.Context, in *SubscribeDownloadMissionWithProgressRequest, opts ...grpc.CallOption) (MissionService_SubscribeDownloadMissionWithProgressClient, error)
 	//
 	// Cancel an ongoing mission download.
 	CancelMissionDownload(ctx context.Context, in *CancelMissionDownloadRequest, opts ...grpc.CallOption) (*CancelMissionDownloadResponse, error)
@@ -83,12 +95,6 @@ type MissionServiceClient interface {
 	// This will only take effect for the next mission upload, meaning that
 	// the mission may have to be uploaded again.
 	SetReturnToLaunchAfterMission(ctx context.Context, in *SetReturnToLaunchAfterMissionRequest, opts ...grpc.CallOption) (*SetReturnToLaunchAfterMissionResponse, error)
-	//
-	// Import a QGroundControl (QGC) mission plan.
-	//
-	// The method will fail if any of the imported mission items are not supported
-	// by the MAVSDK API.
-	ImportQgroundcontrolMission(ctx context.Context, in *ImportQgroundcontrolMissionRequest, opts ...grpc.CallOption) (*ImportQgroundcontrolMissionResponse, error)
 }
 
 type missionServiceClient struct {
@@ -108,6 +114,38 @@ func (c *missionServiceClient) UploadMission(ctx context.Context, in *UploadMiss
 	return out, nil
 }
 
+func (c *missionServiceClient) SubscribeUploadMissionWithProgress(ctx context.Context, in *SubscribeUploadMissionWithProgressRequest, opts ...grpc.CallOption) (MissionService_SubscribeUploadMissionWithProgressClient, error) {
+	stream, err := c.cc.NewStream(ctx, &MissionService_ServiceDesc.Streams[0], "/mavsdk.rpc.mission.MissionService/SubscribeUploadMissionWithProgress", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &missionServiceSubscribeUploadMissionWithProgressClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type MissionService_SubscribeUploadMissionWithProgressClient interface {
+	Recv() (*UploadMissionWithProgressResponse, error)
+	grpc.ClientStream
+}
+
+type missionServiceSubscribeUploadMissionWithProgressClient struct {
+	grpc.ClientStream
+}
+
+func (x *missionServiceSubscribeUploadMissionWithProgressClient) Recv() (*UploadMissionWithProgressResponse, error) {
+	m := new(UploadMissionWithProgressResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (c *missionServiceClient) CancelMissionUpload(ctx context.Context, in *CancelMissionUploadRequest, opts ...grpc.CallOption) (*CancelMissionUploadResponse, error) {
 	out := new(CancelMissionUploadResponse)
 	err := c.cc.Invoke(ctx, "/mavsdk.rpc.mission.MissionService/CancelMissionUpload", in, out, opts...)
@@ -124,6 +162,38 @@ func (c *missionServiceClient) DownloadMission(ctx context.Context, in *Download
 		return nil, err
 	}
 	return out, nil
+}
+
+func (c *missionServiceClient) SubscribeDownloadMissionWithProgress(ctx context.Context, in *SubscribeDownloadMissionWithProgressRequest, opts ...grpc.CallOption) (MissionService_SubscribeDownloadMissionWithProgressClient, error) {
+	stream, err := c.cc.NewStream(ctx, &MissionService_ServiceDesc.Streams[1], "/mavsdk.rpc.mission.MissionService/SubscribeDownloadMissionWithProgress", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &missionServiceSubscribeDownloadMissionWithProgressClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type MissionService_SubscribeDownloadMissionWithProgressClient interface {
+	Recv() (*DownloadMissionWithProgressResponse, error)
+	grpc.ClientStream
+}
+
+type missionServiceSubscribeDownloadMissionWithProgressClient struct {
+	grpc.ClientStream
+}
+
+func (x *missionServiceSubscribeDownloadMissionWithProgressClient) Recv() (*DownloadMissionWithProgressResponse, error) {
+	m := new(DownloadMissionWithProgressResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *missionServiceClient) CancelMissionDownload(ctx context.Context, in *CancelMissionDownloadRequest, opts ...grpc.CallOption) (*CancelMissionDownloadResponse, error) {
@@ -181,7 +251,7 @@ func (c *missionServiceClient) IsMissionFinished(ctx context.Context, in *IsMiss
 }
 
 func (c *missionServiceClient) SubscribeMissionProgress(ctx context.Context, in *SubscribeMissionProgressRequest, opts ...grpc.CallOption) (MissionService_SubscribeMissionProgressClient, error) {
-	stream, err := c.cc.NewStream(ctx, &MissionService_ServiceDesc.Streams[0], "/mavsdk.rpc.mission.MissionService/SubscribeMissionProgress", opts...)
+	stream, err := c.cc.NewStream(ctx, &MissionService_ServiceDesc.Streams[2], "/mavsdk.rpc.mission.MissionService/SubscribeMissionProgress", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -230,15 +300,6 @@ func (c *missionServiceClient) SetReturnToLaunchAfterMission(ctx context.Context
 	return out, nil
 }
 
-func (c *missionServiceClient) ImportQgroundcontrolMission(ctx context.Context, in *ImportQgroundcontrolMissionRequest, opts ...grpc.CallOption) (*ImportQgroundcontrolMissionResponse, error) {
-	out := new(ImportQgroundcontrolMissionResponse)
-	err := c.cc.Invoke(ctx, "/mavsdk.rpc.mission.MissionService/ImportQgroundcontrolMission", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // MissionServiceServer is the server API for MissionService service.
 // All implementations must embed UnimplementedMissionServiceServer
 // for forward compatibility
@@ -250,6 +311,12 @@ type MissionServiceServer interface {
 	// executed even if the connection is lost.
 	UploadMission(context.Context, *UploadMissionRequest) (*UploadMissionResponse, error)
 	//
+	// Upload a list of mission items to the system and report upload progress.
+	//
+	// The mission items are uploaded to a drone. Once uploaded the mission can be started and
+	// executed even if the connection is lost.
+	SubscribeUploadMissionWithProgress(*SubscribeUploadMissionWithProgressRequest, MissionService_SubscribeUploadMissionWithProgressServer) error
+	//
 	// Cancel an ongoing mission upload.
 	CancelMissionUpload(context.Context, *CancelMissionUploadRequest) (*CancelMissionUploadResponse, error)
 	//
@@ -258,6 +325,12 @@ type MissionServiceServer interface {
 	// Will fail if any of the downloaded mission items are not supported
 	// by the MAVSDK API.
 	DownloadMission(context.Context, *DownloadMissionRequest) (*DownloadMissionResponse, error)
+	//
+	// Download a list of mission items from the system (asynchronous) and report progress.
+	//
+	// Will fail if any of the downloaded mission items are not supported
+	// by the MAVSDK API.
+	SubscribeDownloadMissionWithProgress(*SubscribeDownloadMissionWithProgressRequest, MissionService_SubscribeDownloadMissionWithProgressServer) error
 	//
 	// Cancel an ongoing mission download.
 	CancelMissionDownload(context.Context, *CancelMissionDownloadRequest) (*CancelMissionDownloadResponse, error)
@@ -304,12 +377,6 @@ type MissionServiceServer interface {
 	// This will only take effect for the next mission upload, meaning that
 	// the mission may have to be uploaded again.
 	SetReturnToLaunchAfterMission(context.Context, *SetReturnToLaunchAfterMissionRequest) (*SetReturnToLaunchAfterMissionResponse, error)
-	//
-	// Import a QGroundControl (QGC) mission plan.
-	//
-	// The method will fail if any of the imported mission items are not supported
-	// by the MAVSDK API.
-	ImportQgroundcontrolMission(context.Context, *ImportQgroundcontrolMissionRequest) (*ImportQgroundcontrolMissionResponse, error)
 	mustEmbedUnimplementedMissionServiceServer()
 }
 
@@ -320,11 +387,17 @@ type UnimplementedMissionServiceServer struct {
 func (UnimplementedMissionServiceServer) UploadMission(context.Context, *UploadMissionRequest) (*UploadMissionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadMission not implemented")
 }
+func (UnimplementedMissionServiceServer) SubscribeUploadMissionWithProgress(*SubscribeUploadMissionWithProgressRequest, MissionService_SubscribeUploadMissionWithProgressServer) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeUploadMissionWithProgress not implemented")
+}
 func (UnimplementedMissionServiceServer) CancelMissionUpload(context.Context, *CancelMissionUploadRequest) (*CancelMissionUploadResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelMissionUpload not implemented")
 }
 func (UnimplementedMissionServiceServer) DownloadMission(context.Context, *DownloadMissionRequest) (*DownloadMissionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DownloadMission not implemented")
+}
+func (UnimplementedMissionServiceServer) SubscribeDownloadMissionWithProgress(*SubscribeDownloadMissionWithProgressRequest, MissionService_SubscribeDownloadMissionWithProgressServer) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeDownloadMissionWithProgress not implemented")
 }
 func (UnimplementedMissionServiceServer) CancelMissionDownload(context.Context, *CancelMissionDownloadRequest) (*CancelMissionDownloadResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelMissionDownload not implemented")
@@ -352,9 +425,6 @@ func (UnimplementedMissionServiceServer) GetReturnToLaunchAfterMission(context.C
 }
 func (UnimplementedMissionServiceServer) SetReturnToLaunchAfterMission(context.Context, *SetReturnToLaunchAfterMissionRequest) (*SetReturnToLaunchAfterMissionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetReturnToLaunchAfterMission not implemented")
-}
-func (UnimplementedMissionServiceServer) ImportQgroundcontrolMission(context.Context, *ImportQgroundcontrolMissionRequest) (*ImportQgroundcontrolMissionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ImportQgroundcontrolMission not implemented")
 }
 func (UnimplementedMissionServiceServer) mustEmbedUnimplementedMissionServiceServer() {}
 
@@ -385,6 +455,27 @@ func _MissionService_UploadMission_Handler(srv interface{}, ctx context.Context,
 		return srv.(MissionServiceServer).UploadMission(ctx, req.(*UploadMissionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
+}
+
+func _MissionService_SubscribeUploadMissionWithProgress_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeUploadMissionWithProgressRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(MissionServiceServer).SubscribeUploadMissionWithProgress(m, &missionServiceSubscribeUploadMissionWithProgressServer{stream})
+}
+
+type MissionService_SubscribeUploadMissionWithProgressServer interface {
+	Send(*UploadMissionWithProgressResponse) error
+	grpc.ServerStream
+}
+
+type missionServiceSubscribeUploadMissionWithProgressServer struct {
+	grpc.ServerStream
+}
+
+func (x *missionServiceSubscribeUploadMissionWithProgressServer) Send(m *UploadMissionWithProgressResponse) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 func _MissionService_CancelMissionUpload_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -421,6 +512,27 @@ func _MissionService_DownloadMission_Handler(srv interface{}, ctx context.Contex
 		return srv.(MissionServiceServer).DownloadMission(ctx, req.(*DownloadMissionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
+}
+
+func _MissionService_SubscribeDownloadMissionWithProgress_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeDownloadMissionWithProgressRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(MissionServiceServer).SubscribeDownloadMissionWithProgress(m, &missionServiceSubscribeDownloadMissionWithProgressServer{stream})
+}
+
+type MissionService_SubscribeDownloadMissionWithProgressServer interface {
+	Send(*DownloadMissionWithProgressResponse) error
+	grpc.ServerStream
+}
+
+type missionServiceSubscribeDownloadMissionWithProgressServer struct {
+	grpc.ServerStream
+}
+
+func (x *missionServiceSubscribeDownloadMissionWithProgressServer) Send(m *DownloadMissionWithProgressResponse) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 func _MissionService_CancelMissionDownload_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -588,24 +700,6 @@ func _MissionService_SetReturnToLaunchAfterMission_Handler(srv interface{}, ctx 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MissionService_ImportQgroundcontrolMission_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ImportQgroundcontrolMissionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MissionServiceServer).ImportQgroundcontrolMission(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/mavsdk.rpc.mission.MissionService/ImportQgroundcontrolMission",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MissionServiceServer).ImportQgroundcontrolMission(ctx, req.(*ImportQgroundcontrolMissionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // MissionService_ServiceDesc is the grpc.ServiceDesc for MissionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -657,12 +751,18 @@ var MissionService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "SetReturnToLaunchAfterMission",
 			Handler:    _MissionService_SetReturnToLaunchAfterMission_Handler,
 		},
-		{
-			MethodName: "ImportQgroundcontrolMission",
-			Handler:    _MissionService_ImportQgroundcontrolMission_Handler,
-		},
 	},
 	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SubscribeUploadMissionWithProgress",
+			Handler:       _MissionService_SubscribeUploadMissionWithProgress_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "SubscribeDownloadMissionWithProgress",
+			Handler:       _MissionService_SubscribeDownloadMissionWithProgress_Handler,
+			ServerStreams: true,
+		},
 		{
 			StreamName:    "SubscribeMissionProgress",
 			Handler:       _MissionService_SubscribeMissionProgress_Handler,

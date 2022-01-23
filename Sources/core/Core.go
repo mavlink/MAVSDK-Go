@@ -42,29 +42,30 @@ type ServiceImpl struct{
     	return ch, nil
     }
     /*
-         Get a list of currently running plugins.
+         Set timeout of MAVLink transfers.
 
-         
+         The default timeout used is generally (0.5 seconds) seconds.
+         If MAVSDK is used on the same host this timeout can be reduced, while
+         if MAVSDK has to communicate over links with high latency it might
+         need to be increased to prevent timeouts.
 
-         Returns
-         -------
-         True
-         PluginInfo : []*PluginInfo
-              Plugin info
+         Parameters
+         ----------
+         timeoutS float64
 
          
     */
 
-
-    func(s *ServiceImpl)ListRunningPlugins() (*ListRunningPluginsResponse, error){
-        request := &ListRunningPluginsRequest{}
+    func(s *ServiceImpl)SetMavlinkTimeout(timeoutS float64)(*SetMavlinkTimeoutResponse, error){
+        
+        request := &SetMavlinkTimeoutRequest{}
         ctx:= context.Background()
-         response, err := s.Client.ListRunningPlugins(ctx, request)
+         request.TimeoutS = timeoutS
+        response, err := s.Client.SetMavlinkTimeout(ctx, request)
         if err != nil {
     		return nil, err
-    	}
+        }
         return response, nil
-
     }
 
        

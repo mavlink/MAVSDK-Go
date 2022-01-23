@@ -32,6 +32,8 @@ type TelemetryServiceClient interface {
 	SubscribeLandedState(ctx context.Context, in *SubscribeLandedStateRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeLandedStateClient, error)
 	// Subscribe to armed updates.
 	SubscribeArmed(ctx context.Context, in *SubscribeArmedRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeArmedClient, error)
+	// subscribe to vtol state Updates
+	SubscribeVtolState(ctx context.Context, in *SubscribeVtolStateRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeVtolStateClient, error)
 	// Subscribe to 'attitude' updates (quaternion).
 	SubscribeAttitudeQuaternion(ctx context.Context, in *SubscribeAttitudeQuaternionRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeAttitudeQuaternionClient, error)
 	// Subscribe to 'attitude' updates (Euler).
@@ -46,6 +48,8 @@ type TelemetryServiceClient interface {
 	SubscribeVelocityNed(ctx context.Context, in *SubscribeVelocityNedRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeVelocityNedClient, error)
 	// Subscribe to 'GPS info' updates.
 	SubscribeGpsInfo(ctx context.Context, in *SubscribeGpsInfoRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeGpsInfoClient, error)
+	// Subscribe to 'Raw GPS' updates.
+	SubscribeRawGps(ctx context.Context, in *SubscribeRawGpsRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeRawGpsClient, error)
 	// Subscribe to 'battery' updates.
 	SubscribeBattery(ctx context.Context, in *SubscribeBatteryRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeBatteryClient, error)
 	// Subscribe to 'flight mode' updates.
@@ -68,12 +72,22 @@ type TelemetryServiceClient interface {
 	SubscribeGroundTruth(ctx context.Context, in *SubscribeGroundTruthRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeGroundTruthClient, error)
 	// Subscribe to 'fixedwing metrics' updates.
 	SubscribeFixedwingMetrics(ctx context.Context, in *SubscribeFixedwingMetricsRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeFixedwingMetricsClient, error)
-	// Subscribe to 'IMU' updates.
+	// Subscribe to 'IMU' updates (in SI units in NED body frame).
 	SubscribeImu(ctx context.Context, in *SubscribeImuRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeImuClient, error)
+	// Subscribe to 'Scaled IMU' updates.
+	SubscribeScaledImu(ctx context.Context, in *SubscribeScaledImuRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeScaledImuClient, error)
+	// Subscribe to 'Raw IMU' updates.
+	SubscribeRawImu(ctx context.Context, in *SubscribeRawImuRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeRawImuClient, error)
 	// Subscribe to 'HealthAllOk' updates.
 	SubscribeHealthAllOk(ctx context.Context, in *SubscribeHealthAllOkRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeHealthAllOkClient, error)
 	// Subscribe to 'unix epoch time' updates.
 	SubscribeUnixEpochTime(ctx context.Context, in *SubscribeUnixEpochTimeRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeUnixEpochTimeClient, error)
+	// Subscribe to 'Distance Sensor' updates.
+	SubscribeDistanceSensor(ctx context.Context, in *SubscribeDistanceSensorRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeDistanceSensorClient, error)
+	// Subscribe to 'Scaled Pressure' updates.
+	SubscribeScaledPressure(ctx context.Context, in *SubscribeScaledPressureRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeScaledPressureClient, error)
+	// Subscribe to 'Heading' updates.
+	SubscribeHeading(ctx context.Context, in *SubscribeHeadingRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeHeadingClient, error)
 	// Set rate to 'position' updates.
 	SetRatePosition(ctx context.Context, in *SetRatePositionRequest, opts ...grpc.CallOption) (*SetRatePositionResponse, error)
 	// Set rate to 'home position' updates.
@@ -82,6 +96,8 @@ type TelemetryServiceClient interface {
 	SetRateInAir(ctx context.Context, in *SetRateInAirRequest, opts ...grpc.CallOption) (*SetRateInAirResponse, error)
 	// Set rate to landed state updates
 	SetRateLandedState(ctx context.Context, in *SetRateLandedStateRequest, opts ...grpc.CallOption) (*SetRateLandedStateResponse, error)
+	// Set rate to VTOL state updates
+	SetRateVtolState(ctx context.Context, in *SetRateVtolStateRequest, opts ...grpc.CallOption) (*SetRateVtolStateResponse, error)
 	// Set rate to 'attitude' updates.
 	SetRateAttitude(ctx context.Context, in *SetRateAttitudeRequest, opts ...grpc.CallOption) (*SetRateAttitudeResponse, error)
 	// Set rate of camera attitude updates.
@@ -108,8 +124,16 @@ type TelemetryServiceClient interface {
 	SetRateFixedwingMetrics(ctx context.Context, in *SetRateFixedwingMetricsRequest, opts ...grpc.CallOption) (*SetRateFixedwingMetricsResponse, error)
 	// Set rate to 'IMU' updates.
 	SetRateImu(ctx context.Context, in *SetRateImuRequest, opts ...grpc.CallOption) (*SetRateImuResponse, error)
+	// Set rate to 'Scaled IMU' updates.
+	SetRateScaledImu(ctx context.Context, in *SetRateScaledImuRequest, opts ...grpc.CallOption) (*SetRateScaledImuResponse, error)
+	// Set rate to 'Raw IMU' updates.
+	SetRateRawImu(ctx context.Context, in *SetRateRawImuRequest, opts ...grpc.CallOption) (*SetRateRawImuResponse, error)
 	// Set rate to 'unix epoch time' updates.
 	SetRateUnixEpochTime(ctx context.Context, in *SetRateUnixEpochTimeRequest, opts ...grpc.CallOption) (*SetRateUnixEpochTimeResponse, error)
+	// Set rate to 'Distance Sensor' updates.
+	SetRateDistanceSensor(ctx context.Context, in *SetRateDistanceSensorRequest, opts ...grpc.CallOption) (*SetRateDistanceSensorResponse, error)
+	// Get the GPS location of where the estimator has been initialized.
+	GetGpsGlobalOrigin(ctx context.Context, in *GetGpsGlobalOriginRequest, opts ...grpc.CallOption) (*GetGpsGlobalOriginResponse, error)
 }
 
 type telemetryServiceClient struct {
@@ -280,8 +304,40 @@ func (x *telemetryServiceSubscribeArmedClient) Recv() (*ArmedResponse, error) {
 	return m, nil
 }
 
+func (c *telemetryServiceClient) SubscribeVtolState(ctx context.Context, in *SubscribeVtolStateRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeVtolStateClient, error) {
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[5], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeVtolState", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &telemetryServiceSubscribeVtolStateClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type TelemetryService_SubscribeVtolStateClient interface {
+	Recv() (*VtolStateResponse, error)
+	grpc.ClientStream
+}
+
+type telemetryServiceSubscribeVtolStateClient struct {
+	grpc.ClientStream
+}
+
+func (x *telemetryServiceSubscribeVtolStateClient) Recv() (*VtolStateResponse, error) {
+	m := new(VtolStateResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (c *telemetryServiceClient) SubscribeAttitudeQuaternion(ctx context.Context, in *SubscribeAttitudeQuaternionRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeAttitudeQuaternionClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[5], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeAttitudeQuaternion", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[6], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeAttitudeQuaternion", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -313,7 +369,7 @@ func (x *telemetryServiceSubscribeAttitudeQuaternionClient) Recv() (*AttitudeQua
 }
 
 func (c *telemetryServiceClient) SubscribeAttitudeEuler(ctx context.Context, in *SubscribeAttitudeEulerRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeAttitudeEulerClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[6], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeAttitudeEuler", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[7], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeAttitudeEuler", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -345,7 +401,7 @@ func (x *telemetryServiceSubscribeAttitudeEulerClient) Recv() (*AttitudeEulerRes
 }
 
 func (c *telemetryServiceClient) SubscribeAttitudeAngularVelocityBody(ctx context.Context, in *SubscribeAttitudeAngularVelocityBodyRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeAttitudeAngularVelocityBodyClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[7], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeAttitudeAngularVelocityBody", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[8], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeAttitudeAngularVelocityBody", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -377,7 +433,7 @@ func (x *telemetryServiceSubscribeAttitudeAngularVelocityBodyClient) Recv() (*At
 }
 
 func (c *telemetryServiceClient) SubscribeCameraAttitudeQuaternion(ctx context.Context, in *SubscribeCameraAttitudeQuaternionRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeCameraAttitudeQuaternionClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[8], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeCameraAttitudeQuaternion", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[9], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeCameraAttitudeQuaternion", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -409,7 +465,7 @@ func (x *telemetryServiceSubscribeCameraAttitudeQuaternionClient) Recv() (*Camer
 }
 
 func (c *telemetryServiceClient) SubscribeCameraAttitudeEuler(ctx context.Context, in *SubscribeCameraAttitudeEulerRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeCameraAttitudeEulerClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[9], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeCameraAttitudeEuler", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[10], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeCameraAttitudeEuler", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -441,7 +497,7 @@ func (x *telemetryServiceSubscribeCameraAttitudeEulerClient) Recv() (*CameraAtti
 }
 
 func (c *telemetryServiceClient) SubscribeVelocityNed(ctx context.Context, in *SubscribeVelocityNedRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeVelocityNedClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[10], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeVelocityNed", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[11], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeVelocityNed", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -473,7 +529,7 @@ func (x *telemetryServiceSubscribeVelocityNedClient) Recv() (*VelocityNedRespons
 }
 
 func (c *telemetryServiceClient) SubscribeGpsInfo(ctx context.Context, in *SubscribeGpsInfoRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeGpsInfoClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[11], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeGpsInfo", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[12], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeGpsInfo", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -504,8 +560,40 @@ func (x *telemetryServiceSubscribeGpsInfoClient) Recv() (*GpsInfoResponse, error
 	return m, nil
 }
 
+func (c *telemetryServiceClient) SubscribeRawGps(ctx context.Context, in *SubscribeRawGpsRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeRawGpsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[13], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeRawGps", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &telemetryServiceSubscribeRawGpsClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type TelemetryService_SubscribeRawGpsClient interface {
+	Recv() (*RawGpsResponse, error)
+	grpc.ClientStream
+}
+
+type telemetryServiceSubscribeRawGpsClient struct {
+	grpc.ClientStream
+}
+
+func (x *telemetryServiceSubscribeRawGpsClient) Recv() (*RawGpsResponse, error) {
+	m := new(RawGpsResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (c *telemetryServiceClient) SubscribeBattery(ctx context.Context, in *SubscribeBatteryRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeBatteryClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[12], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeBattery", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[14], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeBattery", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -537,7 +625,7 @@ func (x *telemetryServiceSubscribeBatteryClient) Recv() (*BatteryResponse, error
 }
 
 func (c *telemetryServiceClient) SubscribeFlightMode(ctx context.Context, in *SubscribeFlightModeRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeFlightModeClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[13], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeFlightMode", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[15], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeFlightMode", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -569,7 +657,7 @@ func (x *telemetryServiceSubscribeFlightModeClient) Recv() (*FlightModeResponse,
 }
 
 func (c *telemetryServiceClient) SubscribeHealth(ctx context.Context, in *SubscribeHealthRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeHealthClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[14], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeHealth", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[16], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeHealth", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -601,7 +689,7 @@ func (x *telemetryServiceSubscribeHealthClient) Recv() (*HealthResponse, error) 
 }
 
 func (c *telemetryServiceClient) SubscribeRcStatus(ctx context.Context, in *SubscribeRcStatusRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeRcStatusClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[15], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeRcStatus", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[17], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeRcStatus", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -633,7 +721,7 @@ func (x *telemetryServiceSubscribeRcStatusClient) Recv() (*RcStatusResponse, err
 }
 
 func (c *telemetryServiceClient) SubscribeStatusText(ctx context.Context, in *SubscribeStatusTextRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeStatusTextClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[16], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeStatusText", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[18], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeStatusText", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -665,7 +753,7 @@ func (x *telemetryServiceSubscribeStatusTextClient) Recv() (*StatusTextResponse,
 }
 
 func (c *telemetryServiceClient) SubscribeActuatorControlTarget(ctx context.Context, in *SubscribeActuatorControlTargetRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeActuatorControlTargetClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[17], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeActuatorControlTarget", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[19], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeActuatorControlTarget", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -697,7 +785,7 @@ func (x *telemetryServiceSubscribeActuatorControlTargetClient) Recv() (*Actuator
 }
 
 func (c *telemetryServiceClient) SubscribeActuatorOutputStatus(ctx context.Context, in *SubscribeActuatorOutputStatusRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeActuatorOutputStatusClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[18], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeActuatorOutputStatus", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[20], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeActuatorOutputStatus", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -729,7 +817,7 @@ func (x *telemetryServiceSubscribeActuatorOutputStatusClient) Recv() (*ActuatorO
 }
 
 func (c *telemetryServiceClient) SubscribeOdometry(ctx context.Context, in *SubscribeOdometryRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeOdometryClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[19], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeOdometry", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[21], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeOdometry", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -761,7 +849,7 @@ func (x *telemetryServiceSubscribeOdometryClient) Recv() (*OdometryResponse, err
 }
 
 func (c *telemetryServiceClient) SubscribePositionVelocityNed(ctx context.Context, in *SubscribePositionVelocityNedRequest, opts ...grpc.CallOption) (TelemetryService_SubscribePositionVelocityNedClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[20], "/mavsdk.rpc.telemetry.TelemetryService/SubscribePositionVelocityNed", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[22], "/mavsdk.rpc.telemetry.TelemetryService/SubscribePositionVelocityNed", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -793,7 +881,7 @@ func (x *telemetryServiceSubscribePositionVelocityNedClient) Recv() (*PositionVe
 }
 
 func (c *telemetryServiceClient) SubscribeGroundTruth(ctx context.Context, in *SubscribeGroundTruthRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeGroundTruthClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[21], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeGroundTruth", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[23], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeGroundTruth", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -825,7 +913,7 @@ func (x *telemetryServiceSubscribeGroundTruthClient) Recv() (*GroundTruthRespons
 }
 
 func (c *telemetryServiceClient) SubscribeFixedwingMetrics(ctx context.Context, in *SubscribeFixedwingMetricsRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeFixedwingMetricsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[22], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeFixedwingMetrics", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[24], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeFixedwingMetrics", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -857,7 +945,7 @@ func (x *telemetryServiceSubscribeFixedwingMetricsClient) Recv() (*FixedwingMetr
 }
 
 func (c *telemetryServiceClient) SubscribeImu(ctx context.Context, in *SubscribeImuRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeImuClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[23], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeImu", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[25], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeImu", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -888,8 +976,72 @@ func (x *telemetryServiceSubscribeImuClient) Recv() (*ImuResponse, error) {
 	return m, nil
 }
 
+func (c *telemetryServiceClient) SubscribeScaledImu(ctx context.Context, in *SubscribeScaledImuRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeScaledImuClient, error) {
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[26], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeScaledImu", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &telemetryServiceSubscribeScaledImuClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type TelemetryService_SubscribeScaledImuClient interface {
+	Recv() (*ScaledImuResponse, error)
+	grpc.ClientStream
+}
+
+type telemetryServiceSubscribeScaledImuClient struct {
+	grpc.ClientStream
+}
+
+func (x *telemetryServiceSubscribeScaledImuClient) Recv() (*ScaledImuResponse, error) {
+	m := new(ScaledImuResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *telemetryServiceClient) SubscribeRawImu(ctx context.Context, in *SubscribeRawImuRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeRawImuClient, error) {
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[27], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeRawImu", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &telemetryServiceSubscribeRawImuClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type TelemetryService_SubscribeRawImuClient interface {
+	Recv() (*RawImuResponse, error)
+	grpc.ClientStream
+}
+
+type telemetryServiceSubscribeRawImuClient struct {
+	grpc.ClientStream
+}
+
+func (x *telemetryServiceSubscribeRawImuClient) Recv() (*RawImuResponse, error) {
+	m := new(RawImuResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (c *telemetryServiceClient) SubscribeHealthAllOk(ctx context.Context, in *SubscribeHealthAllOkRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeHealthAllOkClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[24], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeHealthAllOk", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[28], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeHealthAllOk", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -921,7 +1073,7 @@ func (x *telemetryServiceSubscribeHealthAllOkClient) Recv() (*HealthAllOkRespons
 }
 
 func (c *telemetryServiceClient) SubscribeUnixEpochTime(ctx context.Context, in *SubscribeUnixEpochTimeRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeUnixEpochTimeClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[25], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeUnixEpochTime", opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[29], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeUnixEpochTime", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -946,6 +1098,102 @@ type telemetryServiceSubscribeUnixEpochTimeClient struct {
 
 func (x *telemetryServiceSubscribeUnixEpochTimeClient) Recv() (*UnixEpochTimeResponse, error) {
 	m := new(UnixEpochTimeResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *telemetryServiceClient) SubscribeDistanceSensor(ctx context.Context, in *SubscribeDistanceSensorRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeDistanceSensorClient, error) {
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[30], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeDistanceSensor", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &telemetryServiceSubscribeDistanceSensorClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type TelemetryService_SubscribeDistanceSensorClient interface {
+	Recv() (*DistanceSensorResponse, error)
+	grpc.ClientStream
+}
+
+type telemetryServiceSubscribeDistanceSensorClient struct {
+	grpc.ClientStream
+}
+
+func (x *telemetryServiceSubscribeDistanceSensorClient) Recv() (*DistanceSensorResponse, error) {
+	m := new(DistanceSensorResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *telemetryServiceClient) SubscribeScaledPressure(ctx context.Context, in *SubscribeScaledPressureRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeScaledPressureClient, error) {
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[31], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeScaledPressure", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &telemetryServiceSubscribeScaledPressureClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type TelemetryService_SubscribeScaledPressureClient interface {
+	Recv() (*ScaledPressureResponse, error)
+	grpc.ClientStream
+}
+
+type telemetryServiceSubscribeScaledPressureClient struct {
+	grpc.ClientStream
+}
+
+func (x *telemetryServiceSubscribeScaledPressureClient) Recv() (*ScaledPressureResponse, error) {
+	m := new(ScaledPressureResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *telemetryServiceClient) SubscribeHeading(ctx context.Context, in *SubscribeHeadingRequest, opts ...grpc.CallOption) (TelemetryService_SubscribeHeadingClient, error) {
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[32], "/mavsdk.rpc.telemetry.TelemetryService/SubscribeHeading", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &telemetryServiceSubscribeHeadingClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type TelemetryService_SubscribeHeadingClient interface {
+	Recv() (*HeadingResponse, error)
+	grpc.ClientStream
+}
+
+type telemetryServiceSubscribeHeadingClient struct {
+	grpc.ClientStream
+}
+
+func (x *telemetryServiceSubscribeHeadingClient) Recv() (*HeadingResponse, error) {
+	m := new(HeadingResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -982,6 +1230,15 @@ func (c *telemetryServiceClient) SetRateInAir(ctx context.Context, in *SetRateIn
 func (c *telemetryServiceClient) SetRateLandedState(ctx context.Context, in *SetRateLandedStateRequest, opts ...grpc.CallOption) (*SetRateLandedStateResponse, error) {
 	out := new(SetRateLandedStateResponse)
 	err := c.cc.Invoke(ctx, "/mavsdk.rpc.telemetry.TelemetryService/SetRateLandedState", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *telemetryServiceClient) SetRateVtolState(ctx context.Context, in *SetRateVtolStateRequest, opts ...grpc.CallOption) (*SetRateVtolStateResponse, error) {
+	out := new(SetRateVtolStateResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.telemetry.TelemetryService/SetRateVtolState", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1105,9 +1362,45 @@ func (c *telemetryServiceClient) SetRateImu(ctx context.Context, in *SetRateImuR
 	return out, nil
 }
 
+func (c *telemetryServiceClient) SetRateScaledImu(ctx context.Context, in *SetRateScaledImuRequest, opts ...grpc.CallOption) (*SetRateScaledImuResponse, error) {
+	out := new(SetRateScaledImuResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.telemetry.TelemetryService/SetRateScaledImu", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *telemetryServiceClient) SetRateRawImu(ctx context.Context, in *SetRateRawImuRequest, opts ...grpc.CallOption) (*SetRateRawImuResponse, error) {
+	out := new(SetRateRawImuResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.telemetry.TelemetryService/SetRateRawImu", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *telemetryServiceClient) SetRateUnixEpochTime(ctx context.Context, in *SetRateUnixEpochTimeRequest, opts ...grpc.CallOption) (*SetRateUnixEpochTimeResponse, error) {
 	out := new(SetRateUnixEpochTimeResponse)
 	err := c.cc.Invoke(ctx, "/mavsdk.rpc.telemetry.TelemetryService/SetRateUnixEpochTime", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *telemetryServiceClient) SetRateDistanceSensor(ctx context.Context, in *SetRateDistanceSensorRequest, opts ...grpc.CallOption) (*SetRateDistanceSensorResponse, error) {
+	out := new(SetRateDistanceSensorResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.telemetry.TelemetryService/SetRateDistanceSensor", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *telemetryServiceClient) GetGpsGlobalOrigin(ctx context.Context, in *GetGpsGlobalOriginRequest, opts ...grpc.CallOption) (*GetGpsGlobalOriginResponse, error) {
+	out := new(GetGpsGlobalOriginResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.telemetry.TelemetryService/GetGpsGlobalOrigin", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1128,6 +1421,8 @@ type TelemetryServiceServer interface {
 	SubscribeLandedState(*SubscribeLandedStateRequest, TelemetryService_SubscribeLandedStateServer) error
 	// Subscribe to armed updates.
 	SubscribeArmed(*SubscribeArmedRequest, TelemetryService_SubscribeArmedServer) error
+	// subscribe to vtol state Updates
+	SubscribeVtolState(*SubscribeVtolStateRequest, TelemetryService_SubscribeVtolStateServer) error
 	// Subscribe to 'attitude' updates (quaternion).
 	SubscribeAttitudeQuaternion(*SubscribeAttitudeQuaternionRequest, TelemetryService_SubscribeAttitudeQuaternionServer) error
 	// Subscribe to 'attitude' updates (Euler).
@@ -1142,6 +1437,8 @@ type TelemetryServiceServer interface {
 	SubscribeVelocityNed(*SubscribeVelocityNedRequest, TelemetryService_SubscribeVelocityNedServer) error
 	// Subscribe to 'GPS info' updates.
 	SubscribeGpsInfo(*SubscribeGpsInfoRequest, TelemetryService_SubscribeGpsInfoServer) error
+	// Subscribe to 'Raw GPS' updates.
+	SubscribeRawGps(*SubscribeRawGpsRequest, TelemetryService_SubscribeRawGpsServer) error
 	// Subscribe to 'battery' updates.
 	SubscribeBattery(*SubscribeBatteryRequest, TelemetryService_SubscribeBatteryServer) error
 	// Subscribe to 'flight mode' updates.
@@ -1164,12 +1461,22 @@ type TelemetryServiceServer interface {
 	SubscribeGroundTruth(*SubscribeGroundTruthRequest, TelemetryService_SubscribeGroundTruthServer) error
 	// Subscribe to 'fixedwing metrics' updates.
 	SubscribeFixedwingMetrics(*SubscribeFixedwingMetricsRequest, TelemetryService_SubscribeFixedwingMetricsServer) error
-	// Subscribe to 'IMU' updates.
+	// Subscribe to 'IMU' updates (in SI units in NED body frame).
 	SubscribeImu(*SubscribeImuRequest, TelemetryService_SubscribeImuServer) error
+	// Subscribe to 'Scaled IMU' updates.
+	SubscribeScaledImu(*SubscribeScaledImuRequest, TelemetryService_SubscribeScaledImuServer) error
+	// Subscribe to 'Raw IMU' updates.
+	SubscribeRawImu(*SubscribeRawImuRequest, TelemetryService_SubscribeRawImuServer) error
 	// Subscribe to 'HealthAllOk' updates.
 	SubscribeHealthAllOk(*SubscribeHealthAllOkRequest, TelemetryService_SubscribeHealthAllOkServer) error
 	// Subscribe to 'unix epoch time' updates.
 	SubscribeUnixEpochTime(*SubscribeUnixEpochTimeRequest, TelemetryService_SubscribeUnixEpochTimeServer) error
+	// Subscribe to 'Distance Sensor' updates.
+	SubscribeDistanceSensor(*SubscribeDistanceSensorRequest, TelemetryService_SubscribeDistanceSensorServer) error
+	// Subscribe to 'Scaled Pressure' updates.
+	SubscribeScaledPressure(*SubscribeScaledPressureRequest, TelemetryService_SubscribeScaledPressureServer) error
+	// Subscribe to 'Heading' updates.
+	SubscribeHeading(*SubscribeHeadingRequest, TelemetryService_SubscribeHeadingServer) error
 	// Set rate to 'position' updates.
 	SetRatePosition(context.Context, *SetRatePositionRequest) (*SetRatePositionResponse, error)
 	// Set rate to 'home position' updates.
@@ -1178,6 +1485,8 @@ type TelemetryServiceServer interface {
 	SetRateInAir(context.Context, *SetRateInAirRequest) (*SetRateInAirResponse, error)
 	// Set rate to landed state updates
 	SetRateLandedState(context.Context, *SetRateLandedStateRequest) (*SetRateLandedStateResponse, error)
+	// Set rate to VTOL state updates
+	SetRateVtolState(context.Context, *SetRateVtolStateRequest) (*SetRateVtolStateResponse, error)
 	// Set rate to 'attitude' updates.
 	SetRateAttitude(context.Context, *SetRateAttitudeRequest) (*SetRateAttitudeResponse, error)
 	// Set rate of camera attitude updates.
@@ -1204,8 +1513,16 @@ type TelemetryServiceServer interface {
 	SetRateFixedwingMetrics(context.Context, *SetRateFixedwingMetricsRequest) (*SetRateFixedwingMetricsResponse, error)
 	// Set rate to 'IMU' updates.
 	SetRateImu(context.Context, *SetRateImuRequest) (*SetRateImuResponse, error)
+	// Set rate to 'Scaled IMU' updates.
+	SetRateScaledImu(context.Context, *SetRateScaledImuRequest) (*SetRateScaledImuResponse, error)
+	// Set rate to 'Raw IMU' updates.
+	SetRateRawImu(context.Context, *SetRateRawImuRequest) (*SetRateRawImuResponse, error)
 	// Set rate to 'unix epoch time' updates.
 	SetRateUnixEpochTime(context.Context, *SetRateUnixEpochTimeRequest) (*SetRateUnixEpochTimeResponse, error)
+	// Set rate to 'Distance Sensor' updates.
+	SetRateDistanceSensor(context.Context, *SetRateDistanceSensorRequest) (*SetRateDistanceSensorResponse, error)
+	// Get the GPS location of where the estimator has been initialized.
+	GetGpsGlobalOrigin(context.Context, *GetGpsGlobalOriginRequest) (*GetGpsGlobalOriginResponse, error)
 	mustEmbedUnimplementedTelemetryServiceServer()
 }
 
@@ -1228,6 +1545,9 @@ func (UnimplementedTelemetryServiceServer) SubscribeLandedState(*SubscribeLanded
 func (UnimplementedTelemetryServiceServer) SubscribeArmed(*SubscribeArmedRequest, TelemetryService_SubscribeArmedServer) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeArmed not implemented")
 }
+func (UnimplementedTelemetryServiceServer) SubscribeVtolState(*SubscribeVtolStateRequest, TelemetryService_SubscribeVtolStateServer) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeVtolState not implemented")
+}
 func (UnimplementedTelemetryServiceServer) SubscribeAttitudeQuaternion(*SubscribeAttitudeQuaternionRequest, TelemetryService_SubscribeAttitudeQuaternionServer) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeAttitudeQuaternion not implemented")
 }
@@ -1248,6 +1568,9 @@ func (UnimplementedTelemetryServiceServer) SubscribeVelocityNed(*SubscribeVeloci
 }
 func (UnimplementedTelemetryServiceServer) SubscribeGpsInfo(*SubscribeGpsInfoRequest, TelemetryService_SubscribeGpsInfoServer) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeGpsInfo not implemented")
+}
+func (UnimplementedTelemetryServiceServer) SubscribeRawGps(*SubscribeRawGpsRequest, TelemetryService_SubscribeRawGpsServer) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeRawGps not implemented")
 }
 func (UnimplementedTelemetryServiceServer) SubscribeBattery(*SubscribeBatteryRequest, TelemetryService_SubscribeBatteryServer) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeBattery not implemented")
@@ -1285,11 +1608,26 @@ func (UnimplementedTelemetryServiceServer) SubscribeFixedwingMetrics(*SubscribeF
 func (UnimplementedTelemetryServiceServer) SubscribeImu(*SubscribeImuRequest, TelemetryService_SubscribeImuServer) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeImu not implemented")
 }
+func (UnimplementedTelemetryServiceServer) SubscribeScaledImu(*SubscribeScaledImuRequest, TelemetryService_SubscribeScaledImuServer) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeScaledImu not implemented")
+}
+func (UnimplementedTelemetryServiceServer) SubscribeRawImu(*SubscribeRawImuRequest, TelemetryService_SubscribeRawImuServer) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeRawImu not implemented")
+}
 func (UnimplementedTelemetryServiceServer) SubscribeHealthAllOk(*SubscribeHealthAllOkRequest, TelemetryService_SubscribeHealthAllOkServer) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeHealthAllOk not implemented")
 }
 func (UnimplementedTelemetryServiceServer) SubscribeUnixEpochTime(*SubscribeUnixEpochTimeRequest, TelemetryService_SubscribeUnixEpochTimeServer) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeUnixEpochTime not implemented")
+}
+func (UnimplementedTelemetryServiceServer) SubscribeDistanceSensor(*SubscribeDistanceSensorRequest, TelemetryService_SubscribeDistanceSensorServer) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeDistanceSensor not implemented")
+}
+func (UnimplementedTelemetryServiceServer) SubscribeScaledPressure(*SubscribeScaledPressureRequest, TelemetryService_SubscribeScaledPressureServer) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeScaledPressure not implemented")
+}
+func (UnimplementedTelemetryServiceServer) SubscribeHeading(*SubscribeHeadingRequest, TelemetryService_SubscribeHeadingServer) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeHeading not implemented")
 }
 func (UnimplementedTelemetryServiceServer) SetRatePosition(context.Context, *SetRatePositionRequest) (*SetRatePositionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetRatePosition not implemented")
@@ -1302,6 +1640,9 @@ func (UnimplementedTelemetryServiceServer) SetRateInAir(context.Context, *SetRat
 }
 func (UnimplementedTelemetryServiceServer) SetRateLandedState(context.Context, *SetRateLandedStateRequest) (*SetRateLandedStateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetRateLandedState not implemented")
+}
+func (UnimplementedTelemetryServiceServer) SetRateVtolState(context.Context, *SetRateVtolStateRequest) (*SetRateVtolStateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetRateVtolState not implemented")
 }
 func (UnimplementedTelemetryServiceServer) SetRateAttitude(context.Context, *SetRateAttitudeRequest) (*SetRateAttitudeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetRateAttitude not implemented")
@@ -1342,8 +1683,20 @@ func (UnimplementedTelemetryServiceServer) SetRateFixedwingMetrics(context.Conte
 func (UnimplementedTelemetryServiceServer) SetRateImu(context.Context, *SetRateImuRequest) (*SetRateImuResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetRateImu not implemented")
 }
+func (UnimplementedTelemetryServiceServer) SetRateScaledImu(context.Context, *SetRateScaledImuRequest) (*SetRateScaledImuResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetRateScaledImu not implemented")
+}
+func (UnimplementedTelemetryServiceServer) SetRateRawImu(context.Context, *SetRateRawImuRequest) (*SetRateRawImuResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetRateRawImu not implemented")
+}
 func (UnimplementedTelemetryServiceServer) SetRateUnixEpochTime(context.Context, *SetRateUnixEpochTimeRequest) (*SetRateUnixEpochTimeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetRateUnixEpochTime not implemented")
+}
+func (UnimplementedTelemetryServiceServer) SetRateDistanceSensor(context.Context, *SetRateDistanceSensorRequest) (*SetRateDistanceSensorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetRateDistanceSensor not implemented")
+}
+func (UnimplementedTelemetryServiceServer) GetGpsGlobalOrigin(context.Context, *GetGpsGlobalOriginRequest) (*GetGpsGlobalOriginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGpsGlobalOrigin not implemented")
 }
 func (UnimplementedTelemetryServiceServer) mustEmbedUnimplementedTelemetryServiceServer() {}
 
@@ -1460,6 +1813,27 @@ type telemetryServiceSubscribeArmedServer struct {
 }
 
 func (x *telemetryServiceSubscribeArmedServer) Send(m *ArmedResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _TelemetryService_SubscribeVtolState_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeVtolStateRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TelemetryServiceServer).SubscribeVtolState(m, &telemetryServiceSubscribeVtolStateServer{stream})
+}
+
+type TelemetryService_SubscribeVtolStateServer interface {
+	Send(*VtolStateResponse) error
+	grpc.ServerStream
+}
+
+type telemetryServiceSubscribeVtolStateServer struct {
+	grpc.ServerStream
+}
+
+func (x *telemetryServiceSubscribeVtolStateServer) Send(m *VtolStateResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -1607,6 +1981,27 @@ type telemetryServiceSubscribeGpsInfoServer struct {
 }
 
 func (x *telemetryServiceSubscribeGpsInfoServer) Send(m *GpsInfoResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _TelemetryService_SubscribeRawGps_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeRawGpsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TelemetryServiceServer).SubscribeRawGps(m, &telemetryServiceSubscribeRawGpsServer{stream})
+}
+
+type TelemetryService_SubscribeRawGpsServer interface {
+	Send(*RawGpsResponse) error
+	grpc.ServerStream
+}
+
+type telemetryServiceSubscribeRawGpsServer struct {
+	grpc.ServerStream
+}
+
+func (x *telemetryServiceSubscribeRawGpsServer) Send(m *RawGpsResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -1862,6 +2257,48 @@ func (x *telemetryServiceSubscribeImuServer) Send(m *ImuResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _TelemetryService_SubscribeScaledImu_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeScaledImuRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TelemetryServiceServer).SubscribeScaledImu(m, &telemetryServiceSubscribeScaledImuServer{stream})
+}
+
+type TelemetryService_SubscribeScaledImuServer interface {
+	Send(*ScaledImuResponse) error
+	grpc.ServerStream
+}
+
+type telemetryServiceSubscribeScaledImuServer struct {
+	grpc.ServerStream
+}
+
+func (x *telemetryServiceSubscribeScaledImuServer) Send(m *ScaledImuResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _TelemetryService_SubscribeRawImu_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeRawImuRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TelemetryServiceServer).SubscribeRawImu(m, &telemetryServiceSubscribeRawImuServer{stream})
+}
+
+type TelemetryService_SubscribeRawImuServer interface {
+	Send(*RawImuResponse) error
+	grpc.ServerStream
+}
+
+type telemetryServiceSubscribeRawImuServer struct {
+	grpc.ServerStream
+}
+
+func (x *telemetryServiceSubscribeRawImuServer) Send(m *RawImuResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 func _TelemetryService_SubscribeHealthAllOk_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(SubscribeHealthAllOkRequest)
 	if err := stream.RecvMsg(m); err != nil {
@@ -1901,6 +2338,69 @@ type telemetryServiceSubscribeUnixEpochTimeServer struct {
 }
 
 func (x *telemetryServiceSubscribeUnixEpochTimeServer) Send(m *UnixEpochTimeResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _TelemetryService_SubscribeDistanceSensor_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeDistanceSensorRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TelemetryServiceServer).SubscribeDistanceSensor(m, &telemetryServiceSubscribeDistanceSensorServer{stream})
+}
+
+type TelemetryService_SubscribeDistanceSensorServer interface {
+	Send(*DistanceSensorResponse) error
+	grpc.ServerStream
+}
+
+type telemetryServiceSubscribeDistanceSensorServer struct {
+	grpc.ServerStream
+}
+
+func (x *telemetryServiceSubscribeDistanceSensorServer) Send(m *DistanceSensorResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _TelemetryService_SubscribeScaledPressure_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeScaledPressureRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TelemetryServiceServer).SubscribeScaledPressure(m, &telemetryServiceSubscribeScaledPressureServer{stream})
+}
+
+type TelemetryService_SubscribeScaledPressureServer interface {
+	Send(*ScaledPressureResponse) error
+	grpc.ServerStream
+}
+
+type telemetryServiceSubscribeScaledPressureServer struct {
+	grpc.ServerStream
+}
+
+func (x *telemetryServiceSubscribeScaledPressureServer) Send(m *ScaledPressureResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _TelemetryService_SubscribeHeading_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeHeadingRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TelemetryServiceServer).SubscribeHeading(m, &telemetryServiceSubscribeHeadingServer{stream})
+}
+
+type TelemetryService_SubscribeHeadingServer interface {
+	Send(*HeadingResponse) error
+	grpc.ServerStream
+}
+
+type telemetryServiceSubscribeHeadingServer struct {
+	grpc.ServerStream
+}
+
+func (x *telemetryServiceSubscribeHeadingServer) Send(m *HeadingResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -1972,6 +2472,24 @@ func _TelemetryService_SetRateLandedState_Handler(srv interface{}, ctx context.C
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TelemetryServiceServer).SetRateLandedState(ctx, req.(*SetRateLandedStateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TelemetryService_SetRateVtolState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetRateVtolStateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TelemetryServiceServer).SetRateVtolState(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.telemetry.TelemetryService/SetRateVtolState",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TelemetryServiceServer).SetRateVtolState(ctx, req.(*SetRateVtolStateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2210,6 +2728,42 @@ func _TelemetryService_SetRateImu_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TelemetryService_SetRateScaledImu_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetRateScaledImuRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TelemetryServiceServer).SetRateScaledImu(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.telemetry.TelemetryService/SetRateScaledImu",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TelemetryServiceServer).SetRateScaledImu(ctx, req.(*SetRateScaledImuRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TelemetryService_SetRateRawImu_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetRateRawImuRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TelemetryServiceServer).SetRateRawImu(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.telemetry.TelemetryService/SetRateRawImu",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TelemetryServiceServer).SetRateRawImu(ctx, req.(*SetRateRawImuRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _TelemetryService_SetRateUnixEpochTime_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetRateUnixEpochTimeRequest)
 	if err := dec(in); err != nil {
@@ -2224,6 +2778,42 @@ func _TelemetryService_SetRateUnixEpochTime_Handler(srv interface{}, ctx context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TelemetryServiceServer).SetRateUnixEpochTime(ctx, req.(*SetRateUnixEpochTimeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TelemetryService_SetRateDistanceSensor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetRateDistanceSensorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TelemetryServiceServer).SetRateDistanceSensor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.telemetry.TelemetryService/SetRateDistanceSensor",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TelemetryServiceServer).SetRateDistanceSensor(ctx, req.(*SetRateDistanceSensorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TelemetryService_GetGpsGlobalOrigin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetGpsGlobalOriginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TelemetryServiceServer).GetGpsGlobalOrigin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.telemetry.TelemetryService/GetGpsGlobalOrigin",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TelemetryServiceServer).GetGpsGlobalOrigin(ctx, req.(*GetGpsGlobalOriginRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2250,6 +2840,10 @@ var TelemetryService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetRateLandedState",
 			Handler:    _TelemetryService_SetRateLandedState_Handler,
+		},
+		{
+			MethodName: "SetRateVtolState",
+			Handler:    _TelemetryService_SetRateVtolState_Handler,
 		},
 		{
 			MethodName: "SetRateAttitude",
@@ -2304,8 +2898,24 @@ var TelemetryService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TelemetryService_SetRateImu_Handler,
 		},
 		{
+			MethodName: "SetRateScaledImu",
+			Handler:    _TelemetryService_SetRateScaledImu_Handler,
+		},
+		{
+			MethodName: "SetRateRawImu",
+			Handler:    _TelemetryService_SetRateRawImu_Handler,
+		},
+		{
 			MethodName: "SetRateUnixEpochTime",
 			Handler:    _TelemetryService_SetRateUnixEpochTime_Handler,
+		},
+		{
+			MethodName: "SetRateDistanceSensor",
+			Handler:    _TelemetryService_SetRateDistanceSensor_Handler,
+		},
+		{
+			MethodName: "GetGpsGlobalOrigin",
+			Handler:    _TelemetryService_GetGpsGlobalOrigin_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
@@ -2332,6 +2942,11 @@ var TelemetryService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "SubscribeArmed",
 			Handler:       _TelemetryService_SubscribeArmed_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "SubscribeVtolState",
+			Handler:       _TelemetryService_SubscribeVtolState_Handler,
 			ServerStreams: true,
 		},
 		{
@@ -2367,6 +2982,11 @@ var TelemetryService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "SubscribeGpsInfo",
 			Handler:       _TelemetryService_SubscribeGpsInfo_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "SubscribeRawGps",
+			Handler:       _TelemetryService_SubscribeRawGps_Handler,
 			ServerStreams: true,
 		},
 		{
@@ -2430,6 +3050,16 @@ var TelemetryService_ServiceDesc = grpc.ServiceDesc{
 			ServerStreams: true,
 		},
 		{
+			StreamName:    "SubscribeScaledImu",
+			Handler:       _TelemetryService_SubscribeScaledImu_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "SubscribeRawImu",
+			Handler:       _TelemetryService_SubscribeRawImu_Handler,
+			ServerStreams: true,
+		},
+		{
 			StreamName:    "SubscribeHealthAllOk",
 			Handler:       _TelemetryService_SubscribeHealthAllOk_Handler,
 			ServerStreams: true,
@@ -2437,6 +3067,21 @@ var TelemetryService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "SubscribeUnixEpochTime",
 			Handler:       _TelemetryService_SubscribeUnixEpochTime_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "SubscribeDistanceSensor",
+			Handler:       _TelemetryService_SubscribeDistanceSensor_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "SubscribeScaledPressure",
+			Handler:       _TelemetryService_SubscribeScaledPressure_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "SubscribeHeading",
+			Handler:       _TelemetryService_SubscribeHeading_Handler,
 			ServerStreams: true,
 		},
 	},

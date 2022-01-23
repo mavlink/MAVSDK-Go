@@ -137,6 +137,26 @@ type ServiceImpl struct{
 
        
     /*
+         Send command to terminate the drone.
+
+         This will run the terminate routine as configured on the drone (e.g. disarm and open the parachute).
+
+         
+    */
+
+    func(s *ServiceImpl)Terminate()(*TerminateResponse, error){
+        
+        request := &TerminateRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.Terminate(ctx, request)
+        if err != nil {
+    		return nil, err
+        }
+        return response, nil
+    }
+
+       
+    /*
          Send command to kill the drone.
 
          This will disarm a drone irrespective of whether it is landed or flying.
@@ -209,6 +229,98 @@ type ServiceImpl struct{
         request.AbsoluteAltitudeM = absoluteAltitudeM
         request.YawDeg = yawDeg
         response, err := s.Client.GotoLocation(ctx, request)
+        if err != nil {
+    		return nil, err
+        }
+        return response, nil
+    }
+
+       
+    /*
+         Send command do orbit to the drone.
+
+         This will run the orbit routine with the given parameters.
+
+         Parameters
+         ----------
+         radiusM float32
+
+         velocityMs float32
+
+         yawBehavior *OrbitYawBehavior 
+            
+
+         latitudeDeg float64
+
+         longitudeDeg float64
+
+         absoluteAltitudeM float64
+
+         
+    */
+
+    func(s *ServiceImpl)DoOrbit(radiusM float32, velocityMs float32, yawBehavior *OrbitYawBehavior , latitudeDeg float64, longitudeDeg float64, absoluteAltitudeM float64)(*DoOrbitResponse, error){
+        
+        request := &DoOrbitRequest{}
+        ctx:= context.Background()
+         request.RadiusM = radiusM
+        request.VelocityMs = velocityMs
+        request.YawBehavior = yawBehavior
+            
+        request.LatitudeDeg = latitudeDeg
+        request.LongitudeDeg = longitudeDeg
+        request.AbsoluteAltitudeM = absoluteAltitudeM
+        response, err := s.Client.DoOrbit(ctx, request)
+        if err != nil {
+    		return nil, err
+        }
+        return response, nil
+    }
+
+       
+    /*
+         Send command to hold position (a.k.a. "Loiter").
+
+         Sends a command to drone to change to Hold flight mode, causing the
+         vehicle to stop and maintain its current GPS position and altitude.
+
+         Note: this command is specific to the PX4 Autopilot flight stack as
+         it implies a change to a PX4-specific mode.
+
+         
+    */
+
+    func(s *ServiceImpl)Hold()(*HoldResponse, error){
+        
+        request := &HoldRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.Hold(ctx, request)
+        if err != nil {
+    		return nil, err
+        }
+        return response, nil
+    }
+
+       
+    /*
+         Send command to set the value of an actuator.
+
+         Parameters
+         ----------
+         index int32
+
+         value float32
+
+         
+    */
+
+    func(s *ServiceImpl)SetActuator(index int32, value float32)(*SetActuatorResponse, error){
+        
+        request := &SetActuatorRequest{}
+        ctx:= context.Background()
+         request.Index = index
+        request.Value = value
+        response, err := s.Client.SetActuator(ctx, request)
         if err != nil {
     		return nil, err
         }

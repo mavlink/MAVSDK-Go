@@ -129,3 +129,30 @@ type ServiceImpl struct{
     }
 
        
+    /*
+         Get all parameters.
+
+         
+
+         Returns
+         -------
+         False
+         Params : AllParams
+              Collection of all parameters
+
+         
+    */
+
+
+    func(s *ServiceImpl)GetAllParams() (*GetAllParamsResponse, error){
+        request := &GetAllParamsRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.GetAllParams(ctx, request)
+        if err != nil {
+    		return nil, err
+    	}
+        return response, nil
+
+    }
+
+       

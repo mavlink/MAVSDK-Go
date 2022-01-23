@@ -36,3 +36,21 @@ type ServiceImpl struct{
     }
 
        
+    /*
+         Clear all geofences saved on the vehicle.
+
+         
+    */
+
+    func(s *ServiceImpl)ClearGeofence()(*ClearGeofenceResponse, error){
+        
+        request := &ClearGeofenceRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.ClearGeofence(ctx, request)
+        if err != nil {
+    		return nil, err
+        }
+        return response, nil
+    }
+
+       

@@ -42,6 +42,9 @@ type ParamServiceClient interface {
 	//
 	// If the type is wrong, the result will be `WRONG_TYPE`.
 	SetParamFloat(ctx context.Context, in *SetParamFloatRequest, opts ...grpc.CallOption) (*SetParamFloatResponse, error)
+	//
+	// Get all parameters.
+	GetAllParams(ctx context.Context, in *GetAllParamsRequest, opts ...grpc.CallOption) (*GetAllParamsResponse, error)
 }
 
 type paramServiceClient struct {
@@ -88,6 +91,15 @@ func (c *paramServiceClient) SetParamFloat(ctx context.Context, in *SetParamFloa
 	return out, nil
 }
 
+func (c *paramServiceClient) GetAllParams(ctx context.Context, in *GetAllParamsRequest, opts ...grpc.CallOption) (*GetAllParamsResponse, error) {
+	out := new(GetAllParamsResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.param.ParamService/GetAllParams", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ParamServiceServer is the server API for ParamService service.
 // All implementations must embed UnimplementedParamServiceServer
 // for forward compatibility
@@ -112,6 +124,9 @@ type ParamServiceServer interface {
 	//
 	// If the type is wrong, the result will be `WRONG_TYPE`.
 	SetParamFloat(context.Context, *SetParamFloatRequest) (*SetParamFloatResponse, error)
+	//
+	// Get all parameters.
+	GetAllParams(context.Context, *GetAllParamsRequest) (*GetAllParamsResponse, error)
 	mustEmbedUnimplementedParamServiceServer()
 }
 
@@ -130,6 +145,9 @@ func (UnimplementedParamServiceServer) GetParamFloat(context.Context, *GetParamF
 }
 func (UnimplementedParamServiceServer) SetParamFloat(context.Context, *SetParamFloatRequest) (*SetParamFloatResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetParamFloat not implemented")
+}
+func (UnimplementedParamServiceServer) GetAllParams(context.Context, *GetAllParamsRequest) (*GetAllParamsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllParams not implemented")
 }
 func (UnimplementedParamServiceServer) mustEmbedUnimplementedParamServiceServer() {}
 
@@ -216,6 +234,24 @@ func _ParamService_SetParamFloat_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ParamService_GetAllParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllParamsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ParamServiceServer).GetAllParams(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.param.ParamService/GetAllParams",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ParamServiceServer).GetAllParams(ctx, req.(*GetAllParamsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ParamService_ServiceDesc is the grpc.ServiceDesc for ParamService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -238,6 +274,10 @@ var ParamService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetParamFloat",
 			Handler:    _ParamService_SetParamFloat_Handler,
+		},
+		{
+			MethodName: "GetAllParams",
+			Handler:    _ParamService_GetAllParams_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -171,6 +171,38 @@ type ServiceImpl struct{
     }
 
      /*
+         subscribe to vtol state Updates
+
+         
+    */
+
+    func (a *ServiceImpl) VtolState() (<-chan   VtolState  , error){
+    		ch := make(chan   VtolState  )
+    		request := &SubscribeVtolStateRequest{}
+    		ctx := context.Background()
+    		stream, err := a.Client.SubscribeVtolState(ctx, request)
+    		if err != nil {
+    			return nil, err
+    		}
+    	go func() {
+    		defer close(ch)
+    		for {
+    			m := &VtolStateResponse{}
+    			err := stream.RecvMsg(m)
+    			if err == io.EOF {
+    				break
+    			}
+    			if err != nil {
+    				fmt.Printf("Unable to receive message %v", err)
+    				break
+    			}
+    			ch <- m.GetVtolState()
+    		}
+    	}()	
+    	return ch, nil
+    }
+
+     /*
          Subscribe to 'attitude' updates (quaternion).
 
          
@@ -389,6 +421,38 @@ type ServiceImpl struct{
     				break
     			}
     			ch <- m.GetGpsInfo()
+    		}
+    	}()	
+    	return ch, nil
+    }
+
+     /*
+         Subscribe to 'Raw GPS' updates.
+
+         
+    */
+
+    func (a *ServiceImpl) RawGps() (<-chan  *RawGps , error){
+    		ch := make(chan  *RawGps )
+    		request := &SubscribeRawGpsRequest{}
+    		ctx := context.Background()
+    		stream, err := a.Client.SubscribeRawGps(ctx, request)
+    		if err != nil {
+    			return nil, err
+    		}
+    	go func() {
+    		defer close(ch)
+    		for {
+    			m := &RawGpsResponse{}
+    			err := stream.RecvMsg(m)
+    			if err == io.EOF {
+    				break
+    			}
+    			if err != nil {
+    				fmt.Printf("Unable to receive message %v", err)
+    				break
+    			}
+    			ch <- m.GetRawGps()
     		}
     	}()	
     	return ch, nil
@@ -747,7 +811,7 @@ type ServiceImpl struct{
     }
 
      /*
-         Subscribe to 'IMU' updates.
+         Subscribe to 'IMU' updates (in SI units in NED body frame).
 
          
     */
@@ -764,6 +828,70 @@ type ServiceImpl struct{
     		defer close(ch)
     		for {
     			m := &ImuResponse{}
+    			err := stream.RecvMsg(m)
+    			if err == io.EOF {
+    				break
+    			}
+    			if err != nil {
+    				fmt.Printf("Unable to receive message %v", err)
+    				break
+    			}
+    			ch <- m.GetImu()
+    		}
+    	}()	
+    	return ch, nil
+    }
+
+     /*
+         Subscribe to 'Scaled IMU' updates.
+
+         
+    */
+
+    func (a *ServiceImpl) ScaledImu() (<-chan  *Imu , error){
+    		ch := make(chan  *Imu )
+    		request := &SubscribeScaledImuRequest{}
+    		ctx := context.Background()
+    		stream, err := a.Client.SubscribeScaledImu(ctx, request)
+    		if err != nil {
+    			return nil, err
+    		}
+    	go func() {
+    		defer close(ch)
+    		for {
+    			m := &ScaledImuResponse{}
+    			err := stream.RecvMsg(m)
+    			if err == io.EOF {
+    				break
+    			}
+    			if err != nil {
+    				fmt.Printf("Unable to receive message %v", err)
+    				break
+    			}
+    			ch <- m.GetImu()
+    		}
+    	}()	
+    	return ch, nil
+    }
+
+     /*
+         Subscribe to 'Raw IMU' updates.
+
+         
+    */
+
+    func (a *ServiceImpl) RawImu() (<-chan  *Imu , error){
+    		ch := make(chan  *Imu )
+    		request := &SubscribeRawImuRequest{}
+    		ctx := context.Background()
+    		stream, err := a.Client.SubscribeRawImu(ctx, request)
+    		if err != nil {
+    			return nil, err
+    		}
+    	go func() {
+    		defer close(ch)
+    		for {
+    			m := &RawImuResponse{}
     			err := stream.RecvMsg(m)
     			if err == io.EOF {
     				break
@@ -837,6 +965,102 @@ type ServiceImpl struct{
     				break
     			}
     			ch <- m.GetTimeUs()
+    		}
+    	}()	
+    	return ch, nil
+    }
+
+     /*
+         Subscribe to 'Distance Sensor' updates.
+
+         
+    */
+
+    func (a *ServiceImpl) DistanceSensor() (<-chan  *DistanceSensor , error){
+    		ch := make(chan  *DistanceSensor )
+    		request := &SubscribeDistanceSensorRequest{}
+    		ctx := context.Background()
+    		stream, err := a.Client.SubscribeDistanceSensor(ctx, request)
+    		if err != nil {
+    			return nil, err
+    		}
+    	go func() {
+    		defer close(ch)
+    		for {
+    			m := &DistanceSensorResponse{}
+    			err := stream.RecvMsg(m)
+    			if err == io.EOF {
+    				break
+    			}
+    			if err != nil {
+    				fmt.Printf("Unable to receive message %v", err)
+    				break
+    			}
+    			ch <- m.GetDistanceSensor()
+    		}
+    	}()	
+    	return ch, nil
+    }
+
+     /*
+         Subscribe to 'Scaled Pressure' updates.
+
+         
+    */
+
+    func (a *ServiceImpl) ScaledPressure() (<-chan  *ScaledPressure , error){
+    		ch := make(chan  *ScaledPressure )
+    		request := &SubscribeScaledPressureRequest{}
+    		ctx := context.Background()
+    		stream, err := a.Client.SubscribeScaledPressure(ctx, request)
+    		if err != nil {
+    			return nil, err
+    		}
+    	go func() {
+    		defer close(ch)
+    		for {
+    			m := &ScaledPressureResponse{}
+    			err := stream.RecvMsg(m)
+    			if err == io.EOF {
+    				break
+    			}
+    			if err != nil {
+    				fmt.Printf("Unable to receive message %v", err)
+    				break
+    			}
+    			ch <- m.GetScaledPressure()
+    		}
+    	}()	
+    	return ch, nil
+    }
+
+     /*
+         Subscribe to 'Heading' updates.
+
+         
+    */
+
+    func (a *ServiceImpl) Heading() (<-chan  *Heading , error){
+    		ch := make(chan  *Heading )
+    		request := &SubscribeHeadingRequest{}
+    		ctx := context.Background()
+    		stream, err := a.Client.SubscribeHeading(ctx, request)
+    		if err != nil {
+    			return nil, err
+    		}
+    	go func() {
+    		defer close(ch)
+    		for {
+    			m := &HeadingResponse{}
+    			err := stream.RecvMsg(m)
+    			if err == io.EOF {
+    				break
+    			}
+    			if err != nil {
+    				fmt.Printf("Unable to receive message %v", err)
+    				break
+    			}
+    			ch <- m.GetHeadingDeg()
     		}
     	}()	
     	return ch, nil
@@ -926,6 +1150,29 @@ type ServiceImpl struct{
         ctx:= context.Background()
          request.RateHz = rateHz
         response, err := s.Client.SetRateLandedState(ctx, request)
+        if err != nil {
+    		return nil, err
+        }
+        return response, nil
+    }
+
+       
+    /*
+         Set rate to VTOL state updates
+
+         Parameters
+         ----------
+         rateHz float64
+
+         
+    */
+
+    func(s *ServiceImpl)SetRateVtolState(rateHz float64)(*SetRateVtolStateResponse, error){
+        
+        request := &SetRateVtolStateRequest{}
+        ctx:= context.Background()
+         request.RateHz = rateHz
+        response, err := s.Client.SetRateVtolState(ctx, request)
         if err != nil {
     		return nil, err
         }
@@ -1233,6 +1480,52 @@ type ServiceImpl struct{
 
        
     /*
+         Set rate to 'Scaled IMU' updates.
+
+         Parameters
+         ----------
+         rateHz float64
+
+         
+    */
+
+    func(s *ServiceImpl)SetRateScaledImu(rateHz float64)(*SetRateScaledImuResponse, error){
+        
+        request := &SetRateScaledImuRequest{}
+        ctx:= context.Background()
+         request.RateHz = rateHz
+        response, err := s.Client.SetRateScaledImu(ctx, request)
+        if err != nil {
+    		return nil, err
+        }
+        return response, nil
+    }
+
+       
+    /*
+         Set rate to 'Raw IMU' updates.
+
+         Parameters
+         ----------
+         rateHz float64
+
+         
+    */
+
+    func(s *ServiceImpl)SetRateRawImu(rateHz float64)(*SetRateRawImuResponse, error){
+        
+        request := &SetRateRawImuRequest{}
+        ctx:= context.Background()
+         request.RateHz = rateHz
+        response, err := s.Client.SetRateRawImu(ctx, request)
+        if err != nil {
+    		return nil, err
+        }
+        return response, nil
+    }
+
+       
+    /*
          Set rate to 'unix epoch time' updates.
 
          Parameters
@@ -1252,6 +1545,55 @@ type ServiceImpl struct{
     		return nil, err
         }
         return response, nil
+    }
+
+       
+    /*
+         Set rate to 'Distance Sensor' updates.
+
+         Parameters
+         ----------
+         rateHz float64
+
+         
+    */
+
+    func(s *ServiceImpl)SetRateDistanceSensor(rateHz float64)(*SetRateDistanceSensorResponse, error){
+        
+        request := &SetRateDistanceSensorRequest{}
+        ctx:= context.Background()
+         request.RateHz = rateHz
+        response, err := s.Client.SetRateDistanceSensor(ctx, request)
+        if err != nil {
+    		return nil, err
+        }
+        return response, nil
+    }
+
+       
+    /*
+         Get the GPS location of where the estimator has been initialized.
+
+         
+
+         Returns
+         -------
+         False
+         GpsGlobalOrigin : GpsGlobalOrigin
+             
+         
+    */
+
+
+    func(s *ServiceImpl)GetGpsGlobalOrigin() (*GetGpsGlobalOriginResponse, error){
+        request := &GetGpsGlobalOriginRequest{}
+        ctx:= context.Background()
+         response, err := s.Client.GetGpsGlobalOrigin(ctx, request)
+        if err != nil {
+    		return nil, err
+    	}
+        return response, nil
+
     }
 
        

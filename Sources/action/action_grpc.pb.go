@@ -60,6 +60,11 @@ type ActionServiceClient interface {
 	// reject it if they are not already ready to shut down.
 	Shutdown(ctx context.Context, in *ShutdownRequest, opts ...grpc.CallOption) (*ShutdownResponse, error)
 	//
+	// Send command to terminate the drone.
+	//
+	// This will run the terminate routine as configured on the drone (e.g. disarm and open the parachute).
+	Terminate(ctx context.Context, in *TerminateRequest, opts ...grpc.CallOption) (*TerminateResponse, error)
+	//
 	// Send command to kill the drone.
 	//
 	// This will disarm a drone irrespective of whether it is landed or flying.
@@ -80,6 +85,23 @@ type ActionServiceClient interface {
 	//
 	// The yaw angle is in degrees (frame is NED, 0 is North, positive is clockwise).
 	GotoLocation(ctx context.Context, in *GotoLocationRequest, opts ...grpc.CallOption) (*GotoLocationResponse, error)
+	//
+	// Send command do orbit to the drone.
+	//
+	// This will run the orbit routine with the given parameters.
+	DoOrbit(ctx context.Context, in *DoOrbitRequest, opts ...grpc.CallOption) (*DoOrbitResponse, error)
+	//
+	// Send command to hold position (a.k.a. "Loiter").
+	//
+	// Sends a command to drone to change to Hold flight mode, causing the
+	// vehicle to stop and maintain its current GPS position and altitude.
+	//
+	// Note: this command is specific to the PX4 Autopilot flight stack as
+	// it implies a change to a PX4-specific mode.
+	Hold(ctx context.Context, in *HoldRequest, opts ...grpc.CallOption) (*HoldResponse, error)
+	//
+	// Send command to set the value of an actuator.
+	SetActuator(ctx context.Context, in *SetActuatorRequest, opts ...grpc.CallOption) (*SetActuatorResponse, error)
 	//
 	// Send command to transition the drone to fixedwing.
 	//
@@ -176,6 +198,15 @@ func (c *actionServiceClient) Shutdown(ctx context.Context, in *ShutdownRequest,
 	return out, nil
 }
 
+func (c *actionServiceClient) Terminate(ctx context.Context, in *TerminateRequest, opts ...grpc.CallOption) (*TerminateResponse, error) {
+	out := new(TerminateResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.action.ActionService/Terminate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *actionServiceClient) Kill(ctx context.Context, in *KillRequest, opts ...grpc.CallOption) (*KillResponse, error) {
 	out := new(KillResponse)
 	err := c.cc.Invoke(ctx, "/mavsdk.rpc.action.ActionService/Kill", in, out, opts...)
@@ -197,6 +228,33 @@ func (c *actionServiceClient) ReturnToLaunch(ctx context.Context, in *ReturnToLa
 func (c *actionServiceClient) GotoLocation(ctx context.Context, in *GotoLocationRequest, opts ...grpc.CallOption) (*GotoLocationResponse, error) {
 	out := new(GotoLocationResponse)
 	err := c.cc.Invoke(ctx, "/mavsdk.rpc.action.ActionService/GotoLocation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *actionServiceClient) DoOrbit(ctx context.Context, in *DoOrbitRequest, opts ...grpc.CallOption) (*DoOrbitResponse, error) {
+	out := new(DoOrbitResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.action.ActionService/DoOrbit", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *actionServiceClient) Hold(ctx context.Context, in *HoldRequest, opts ...grpc.CallOption) (*HoldResponse, error) {
+	out := new(HoldResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.action.ActionService/Hold", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *actionServiceClient) SetActuator(ctx context.Context, in *SetActuatorRequest, opts ...grpc.CallOption) (*SetActuatorResponse, error) {
+	out := new(SetActuatorResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.action.ActionService/SetActuator", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -317,6 +375,11 @@ type ActionServiceServer interface {
 	// reject it if they are not already ready to shut down.
 	Shutdown(context.Context, *ShutdownRequest) (*ShutdownResponse, error)
 	//
+	// Send command to terminate the drone.
+	//
+	// This will run the terminate routine as configured on the drone (e.g. disarm and open the parachute).
+	Terminate(context.Context, *TerminateRequest) (*TerminateResponse, error)
+	//
 	// Send command to kill the drone.
 	//
 	// This will disarm a drone irrespective of whether it is landed or flying.
@@ -337,6 +400,23 @@ type ActionServiceServer interface {
 	//
 	// The yaw angle is in degrees (frame is NED, 0 is North, positive is clockwise).
 	GotoLocation(context.Context, *GotoLocationRequest) (*GotoLocationResponse, error)
+	//
+	// Send command do orbit to the drone.
+	//
+	// This will run the orbit routine with the given parameters.
+	DoOrbit(context.Context, *DoOrbitRequest) (*DoOrbitResponse, error)
+	//
+	// Send command to hold position (a.k.a. "Loiter").
+	//
+	// Sends a command to drone to change to Hold flight mode, causing the
+	// vehicle to stop and maintain its current GPS position and altitude.
+	//
+	// Note: this command is specific to the PX4 Autopilot flight stack as
+	// it implies a change to a PX4-specific mode.
+	Hold(context.Context, *HoldRequest) (*HoldResponse, error)
+	//
+	// Send command to set the value of an actuator.
+	SetActuator(context.Context, *SetActuatorRequest) (*SetActuatorResponse, error)
 	//
 	// Send command to transition the drone to fixedwing.
 	//
@@ -394,6 +474,9 @@ func (UnimplementedActionServiceServer) Reboot(context.Context, *RebootRequest) 
 func (UnimplementedActionServiceServer) Shutdown(context.Context, *ShutdownRequest) (*ShutdownResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Shutdown not implemented")
 }
+func (UnimplementedActionServiceServer) Terminate(context.Context, *TerminateRequest) (*TerminateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Terminate not implemented")
+}
 func (UnimplementedActionServiceServer) Kill(context.Context, *KillRequest) (*KillResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Kill not implemented")
 }
@@ -402,6 +485,15 @@ func (UnimplementedActionServiceServer) ReturnToLaunch(context.Context, *ReturnT
 }
 func (UnimplementedActionServiceServer) GotoLocation(context.Context, *GotoLocationRequest) (*GotoLocationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GotoLocation not implemented")
+}
+func (UnimplementedActionServiceServer) DoOrbit(context.Context, *DoOrbitRequest) (*DoOrbitResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DoOrbit not implemented")
+}
+func (UnimplementedActionServiceServer) Hold(context.Context, *HoldRequest) (*HoldResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Hold not implemented")
+}
+func (UnimplementedActionServiceServer) SetActuator(context.Context, *SetActuatorRequest) (*SetActuatorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetActuator not implemented")
 }
 func (UnimplementedActionServiceServer) TransitionToFixedwing(context.Context, *TransitionToFixedwingRequest) (*TransitionToFixedwingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TransitionToFixedwing not implemented")
@@ -548,6 +640,24 @@ func _ActionService_Shutdown_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ActionService_Terminate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TerminateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActionServiceServer).Terminate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.action.ActionService/Terminate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActionServiceServer).Terminate(ctx, req.(*TerminateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ActionService_Kill_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(KillRequest)
 	if err := dec(in); err != nil {
@@ -598,6 +708,60 @@ func _ActionService_GotoLocation_Handler(srv interface{}, ctx context.Context, d
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ActionServiceServer).GotoLocation(ctx, req.(*GotoLocationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ActionService_DoOrbit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DoOrbitRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActionServiceServer).DoOrbit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.action.ActionService/DoOrbit",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActionServiceServer).DoOrbit(ctx, req.(*DoOrbitRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ActionService_Hold_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HoldRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActionServiceServer).Hold(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.action.ActionService/Hold",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActionServiceServer).Hold(ctx, req.(*HoldRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ActionService_SetActuator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetActuatorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActionServiceServer).SetActuator(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.action.ActionService/SetActuator",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActionServiceServer).SetActuator(ctx, req.(*SetActuatorRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -778,6 +942,10 @@ var ActionService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ActionService_Shutdown_Handler,
 		},
 		{
+			MethodName: "Terminate",
+			Handler:    _ActionService_Terminate_Handler,
+		},
+		{
 			MethodName: "Kill",
 			Handler:    _ActionService_Kill_Handler,
 		},
@@ -788,6 +956,18 @@ var ActionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GotoLocation",
 			Handler:    _ActionService_GotoLocation_Handler,
+		},
+		{
+			MethodName: "DoOrbit",
+			Handler:    _ActionService_DoOrbit_Handler,
+		},
+		{
+			MethodName: "Hold",
+			Handler:    _ActionService_Hold_Handler,
+		},
+		{
+			MethodName: "SetActuator",
+			Handler:    _ActionService_SetActuator_Handler,
 		},
 		{
 			MethodName: "TransitionToFixedwing",

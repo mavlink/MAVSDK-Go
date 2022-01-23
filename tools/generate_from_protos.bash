@@ -11,8 +11,8 @@ PROTO_DIR_TMP=${PROTO_DIR_TMP:-"${SCRIPT_DIR}/tmp/protos"}
 export TEMPLATE_PATH="$(pwd)/../templates/"
 
 PLUGIN_LIST="action calibration camera core failure follow_me ftp geofence gimbal info log_files manual_control mission mission_raw
-             mocap offboard param shell telemetry transponder tune"
-#             action_server mission_raw_server param_server telemetry_server tracking_server"
+             mocap offboard param shell telemetry transponder tune
+             action_server mission_raw_server param_server telemetry_server tracking_server"
 
 echo "Plugin List consist of: " ${PLUGIN_LIST}
 rm -rf ${PROTO_DIR_TMP}

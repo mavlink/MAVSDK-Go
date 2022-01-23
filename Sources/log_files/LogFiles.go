@@ -42,13 +42,14 @@ type ServiceImpl struct{
 
          Parameters
          ----------
-         id uint32, path string
+         entry *Entry , path string
     */
 
-    func (a *ServiceImpl) DownloadLogFile(id uint32, path string) (<-chan  *ProgressData , error){
+    func (a *ServiceImpl) DownloadLogFile(entry *Entry , path string) (<-chan  *ProgressData , error){
     		ch := make(chan  *ProgressData )
     		request := &SubscribeDownloadLogFileRequest{}
-    		request.Id = id
+    		request.Entry = 
+            
         request.Path = path
         ctx := context.Background()
     		stream, err := a.Client.SubscribeDownloadLogFile(ctx, request)

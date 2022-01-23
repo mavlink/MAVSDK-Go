@@ -37,6 +37,45 @@ type ServiceImpl struct{
     }
 
        
+
+     /*
+         Upload a list of mission items to the system and report upload progress.
+
+         The mission items are uploaded to a drone. Once uploaded the mission can be started and
+         executed even if the connection is lost.
+
+         Parameters
+         ----------
+         missionPlan *MissionPlan 
+    */
+
+    func (a *ServiceImpl) UploadMissionWithProgress(missionPlan *MissionPlan ) (<-chan  *ProgressData , error){
+    		ch := make(chan  *ProgressData )
+    		request := &SubscribeUploadMissionWithProgressRequest{}
+    		request.MissionPlan = 
+            
+        ctx := context.Background()
+    		stream, err := a.Client.SubscribeUploadMissionWithProgress(ctx, request)
+    		if err != nil {
+    			return nil, err
+    		}
+    	go func() {
+    		defer close(ch)
+    		for {
+    			m := &UploadMissionWithProgressResponse{}
+    			err := stream.RecvMsg(m)
+    			if err == io.EOF {
+    				break
+    			}
+    			if err != nil {
+    				fmt.Printf("Unable to receive message %v", err)
+    				break
+    			}
+    			ch <- m.GetProgressData()
+    		}
+    	}()	
+    	return ch, nil
+    }
     /*
          Cancel an ongoing mission upload.
 
@@ -85,6 +124,41 @@ type ServiceImpl struct{
     }
 
        
+
+     /*
+         Download a list of mission items from the system (asynchronous) and report progress.
+
+         Will fail if any of the downloaded mission items are not supported
+         by the MAVSDK API.
+
+         
+    */
+
+    func (a *ServiceImpl) DownloadMissionWithProgress() (<-chan  *ProgressDataOrMission , error){
+    		ch := make(chan  *ProgressDataOrMission )
+    		request := &SubscribeDownloadMissionWithProgressRequest{}
+    		ctx := context.Background()
+    		stream, err := a.Client.SubscribeDownloadMissionWithProgress(ctx, request)
+    		if err != nil {
+    			return nil, err
+    		}
+    	go func() {
+    		defer close(ch)
+    		for {
+    			m := &DownloadMissionWithProgressResponse{}
+    			err := stream.RecvMsg(m)
+    			if err == io.EOF {
+    				break
+    			}
+    			if err != nil {
+    				fmt.Printf("Unable to receive message %v", err)
+    				break
+    			}
+    			ch <- m.GetProgressData()
+    		}
+    	}()	
+    	return ch, nil
+    }
     /*
          Cancel an ongoing mission download.
 
@@ -305,39 +379,6 @@ type ServiceImpl struct{
     		return nil, err
         }
         return response, nil
-    }
-
-       
-    /*
-         Import a QGroundControl (QGC) mission plan.
-
-         The method will fail if any of the imported mission items are not supported
-         by the MAVSDK API.
-
-         Parameters
-         ----------
-         qgcPlanPath string
-
-         Returns
-         -------
-         False
-         MissionPlan : MissionPlan
-              The mission plan
-
-         
-    */
-
-
-    func(s *ServiceImpl)ImportQgroundcontrolMission(qgcPlanPath string) (*ImportQgroundcontrolMissionResponse, error){
-        request := &ImportQgroundcontrolMissionRequest{}
-        ctx:= context.Background()
-         request.QgcPlanPath = qgcPlanPath
-        response, err := s.Client.ImportQgroundcontrolMission(ctx, request)
-        if err != nil {
-    		return nil, err
-    	}
-        return response, nil
-
     }
 
        

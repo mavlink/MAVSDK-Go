@@ -70,6 +70,15 @@ type MissionRawServiceClient interface {
 	//
 	// @param callback Callback to notify about change.
 	SubscribeMissionChanged(ctx context.Context, in *SubscribeMissionChangedRequest, opts ...grpc.CallOption) (MissionRawService_SubscribeMissionChangedClient, error)
+	//
+	// Import a QGroundControl missions in JSON .plan format.
+	//
+	// Supported:
+	// - Waypoints
+	// - Survey
+	// Not supported:
+	// - Structure Scan
+	ImportQgroundcontrolMission(ctx context.Context, in *ImportQgroundcontrolMissionRequest, opts ...grpc.CallOption) (*ImportQgroundcontrolMissionResponse, error)
 }
 
 type missionRawServiceClient struct {
@@ -216,6 +225,15 @@ func (x *missionRawServiceSubscribeMissionChangedClient) Recv() (*MissionChanged
 	return m, nil
 }
 
+func (c *missionRawServiceClient) ImportQgroundcontrolMission(ctx context.Context, in *ImportQgroundcontrolMissionRequest, opts ...grpc.CallOption) (*ImportQgroundcontrolMissionResponse, error) {
+	out := new(ImportQgroundcontrolMissionResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.mission_raw.MissionRawService/ImportQgroundcontrolMission", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MissionRawServiceServer is the server API for MissionRawService service.
 // All implementations must embed UnimplementedMissionRawServiceServer
 // for forward compatibility
@@ -268,6 +286,15 @@ type MissionRawServiceServer interface {
 	//
 	// @param callback Callback to notify about change.
 	SubscribeMissionChanged(*SubscribeMissionChangedRequest, MissionRawService_SubscribeMissionChangedServer) error
+	//
+	// Import a QGroundControl missions in JSON .plan format.
+	//
+	// Supported:
+	// - Waypoints
+	// - Survey
+	// Not supported:
+	// - Structure Scan
+	ImportQgroundcontrolMission(context.Context, *ImportQgroundcontrolMissionRequest) (*ImportQgroundcontrolMissionResponse, error)
 	mustEmbedUnimplementedMissionRawServiceServer()
 }
 
@@ -304,6 +331,9 @@ func (UnimplementedMissionRawServiceServer) SubscribeMissionProgress(*SubscribeM
 }
 func (UnimplementedMissionRawServiceServer) SubscribeMissionChanged(*SubscribeMissionChangedRequest, MissionRawService_SubscribeMissionChangedServer) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeMissionChanged not implemented")
+}
+func (UnimplementedMissionRawServiceServer) ImportQgroundcontrolMission(context.Context, *ImportQgroundcontrolMissionRequest) (*ImportQgroundcontrolMissionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ImportQgroundcontrolMission not implemented")
 }
 func (UnimplementedMissionRawServiceServer) mustEmbedUnimplementedMissionRawServiceServer() {}
 
@@ -504,6 +534,24 @@ func (x *missionRawServiceSubscribeMissionChangedServer) Send(m *MissionChangedR
 	return x.ServerStream.SendMsg(m)
 }
 
+func _MissionRawService_ImportQgroundcontrolMission_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ImportQgroundcontrolMissionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MissionRawServiceServer).ImportQgroundcontrolMission(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.mission_raw.MissionRawService/ImportQgroundcontrolMission",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MissionRawServiceServer).ImportQgroundcontrolMission(ctx, req.(*ImportQgroundcontrolMissionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MissionRawService_ServiceDesc is the grpc.ServiceDesc for MissionRawService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -542,6 +590,10 @@ var MissionRawService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetCurrentMissionItem",
 			Handler:    _MissionRawService_SetCurrentMissionItem_Handler,
+		},
+		{
+			MethodName: "ImportQgroundcontrolMission",
+			Handler:    _MissionRawService_ImportQgroundcontrolMission_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
