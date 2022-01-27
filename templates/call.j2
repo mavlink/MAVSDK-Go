@@ -21,11 +21,13 @@ func(s *ServiceImpl){{ name.upper_camel_case }}({% for param in params %}{%- if 
     
     request := &{{ name.upper_camel_case }}Request{}
     ctx:= context.Background()
-     {% for param in params %}
+	{% for param in params %}
         {%- if param.type_info.is_primitive -%}
-    request.{{ param.name.upper_camel_case }} = {{ param.name.lower_camel_case }}
+    		request.{{ param.name.upper_camel_case }} = {{ param.name.lower_camel_case }}
+        {%- elif param.type_info.is_enum -%}
+            request.{{ param.name.upper_camel_case }} = *{{ param.name.lower_camel_case }}
         {%- else -%}
-    request.{{param.name.upper_camel_case}} = {{param.name.lower_camel_case}}
+    		request.{{param.name.upper_camel_case}} = {{param.name.lower_camel_case}}
         {% endif %}
     {% endfor -%}
     response, err := s.Client.{{ name.upper_camel_case }}(ctx, request)

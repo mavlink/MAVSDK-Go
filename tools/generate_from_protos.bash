@@ -2,6 +2,10 @@
 
 set -e
 
+function snake_case_to_camel_case {
+    echo $1 | awk -v FS="_" -v OFS="" '{for (i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)} 1'
+}
+
 command -v protoc || { echo >&2 "Protobuf needs to be installed (e.g. '$ apt install protobuf-compiler') for this script to run!"; exit 1; }
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -58,6 +62,7 @@ echo "Generating final plugins."
 for plugin in ${PLUGIN_LIST}; do
 	echo "+=> Doing $plugin"
 	python3 -m grpc_tools.protoc --plugin=protoc-gen-custom=$(which protoc-gen-mavsdk) -I${PROTO_DIR}/$plugin --custom_out=${OUTPUT_DIR}/$plugin --custom_opt=file_ext=go ${plugin}.proto
+    mv ${OUTPUT_DIR}/$plugin/$(snake_case_to_camel_case ${plugin}).go ${OUTPUT_DIR}/$plugin/$plugin.go
 done
 
 # Remove the temp directory.

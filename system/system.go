@@ -112,7 +112,7 @@ func main() {
 
 	polygon := &geofence.Polygon{
 		Points:    []*geofence.Point{p1, p2, p3, p4},
-		FenceType: geofence.Polygon_TYPE_INCLUSION}
+		FenceType: geofence.Polygon_FENCE_TYPE_EXCLUSION}
 	drone.geofence.UploadGeofence([]*geofence.Polygon{polygon})
 
 }
