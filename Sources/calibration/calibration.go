@@ -16,10 +16,9 @@ type ServiceImpl struct {
 
 */
 
-func (a *ServiceImpl) CalibrateGyro() (<-chan *ProgressData, error) {
+func (a *ServiceImpl) CalibrateGyro(ctx context.Context) (<-chan *ProgressData, error) {
 	ch := make(chan *ProgressData)
 	request := &SubscribeCalibrateGyroRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeCalibrateGyro(ctx, request)
 	if err != nil {
 		return nil, err
@@ -48,10 +47,9 @@ func (a *ServiceImpl) CalibrateGyro() (<-chan *ProgressData, error) {
 
 */
 
-func (a *ServiceImpl) CalibrateAccelerometer() (<-chan *ProgressData, error) {
+func (a *ServiceImpl) CalibrateAccelerometer(ctx context.Context) (<-chan *ProgressData, error) {
 	ch := make(chan *ProgressData)
 	request := &SubscribeCalibrateAccelerometerRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeCalibrateAccelerometer(ctx, request)
 	if err != nil {
 		return nil, err
@@ -80,10 +78,9 @@ func (a *ServiceImpl) CalibrateAccelerometer() (<-chan *ProgressData, error) {
 
 */
 
-func (a *ServiceImpl) CalibrateMagnetometer() (<-chan *ProgressData, error) {
+func (a *ServiceImpl) CalibrateMagnetometer(ctx context.Context) (<-chan *ProgressData, error) {
 	ch := make(chan *ProgressData)
 	request := &SubscribeCalibrateMagnetometerRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeCalibrateMagnetometer(ctx, request)
 	if err != nil {
 		return nil, err
@@ -112,10 +109,9 @@ func (a *ServiceImpl) CalibrateMagnetometer() (<-chan *ProgressData, error) {
 
 */
 
-func (a *ServiceImpl) CalibrateLevelHorizon() (<-chan *ProgressData, error) {
+func (a *ServiceImpl) CalibrateLevelHorizon(ctx context.Context) (<-chan *ProgressData, error) {
 	ch := make(chan *ProgressData)
 	request := &SubscribeCalibrateLevelHorizonRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeCalibrateLevelHorizon(ctx, request)
 	if err != nil {
 		return nil, err
@@ -144,10 +140,9 @@ func (a *ServiceImpl) CalibrateLevelHorizon() (<-chan *ProgressData, error) {
 
 */
 
-func (a *ServiceImpl) CalibrateGimbalAccelerometer() (<-chan *ProgressData, error) {
+func (a *ServiceImpl) CalibrateGimbalAccelerometer(ctx context.Context) (<-chan *ProgressData, error) {
 	ch := make(chan *ProgressData)
 	request := &SubscribeCalibrateGimbalAccelerometerRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeCalibrateGimbalAccelerometer(ctx, request)
 	if err != nil {
 		return nil, err
@@ -176,10 +171,9 @@ func (a *ServiceImpl) CalibrateGimbalAccelerometer() (<-chan *ProgressData, erro
 
 */
 
-func (s *ServiceImpl) Cancel() (*CancelResponse, error) {
+func (s *ServiceImpl) Cancel(ctx context.Context) (*CancelResponse, error) {
 
 	request := &CancelRequest{}
-	ctx := context.Background()
 	response, err := s.Client.Cancel(ctx, request)
 	if err != nil {
 		return nil, err

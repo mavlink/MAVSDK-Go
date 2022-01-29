@@ -24,10 +24,9 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) Inject(failureUnit *FailureUnit, failureType *FailureType, instance int32) (*InjectResponse, error) {
+func (s *ServiceImpl) Inject(ctx context.Context, failureUnit *FailureUnit, failureType *FailureType, instance int32) (*InjectResponse, error) {
 
 	request := &InjectRequest{}
-	ctx := context.Background()
 	request.FailureUnit = *failureUnit
 	request.FailureType = *failureType
 	request.Instance = instance

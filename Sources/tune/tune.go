@@ -19,10 +19,9 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) PlayTune(tuneDescription *TuneDescription) (*PlayTuneResponse, error) {
+func (s *ServiceImpl) PlayTune(ctx context.Context, tuneDescription *TuneDescription) (*PlayTuneResponse, error) {
 
 	request := &PlayTuneRequest{}
-	ctx := context.Background()
 	request.TuneDescription = tuneDescription
 
 	response, err := s.Client.PlayTune(ctx, request)

@@ -16,10 +16,9 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) Reset() (*ResetResponse, error) {
+func (s *ServiceImpl) Reset(ctx context.Context) (*ResetResponse, error) {
 
 	request := &ResetRequest{}
-	ctx := context.Background()
 	response, err := s.Client.Reset(ctx, request)
 	if err != nil {
 		return nil, err
@@ -35,12 +34,11 @@ func (s *ServiceImpl) Reset() (*ResetResponse, error) {
    remoteFilePath string, localDir string
 */
 
-func (a *ServiceImpl) Download(remoteFilePath string, localDir string) (<-chan *ProgressData, error) {
+func (a *ServiceImpl) Download(ctx context.Context, remoteFilePath string, localDir string) (<-chan *ProgressData, error) {
 	ch := make(chan *ProgressData)
 	request := &SubscribeDownloadRequest{}
 	request.RemoteFilePath = remoteFilePath
 	request.LocalDir = localDir
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeDownload(ctx, request)
 	if err != nil {
 		return nil, err
@@ -71,12 +69,11 @@ func (a *ServiceImpl) Download(remoteFilePath string, localDir string) (<-chan *
    localFilePath string, remoteDir string
 */
 
-func (a *ServiceImpl) Upload(localFilePath string, remoteDir string) (<-chan *ProgressData, error) {
+func (a *ServiceImpl) Upload(ctx context.Context, localFilePath string, remoteDir string) (<-chan *ProgressData, error) {
 	ch := make(chan *ProgressData)
 	request := &SubscribeUploadRequest{}
 	request.LocalFilePath = localFilePath
 	request.RemoteDir = remoteDir
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeUpload(ctx, request)
 	if err != nil {
 		return nil, err
@@ -115,9 +112,8 @@ func (a *ServiceImpl) Upload(localFilePath string, remoteDir string) (<-chan *Pr
 
 */
 
-func (s *ServiceImpl) ListDirectory(remoteDir string) (*ListDirectoryResponse, error) {
+func (s *ServiceImpl) ListDirectory(ctx context.Context, remoteDir string) (*ListDirectoryResponse, error) {
 	request := &ListDirectoryRequest{}
-	ctx := context.Background()
 	request.RemoteDir = remoteDir
 	response, err := s.Client.ListDirectory(ctx, request)
 	if err != nil {
@@ -137,10 +133,9 @@ func (s *ServiceImpl) ListDirectory(remoteDir string) (*ListDirectoryResponse, e
 
 */
 
-func (s *ServiceImpl) CreateDirectory(remoteDir string) (*CreateDirectoryResponse, error) {
+func (s *ServiceImpl) CreateDirectory(ctx context.Context, remoteDir string) (*CreateDirectoryResponse, error) {
 
 	request := &CreateDirectoryRequest{}
-	ctx := context.Background()
 	request.RemoteDir = remoteDir
 	response, err := s.Client.CreateDirectory(ctx, request)
 	if err != nil {
@@ -159,10 +154,9 @@ func (s *ServiceImpl) CreateDirectory(remoteDir string) (*CreateDirectoryRespons
 
 */
 
-func (s *ServiceImpl) RemoveDirectory(remoteDir string) (*RemoveDirectoryResponse, error) {
+func (s *ServiceImpl) RemoveDirectory(ctx context.Context, remoteDir string) (*RemoveDirectoryResponse, error) {
 
 	request := &RemoveDirectoryRequest{}
-	ctx := context.Background()
 	request.RemoteDir = remoteDir
 	response, err := s.Client.RemoveDirectory(ctx, request)
 	if err != nil {
@@ -181,10 +175,9 @@ func (s *ServiceImpl) RemoveDirectory(remoteDir string) (*RemoveDirectoryRespons
 
 */
 
-func (s *ServiceImpl) RemoveFile(remoteFilePath string) (*RemoveFileResponse, error) {
+func (s *ServiceImpl) RemoveFile(ctx context.Context, remoteFilePath string) (*RemoveFileResponse, error) {
 
 	request := &RemoveFileRequest{}
-	ctx := context.Background()
 	request.RemoteFilePath = remoteFilePath
 	response, err := s.Client.RemoveFile(ctx, request)
 	if err != nil {
@@ -205,10 +198,9 @@ func (s *ServiceImpl) RemoveFile(remoteFilePath string) (*RemoveFileResponse, er
 
 */
 
-func (s *ServiceImpl) Rename(remoteFromPath string, remoteToPath string) (*RenameResponse, error) {
+func (s *ServiceImpl) Rename(ctx context.Context, remoteFromPath string, remoteToPath string) (*RenameResponse, error) {
 
 	request := &RenameRequest{}
-	ctx := context.Background()
 	request.RemoteFromPath = remoteFromPath
 	request.RemoteToPath = remoteToPath
 	response, err := s.Client.Rename(ctx, request)
@@ -234,9 +226,8 @@ func (s *ServiceImpl) Rename(remoteFromPath string, remoteToPath string) (*Renam
 
 */
 
-func (s *ServiceImpl) AreFilesIdentical(localFilePath string, remoteFilePath string) (*AreFilesIdenticalResponse, error) {
+func (s *ServiceImpl) AreFilesIdentical(ctx context.Context, localFilePath string, remoteFilePath string) (*AreFilesIdenticalResponse, error) {
 	request := &AreFilesIdenticalRequest{}
-	ctx := context.Background()
 	request.LocalFilePath = localFilePath
 	request.RemoteFilePath = remoteFilePath
 	response, err := s.Client.AreFilesIdentical(ctx, request)
@@ -257,10 +248,9 @@ func (s *ServiceImpl) AreFilesIdentical(localFilePath string, remoteFilePath str
 
 */
 
-func (s *ServiceImpl) SetRootDirectory(rootDir string) (*SetRootDirectoryResponse, error) {
+func (s *ServiceImpl) SetRootDirectory(ctx context.Context, rootDir string) (*SetRootDirectoryResponse, error) {
 
 	request := &SetRootDirectoryRequest{}
-	ctx := context.Background()
 	request.RootDir = rootDir
 	response, err := s.Client.SetRootDirectory(ctx, request)
 	if err != nil {
@@ -279,10 +269,9 @@ func (s *ServiceImpl) SetRootDirectory(rootDir string) (*SetRootDirectoryRespons
 
 */
 
-func (s *ServiceImpl) SetTargetCompid(compid uint32) (*SetTargetCompidResponse, error) {
+func (s *ServiceImpl) SetTargetCompid(ctx context.Context, compid uint32) (*SetTargetCompidResponse, error) {
 
 	request := &SetTargetCompidRequest{}
-	ctx := context.Background()
 	request.Compid = compid
 	response, err := s.Client.SetTargetCompid(ctx, request)
 	if err != nil {
@@ -305,9 +294,8 @@ func (s *ServiceImpl) SetTargetCompid(compid uint32) (*SetTargetCompidResponse, 
 
 */
 
-func (s *ServiceImpl) GetOurCompid() (*GetOurCompidResponse, error) {
+func (s *ServiceImpl) GetOurCompid(ctx context.Context) (*GetOurCompidResponse, error) {
 	request := &GetOurCompidRequest{}
-	ctx := context.Background()
 	response, err := s.Client.GetOurCompid(ctx, request)
 	if err != nil {
 		return nil, err

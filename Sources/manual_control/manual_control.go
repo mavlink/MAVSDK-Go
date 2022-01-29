@@ -17,10 +17,9 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) StartPositionControl() (*StartPositionControlResponse, error) {
+func (s *ServiceImpl) StartPositionControl(ctx context.Context) (*StartPositionControlResponse, error) {
 
 	request := &StartPositionControlRequest{}
-	ctx := context.Background()
 	response, err := s.Client.StartPositionControl(ctx, request)
 	if err != nil {
 		return nil, err
@@ -37,10 +36,9 @@ func (s *ServiceImpl) StartPositionControl() (*StartPositionControlResponse, err
 
 */
 
-func (s *ServiceImpl) StartAltitudeControl() (*StartAltitudeControlResponse, error) {
+func (s *ServiceImpl) StartAltitudeControl(ctx context.Context) (*StartAltitudeControlResponse, error) {
 
 	request := &StartAltitudeControlRequest{}
-	ctx := context.Background()
 	response, err := s.Client.StartAltitudeControl(ctx, request)
 	if err != nil {
 		return nil, err
@@ -67,10 +65,9 @@ func (s *ServiceImpl) StartAltitudeControl() (*StartAltitudeControlResponse, err
 
 */
 
-func (s *ServiceImpl) SetManualControlInput(x float32, y float32, z float32, r float32) (*SetManualControlInputResponse, error) {
+func (s *ServiceImpl) SetManualControlInput(ctx context.Context, x float32, y float32, z float32, r float32) (*SetManualControlInputResponse, error) {
 
 	request := &SetManualControlInputRequest{}
-	ctx := context.Background()
 	request.X = x
 	request.Y = y
 	request.Z = z

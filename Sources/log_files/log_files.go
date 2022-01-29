@@ -24,9 +24,8 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) GetEntries() (*GetEntriesResponse, error) {
+func (s *ServiceImpl) GetEntries(ctx context.Context) (*GetEntriesResponse, error) {
 	request := &GetEntriesRequest{}
-	ctx := context.Background()
 	response, err := s.Client.GetEntries(ctx, request)
 	if err != nil {
 		return nil, err
@@ -43,13 +42,12 @@ func (s *ServiceImpl) GetEntries() (*GetEntriesResponse, error) {
    entry *Entry , path string
 */
 
-func (a *ServiceImpl) DownloadLogFile(entry *Entry, path string) (<-chan *ProgressData, error) {
+func (a *ServiceImpl) DownloadLogFile(ctx context.Context, entry *Entry, path string) (<-chan *ProgressData, error) {
 	ch := make(chan *ProgressData)
 	request := &SubscribeDownloadLogFileRequest{}
 	request.Entry = entry
 
 	request.Path = path
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeDownloadLogFile(ctx, request)
 	if err != nil {
 		return nil, err

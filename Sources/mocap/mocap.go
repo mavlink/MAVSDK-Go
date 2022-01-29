@@ -19,10 +19,9 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) SetVisionPositionEstimate(visionPositionEstimate *VisionPositionEstimate) (*SetVisionPositionEstimateResponse, error) {
+func (s *ServiceImpl) SetVisionPositionEstimate(ctx context.Context, visionPositionEstimate *VisionPositionEstimate) (*SetVisionPositionEstimateResponse, error) {
 
 	request := &SetVisionPositionEstimateRequest{}
-	ctx := context.Background()
 	request.VisionPositionEstimate = visionPositionEstimate
 
 	response, err := s.Client.SetVisionPositionEstimate(ctx, request)
@@ -43,10 +42,9 @@ func (s *ServiceImpl) SetVisionPositionEstimate(visionPositionEstimate *VisionPo
 
 */
 
-func (s *ServiceImpl) SetAttitudePositionMocap(attitudePositionMocap *AttitudePositionMocap) (*SetAttitudePositionMocapResponse, error) {
+func (s *ServiceImpl) SetAttitudePositionMocap(ctx context.Context, attitudePositionMocap *AttitudePositionMocap) (*SetAttitudePositionMocapResponse, error) {
 
 	request := &SetAttitudePositionMocapRequest{}
-	ctx := context.Background()
 	request.AttitudePositionMocap = attitudePositionMocap
 
 	response, err := s.Client.SetAttitudePositionMocap(ctx, request)
@@ -67,10 +65,9 @@ func (s *ServiceImpl) SetAttitudePositionMocap(attitudePositionMocap *AttitudePo
 
 */
 
-func (s *ServiceImpl) SetOdometry(odometry *Odometry) (*SetOdometryResponse, error) {
+func (s *ServiceImpl) SetOdometry(ctx context.Context, odometry *Odometry) (*SetOdometryResponse, error) {
 
 	request := &SetOdometryRequest{}
-	ctx := context.Background()
 	request.Odometry = odometry
 
 	response, err := s.Client.SetOdometry(ctx, request)

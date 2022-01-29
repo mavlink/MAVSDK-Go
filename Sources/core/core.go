@@ -16,10 +16,9 @@ type ServiceImpl struct {
 
 */
 
-func (a *ServiceImpl) ConnectionState() (<-chan *ConnectionState, error) {
+func (a *ServiceImpl) ConnectionState(ctx context.Context) (<-chan *ConnectionState, error) {
 	ch := make(chan *ConnectionState)
 	request := &SubscribeConnectionStateRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeConnectionState(ctx, request)
 	if err != nil {
 		return nil, err
@@ -57,10 +56,9 @@ func (a *ServiceImpl) ConnectionState() (<-chan *ConnectionState, error) {
 
 */
 
-func (s *ServiceImpl) SetMavlinkTimeout(timeoutS float64) (*SetMavlinkTimeoutResponse, error) {
+func (s *ServiceImpl) SetMavlinkTimeout(ctx context.Context, timeoutS float64) (*SetMavlinkTimeoutResponse, error) {
 
 	request := &SetMavlinkTimeoutRequest{}
-	ctx := context.Background()
 	request.TimeoutS = timeoutS
 	response, err := s.Client.SetMavlinkTimeout(ctx, request)
 	if err != nil {

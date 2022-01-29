@@ -16,10 +16,9 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) Prepare() (*PrepareResponse, error) {
+func (s *ServiceImpl) Prepare(ctx context.Context) (*PrepareResponse, error) {
 
 	request := &PrepareRequest{}
-	ctx := context.Background()
 	response, err := s.Client.Prepare(ctx, request)
 	if err != nil {
 		return nil, err
@@ -33,10 +32,9 @@ func (s *ServiceImpl) Prepare() (*PrepareResponse, error) {
 
 */
 
-func (s *ServiceImpl) TakePhoto() (*TakePhotoResponse, error) {
+func (s *ServiceImpl) TakePhoto(ctx context.Context) (*TakePhotoResponse, error) {
 
 	request := &TakePhotoRequest{}
-	ctx := context.Background()
 	response, err := s.Client.TakePhoto(ctx, request)
 	if err != nil {
 		return nil, err
@@ -54,10 +52,9 @@ func (s *ServiceImpl) TakePhoto() (*TakePhotoResponse, error) {
 
 */
 
-func (s *ServiceImpl) StartPhotoInterval(intervalS float32) (*StartPhotoIntervalResponse, error) {
+func (s *ServiceImpl) StartPhotoInterval(ctx context.Context, intervalS float32) (*StartPhotoIntervalResponse, error) {
 
 	request := &StartPhotoIntervalRequest{}
-	ctx := context.Background()
 	request.IntervalS = intervalS
 	response, err := s.Client.StartPhotoInterval(ctx, request)
 	if err != nil {
@@ -72,10 +69,9 @@ func (s *ServiceImpl) StartPhotoInterval(intervalS float32) (*StartPhotoInterval
 
 */
 
-func (s *ServiceImpl) StopPhotoInterval() (*StopPhotoIntervalResponse, error) {
+func (s *ServiceImpl) StopPhotoInterval(ctx context.Context) (*StopPhotoIntervalResponse, error) {
 
 	request := &StopPhotoIntervalRequest{}
-	ctx := context.Background()
 	response, err := s.Client.StopPhotoInterval(ctx, request)
 	if err != nil {
 		return nil, err
@@ -89,10 +85,9 @@ func (s *ServiceImpl) StopPhotoInterval() (*StopPhotoIntervalResponse, error) {
 
 */
 
-func (s *ServiceImpl) StartVideo() (*StartVideoResponse, error) {
+func (s *ServiceImpl) StartVideo(ctx context.Context) (*StartVideoResponse, error) {
 
 	request := &StartVideoRequest{}
-	ctx := context.Background()
 	response, err := s.Client.StartVideo(ctx, request)
 	if err != nil {
 		return nil, err
@@ -106,10 +101,9 @@ func (s *ServiceImpl) StartVideo() (*StartVideoResponse, error) {
 
 */
 
-func (s *ServiceImpl) StopVideo() (*StopVideoResponse, error) {
+func (s *ServiceImpl) StopVideo(ctx context.Context) (*StopVideoResponse, error) {
 
 	request := &StopVideoRequest{}
-	ctx := context.Background()
 	response, err := s.Client.StopVideo(ctx, request)
 	if err != nil {
 		return nil, err
@@ -123,10 +117,9 @@ func (s *ServiceImpl) StopVideo() (*StopVideoResponse, error) {
 
 */
 
-func (s *ServiceImpl) StartVideoStreaming() (*StartVideoStreamingResponse, error) {
+func (s *ServiceImpl) StartVideoStreaming(ctx context.Context) (*StartVideoStreamingResponse, error) {
 
 	request := &StartVideoStreamingRequest{}
-	ctx := context.Background()
 	response, err := s.Client.StartVideoStreaming(ctx, request)
 	if err != nil {
 		return nil, err
@@ -140,10 +133,9 @@ func (s *ServiceImpl) StartVideoStreaming() (*StartVideoStreamingResponse, error
 
 */
 
-func (s *ServiceImpl) StopVideoStreaming() (*StopVideoStreamingResponse, error) {
+func (s *ServiceImpl) StopVideoStreaming(ctx context.Context) (*StopVideoStreamingResponse, error) {
 
 	request := &StopVideoStreamingRequest{}
-	ctx := context.Background()
 	response, err := s.Client.StopVideoStreaming(ctx, request)
 	if err != nil {
 		return nil, err
@@ -162,10 +154,9 @@ func (s *ServiceImpl) StopVideoStreaming() (*StopVideoStreamingResponse, error) 
 
 */
 
-func (s *ServiceImpl) SetMode(mode *Mode) (*SetModeResponse, error) {
+func (s *ServiceImpl) SetMode(ctx context.Context, mode *Mode) (*SetModeResponse, error) {
 
 	request := &SetModeRequest{}
-	ctx := context.Background()
 	request.Mode = *mode
 	response, err := s.Client.SetMode(ctx, request)
 	if err != nil {
@@ -191,9 +182,8 @@ func (s *ServiceImpl) SetMode(mode *Mode) (*SetModeResponse, error) {
 
 */
 
-func (s *ServiceImpl) ListPhotos(photosRange *PhotosRange) (*ListPhotosResponse, error) {
+func (s *ServiceImpl) ListPhotos(ctx context.Context, photosRange *PhotosRange) (*ListPhotosResponse, error) {
 	request := &ListPhotosRequest{}
-	ctx := context.Background()
 	request.PhotosRange = *photosRange
 	response, err := s.Client.ListPhotos(ctx, request)
 	if err != nil {
@@ -209,10 +199,9 @@ func (s *ServiceImpl) ListPhotos(photosRange *PhotosRange) (*ListPhotosResponse,
 
 */
 
-func (a *ServiceImpl) Mode() (<-chan Mode, error) {
+func (a *ServiceImpl) Mode(ctx context.Context) (<-chan Mode, error) {
 	ch := make(chan Mode)
 	request := &SubscribeModeRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeMode(ctx, request)
 	if err != nil {
 		return nil, err
@@ -241,10 +230,9 @@ func (a *ServiceImpl) Mode() (<-chan Mode, error) {
 
 */
 
-func (a *ServiceImpl) Information() (<-chan *Information, error) {
+func (a *ServiceImpl) Information(ctx context.Context) (<-chan *Information, error) {
 	ch := make(chan *Information)
 	request := &SubscribeInformationRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeInformation(ctx, request)
 	if err != nil {
 		return nil, err
@@ -273,10 +261,9 @@ func (a *ServiceImpl) Information() (<-chan *Information, error) {
 
 */
 
-func (a *ServiceImpl) VideoStreamInfo() (<-chan *VideoStreamInfo, error) {
+func (a *ServiceImpl) VideoStreamInfo(ctx context.Context) (<-chan *VideoStreamInfo, error) {
 	ch := make(chan *VideoStreamInfo)
 	request := &SubscribeVideoStreamInfoRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeVideoStreamInfo(ctx, request)
 	if err != nil {
 		return nil, err
@@ -305,10 +292,9 @@ func (a *ServiceImpl) VideoStreamInfo() (<-chan *VideoStreamInfo, error) {
 
 */
 
-func (a *ServiceImpl) CaptureInfo() (<-chan *CaptureInfo, error) {
+func (a *ServiceImpl) CaptureInfo(ctx context.Context) (<-chan *CaptureInfo, error) {
 	ch := make(chan *CaptureInfo)
 	request := &SubscribeCaptureInfoRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeCaptureInfo(ctx, request)
 	if err != nil {
 		return nil, err
@@ -337,10 +323,9 @@ func (a *ServiceImpl) CaptureInfo() (<-chan *CaptureInfo, error) {
 
 */
 
-func (a *ServiceImpl) Status() (<-chan *Status, error) {
+func (a *ServiceImpl) Status(ctx context.Context) (<-chan *Status, error) {
 	ch := make(chan *Status)
 	request := &SubscribeStatusRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeStatus(ctx, request)
 	if err != nil {
 		return nil, err
@@ -369,10 +354,9 @@ func (a *ServiceImpl) Status() (<-chan *Status, error) {
 
 */
 
-func (a *ServiceImpl) CurrentSettings() (<-chan []*Setting, error) {
+func (a *ServiceImpl) CurrentSettings(ctx context.Context) (<-chan []*Setting, error) {
 	ch := make(chan []*Setting)
 	request := &SubscribeCurrentSettingsRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeCurrentSettings(ctx, request)
 	if err != nil {
 		return nil, err
@@ -401,10 +385,9 @@ func (a *ServiceImpl) CurrentSettings() (<-chan []*Setting, error) {
 
 */
 
-func (a *ServiceImpl) PossibleSettingOptions() (<-chan []*SettingOptions, error) {
+func (a *ServiceImpl) PossibleSettingOptions(ctx context.Context) (<-chan []*SettingOptions, error) {
 	ch := make(chan []*SettingOptions)
 	request := &SubscribePossibleSettingOptionsRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribePossibleSettingOptions(ctx, request)
 	if err != nil {
 		return nil, err
@@ -440,10 +423,9 @@ func (a *ServiceImpl) PossibleSettingOptions() (<-chan []*SettingOptions, error)
 
 */
 
-func (s *ServiceImpl) SetSetting(setting *Setting) (*SetSettingResponse, error) {
+func (s *ServiceImpl) SetSetting(ctx context.Context, setting *Setting) (*SetSettingResponse, error) {
 
 	request := &SetSettingRequest{}
-	ctx := context.Background()
 	request.Setting = setting
 
 	response, err := s.Client.SetSetting(ctx, request)
@@ -472,9 +454,8 @@ func (s *ServiceImpl) SetSetting(setting *Setting) (*SetSettingResponse, error) 
 
 */
 
-func (s *ServiceImpl) GetSetting(setting *Setting) (*GetSettingResponse, error) {
+func (s *ServiceImpl) GetSetting(ctx context.Context, setting *Setting) (*GetSettingResponse, error) {
 	request := &GetSettingRequest{}
-	ctx := context.Background()
 	request.Setting = setting
 
 	response, err := s.Client.GetSetting(ctx, request)
@@ -493,10 +474,9 @@ func (s *ServiceImpl) GetSetting(setting *Setting) (*GetSettingResponse, error) 
 
 */
 
-func (s *ServiceImpl) FormatStorage() (*FormatStorageResponse, error) {
+func (s *ServiceImpl) FormatStorage(ctx context.Context) (*FormatStorageResponse, error) {
 
 	request := &FormatStorageRequest{}
-	ctx := context.Background()
 	response, err := s.Client.FormatStorage(ctx, request)
 	if err != nil {
 		return nil, err

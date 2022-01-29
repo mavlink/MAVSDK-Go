@@ -16,10 +16,9 @@ type ServiceImpl struct {
 
 */
 
-func (a *ServiceImpl) Position() (<-chan *Position, error) {
+func (a *ServiceImpl) Position(ctx context.Context) (<-chan *Position, error) {
 	ch := make(chan *Position)
 	request := &SubscribePositionRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribePosition(ctx, request)
 	if err != nil {
 		return nil, err
@@ -48,10 +47,9 @@ func (a *ServiceImpl) Position() (<-chan *Position, error) {
 
 */
 
-func (a *ServiceImpl) Home() (<-chan *Position, error) {
+func (a *ServiceImpl) Home(ctx context.Context) (<-chan *Position, error) {
 	ch := make(chan *Position)
 	request := &SubscribeHomeRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeHome(ctx, request)
 	if err != nil {
 		return nil, err
@@ -80,10 +78,9 @@ func (a *ServiceImpl) Home() (<-chan *Position, error) {
 
 */
 
-func (a *ServiceImpl) InAir() (<-chan bool, error) {
+func (a *ServiceImpl) InAir(ctx context.Context) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeInAirRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeInAir(ctx, request)
 	if err != nil {
 		return nil, err
@@ -112,10 +109,9 @@ func (a *ServiceImpl) InAir() (<-chan bool, error) {
 
 */
 
-func (a *ServiceImpl) LandedState() (<-chan LandedState, error) {
+func (a *ServiceImpl) LandedState(ctx context.Context) (<-chan LandedState, error) {
 	ch := make(chan LandedState)
 	request := &SubscribeLandedStateRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeLandedState(ctx, request)
 	if err != nil {
 		return nil, err
@@ -144,10 +140,9 @@ func (a *ServiceImpl) LandedState() (<-chan LandedState, error) {
 
 */
 
-func (a *ServiceImpl) Armed() (<-chan bool, error) {
+func (a *ServiceImpl) Armed(ctx context.Context) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeArmedRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeArmed(ctx, request)
 	if err != nil {
 		return nil, err
@@ -176,10 +171,9 @@ func (a *ServiceImpl) Armed() (<-chan bool, error) {
 
 */
 
-func (a *ServiceImpl) VtolState() (<-chan VtolState, error) {
+func (a *ServiceImpl) VtolState(ctx context.Context) (<-chan VtolState, error) {
 	ch := make(chan VtolState)
 	request := &SubscribeVtolStateRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeVtolState(ctx, request)
 	if err != nil {
 		return nil, err
@@ -208,10 +202,9 @@ func (a *ServiceImpl) VtolState() (<-chan VtolState, error) {
 
 */
 
-func (a *ServiceImpl) AttitudeQuaternion() (<-chan *Quaternion, error) {
+func (a *ServiceImpl) AttitudeQuaternion(ctx context.Context) (<-chan *Quaternion, error) {
 	ch := make(chan *Quaternion)
 	request := &SubscribeAttitudeQuaternionRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeAttitudeQuaternion(ctx, request)
 	if err != nil {
 		return nil, err
@@ -240,10 +233,9 @@ func (a *ServiceImpl) AttitudeQuaternion() (<-chan *Quaternion, error) {
 
 */
 
-func (a *ServiceImpl) AttitudeEuler() (<-chan *EulerAngle, error) {
+func (a *ServiceImpl) AttitudeEuler(ctx context.Context) (<-chan *EulerAngle, error) {
 	ch := make(chan *EulerAngle)
 	request := &SubscribeAttitudeEulerRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeAttitudeEuler(ctx, request)
 	if err != nil {
 		return nil, err
@@ -272,10 +264,9 @@ func (a *ServiceImpl) AttitudeEuler() (<-chan *EulerAngle, error) {
 
 */
 
-func (a *ServiceImpl) AttitudeAngularVelocityBody() (<-chan *AngularVelocityBody, error) {
+func (a *ServiceImpl) AttitudeAngularVelocityBody(ctx context.Context) (<-chan *AngularVelocityBody, error) {
 	ch := make(chan *AngularVelocityBody)
 	request := &SubscribeAttitudeAngularVelocityBodyRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeAttitudeAngularVelocityBody(ctx, request)
 	if err != nil {
 		return nil, err
@@ -304,10 +295,9 @@ func (a *ServiceImpl) AttitudeAngularVelocityBody() (<-chan *AngularVelocityBody
 
 */
 
-func (a *ServiceImpl) CameraAttitudeQuaternion() (<-chan *Quaternion, error) {
+func (a *ServiceImpl) CameraAttitudeQuaternion(ctx context.Context) (<-chan *Quaternion, error) {
 	ch := make(chan *Quaternion)
 	request := &SubscribeCameraAttitudeQuaternionRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeCameraAttitudeQuaternion(ctx, request)
 	if err != nil {
 		return nil, err
@@ -336,10 +326,9 @@ func (a *ServiceImpl) CameraAttitudeQuaternion() (<-chan *Quaternion, error) {
 
 */
 
-func (a *ServiceImpl) CameraAttitudeEuler() (<-chan *EulerAngle, error) {
+func (a *ServiceImpl) CameraAttitudeEuler(ctx context.Context) (<-chan *EulerAngle, error) {
 	ch := make(chan *EulerAngle)
 	request := &SubscribeCameraAttitudeEulerRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeCameraAttitudeEuler(ctx, request)
 	if err != nil {
 		return nil, err
@@ -368,10 +357,9 @@ func (a *ServiceImpl) CameraAttitudeEuler() (<-chan *EulerAngle, error) {
 
 */
 
-func (a *ServiceImpl) VelocityNed() (<-chan *VelocityNed, error) {
+func (a *ServiceImpl) VelocityNed(ctx context.Context) (<-chan *VelocityNed, error) {
 	ch := make(chan *VelocityNed)
 	request := &SubscribeVelocityNedRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeVelocityNed(ctx, request)
 	if err != nil {
 		return nil, err
@@ -400,10 +388,9 @@ func (a *ServiceImpl) VelocityNed() (<-chan *VelocityNed, error) {
 
 */
 
-func (a *ServiceImpl) GpsInfo() (<-chan *GpsInfo, error) {
+func (a *ServiceImpl) GpsInfo(ctx context.Context) (<-chan *GpsInfo, error) {
 	ch := make(chan *GpsInfo)
 	request := &SubscribeGpsInfoRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeGpsInfo(ctx, request)
 	if err != nil {
 		return nil, err
@@ -432,10 +419,9 @@ func (a *ServiceImpl) GpsInfo() (<-chan *GpsInfo, error) {
 
 */
 
-func (a *ServiceImpl) RawGps() (<-chan *RawGps, error) {
+func (a *ServiceImpl) RawGps(ctx context.Context) (<-chan *RawGps, error) {
 	ch := make(chan *RawGps)
 	request := &SubscribeRawGpsRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeRawGps(ctx, request)
 	if err != nil {
 		return nil, err
@@ -464,10 +450,9 @@ func (a *ServiceImpl) RawGps() (<-chan *RawGps, error) {
 
 */
 
-func (a *ServiceImpl) Battery() (<-chan *Battery, error) {
+func (a *ServiceImpl) Battery(ctx context.Context) (<-chan *Battery, error) {
 	ch := make(chan *Battery)
 	request := &SubscribeBatteryRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeBattery(ctx, request)
 	if err != nil {
 		return nil, err
@@ -496,10 +481,9 @@ func (a *ServiceImpl) Battery() (<-chan *Battery, error) {
 
 */
 
-func (a *ServiceImpl) FlightMode() (<-chan FlightMode, error) {
+func (a *ServiceImpl) FlightMode(ctx context.Context) (<-chan FlightMode, error) {
 	ch := make(chan FlightMode)
 	request := &SubscribeFlightModeRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeFlightMode(ctx, request)
 	if err != nil {
 		return nil, err
@@ -528,10 +512,9 @@ func (a *ServiceImpl) FlightMode() (<-chan FlightMode, error) {
 
 */
 
-func (a *ServiceImpl) Health() (<-chan *Health, error) {
+func (a *ServiceImpl) Health(ctx context.Context) (<-chan *Health, error) {
 	ch := make(chan *Health)
 	request := &SubscribeHealthRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeHealth(ctx, request)
 	if err != nil {
 		return nil, err
@@ -560,10 +543,9 @@ func (a *ServiceImpl) Health() (<-chan *Health, error) {
 
 */
 
-func (a *ServiceImpl) RcStatus() (<-chan *RcStatus, error) {
+func (a *ServiceImpl) RcStatus(ctx context.Context) (<-chan *RcStatus, error) {
 	ch := make(chan *RcStatus)
 	request := &SubscribeRcStatusRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeRcStatus(ctx, request)
 	if err != nil {
 		return nil, err
@@ -592,10 +574,9 @@ func (a *ServiceImpl) RcStatus() (<-chan *RcStatus, error) {
 
 */
 
-func (a *ServiceImpl) StatusText() (<-chan *StatusText, error) {
+func (a *ServiceImpl) StatusText(ctx context.Context) (<-chan *StatusText, error) {
 	ch := make(chan *StatusText)
 	request := &SubscribeStatusTextRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeStatusText(ctx, request)
 	if err != nil {
 		return nil, err
@@ -624,10 +605,9 @@ func (a *ServiceImpl) StatusText() (<-chan *StatusText, error) {
 
 */
 
-func (a *ServiceImpl) ActuatorControlTarget() (<-chan *ActuatorControlTarget, error) {
+func (a *ServiceImpl) ActuatorControlTarget(ctx context.Context) (<-chan *ActuatorControlTarget, error) {
 	ch := make(chan *ActuatorControlTarget)
 	request := &SubscribeActuatorControlTargetRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeActuatorControlTarget(ctx, request)
 	if err != nil {
 		return nil, err
@@ -656,10 +636,9 @@ func (a *ServiceImpl) ActuatorControlTarget() (<-chan *ActuatorControlTarget, er
 
 */
 
-func (a *ServiceImpl) ActuatorOutputStatus() (<-chan *ActuatorOutputStatus, error) {
+func (a *ServiceImpl) ActuatorOutputStatus(ctx context.Context) (<-chan *ActuatorOutputStatus, error) {
 	ch := make(chan *ActuatorOutputStatus)
 	request := &SubscribeActuatorOutputStatusRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeActuatorOutputStatus(ctx, request)
 	if err != nil {
 		return nil, err
@@ -688,10 +667,9 @@ func (a *ServiceImpl) ActuatorOutputStatus() (<-chan *ActuatorOutputStatus, erro
 
 */
 
-func (a *ServiceImpl) Odometry() (<-chan *Odometry, error) {
+func (a *ServiceImpl) Odometry(ctx context.Context) (<-chan *Odometry, error) {
 	ch := make(chan *Odometry)
 	request := &SubscribeOdometryRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeOdometry(ctx, request)
 	if err != nil {
 		return nil, err
@@ -720,10 +698,9 @@ func (a *ServiceImpl) Odometry() (<-chan *Odometry, error) {
 
 */
 
-func (a *ServiceImpl) PositionVelocityNed() (<-chan *PositionVelocityNed, error) {
+func (a *ServiceImpl) PositionVelocityNed(ctx context.Context) (<-chan *PositionVelocityNed, error) {
 	ch := make(chan *PositionVelocityNed)
 	request := &SubscribePositionVelocityNedRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribePositionVelocityNed(ctx, request)
 	if err != nil {
 		return nil, err
@@ -752,10 +729,9 @@ func (a *ServiceImpl) PositionVelocityNed() (<-chan *PositionVelocityNed, error)
 
 */
 
-func (a *ServiceImpl) GroundTruth() (<-chan *GroundTruth, error) {
+func (a *ServiceImpl) GroundTruth(ctx context.Context) (<-chan *GroundTruth, error) {
 	ch := make(chan *GroundTruth)
 	request := &SubscribeGroundTruthRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeGroundTruth(ctx, request)
 	if err != nil {
 		return nil, err
@@ -784,10 +760,9 @@ func (a *ServiceImpl) GroundTruth() (<-chan *GroundTruth, error) {
 
 */
 
-func (a *ServiceImpl) FixedwingMetrics() (<-chan *FixedwingMetrics, error) {
+func (a *ServiceImpl) FixedwingMetrics(ctx context.Context) (<-chan *FixedwingMetrics, error) {
 	ch := make(chan *FixedwingMetrics)
 	request := &SubscribeFixedwingMetricsRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeFixedwingMetrics(ctx, request)
 	if err != nil {
 		return nil, err
@@ -816,10 +791,9 @@ func (a *ServiceImpl) FixedwingMetrics() (<-chan *FixedwingMetrics, error) {
 
 */
 
-func (a *ServiceImpl) Imu() (<-chan *Imu, error) {
+func (a *ServiceImpl) Imu(ctx context.Context) (<-chan *Imu, error) {
 	ch := make(chan *Imu)
 	request := &SubscribeImuRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeImu(ctx, request)
 	if err != nil {
 		return nil, err
@@ -848,10 +822,9 @@ func (a *ServiceImpl) Imu() (<-chan *Imu, error) {
 
 */
 
-func (a *ServiceImpl) ScaledImu() (<-chan *Imu, error) {
+func (a *ServiceImpl) ScaledImu(ctx context.Context) (<-chan *Imu, error) {
 	ch := make(chan *Imu)
 	request := &SubscribeScaledImuRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeScaledImu(ctx, request)
 	if err != nil {
 		return nil, err
@@ -880,10 +853,9 @@ func (a *ServiceImpl) ScaledImu() (<-chan *Imu, error) {
 
 */
 
-func (a *ServiceImpl) RawImu() (<-chan *Imu, error) {
+func (a *ServiceImpl) RawImu(ctx context.Context) (<-chan *Imu, error) {
 	ch := make(chan *Imu)
 	request := &SubscribeRawImuRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeRawImu(ctx, request)
 	if err != nil {
 		return nil, err
@@ -912,10 +884,9 @@ func (a *ServiceImpl) RawImu() (<-chan *Imu, error) {
 
 */
 
-func (a *ServiceImpl) HealthAllOk() (<-chan bool, error) {
+func (a *ServiceImpl) HealthAllOk(ctx context.Context) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeHealthAllOkRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeHealthAllOk(ctx, request)
 	if err != nil {
 		return nil, err
@@ -944,10 +915,9 @@ func (a *ServiceImpl) HealthAllOk() (<-chan bool, error) {
 
 */
 
-func (a *ServiceImpl) UnixEpochTime() (<-chan uint64, error) {
+func (a *ServiceImpl) UnixEpochTime(ctx context.Context) (<-chan uint64, error) {
 	ch := make(chan uint64)
 	request := &SubscribeUnixEpochTimeRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeUnixEpochTime(ctx, request)
 	if err != nil {
 		return nil, err
@@ -976,10 +946,9 @@ func (a *ServiceImpl) UnixEpochTime() (<-chan uint64, error) {
 
 */
 
-func (a *ServiceImpl) DistanceSensor() (<-chan *DistanceSensor, error) {
+func (a *ServiceImpl) DistanceSensor(ctx context.Context) (<-chan *DistanceSensor, error) {
 	ch := make(chan *DistanceSensor)
 	request := &SubscribeDistanceSensorRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeDistanceSensor(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1008,10 +977,9 @@ func (a *ServiceImpl) DistanceSensor() (<-chan *DistanceSensor, error) {
 
 */
 
-func (a *ServiceImpl) ScaledPressure() (<-chan *ScaledPressure, error) {
+func (a *ServiceImpl) ScaledPressure(ctx context.Context) (<-chan *ScaledPressure, error) {
 	ch := make(chan *ScaledPressure)
 	request := &SubscribeScaledPressureRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeScaledPressure(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1040,10 +1008,9 @@ func (a *ServiceImpl) ScaledPressure() (<-chan *ScaledPressure, error) {
 
 */
 
-func (a *ServiceImpl) Heading() (<-chan *Heading, error) {
+func (a *ServiceImpl) Heading(ctx context.Context) (<-chan *Heading, error) {
 	ch := make(chan *Heading)
 	request := &SubscribeHeadingRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeHeading(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1076,10 +1043,9 @@ func (a *ServiceImpl) Heading() (<-chan *Heading, error) {
 
 */
 
-func (s *ServiceImpl) SetRatePosition(rateHz float64) (*SetRatePositionResponse, error) {
+func (s *ServiceImpl) SetRatePosition(ctx context.Context, rateHz float64) (*SetRatePositionResponse, error) {
 
 	request := &SetRatePositionRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRatePosition(ctx, request)
 	if err != nil {
@@ -1098,10 +1064,9 @@ func (s *ServiceImpl) SetRatePosition(rateHz float64) (*SetRatePositionResponse,
 
 */
 
-func (s *ServiceImpl) SetRateHome(rateHz float64) (*SetRateHomeResponse, error) {
+func (s *ServiceImpl) SetRateHome(ctx context.Context, rateHz float64) (*SetRateHomeResponse, error) {
 
 	request := &SetRateHomeRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateHome(ctx, request)
 	if err != nil {
@@ -1120,10 +1085,9 @@ func (s *ServiceImpl) SetRateHome(rateHz float64) (*SetRateHomeResponse, error) 
 
 */
 
-func (s *ServiceImpl) SetRateInAir(rateHz float64) (*SetRateInAirResponse, error) {
+func (s *ServiceImpl) SetRateInAir(ctx context.Context, rateHz float64) (*SetRateInAirResponse, error) {
 
 	request := &SetRateInAirRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateInAir(ctx, request)
 	if err != nil {
@@ -1142,10 +1106,9 @@ func (s *ServiceImpl) SetRateInAir(rateHz float64) (*SetRateInAirResponse, error
 
 */
 
-func (s *ServiceImpl) SetRateLandedState(rateHz float64) (*SetRateLandedStateResponse, error) {
+func (s *ServiceImpl) SetRateLandedState(ctx context.Context, rateHz float64) (*SetRateLandedStateResponse, error) {
 
 	request := &SetRateLandedStateRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateLandedState(ctx, request)
 	if err != nil {
@@ -1164,10 +1127,9 @@ func (s *ServiceImpl) SetRateLandedState(rateHz float64) (*SetRateLandedStateRes
 
 */
 
-func (s *ServiceImpl) SetRateVtolState(rateHz float64) (*SetRateVtolStateResponse, error) {
+func (s *ServiceImpl) SetRateVtolState(ctx context.Context, rateHz float64) (*SetRateVtolStateResponse, error) {
 
 	request := &SetRateVtolStateRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateVtolState(ctx, request)
 	if err != nil {
@@ -1186,10 +1148,9 @@ func (s *ServiceImpl) SetRateVtolState(rateHz float64) (*SetRateVtolStateRespons
 
 */
 
-func (s *ServiceImpl) SetRateAttitude(rateHz float64) (*SetRateAttitudeResponse, error) {
+func (s *ServiceImpl) SetRateAttitude(ctx context.Context, rateHz float64) (*SetRateAttitudeResponse, error) {
 
 	request := &SetRateAttitudeRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateAttitude(ctx, request)
 	if err != nil {
@@ -1208,10 +1169,9 @@ func (s *ServiceImpl) SetRateAttitude(rateHz float64) (*SetRateAttitudeResponse,
 
 */
 
-func (s *ServiceImpl) SetRateCameraAttitude(rateHz float64) (*SetRateCameraAttitudeResponse, error) {
+func (s *ServiceImpl) SetRateCameraAttitude(ctx context.Context, rateHz float64) (*SetRateCameraAttitudeResponse, error) {
 
 	request := &SetRateCameraAttitudeRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateCameraAttitude(ctx, request)
 	if err != nil {
@@ -1230,10 +1190,9 @@ func (s *ServiceImpl) SetRateCameraAttitude(rateHz float64) (*SetRateCameraAttit
 
 */
 
-func (s *ServiceImpl) SetRateVelocityNed(rateHz float64) (*SetRateVelocityNedResponse, error) {
+func (s *ServiceImpl) SetRateVelocityNed(ctx context.Context, rateHz float64) (*SetRateVelocityNedResponse, error) {
 
 	request := &SetRateVelocityNedRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateVelocityNed(ctx, request)
 	if err != nil {
@@ -1252,10 +1211,9 @@ func (s *ServiceImpl) SetRateVelocityNed(rateHz float64) (*SetRateVelocityNedRes
 
 */
 
-func (s *ServiceImpl) SetRateGpsInfo(rateHz float64) (*SetRateGpsInfoResponse, error) {
+func (s *ServiceImpl) SetRateGpsInfo(ctx context.Context, rateHz float64) (*SetRateGpsInfoResponse, error) {
 
 	request := &SetRateGpsInfoRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateGpsInfo(ctx, request)
 	if err != nil {
@@ -1274,10 +1232,9 @@ func (s *ServiceImpl) SetRateGpsInfo(rateHz float64) (*SetRateGpsInfoResponse, e
 
 */
 
-func (s *ServiceImpl) SetRateBattery(rateHz float64) (*SetRateBatteryResponse, error) {
+func (s *ServiceImpl) SetRateBattery(ctx context.Context, rateHz float64) (*SetRateBatteryResponse, error) {
 
 	request := &SetRateBatteryRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateBattery(ctx, request)
 	if err != nil {
@@ -1296,10 +1253,9 @@ func (s *ServiceImpl) SetRateBattery(rateHz float64) (*SetRateBatteryResponse, e
 
 */
 
-func (s *ServiceImpl) SetRateRcStatus(rateHz float64) (*SetRateRcStatusResponse, error) {
+func (s *ServiceImpl) SetRateRcStatus(ctx context.Context, rateHz float64) (*SetRateRcStatusResponse, error) {
 
 	request := &SetRateRcStatusRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateRcStatus(ctx, request)
 	if err != nil {
@@ -1318,10 +1274,9 @@ func (s *ServiceImpl) SetRateRcStatus(rateHz float64) (*SetRateRcStatusResponse,
 
 */
 
-func (s *ServiceImpl) SetRateActuatorControlTarget(rateHz float64) (*SetRateActuatorControlTargetResponse, error) {
+func (s *ServiceImpl) SetRateActuatorControlTarget(ctx context.Context, rateHz float64) (*SetRateActuatorControlTargetResponse, error) {
 
 	request := &SetRateActuatorControlTargetRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateActuatorControlTarget(ctx, request)
 	if err != nil {
@@ -1340,10 +1295,9 @@ func (s *ServiceImpl) SetRateActuatorControlTarget(rateHz float64) (*SetRateActu
 
 */
 
-func (s *ServiceImpl) SetRateActuatorOutputStatus(rateHz float64) (*SetRateActuatorOutputStatusResponse, error) {
+func (s *ServiceImpl) SetRateActuatorOutputStatus(ctx context.Context, rateHz float64) (*SetRateActuatorOutputStatusResponse, error) {
 
 	request := &SetRateActuatorOutputStatusRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateActuatorOutputStatus(ctx, request)
 	if err != nil {
@@ -1362,10 +1316,9 @@ func (s *ServiceImpl) SetRateActuatorOutputStatus(rateHz float64) (*SetRateActua
 
 */
 
-func (s *ServiceImpl) SetRateOdometry(rateHz float64) (*SetRateOdometryResponse, error) {
+func (s *ServiceImpl) SetRateOdometry(ctx context.Context, rateHz float64) (*SetRateOdometryResponse, error) {
 
 	request := &SetRateOdometryRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateOdometry(ctx, request)
 	if err != nil {
@@ -1384,10 +1337,9 @@ func (s *ServiceImpl) SetRateOdometry(rateHz float64) (*SetRateOdometryResponse,
 
 */
 
-func (s *ServiceImpl) SetRatePositionVelocityNed(rateHz float64) (*SetRatePositionVelocityNedResponse, error) {
+func (s *ServiceImpl) SetRatePositionVelocityNed(ctx context.Context, rateHz float64) (*SetRatePositionVelocityNedResponse, error) {
 
 	request := &SetRatePositionVelocityNedRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRatePositionVelocityNed(ctx, request)
 	if err != nil {
@@ -1406,10 +1358,9 @@ func (s *ServiceImpl) SetRatePositionVelocityNed(rateHz float64) (*SetRatePositi
 
 */
 
-func (s *ServiceImpl) SetRateGroundTruth(rateHz float64) (*SetRateGroundTruthResponse, error) {
+func (s *ServiceImpl) SetRateGroundTruth(ctx context.Context, rateHz float64) (*SetRateGroundTruthResponse, error) {
 
 	request := &SetRateGroundTruthRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateGroundTruth(ctx, request)
 	if err != nil {
@@ -1428,10 +1379,9 @@ func (s *ServiceImpl) SetRateGroundTruth(rateHz float64) (*SetRateGroundTruthRes
 
 */
 
-func (s *ServiceImpl) SetRateFixedwingMetrics(rateHz float64) (*SetRateFixedwingMetricsResponse, error) {
+func (s *ServiceImpl) SetRateFixedwingMetrics(ctx context.Context, rateHz float64) (*SetRateFixedwingMetricsResponse, error) {
 
 	request := &SetRateFixedwingMetricsRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateFixedwingMetrics(ctx, request)
 	if err != nil {
@@ -1450,10 +1400,9 @@ func (s *ServiceImpl) SetRateFixedwingMetrics(rateHz float64) (*SetRateFixedwing
 
 */
 
-func (s *ServiceImpl) SetRateImu(rateHz float64) (*SetRateImuResponse, error) {
+func (s *ServiceImpl) SetRateImu(ctx context.Context, rateHz float64) (*SetRateImuResponse, error) {
 
 	request := &SetRateImuRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateImu(ctx, request)
 	if err != nil {
@@ -1472,10 +1421,9 @@ func (s *ServiceImpl) SetRateImu(rateHz float64) (*SetRateImuResponse, error) {
 
 */
 
-func (s *ServiceImpl) SetRateScaledImu(rateHz float64) (*SetRateScaledImuResponse, error) {
+func (s *ServiceImpl) SetRateScaledImu(ctx context.Context, rateHz float64) (*SetRateScaledImuResponse, error) {
 
 	request := &SetRateScaledImuRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateScaledImu(ctx, request)
 	if err != nil {
@@ -1494,10 +1442,9 @@ func (s *ServiceImpl) SetRateScaledImu(rateHz float64) (*SetRateScaledImuRespons
 
 */
 
-func (s *ServiceImpl) SetRateRawImu(rateHz float64) (*SetRateRawImuResponse, error) {
+func (s *ServiceImpl) SetRateRawImu(ctx context.Context, rateHz float64) (*SetRateRawImuResponse, error) {
 
 	request := &SetRateRawImuRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateRawImu(ctx, request)
 	if err != nil {
@@ -1516,10 +1463,9 @@ func (s *ServiceImpl) SetRateRawImu(rateHz float64) (*SetRateRawImuResponse, err
 
 */
 
-func (s *ServiceImpl) SetRateUnixEpochTime(rateHz float64) (*SetRateUnixEpochTimeResponse, error) {
+func (s *ServiceImpl) SetRateUnixEpochTime(ctx context.Context, rateHz float64) (*SetRateUnixEpochTimeResponse, error) {
 
 	request := &SetRateUnixEpochTimeRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateUnixEpochTime(ctx, request)
 	if err != nil {
@@ -1538,10 +1484,9 @@ func (s *ServiceImpl) SetRateUnixEpochTime(rateHz float64) (*SetRateUnixEpochTim
 
 */
 
-func (s *ServiceImpl) SetRateDistanceSensor(rateHz float64) (*SetRateDistanceSensorResponse, error) {
+func (s *ServiceImpl) SetRateDistanceSensor(ctx context.Context, rateHz float64) (*SetRateDistanceSensorResponse, error) {
 
 	request := &SetRateDistanceSensorRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateDistanceSensor(ctx, request)
 	if err != nil {
@@ -1563,9 +1508,8 @@ func (s *ServiceImpl) SetRateDistanceSensor(rateHz float64) (*SetRateDistanceSen
 
 */
 
-func (s *ServiceImpl) GetGpsGlobalOrigin() (*GetGpsGlobalOriginResponse, error) {
+func (s *ServiceImpl) GetGpsGlobalOrigin(ctx context.Context) (*GetGpsGlobalOriginResponse, error) {
 	request := &GetGpsGlobalOriginRequest{}
-	ctx := context.Background()
 	response, err := s.Client.GetGpsGlobalOrigin(ctx, request)
 	if err != nil {
 		return nil, err

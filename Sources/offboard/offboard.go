@@ -14,10 +14,9 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) Start() (*StartResponse, error) {
+func (s *ServiceImpl) Start(ctx context.Context) (*StartResponse, error) {
 
 	request := &StartRequest{}
-	ctx := context.Background()
 	response, err := s.Client.Start(ctx, request)
 	if err != nil {
 		return nil, err
@@ -33,10 +32,9 @@ func (s *ServiceImpl) Start() (*StartResponse, error) {
 
 */
 
-func (s *ServiceImpl) Stop() (*StopResponse, error) {
+func (s *ServiceImpl) Stop(ctx context.Context) (*StopResponse, error) {
 
 	request := &StopRequest{}
-	ctx := context.Background()
 	response, err := s.Client.Stop(ctx, request)
 	if err != nil {
 		return nil, err
@@ -61,9 +59,8 @@ func (s *ServiceImpl) Stop() (*StopResponse, error) {
 
 */
 
-func (s *ServiceImpl) IsActive() (*IsActiveResponse, error) {
+func (s *ServiceImpl) IsActive(ctx context.Context) (*IsActiveResponse, error) {
 	request := &IsActiveRequest{}
-	ctx := context.Background()
 	response, err := s.Client.IsActive(ctx, request)
 	if err != nil {
 		return nil, err
@@ -83,10 +80,9 @@ func (s *ServiceImpl) IsActive() (*IsActiveResponse, error) {
 
 */
 
-func (s *ServiceImpl) SetAttitude(attitude *Attitude) (*SetAttitudeResponse, error) {
+func (s *ServiceImpl) SetAttitude(ctx context.Context, attitude *Attitude) (*SetAttitudeResponse, error) {
 
 	request := &SetAttitudeRequest{}
-	ctx := context.Background()
 	request.Attitude = attitude
 
 	response, err := s.Client.SetAttitude(ctx, request)
@@ -110,10 +106,9 @@ func (s *ServiceImpl) SetAttitude(attitude *Attitude) (*SetAttitudeResponse, err
 
 */
 
-func (s *ServiceImpl) SetActuatorControl(actuatorControl *ActuatorControl) (*SetActuatorControlResponse, error) {
+func (s *ServiceImpl) SetActuatorControl(ctx context.Context, actuatorControl *ActuatorControl) (*SetActuatorControlResponse, error) {
 
 	request := &SetActuatorControlRequest{}
-	ctx := context.Background()
 	request.ActuatorControl = actuatorControl
 
 	response, err := s.Client.SetActuatorControl(ctx, request)
@@ -134,10 +129,9 @@ func (s *ServiceImpl) SetActuatorControl(actuatorControl *ActuatorControl) (*Set
 
 */
 
-func (s *ServiceImpl) SetAttitudeRate(attitudeRate *AttitudeRate) (*SetAttitudeRateResponse, error) {
+func (s *ServiceImpl) SetAttitudeRate(ctx context.Context, attitudeRate *AttitudeRate) (*SetAttitudeRateResponse, error) {
 
 	request := &SetAttitudeRateRequest{}
-	ctx := context.Background()
 	request.AttitudeRate = attitudeRate
 
 	response, err := s.Client.SetAttitudeRate(ctx, request)
@@ -158,10 +152,9 @@ func (s *ServiceImpl) SetAttitudeRate(attitudeRate *AttitudeRate) (*SetAttitudeR
 
 */
 
-func (s *ServiceImpl) SetPositionNed(positionNedYaw *PositionNedYaw) (*SetPositionNedResponse, error) {
+func (s *ServiceImpl) SetPositionNed(ctx context.Context, positionNedYaw *PositionNedYaw) (*SetPositionNedResponse, error) {
 
 	request := &SetPositionNedRequest{}
-	ctx := context.Background()
 	request.PositionNedYaw = positionNedYaw
 
 	response, err := s.Client.SetPositionNed(ctx, request)
@@ -182,10 +175,9 @@ func (s *ServiceImpl) SetPositionNed(positionNedYaw *PositionNedYaw) (*SetPositi
 
 */
 
-func (s *ServiceImpl) SetPositionGlobal(positionGlobalYaw *PositionGlobalYaw) (*SetPositionGlobalResponse, error) {
+func (s *ServiceImpl) SetPositionGlobal(ctx context.Context, positionGlobalYaw *PositionGlobalYaw) (*SetPositionGlobalResponse, error) {
 
 	request := &SetPositionGlobalRequest{}
-	ctx := context.Background()
 	request.PositionGlobalYaw = positionGlobalYaw
 
 	response, err := s.Client.SetPositionGlobal(ctx, request)
@@ -206,10 +198,9 @@ func (s *ServiceImpl) SetPositionGlobal(positionGlobalYaw *PositionGlobalYaw) (*
 
 */
 
-func (s *ServiceImpl) SetVelocityBody(velocityBodyYawspeed *VelocityBodyYawspeed) (*SetVelocityBodyResponse, error) {
+func (s *ServiceImpl) SetVelocityBody(ctx context.Context, velocityBodyYawspeed *VelocityBodyYawspeed) (*SetVelocityBodyResponse, error) {
 
 	request := &SetVelocityBodyRequest{}
-	ctx := context.Background()
 	request.VelocityBodyYawspeed = velocityBodyYawspeed
 
 	response, err := s.Client.SetVelocityBody(ctx, request)
@@ -230,10 +221,9 @@ func (s *ServiceImpl) SetVelocityBody(velocityBodyYawspeed *VelocityBodyYawspeed
 
 */
 
-func (s *ServiceImpl) SetVelocityNed(velocityNedYaw *VelocityNedYaw) (*SetVelocityNedResponse, error) {
+func (s *ServiceImpl) SetVelocityNed(ctx context.Context, velocityNedYaw *VelocityNedYaw) (*SetVelocityNedResponse, error) {
 
 	request := &SetVelocityNedRequest{}
-	ctx := context.Background()
 	request.VelocityNedYaw = velocityNedYaw
 
 	response, err := s.Client.SetVelocityNed(ctx, request)
@@ -257,10 +247,9 @@ func (s *ServiceImpl) SetVelocityNed(velocityNedYaw *VelocityNedYaw) (*SetVeloci
 
 */
 
-func (s *ServiceImpl) SetPositionVelocityNed(positionNedYaw *PositionNedYaw, velocityNedYaw *VelocityNedYaw) (*SetPositionVelocityNedResponse, error) {
+func (s *ServiceImpl) SetPositionVelocityNed(ctx context.Context, positionNedYaw *PositionNedYaw, velocityNedYaw *VelocityNedYaw) (*SetPositionVelocityNedResponse, error) {
 
 	request := &SetPositionVelocityNedRequest{}
-	ctx := context.Background()
 	request.PositionNedYaw = positionNedYaw
 
 	request.VelocityNedYaw = velocityNedYaw
@@ -283,10 +272,9 @@ func (s *ServiceImpl) SetPositionVelocityNed(positionNedYaw *PositionNedYaw, vel
 
 */
 
-func (s *ServiceImpl) SetAccelerationNed(accelerationNed *AccelerationNed) (*SetAccelerationNedResponse, error) {
+func (s *ServiceImpl) SetAccelerationNed(ctx context.Context, accelerationNed *AccelerationNed) (*SetAccelerationNedResponse, error) {
 
 	request := &SetAccelerationNedRequest{}
-	ctx := context.Background()
 	request.AccelerationNed = accelerationNed
 
 	response, err := s.Client.SetAccelerationNed(ctx, request)

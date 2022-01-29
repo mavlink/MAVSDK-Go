@@ -26,9 +26,8 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) GetParamInt(name string) (*GetParamIntResponse, error) {
+func (s *ServiceImpl) GetParamInt(ctx context.Context, name string) (*GetParamIntResponse, error) {
 	request := &GetParamIntRequest{}
-	ctx := context.Background()
 	request.Name = name
 	response, err := s.Client.GetParamInt(ctx, request)
 	if err != nil {
@@ -52,10 +51,9 @@ func (s *ServiceImpl) GetParamInt(name string) (*GetParamIntResponse, error) {
 
 */
 
-func (s *ServiceImpl) SetParamInt(name string, value int32) (*SetParamIntResponse, error) {
+func (s *ServiceImpl) SetParamInt(ctx context.Context, name string, value int32) (*SetParamIntResponse, error) {
 
 	request := &SetParamIntRequest{}
-	ctx := context.Background()
 	request.Name = name
 	request.Value = value
 	response, err := s.Client.SetParamInt(ctx, request)
@@ -83,9 +81,8 @@ func (s *ServiceImpl) SetParamInt(name string, value int32) (*SetParamIntRespons
 
 */
 
-func (s *ServiceImpl) GetParamFloat(name string) (*GetParamFloatResponse, error) {
+func (s *ServiceImpl) GetParamFloat(ctx context.Context, name string) (*GetParamFloatResponse, error) {
 	request := &GetParamFloatRequest{}
-	ctx := context.Background()
 	request.Name = name
 	response, err := s.Client.GetParamFloat(ctx, request)
 	if err != nil {
@@ -109,10 +106,9 @@ func (s *ServiceImpl) GetParamFloat(name string) (*GetParamFloatResponse, error)
 
 */
 
-func (s *ServiceImpl) SetParamFloat(name string, value float32) (*SetParamFloatResponse, error) {
+func (s *ServiceImpl) SetParamFloat(ctx context.Context, name string, value float32) (*SetParamFloatResponse, error) {
 
 	request := &SetParamFloatRequest{}
-	ctx := context.Background()
 	request.Name = name
 	request.Value = value
 	response, err := s.Client.SetParamFloat(ctx, request)
@@ -136,9 +132,8 @@ func (s *ServiceImpl) SetParamFloat(name string, value float32) (*SetParamFloatR
 
 */
 
-func (s *ServiceImpl) GetAllParams() (*GetAllParamsResponse, error) {
+func (s *ServiceImpl) GetAllParams(ctx context.Context) (*GetAllParamsResponse, error) {
 	request := &GetAllParamsRequest{}
-	ctx := context.Background()
 	response, err := s.Client.GetAllParams(ctx, request)
 	if err != nil {
 		return nil, err

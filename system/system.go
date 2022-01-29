@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
@@ -83,13 +84,13 @@ func main() {
 	//for x := range ch {
 	//	fmt.Printf("%v\n", x)
 	//}
-	drone.action.Arm()
-	drone.action.Takeoff()
-	drone.action.Land()
+	drone.action.Arm(context.Background())
+	drone.action.Takeoff(context.Background())
+	drone.action.Land(context.Background())
 	// drone.telemetry.SetRatePosition(60)
 
 	// drone.action.GotoLocation(54, 56, 0.5, 30)
-	drone.core.ConnectionState()
+	drone.core.ConnectionState(context.Background())
 	// fmt.Printf("channel value %v \n", <-ch1)
 	lat := 47.3977508
 	lon := 8.5456074
@@ -113,6 +114,6 @@ func main() {
 	polygon := &geofence.Polygon{
 		Points:    []*geofence.Point{p1, p2, p3, p4},
 		FenceType: geofence.Polygon_FENCE_TYPE_EXCLUSION}
-	drone.geofence.UploadGeofence([]*geofence.Polygon{polygon})
+	drone.geofence.UploadGeofence(context.Background(), []*geofence.Polygon{polygon})
 
 }

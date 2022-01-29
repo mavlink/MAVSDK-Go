@@ -24,10 +24,9 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) UploadMission(missionPlan *MissionPlan) (*UploadMissionResponse, error) {
+func (s *ServiceImpl) UploadMission(ctx context.Context, missionPlan *MissionPlan) (*UploadMissionResponse, error) {
 
 	request := &UploadMissionRequest{}
-	ctx := context.Background()
 	request.MissionPlan = missionPlan
 
 	response, err := s.Client.UploadMission(ctx, request)
@@ -48,12 +47,11 @@ func (s *ServiceImpl) UploadMission(missionPlan *MissionPlan) (*UploadMissionRes
    missionPlan *MissionPlan
 */
 
-func (a *ServiceImpl) UploadMissionWithProgress(missionPlan *MissionPlan) (<-chan *ProgressData, error) {
+func (a *ServiceImpl) UploadMissionWithProgress(ctx context.Context, missionPlan *MissionPlan) (<-chan *ProgressData, error) {
 	ch := make(chan *ProgressData)
 	request := &SubscribeUploadMissionWithProgressRequest{}
 	request.MissionPlan = missionPlan
 
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeUploadMissionWithProgress(ctx, request)
 	if err != nil {
 		return nil, err
@@ -82,10 +80,9 @@ func (a *ServiceImpl) UploadMissionWithProgress(missionPlan *MissionPlan) (<-cha
 
 */
 
-func (s *ServiceImpl) CancelMissionUpload() (*CancelMissionUploadResponse, error) {
+func (s *ServiceImpl) CancelMissionUpload(ctx context.Context) (*CancelMissionUploadResponse, error) {
 
 	request := &CancelMissionUploadRequest{}
-	ctx := context.Background()
 	response, err := s.Client.CancelMissionUpload(ctx, request)
 	if err != nil {
 		return nil, err
@@ -110,9 +107,8 @@ func (s *ServiceImpl) CancelMissionUpload() (*CancelMissionUploadResponse, error
 
 */
 
-func (s *ServiceImpl) DownloadMission() (*DownloadMissionResponse, error) {
+func (s *ServiceImpl) DownloadMission(ctx context.Context) (*DownloadMissionResponse, error) {
 	request := &DownloadMissionRequest{}
-	ctx := context.Background()
 	response, err := s.Client.DownloadMission(ctx, request)
 	if err != nil {
 		return nil, err
@@ -130,10 +126,9 @@ func (s *ServiceImpl) DownloadMission() (*DownloadMissionResponse, error) {
 
 */
 
-func (a *ServiceImpl) DownloadMissionWithProgress() (<-chan *ProgressDataOrMission, error) {
+func (a *ServiceImpl) DownloadMissionWithProgress(ctx context.Context) (<-chan *ProgressDataOrMission, error) {
 	ch := make(chan *ProgressDataOrMission)
 	request := &SubscribeDownloadMissionWithProgressRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeDownloadMissionWithProgress(ctx, request)
 	if err != nil {
 		return nil, err
@@ -162,10 +157,9 @@ func (a *ServiceImpl) DownloadMissionWithProgress() (<-chan *ProgressDataOrMissi
 
 */
 
-func (s *ServiceImpl) CancelMissionDownload() (*CancelMissionDownloadResponse, error) {
+func (s *ServiceImpl) CancelMissionDownload(ctx context.Context) (*CancelMissionDownloadResponse, error) {
 
 	request := &CancelMissionDownloadRequest{}
-	ctx := context.Background()
 	response, err := s.Client.CancelMissionDownload(ctx, request)
 	if err != nil {
 		return nil, err
@@ -181,10 +175,9 @@ func (s *ServiceImpl) CancelMissionDownload() (*CancelMissionDownloadResponse, e
 
 */
 
-func (s *ServiceImpl) StartMission() (*StartMissionResponse, error) {
+func (s *ServiceImpl) StartMission(ctx context.Context) (*StartMissionResponse, error) {
 
 	request := &StartMissionRequest{}
-	ctx := context.Background()
 	response, err := s.Client.StartMission(ctx, request)
 	if err != nil {
 		return nil, err
@@ -203,10 +196,9 @@ func (s *ServiceImpl) StartMission() (*StartMissionResponse, error) {
 
 */
 
-func (s *ServiceImpl) PauseMission() (*PauseMissionResponse, error) {
+func (s *ServiceImpl) PauseMission(ctx context.Context) (*PauseMissionResponse, error) {
 
 	request := &PauseMissionRequest{}
-	ctx := context.Background()
 	response, err := s.Client.PauseMission(ctx, request)
 	if err != nil {
 		return nil, err
@@ -220,10 +212,9 @@ func (s *ServiceImpl) PauseMission() (*PauseMissionResponse, error) {
 
 */
 
-func (s *ServiceImpl) ClearMission() (*ClearMissionResponse, error) {
+func (s *ServiceImpl) ClearMission(ctx context.Context) (*ClearMissionResponse, error) {
 
 	request := &ClearMissionRequest{}
-	ctx := context.Background()
 	response, err := s.Client.ClearMission(ctx, request)
 	if err != nil {
 		return nil, err
@@ -247,10 +238,9 @@ func (s *ServiceImpl) ClearMission() (*ClearMissionResponse, error) {
 
 */
 
-func (s *ServiceImpl) SetCurrentMissionItem(index int32) (*SetCurrentMissionItemResponse, error) {
+func (s *ServiceImpl) SetCurrentMissionItem(ctx context.Context, index int32) (*SetCurrentMissionItemResponse, error) {
 
 	request := &SetCurrentMissionItemRequest{}
-	ctx := context.Background()
 	request.Index = index
 	response, err := s.Client.SetCurrentMissionItem(ctx, request)
 	if err != nil {
@@ -273,9 +263,8 @@ func (s *ServiceImpl) SetCurrentMissionItem(index int32) (*SetCurrentMissionItem
 
 */
 
-func (s *ServiceImpl) IsMissionFinished() (*IsMissionFinishedResponse, error) {
+func (s *ServiceImpl) IsMissionFinished(ctx context.Context) (*IsMissionFinishedResponse, error) {
 	request := &IsMissionFinishedRequest{}
-	ctx := context.Background()
 	response, err := s.Client.IsMissionFinished(ctx, request)
 	if err != nil {
 		return nil, err
@@ -290,10 +279,9 @@ func (s *ServiceImpl) IsMissionFinished() (*IsMissionFinishedResponse, error) {
 
 */
 
-func (a *ServiceImpl) MissionProgress() (<-chan *MissionProgress, error) {
+func (a *ServiceImpl) MissionProgress(ctx context.Context) (<-chan *MissionProgress, error) {
 	ch := make(chan *MissionProgress)
 	request := &SubscribeMissionProgressRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeMissionProgress(ctx, request)
 	if err != nil {
 		return nil, err
@@ -333,9 +321,8 @@ func (a *ServiceImpl) MissionProgress() (<-chan *MissionProgress, error) {
 
 */
 
-func (s *ServiceImpl) GetReturnToLaunchAfterMission() (*GetReturnToLaunchAfterMissionResponse, error) {
+func (s *ServiceImpl) GetReturnToLaunchAfterMission(ctx context.Context) (*GetReturnToLaunchAfterMissionResponse, error) {
 	request := &GetReturnToLaunchAfterMissionRequest{}
-	ctx := context.Background()
 	response, err := s.Client.GetReturnToLaunchAfterMission(ctx, request)
 	if err != nil {
 		return nil, err
@@ -357,10 +344,9 @@ func (s *ServiceImpl) GetReturnToLaunchAfterMission() (*GetReturnToLaunchAfterMi
 
 */
 
-func (s *ServiceImpl) SetReturnToLaunchAfterMission(enable bool) (*SetReturnToLaunchAfterMissionResponse, error) {
+func (s *ServiceImpl) SetReturnToLaunchAfterMission(ctx context.Context, enable bool) (*SetReturnToLaunchAfterMissionResponse, error) {
 
 	request := &SetReturnToLaunchAfterMissionRequest{}
-	ctx := context.Background()
 	request.Enable = enable
 	response, err := s.Client.SetReturnToLaunchAfterMission(ctx, request)
 	if err != nil {

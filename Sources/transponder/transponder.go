@@ -16,10 +16,9 @@ type ServiceImpl struct {
 
 */
 
-func (a *ServiceImpl) Transponder() (<-chan *AdsbVehicle, error) {
+func (a *ServiceImpl) Transponder(ctx context.Context) (<-chan *AdsbVehicle, error) {
 	ch := make(chan *AdsbVehicle)
 	request := &SubscribeTransponderRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeTransponder(ctx, request)
 	if err != nil {
 		return nil, err
@@ -52,10 +51,9 @@ func (a *ServiceImpl) Transponder() (<-chan *AdsbVehicle, error) {
 
 */
 
-func (s *ServiceImpl) SetRateTransponder(rateHz float64) (*SetRateTransponderResponse, error) {
+func (s *ServiceImpl) SetRateTransponder(ctx context.Context, rateHz float64) (*SetRateTransponderResponse, error) {
 
 	request := &SetRateTransponderRequest{}
-	ctx := context.Background()
 	request.RateHz = rateHz
 	response, err := s.Client.SetRateTransponder(ctx, request)
 	if err != nil {

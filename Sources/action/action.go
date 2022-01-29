@@ -17,10 +17,9 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) Arm() (*ArmResponse, error) {
+func (s *ServiceImpl) Arm(ctx context.Context) (*ArmResponse, error) {
 
 	request := &ArmRequest{}
-	ctx := context.Background()
 	response, err := s.Client.Arm(ctx, request)
 	if err != nil {
 		return nil, err
@@ -37,10 +36,9 @@ func (s *ServiceImpl) Arm() (*ArmResponse, error) {
 
 */
 
-func (s *ServiceImpl) Disarm() (*DisarmResponse, error) {
+func (s *ServiceImpl) Disarm(ctx context.Context) (*DisarmResponse, error) {
 
 	request := &DisarmRequest{}
-	ctx := context.Background()
 	response, err := s.Client.Disarm(ctx, request)
 	if err != nil {
 		return nil, err
@@ -59,10 +57,9 @@ func (s *ServiceImpl) Disarm() (*DisarmResponse, error) {
 
 */
 
-func (s *ServiceImpl) Takeoff() (*TakeoffResponse, error) {
+func (s *ServiceImpl) Takeoff(ctx context.Context) (*TakeoffResponse, error) {
 
 	request := &TakeoffRequest{}
-	ctx := context.Background()
 	response, err := s.Client.Takeoff(ctx, request)
 	if err != nil {
 		return nil, err
@@ -78,10 +75,9 @@ func (s *ServiceImpl) Takeoff() (*TakeoffResponse, error) {
 
 */
 
-func (s *ServiceImpl) Land() (*LandResponse, error) {
+func (s *ServiceImpl) Land(ctx context.Context) (*LandResponse, error) {
 
 	request := &LandRequest{}
-	ctx := context.Background()
 	response, err := s.Client.Land(ctx, request)
 	if err != nil {
 		return nil, err
@@ -97,10 +93,9 @@ func (s *ServiceImpl) Land() (*LandResponse, error) {
 
 */
 
-func (s *ServiceImpl) Reboot() (*RebootResponse, error) {
+func (s *ServiceImpl) Reboot(ctx context.Context) (*RebootResponse, error) {
 
 	request := &RebootRequest{}
-	ctx := context.Background()
 	response, err := s.Client.Reboot(ctx, request)
 	if err != nil {
 		return nil, err
@@ -118,10 +113,9 @@ func (s *ServiceImpl) Reboot() (*RebootResponse, error) {
 
 */
 
-func (s *ServiceImpl) Shutdown() (*ShutdownResponse, error) {
+func (s *ServiceImpl) Shutdown(ctx context.Context) (*ShutdownResponse, error) {
 
 	request := &ShutdownRequest{}
-	ctx := context.Background()
 	response, err := s.Client.Shutdown(ctx, request)
 	if err != nil {
 		return nil, err
@@ -137,10 +131,9 @@ func (s *ServiceImpl) Shutdown() (*ShutdownResponse, error) {
 
 */
 
-func (s *ServiceImpl) Terminate() (*TerminateResponse, error) {
+func (s *ServiceImpl) Terminate(ctx context.Context) (*TerminateResponse, error) {
 
 	request := &TerminateRequest{}
-	ctx := context.Background()
 	response, err := s.Client.Terminate(ctx, request)
 	if err != nil {
 		return nil, err
@@ -157,10 +150,9 @@ func (s *ServiceImpl) Terminate() (*TerminateResponse, error) {
 
 */
 
-func (s *ServiceImpl) Kill() (*KillResponse, error) {
+func (s *ServiceImpl) Kill(ctx context.Context) (*KillResponse, error) {
 
 	request := &KillRequest{}
-	ctx := context.Background()
 	response, err := s.Client.Kill(ctx, request)
 	if err != nil {
 		return nil, err
@@ -178,10 +170,9 @@ func (s *ServiceImpl) Kill() (*KillResponse, error) {
 
 */
 
-func (s *ServiceImpl) ReturnToLaunch() (*ReturnToLaunchResponse, error) {
+func (s *ServiceImpl) ReturnToLaunch(ctx context.Context) (*ReturnToLaunchResponse, error) {
 
 	request := &ReturnToLaunchRequest{}
-	ctx := context.Background()
 	response, err := s.Client.ReturnToLaunch(ctx, request)
 	if err != nil {
 		return nil, err
@@ -210,10 +201,9 @@ func (s *ServiceImpl) ReturnToLaunch() (*ReturnToLaunchResponse, error) {
 
 */
 
-func (s *ServiceImpl) GotoLocation(latitudeDeg float64, longitudeDeg float64, absoluteAltitudeM float32, yawDeg float32) (*GotoLocationResponse, error) {
+func (s *ServiceImpl) GotoLocation(ctx context.Context, latitudeDeg float64, longitudeDeg float64, absoluteAltitudeM float32, yawDeg float32) (*GotoLocationResponse, error) {
 
 	request := &GotoLocationRequest{}
-	ctx := context.Background()
 	request.LatitudeDeg = latitudeDeg
 	request.LongitudeDeg = longitudeDeg
 	request.AbsoluteAltitudeM = absoluteAltitudeM
@@ -248,10 +238,9 @@ func (s *ServiceImpl) GotoLocation(latitudeDeg float64, longitudeDeg float64, ab
 
 */
 
-func (s *ServiceImpl) DoOrbit(radiusM float32, velocityMs float32, yawBehavior *OrbitYawBehavior, latitudeDeg float64, longitudeDeg float64, absoluteAltitudeM float64) (*DoOrbitResponse, error) {
+func (s *ServiceImpl) DoOrbit(ctx context.Context, radiusM float32, velocityMs float32, yawBehavior *OrbitYawBehavior, latitudeDeg float64, longitudeDeg float64, absoluteAltitudeM float64) (*DoOrbitResponse, error) {
 
 	request := &DoOrbitRequest{}
-	ctx := context.Background()
 	request.RadiusM = radiusM
 	request.VelocityMs = velocityMs
 	request.YawBehavior = *yawBehavior
@@ -277,10 +266,9 @@ func (s *ServiceImpl) DoOrbit(radiusM float32, velocityMs float32, yawBehavior *
 
 */
 
-func (s *ServiceImpl) Hold() (*HoldResponse, error) {
+func (s *ServiceImpl) Hold(ctx context.Context) (*HoldResponse, error) {
 
 	request := &HoldRequest{}
-	ctx := context.Background()
 	response, err := s.Client.Hold(ctx, request)
 	if err != nil {
 		return nil, err
@@ -300,10 +288,9 @@ func (s *ServiceImpl) Hold() (*HoldResponse, error) {
 
 */
 
-func (s *ServiceImpl) SetActuator(index int32, value float32) (*SetActuatorResponse, error) {
+func (s *ServiceImpl) SetActuator(ctx context.Context, index int32, value float32) (*SetActuatorResponse, error) {
 
 	request := &SetActuatorRequest{}
-	ctx := context.Background()
 	request.Index = index
 	request.Value = value
 	response, err := s.Client.SetActuator(ctx, request)
@@ -323,10 +310,9 @@ func (s *ServiceImpl) SetActuator(index int32, value float32) (*SetActuatorRespo
 
 */
 
-func (s *ServiceImpl) TransitionToFixedwing() (*TransitionToFixedwingResponse, error) {
+func (s *ServiceImpl) TransitionToFixedwing(ctx context.Context) (*TransitionToFixedwingResponse, error) {
 
 	request := &TransitionToFixedwingRequest{}
-	ctx := context.Background()
 	response, err := s.Client.TransitionToFixedwing(ctx, request)
 	if err != nil {
 		return nil, err
@@ -344,10 +330,9 @@ func (s *ServiceImpl) TransitionToFixedwing() (*TransitionToFixedwingResponse, e
 
 */
 
-func (s *ServiceImpl) TransitionToMulticopter() (*TransitionToMulticopterResponse, error) {
+func (s *ServiceImpl) TransitionToMulticopter(ctx context.Context) (*TransitionToMulticopterResponse, error) {
 
 	request := &TransitionToMulticopterRequest{}
-	ctx := context.Background()
 	response, err := s.Client.TransitionToMulticopter(ctx, request)
 	if err != nil {
 		return nil, err
@@ -369,9 +354,8 @@ func (s *ServiceImpl) TransitionToMulticopter() (*TransitionToMulticopterRespons
 
 */
 
-func (s *ServiceImpl) GetTakeoffAltitude() (*GetTakeoffAltitudeResponse, error) {
+func (s *ServiceImpl) GetTakeoffAltitude(ctx context.Context) (*GetTakeoffAltitudeResponse, error) {
 	request := &GetTakeoffAltitudeRequest{}
-	ctx := context.Background()
 	response, err := s.Client.GetTakeoffAltitude(ctx, request)
 	if err != nil {
 		return nil, err
@@ -390,10 +374,9 @@ func (s *ServiceImpl) GetTakeoffAltitude() (*GetTakeoffAltitudeResponse, error) 
 
 */
 
-func (s *ServiceImpl) SetTakeoffAltitude(altitude float32) (*SetTakeoffAltitudeResponse, error) {
+func (s *ServiceImpl) SetTakeoffAltitude(ctx context.Context, altitude float32) (*SetTakeoffAltitudeResponse, error) {
 
 	request := &SetTakeoffAltitudeRequest{}
-	ctx := context.Background()
 	request.Altitude = altitude
 	response, err := s.Client.SetTakeoffAltitude(ctx, request)
 	if err != nil {
@@ -416,9 +399,8 @@ func (s *ServiceImpl) SetTakeoffAltitude(altitude float32) (*SetTakeoffAltitudeR
 
 */
 
-func (s *ServiceImpl) GetMaximumSpeed() (*GetMaximumSpeedResponse, error) {
+func (s *ServiceImpl) GetMaximumSpeed(ctx context.Context) (*GetMaximumSpeedResponse, error) {
 	request := &GetMaximumSpeedRequest{}
-	ctx := context.Background()
 	response, err := s.Client.GetMaximumSpeed(ctx, request)
 	if err != nil {
 		return nil, err
@@ -437,10 +419,9 @@ func (s *ServiceImpl) GetMaximumSpeed() (*GetMaximumSpeedResponse, error) {
 
 */
 
-func (s *ServiceImpl) SetMaximumSpeed(speed float32) (*SetMaximumSpeedResponse, error) {
+func (s *ServiceImpl) SetMaximumSpeed(ctx context.Context, speed float32) (*SetMaximumSpeedResponse, error) {
 
 	request := &SetMaximumSpeedRequest{}
-	ctx := context.Background()
 	request.Speed = speed
 	response, err := s.Client.SetMaximumSpeed(ctx, request)
 	if err != nil {
@@ -463,9 +444,8 @@ func (s *ServiceImpl) SetMaximumSpeed(speed float32) (*SetMaximumSpeedResponse, 
 
 */
 
-func (s *ServiceImpl) GetReturnToLaunchAltitude() (*GetReturnToLaunchAltitudeResponse, error) {
+func (s *ServiceImpl) GetReturnToLaunchAltitude(ctx context.Context) (*GetReturnToLaunchAltitudeResponse, error) {
 	request := &GetReturnToLaunchAltitudeRequest{}
-	ctx := context.Background()
 	response, err := s.Client.GetReturnToLaunchAltitude(ctx, request)
 	if err != nil {
 		return nil, err
@@ -484,10 +464,9 @@ func (s *ServiceImpl) GetReturnToLaunchAltitude() (*GetReturnToLaunchAltitudeRes
 
 */
 
-func (s *ServiceImpl) SetReturnToLaunchAltitude(relativeAltitudeM float32) (*SetReturnToLaunchAltitudeResponse, error) {
+func (s *ServiceImpl) SetReturnToLaunchAltitude(ctx context.Context, relativeAltitudeM float32) (*SetReturnToLaunchAltitudeResponse, error) {
 
 	request := &SetReturnToLaunchAltitudeRequest{}
-	ctx := context.Background()
 	request.RelativeAltitudeM = relativeAltitudeM
 	response, err := s.Client.SetReturnToLaunchAltitude(ctx, request)
 	if err != nil {

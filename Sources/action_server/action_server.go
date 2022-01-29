@@ -16,10 +16,9 @@ type ServiceImpl struct {
 
 */
 
-func (a *ServiceImpl) ArmDisarm() (<-chan *ArmDisarm, error) {
+func (a *ServiceImpl) ArmDisarm(ctx context.Context) (<-chan *ArmDisarm, error) {
 	ch := make(chan *ArmDisarm)
 	request := &SubscribeArmDisarmRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeArmDisarm(ctx, request)
 	if err != nil {
 		return nil, err
@@ -48,10 +47,9 @@ func (a *ServiceImpl) ArmDisarm() (<-chan *ArmDisarm, error) {
 
 */
 
-func (a *ServiceImpl) FlightModeChange() (<-chan FlightMode, error) {
+func (a *ServiceImpl) FlightModeChange(ctx context.Context) (<-chan FlightMode, error) {
 	ch := make(chan FlightMode)
 	request := &SubscribeFlightModeChangeRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeFlightModeChange(ctx, request)
 	if err != nil {
 		return nil, err
@@ -80,10 +78,9 @@ func (a *ServiceImpl) FlightModeChange() (<-chan FlightMode, error) {
 
 */
 
-func (a *ServiceImpl) Takeoff() (<-chan bool, error) {
+func (a *ServiceImpl) Takeoff(ctx context.Context) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeTakeoffRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeTakeoff(ctx, request)
 	if err != nil {
 		return nil, err
@@ -112,10 +109,9 @@ func (a *ServiceImpl) Takeoff() (<-chan bool, error) {
 
 */
 
-func (a *ServiceImpl) Land() (<-chan bool, error) {
+func (a *ServiceImpl) Land(ctx context.Context) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeLandRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeLand(ctx, request)
 	if err != nil {
 		return nil, err
@@ -144,10 +140,9 @@ func (a *ServiceImpl) Land() (<-chan bool, error) {
 
 */
 
-func (a *ServiceImpl) Reboot() (<-chan bool, error) {
+func (a *ServiceImpl) Reboot(ctx context.Context) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeRebootRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeReboot(ctx, request)
 	if err != nil {
 		return nil, err
@@ -176,10 +171,9 @@ func (a *ServiceImpl) Reboot() (<-chan bool, error) {
 
 */
 
-func (a *ServiceImpl) Shutdown() (<-chan bool, error) {
+func (a *ServiceImpl) Shutdown(ctx context.Context) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeShutdownRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeShutdown(ctx, request)
 	if err != nil {
 		return nil, err
@@ -208,10 +202,9 @@ func (a *ServiceImpl) Shutdown() (<-chan bool, error) {
 
 */
 
-func (a *ServiceImpl) Terminate() (<-chan bool, error) {
+func (a *ServiceImpl) Terminate(ctx context.Context) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeTerminateRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeTerminate(ctx, request)
 	if err != nil {
 		return nil, err
@@ -244,10 +237,9 @@ func (a *ServiceImpl) Terminate() (<-chan bool, error) {
 
 */
 
-func (s *ServiceImpl) SetAllowTakeoff(allowTakeoff bool) (*SetAllowTakeoffResponse, error) {
+func (s *ServiceImpl) SetAllowTakeoff(ctx context.Context, allowTakeoff bool) (*SetAllowTakeoffResponse, error) {
 
 	request := &SetAllowTakeoffRequest{}
-	ctx := context.Background()
 	request.AllowTakeoff = allowTakeoff
 	response, err := s.Client.SetAllowTakeoff(ctx, request)
 	if err != nil {
@@ -268,10 +260,9 @@ func (s *ServiceImpl) SetAllowTakeoff(allowTakeoff bool) (*SetAllowTakeoffRespon
 
 */
 
-func (s *ServiceImpl) SetArmable(armable bool, forceArmable bool) (*SetArmableResponse, error) {
+func (s *ServiceImpl) SetArmable(ctx context.Context, armable bool, forceArmable bool) (*SetArmableResponse, error) {
 
 	request := &SetArmableRequest{}
-	ctx := context.Background()
 	request.Armable = armable
 	request.ForceArmable = forceArmable
 	response, err := s.Client.SetArmable(ctx, request)
@@ -293,10 +284,9 @@ func (s *ServiceImpl) SetArmable(armable bool, forceArmable bool) (*SetArmableRe
 
 */
 
-func (s *ServiceImpl) SetDisarmable(disarmable bool, forceDisarmable bool) (*SetDisarmableResponse, error) {
+func (s *ServiceImpl) SetDisarmable(ctx context.Context, disarmable bool, forceDisarmable bool) (*SetDisarmableResponse, error) {
 
 	request := &SetDisarmableRequest{}
-	ctx := context.Background()
 	request.Disarmable = disarmable
 	request.ForceDisarmable = forceDisarmable
 	response, err := s.Client.SetDisarmable(ctx, request)
@@ -317,10 +307,9 @@ func (s *ServiceImpl) SetDisarmable(disarmable bool, forceDisarmable bool) (*Set
 
 */
 
-func (s *ServiceImpl) SetAllowableFlightModes(flightModes *AllowableFlightModes) (*SetAllowableFlightModesResponse, error) {
+func (s *ServiceImpl) SetAllowableFlightModes(ctx context.Context, flightModes *AllowableFlightModes) (*SetAllowableFlightModesResponse, error) {
 
 	request := &SetAllowableFlightModesRequest{}
-	ctx := context.Background()
 	request.FlightModes = flightModes
 
 	response, err := s.Client.SetAllowableFlightModes(ctx, request)
@@ -343,9 +332,8 @@ func (s *ServiceImpl) SetAllowableFlightModes(flightModes *AllowableFlightModes)
 
 */
 
-func (s *ServiceImpl) GetAllowableFlightModes() (*GetAllowableFlightModesResponse, error) {
+func (s *ServiceImpl) GetAllowableFlightModes(ctx context.Context) (*GetAllowableFlightModesResponse, error) {
 	request := &GetAllowableFlightModesRequest{}
-	ctx := context.Background()
 	response, err := s.Client.GetAllowableFlightModes(ctx, request)
 	if err != nil {
 		return nil, err

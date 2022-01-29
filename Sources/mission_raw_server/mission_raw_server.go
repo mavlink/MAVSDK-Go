@@ -16,10 +16,9 @@ type ServiceImpl struct {
 
 */
 
-func (a *ServiceImpl) IncomingMission() (<-chan *MissionPlan, error) {
+func (a *ServiceImpl) IncomingMission(ctx context.Context) (<-chan *MissionPlan, error) {
 	ch := make(chan *MissionPlan)
 	request := &SubscribeIncomingMissionRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeIncomingMission(ctx, request)
 	if err != nil {
 		return nil, err
@@ -48,10 +47,9 @@ func (a *ServiceImpl) IncomingMission() (<-chan *MissionPlan, error) {
 
 */
 
-func (a *ServiceImpl) CurrentItemChanged() (<-chan *MissionItem, error) {
+func (a *ServiceImpl) CurrentItemChanged(ctx context.Context) (<-chan *MissionItem, error) {
 	ch := make(chan *MissionItem)
 	request := &SubscribeCurrentItemChangedRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeCurrentItemChanged(ctx, request)
 	if err != nil {
 		return nil, err
@@ -80,10 +78,9 @@ func (a *ServiceImpl) CurrentItemChanged() (<-chan *MissionItem, error) {
 
 */
 
-func (s *ServiceImpl) SetCurrentItemComplete() (*SetCurrentItemCompleteResponse, error) {
+func (s *ServiceImpl) SetCurrentItemComplete(ctx context.Context) (*SetCurrentItemCompleteResponse, error) {
 
 	request := &SetCurrentItemCompleteRequest{}
-	ctx := context.Background()
 	response, err := s.Client.SetCurrentItemComplete(ctx, request)
 	if err != nil {
 		return nil, err
@@ -97,10 +94,9 @@ func (s *ServiceImpl) SetCurrentItemComplete() (*SetCurrentItemCompleteResponse,
 
 */
 
-func (a *ServiceImpl) ClearAll() (<-chan uint32, error) {
+func (a *ServiceImpl) ClearAll(ctx context.Context) (<-chan uint32, error) {
 	ch := make(chan uint32)
 	request := &SubscribeClearAllRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeClearAll(ctx, request)
 	if err != nil {
 		return nil, err

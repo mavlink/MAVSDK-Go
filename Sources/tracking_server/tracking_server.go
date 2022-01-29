@@ -21,10 +21,9 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) SetTrackingPointStatus(trackedPoint *TrackPoint) (*SetTrackingPointStatusResponse, error) {
+func (s *ServiceImpl) SetTrackingPointStatus(ctx context.Context, trackedPoint *TrackPoint) (*SetTrackingPointStatusResponse, error) {
 
 	request := &SetTrackingPointStatusRequest{}
-	ctx := context.Background()
 	request.TrackedPoint = trackedPoint
 
 	response, err := s.Client.SetTrackingPointStatus(ctx, request)
@@ -45,10 +44,9 @@ func (s *ServiceImpl) SetTrackingPointStatus(trackedPoint *TrackPoint) (*SetTrac
 
 */
 
-func (s *ServiceImpl) SetTrackingRectangleStatus(trackedRectangle *TrackRectangle) (*SetTrackingRectangleStatusResponse, error) {
+func (s *ServiceImpl) SetTrackingRectangleStatus(ctx context.Context, trackedRectangle *TrackRectangle) (*SetTrackingRectangleStatusResponse, error) {
 
 	request := &SetTrackingRectangleStatusRequest{}
-	ctx := context.Background()
 	request.TrackedRectangle = trackedRectangle
 
 	response, err := s.Client.SetTrackingRectangleStatus(ctx, request)
@@ -64,10 +62,9 @@ func (s *ServiceImpl) SetTrackingRectangleStatus(trackedRectangle *TrackRectangl
 
 */
 
-func (s *ServiceImpl) SetTrackingOffStatus() (*SetTrackingOffStatusResponse, error) {
+func (s *ServiceImpl) SetTrackingOffStatus(ctx context.Context) (*SetTrackingOffStatusResponse, error) {
 
 	request := &SetTrackingOffStatusRequest{}
-	ctx := context.Background()
 	response, err := s.Client.SetTrackingOffStatus(ctx, request)
 	if err != nil {
 		return nil, err
@@ -81,10 +78,9 @@ func (s *ServiceImpl) SetTrackingOffStatus() (*SetTrackingOffStatusResponse, err
 
 */
 
-func (a *ServiceImpl) TrackingPointCommand() (<-chan *TrackPoint, error) {
+func (a *ServiceImpl) TrackingPointCommand(ctx context.Context) (<-chan *TrackPoint, error) {
 	ch := make(chan *TrackPoint)
 	request := &SubscribeTrackingPointCommandRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeTrackingPointCommand(ctx, request)
 	if err != nil {
 		return nil, err
@@ -113,10 +109,9 @@ func (a *ServiceImpl) TrackingPointCommand() (<-chan *TrackPoint, error) {
 
 */
 
-func (a *ServiceImpl) TrackingRectangleCommand() (<-chan *TrackRectangle, error) {
+func (a *ServiceImpl) TrackingRectangleCommand(ctx context.Context) (<-chan *TrackRectangle, error) {
 	ch := make(chan *TrackRectangle)
 	request := &SubscribeTrackingRectangleCommandRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeTrackingRectangleCommand(ctx, request)
 	if err != nil {
 		return nil, err
@@ -145,10 +140,9 @@ func (a *ServiceImpl) TrackingRectangleCommand() (<-chan *TrackRectangle, error)
 
 */
 
-func (a *ServiceImpl) TrackingOffCommand() (<-chan int32, error) {
+func (a *ServiceImpl) TrackingOffCommand(ctx context.Context) (<-chan int32, error) {
 	ch := make(chan int32)
 	request := &SubscribeTrackingOffCommandRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeTrackingOffCommand(ctx, request)
 	if err != nil {
 		return nil, err
@@ -182,10 +176,9 @@ func (a *ServiceImpl) TrackingOffCommand() (<-chan int32, error) {
 
 */
 
-func (s *ServiceImpl) RespondTrackingPointCommand(commandAnswer *CommandAnswer) (*RespondTrackingPointCommandResponse, error) {
+func (s *ServiceImpl) RespondTrackingPointCommand(ctx context.Context, commandAnswer *CommandAnswer) (*RespondTrackingPointCommandResponse, error) {
 
 	request := &RespondTrackingPointCommandRequest{}
-	ctx := context.Background()
 	request.CommandAnswer = *commandAnswer
 	response, err := s.Client.RespondTrackingPointCommand(ctx, request)
 	if err != nil {
@@ -205,10 +198,9 @@ func (s *ServiceImpl) RespondTrackingPointCommand(commandAnswer *CommandAnswer) 
 
 */
 
-func (s *ServiceImpl) RespondTrackingRectangleCommand(commandAnswer *CommandAnswer) (*RespondTrackingRectangleCommandResponse, error) {
+func (s *ServiceImpl) RespondTrackingRectangleCommand(ctx context.Context, commandAnswer *CommandAnswer) (*RespondTrackingRectangleCommandResponse, error) {
 
 	request := &RespondTrackingRectangleCommandRequest{}
-	ctx := context.Background()
 	request.CommandAnswer = *commandAnswer
 	response, err := s.Client.RespondTrackingRectangleCommand(ctx, request)
 	if err != nil {
@@ -228,10 +220,9 @@ func (s *ServiceImpl) RespondTrackingRectangleCommand(commandAnswer *CommandAnsw
 
 */
 
-func (s *ServiceImpl) RespondTrackingOffCommand(commandAnswer *CommandAnswer) (*RespondTrackingOffCommandResponse, error) {
+func (s *ServiceImpl) RespondTrackingOffCommand(ctx context.Context, commandAnswer *CommandAnswer) (*RespondTrackingOffCommandResponse, error) {
 
 	request := &RespondTrackingOffCommandRequest{}
-	ctx := context.Background()
 	request.CommandAnswer = *commandAnswer
 	response, err := s.Client.RespondTrackingOffCommand(ctx, request)
 	if err != nil {

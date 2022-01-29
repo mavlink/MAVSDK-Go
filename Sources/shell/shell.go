@@ -20,10 +20,9 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) Send(command string) (*SendResponse, error) {
+func (s *ServiceImpl) Send(ctx context.Context, command string) (*SendResponse, error) {
 
 	request := &SendRequest{}
-	ctx := context.Background()
 	request.Command = command
 	response, err := s.Client.Send(ctx, request)
 	if err != nil {
@@ -40,10 +39,9 @@ func (s *ServiceImpl) Send(command string) (*SendResponse, error) {
 
 */
 
-func (a *ServiceImpl) Receive() (<-chan string, error) {
+func (a *ServiceImpl) Receive(ctx context.Context) (<-chan string, error) {
 	ch := make(chan string)
 	request := &SubscribeReceiveRequest{}
-	ctx := context.Background()
 	stream, err := a.Client.SubscribeReceive(ctx, request)
 	if err != nil {
 		return nil, err

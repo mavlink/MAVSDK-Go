@@ -25,10 +25,9 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) PublishPosition(position *Position, velocityNed *VelocityNed, heading *Heading) (*PublishPositionResponse, error) {
+func (s *ServiceImpl) PublishPosition(ctx context.Context, position *Position, velocityNed *VelocityNed, heading *Heading) (*PublishPositionResponse, error) {
 
 	request := &PublishPositionRequest{}
-	ctx := context.Background()
 	request.Position = position
 
 	request.VelocityNed = velocityNed
@@ -53,10 +52,9 @@ func (s *ServiceImpl) PublishPosition(position *Position, velocityNed *VelocityN
 
 */
 
-func (s *ServiceImpl) PublishHome(home *Position) (*PublishHomeResponse, error) {
+func (s *ServiceImpl) PublishHome(ctx context.Context, home *Position) (*PublishHomeResponse, error) {
 
 	request := &PublishHomeRequest{}
-	ctx := context.Background()
 	request.Home = home
 
 	response, err := s.Client.PublishHome(ctx, request)
@@ -87,10 +85,9 @@ func (s *ServiceImpl) PublishHome(home *Position) (*PublishHomeResponse, error) 
 
 */
 
-func (s *ServiceImpl) PublishSysStatus(battery *Battery, rcReceiverStatus bool, gyroStatus bool, accelStatus bool, magStatus bool, gpsStatus bool) (*PublishSysStatusResponse, error) {
+func (s *ServiceImpl) PublishSysStatus(ctx context.Context, battery *Battery, rcReceiverStatus bool, gyroStatus bool, accelStatus bool, magStatus bool, gpsStatus bool) (*PublishSysStatusResponse, error) {
 
 	request := &PublishSysStatusRequest{}
-	ctx := context.Background()
 	request.Battery = battery
 
 	request.RcReceiverStatus = rcReceiverStatus
@@ -119,10 +116,9 @@ func (s *ServiceImpl) PublishSysStatus(battery *Battery, rcReceiverStatus bool, 
 
 */
 
-func (s *ServiceImpl) PublishExtendedSysState(vtolState *VtolState, landedState *LandedState) (*PublishExtendedSysStateResponse, error) {
+func (s *ServiceImpl) PublishExtendedSysState(ctx context.Context, vtolState *VtolState, landedState *LandedState) (*PublishExtendedSysStateResponse, error) {
 
 	request := &PublishExtendedSysStateRequest{}
-	ctx := context.Background()
 	request.VtolState = *vtolState
 	request.LandedState = *landedState
 	response, err := s.Client.PublishExtendedSysState(ctx, request)
@@ -146,10 +142,9 @@ func (s *ServiceImpl) PublishExtendedSysState(vtolState *VtolState, landedState 
 
 */
 
-func (s *ServiceImpl) PublishRawGps(rawGps *RawGps, gpsInfo *GpsInfo) (*PublishRawGpsResponse, error) {
+func (s *ServiceImpl) PublishRawGps(ctx context.Context, rawGps *RawGps, gpsInfo *GpsInfo) (*PublishRawGpsResponse, error) {
 
 	request := &PublishRawGpsRequest{}
-	ctx := context.Background()
 	request.RawGps = rawGps
 
 	request.GpsInfo = gpsInfo
@@ -172,10 +167,9 @@ func (s *ServiceImpl) PublishRawGps(rawGps *RawGps, gpsInfo *GpsInfo) (*PublishR
 
 */
 
-func (s *ServiceImpl) PublishBattery(battery *Battery) (*PublishBatteryResponse, error) {
+func (s *ServiceImpl) PublishBattery(ctx context.Context, battery *Battery) (*PublishBatteryResponse, error) {
 
 	request := &PublishBatteryRequest{}
-	ctx := context.Background()
 	request.Battery = battery
 
 	response, err := s.Client.PublishBattery(ctx, request)
@@ -196,10 +190,9 @@ func (s *ServiceImpl) PublishBattery(battery *Battery) (*PublishBatteryResponse,
 
 */
 
-func (s *ServiceImpl) PublishStatusText(statusText *StatusText) (*PublishStatusTextResponse, error) {
+func (s *ServiceImpl) PublishStatusText(ctx context.Context, statusText *StatusText) (*PublishStatusTextResponse, error) {
 
 	request := &PublishStatusTextRequest{}
-	ctx := context.Background()
 	request.StatusText = statusText
 
 	response, err := s.Client.PublishStatusText(ctx, request)
@@ -220,10 +213,9 @@ func (s *ServiceImpl) PublishStatusText(statusText *StatusText) (*PublishStatusT
 
 */
 
-func (s *ServiceImpl) PublishOdometry(odometry *Odometry) (*PublishOdometryResponse, error) {
+func (s *ServiceImpl) PublishOdometry(ctx context.Context, odometry *Odometry) (*PublishOdometryResponse, error) {
 
 	request := &PublishOdometryRequest{}
-	ctx := context.Background()
 	request.Odometry = odometry
 
 	response, err := s.Client.PublishOdometry(ctx, request)
@@ -244,10 +236,9 @@ func (s *ServiceImpl) PublishOdometry(odometry *Odometry) (*PublishOdometryRespo
 
 */
 
-func (s *ServiceImpl) PublishPositionVelocityNed(positionVelocityNed *PositionVelocityNed) (*PublishPositionVelocityNedResponse, error) {
+func (s *ServiceImpl) PublishPositionVelocityNed(ctx context.Context, positionVelocityNed *PositionVelocityNed) (*PublishPositionVelocityNedResponse, error) {
 
 	request := &PublishPositionVelocityNedRequest{}
-	ctx := context.Background()
 	request.PositionVelocityNed = positionVelocityNed
 
 	response, err := s.Client.PublishPositionVelocityNed(ctx, request)
@@ -268,10 +259,9 @@ func (s *ServiceImpl) PublishPositionVelocityNed(positionVelocityNed *PositionVe
 
 */
 
-func (s *ServiceImpl) PublishGroundTruth(groundTruth *GroundTruth) (*PublishGroundTruthResponse, error) {
+func (s *ServiceImpl) PublishGroundTruth(ctx context.Context, groundTruth *GroundTruth) (*PublishGroundTruthResponse, error) {
 
 	request := &PublishGroundTruthRequest{}
-	ctx := context.Background()
 	request.GroundTruth = groundTruth
 
 	response, err := s.Client.PublishGroundTruth(ctx, request)
@@ -292,10 +282,9 @@ func (s *ServiceImpl) PublishGroundTruth(groundTruth *GroundTruth) (*PublishGrou
 
 */
 
-func (s *ServiceImpl) PublishImu(imu *Imu) (*PublishImuResponse, error) {
+func (s *ServiceImpl) PublishImu(ctx context.Context, imu *Imu) (*PublishImuResponse, error) {
 
 	request := &PublishImuRequest{}
-	ctx := context.Background()
 	request.Imu = imu
 
 	response, err := s.Client.PublishImu(ctx, request)
@@ -316,10 +305,9 @@ func (s *ServiceImpl) PublishImu(imu *Imu) (*PublishImuResponse, error) {
 
 */
 
-func (s *ServiceImpl) PublishScaledImu(imu *Imu) (*PublishScaledImuResponse, error) {
+func (s *ServiceImpl) PublishScaledImu(ctx context.Context, imu *Imu) (*PublishScaledImuResponse, error) {
 
 	request := &PublishScaledImuRequest{}
-	ctx := context.Background()
 	request.Imu = imu
 
 	response, err := s.Client.PublishScaledImu(ctx, request)
@@ -340,10 +328,9 @@ func (s *ServiceImpl) PublishScaledImu(imu *Imu) (*PublishScaledImuResponse, err
 
 */
 
-func (s *ServiceImpl) PublishRawImu(imu *Imu) (*PublishRawImuResponse, error) {
+func (s *ServiceImpl) PublishRawImu(ctx context.Context, imu *Imu) (*PublishRawImuResponse, error) {
 
 	request := &PublishRawImuRequest{}
-	ctx := context.Background()
 	request.Imu = imu
 
 	response, err := s.Client.PublishRawImu(ctx, request)
@@ -363,10 +350,9 @@ func (s *ServiceImpl) PublishRawImu(imu *Imu) (*PublishRawImuResponse, error) {
 
 */
 
-func (s *ServiceImpl) PublishUnixEpochTime(timeUs uint64) (*PublishUnixEpochTimeResponse, error) {
+func (s *ServiceImpl) PublishUnixEpochTime(ctx context.Context, timeUs uint64) (*PublishUnixEpochTimeResponse, error) {
 
 	request := &PublishUnixEpochTimeRequest{}
-	ctx := context.Background()
 	request.TimeUs = timeUs
 	response, err := s.Client.PublishUnixEpochTime(ctx, request)
 	if err != nil {

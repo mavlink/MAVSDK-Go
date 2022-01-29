@@ -22,9 +22,8 @@ type ServiceImpl struct {
 
 */
 
-func (s *ServiceImpl) GetConfig() (*GetConfigResponse, error) {
+func (s *ServiceImpl) GetConfig(ctx context.Context) (*GetConfigResponse, error) {
 	request := &GetConfigRequest{}
-	ctx := context.Background()
 	response, err := s.Client.GetConfig(ctx, request)
 	if err != nil {
 		return nil, err
@@ -44,10 +43,9 @@ func (s *ServiceImpl) GetConfig() (*GetConfigResponse, error) {
 
 */
 
-func (s *ServiceImpl) SetConfig(config *Config) (*SetConfigResponse, error) {
+func (s *ServiceImpl) SetConfig(ctx context.Context, config *Config) (*SetConfigResponse, error) {
 
 	request := &SetConfigRequest{}
-	ctx := context.Background()
 	request.Config = config
 
 	response, err := s.Client.SetConfig(ctx, request)
@@ -71,9 +69,8 @@ func (s *ServiceImpl) SetConfig(config *Config) (*SetConfigResponse, error) {
 
 */
 
-func (s *ServiceImpl) IsActive() (*IsActiveResponse, error) {
+func (s *ServiceImpl) IsActive(ctx context.Context) (*IsActiveResponse, error) {
 	request := &IsActiveRequest{}
-	ctx := context.Background()
 	response, err := s.Client.IsActive(ctx, request)
 	if err != nil {
 		return nil, err
@@ -93,10 +90,9 @@ func (s *ServiceImpl) IsActive() (*IsActiveResponse, error) {
 
 */
 
-func (s *ServiceImpl) SetTargetLocation(location *TargetLocation) (*SetTargetLocationResponse, error) {
+func (s *ServiceImpl) SetTargetLocation(ctx context.Context, location *TargetLocation) (*SetTargetLocationResponse, error) {
 
 	request := &SetTargetLocationRequest{}
-	ctx := context.Background()
 	request.Location = location
 
 	response, err := s.Client.SetTargetLocation(ctx, request)
@@ -120,9 +116,8 @@ func (s *ServiceImpl) SetTargetLocation(location *TargetLocation) (*SetTargetLoc
 
 */
 
-func (s *ServiceImpl) GetLastLocation() (*GetLastLocationResponse, error) {
+func (s *ServiceImpl) GetLastLocation(ctx context.Context) (*GetLastLocationResponse, error) {
 	request := &GetLastLocationRequest{}
-	ctx := context.Background()
 	response, err := s.Client.GetLastLocation(ctx, request)
 	if err != nil {
 		return nil, err
@@ -137,10 +132,9 @@ func (s *ServiceImpl) GetLastLocation() (*GetLastLocationResponse, error) {
 
 */
 
-func (s *ServiceImpl) Start() (*StartResponse, error) {
+func (s *ServiceImpl) Start(ctx context.Context) (*StartResponse, error) {
 
 	request := &StartRequest{}
-	ctx := context.Background()
 	response, err := s.Client.Start(ctx, request)
 	if err != nil {
 		return nil, err
@@ -154,10 +148,9 @@ func (s *ServiceImpl) Start() (*StartResponse, error) {
 
 */
 
-func (s *ServiceImpl) Stop() (*StopResponse, error) {
+func (s *ServiceImpl) Stop(ctx context.Context) (*StopResponse, error) {
 
 	request := &StopRequest{}
-	ctx := context.Background()
 	response, err := s.Client.Stop(ctx, request)
 	if err != nil {
 		return nil, err
