@@ -500,3 +500,28 @@ type ServiceImpl struct{
     }
 
        
+    /*
+         Set current speed.
+
+         This will set the speed during a mission, reposition, and similar.
+         It is ephemeral, so not stored on the drone and does not survive a reboot.
+
+         Parameters
+         ----------
+         speedMS float32
+
+         
+    */
+
+    func(s *ServiceImpl)SetCurrentSpeed(ctx context.Context, speedMS float32)(*SetCurrentSpeedResponse, error){
+        
+        request := &SetCurrentSpeedRequest{}
+    	request.SpeedMS = speedMS
+        response, err := s.Client.SetCurrentSpeed(ctx, request)
+        if err != nil {
+    		return nil, err
+        }
+        return response, nil
+    }
+
+       

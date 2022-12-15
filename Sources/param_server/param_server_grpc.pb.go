@@ -38,6 +38,14 @@ type ParamServerServiceClient interface {
 	//
 	// If the type is wrong, the result will be `WRONG_TYPE`.
 	ProvideParamFloat(ctx context.Context, in *ProvideParamFloatRequest, opts ...grpc.CallOption) (*ProvideParamFloatResponse, error)
+	// Retrieve a custom parameter.
+	//
+	// If the type is wrong, the result will be `WRONG_TYPE`.
+	RetrieveParamCustom(ctx context.Context, in *RetrieveParamCustomRequest, opts ...grpc.CallOption) (*RetrieveParamCustomResponse, error)
+	// Provide a custom parameter.
+	//
+	// If the type is wrong, the result will be `WRONG_TYPE`.
+	ProvideParamCustom(ctx context.Context, in *ProvideParamCustomRequest, opts ...grpc.CallOption) (*ProvideParamCustomResponse, error)
 	// Retrieve all parameters.
 	RetrieveAllParams(ctx context.Context, in *RetrieveAllParamsRequest, opts ...grpc.CallOption) (*RetrieveAllParamsResponse, error)
 }
@@ -86,6 +94,24 @@ func (c *paramServerServiceClient) ProvideParamFloat(ctx context.Context, in *Pr
 	return out, nil
 }
 
+func (c *paramServerServiceClient) RetrieveParamCustom(ctx context.Context, in *RetrieveParamCustomRequest, opts ...grpc.CallOption) (*RetrieveParamCustomResponse, error) {
+	out := new(RetrieveParamCustomResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.param_server.ParamServerService/RetrieveParamCustom", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paramServerServiceClient) ProvideParamCustom(ctx context.Context, in *ProvideParamCustomRequest, opts ...grpc.CallOption) (*ProvideParamCustomResponse, error) {
+	out := new(ProvideParamCustomResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.param_server.ParamServerService/ProvideParamCustom", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *paramServerServiceClient) RetrieveAllParams(ctx context.Context, in *RetrieveAllParamsRequest, opts ...grpc.CallOption) (*RetrieveAllParamsResponse, error) {
 	out := new(RetrieveAllParamsResponse)
 	err := c.cc.Invoke(ctx, "/mavsdk.rpc.param_server.ParamServerService/RetrieveAllParams", in, out, opts...)
@@ -115,6 +141,14 @@ type ParamServerServiceServer interface {
 	//
 	// If the type is wrong, the result will be `WRONG_TYPE`.
 	ProvideParamFloat(context.Context, *ProvideParamFloatRequest) (*ProvideParamFloatResponse, error)
+	// Retrieve a custom parameter.
+	//
+	// If the type is wrong, the result will be `WRONG_TYPE`.
+	RetrieveParamCustom(context.Context, *RetrieveParamCustomRequest) (*RetrieveParamCustomResponse, error)
+	// Provide a custom parameter.
+	//
+	// If the type is wrong, the result will be `WRONG_TYPE`.
+	ProvideParamCustom(context.Context, *ProvideParamCustomRequest) (*ProvideParamCustomResponse, error)
 	// Retrieve all parameters.
 	RetrieveAllParams(context.Context, *RetrieveAllParamsRequest) (*RetrieveAllParamsResponse, error)
 	mustEmbedUnimplementedParamServerServiceServer()
@@ -135,6 +169,12 @@ func (UnimplementedParamServerServiceServer) RetrieveParamFloat(context.Context,
 }
 func (UnimplementedParamServerServiceServer) ProvideParamFloat(context.Context, *ProvideParamFloatRequest) (*ProvideParamFloatResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ProvideParamFloat not implemented")
+}
+func (UnimplementedParamServerServiceServer) RetrieveParamCustom(context.Context, *RetrieveParamCustomRequest) (*RetrieveParamCustomResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RetrieveParamCustom not implemented")
+}
+func (UnimplementedParamServerServiceServer) ProvideParamCustom(context.Context, *ProvideParamCustomRequest) (*ProvideParamCustomResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ProvideParamCustom not implemented")
 }
 func (UnimplementedParamServerServiceServer) RetrieveAllParams(context.Context, *RetrieveAllParamsRequest) (*RetrieveAllParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RetrieveAllParams not implemented")
@@ -224,6 +264,42 @@ func _ParamServerService_ProvideParamFloat_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ParamServerService_RetrieveParamCustom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RetrieveParamCustomRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ParamServerServiceServer).RetrieveParamCustom(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.param_server.ParamServerService/RetrieveParamCustom",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ParamServerServiceServer).RetrieveParamCustom(ctx, req.(*RetrieveParamCustomRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ParamServerService_ProvideParamCustom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProvideParamCustomRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ParamServerServiceServer).ProvideParamCustom(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.param_server.ParamServerService/ProvideParamCustom",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ParamServerServiceServer).ProvideParamCustom(ctx, req.(*ProvideParamCustomRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ParamServerService_RetrieveAllParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RetrieveAllParamsRequest)
 	if err := dec(in); err != nil {
@@ -264,6 +340,14 @@ var ParamServerService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ProvideParamFloat",
 			Handler:    _ParamServerService_ProvideParamFloat_Handler,
+		},
+		{
+			MethodName: "RetrieveParamCustom",
+			Handler:    _ParamServerService_RetrieveParamCustom_Handler,
+		},
+		{
+			MethodName: "ProvideParamCustom",
+			Handler:    _ParamServerService_ProvideParamCustom_Handler,
 		},
 		{
 			MethodName: "RetrieveAllParams",

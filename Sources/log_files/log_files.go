@@ -71,3 +71,20 @@ type ServiceImpl struct{
     		}()	
     	return ch, nil
     }
+    /*
+         Erase all log files.
+
+         
+    */
+
+    func(s *ServiceImpl)EraseAllLogFiles(ctx context.Context, )(*EraseAllLogFilesResponse, error){
+        
+        request := &EraseAllLogFilesRequest{}
+    	response, err := s.Client.EraseAllLogFiles(ctx, request)
+        if err != nil {
+    		return nil, err
+        }
+        return response, nil
+    }
+
+       

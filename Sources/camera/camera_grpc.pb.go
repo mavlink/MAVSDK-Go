@@ -68,6 +68,10 @@ type CameraServiceClient interface {
 	//
 	// This will delete all content of the camera storage!
 	FormatStorage(ctx context.Context, in *FormatStorageRequest, opts ...grpc.CallOption) (*FormatStorageResponse, error)
+	// Select current camera .
+	//
+	// Bind the plugin instance to a specific camera_id
+	SelectCamera(ctx context.Context, in *SelectCameraRequest, opts ...grpc.CallOption) (*SelectCameraResponse, error)
 }
 
 type cameraServiceClient struct {
@@ -419,6 +423,15 @@ func (c *cameraServiceClient) FormatStorage(ctx context.Context, in *FormatStora
 	return out, nil
 }
 
+func (c *cameraServiceClient) SelectCamera(ctx context.Context, in *SelectCameraRequest, opts ...grpc.CallOption) (*SelectCameraResponse, error) {
+	out := new(SelectCameraResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.camera.CameraService/SelectCamera", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CameraServiceServer is the server API for CameraService service.
 // All implementations must embed UnimplementedCameraServiceServer
 // for forward compatibility
@@ -469,6 +482,10 @@ type CameraServiceServer interface {
 	//
 	// This will delete all content of the camera storage!
 	FormatStorage(context.Context, *FormatStorageRequest) (*FormatStorageResponse, error)
+	// Select current camera .
+	//
+	// Bind the plugin instance to a specific camera_id
+	SelectCamera(context.Context, *SelectCameraRequest) (*SelectCameraResponse, error)
 	mustEmbedUnimplementedCameraServiceServer()
 }
 
@@ -535,6 +552,9 @@ func (UnimplementedCameraServiceServer) GetSetting(context.Context, *GetSettingR
 }
 func (UnimplementedCameraServiceServer) FormatStorage(context.Context, *FormatStorageRequest) (*FormatStorageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FormatStorage not implemented")
+}
+func (UnimplementedCameraServiceServer) SelectCamera(context.Context, *SelectCameraRequest) (*SelectCameraResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SelectCamera not implemented")
 }
 func (UnimplementedCameraServiceServer) mustEmbedUnimplementedCameraServiceServer() {}
 
@@ -930,6 +950,24 @@ func _CameraService_FormatStorage_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CameraService_SelectCamera_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SelectCameraRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CameraServiceServer).SelectCamera(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.camera.CameraService/SelectCamera",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CameraServiceServer).SelectCamera(ctx, req.(*SelectCameraRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CameraService_ServiceDesc is the grpc.ServiceDesc for CameraService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -988,6 +1026,10 @@ var CameraService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FormatStorage",
 			Handler:    _CameraService_FormatStorage_Handler,
+		},
+		{
+			MethodName: "SelectCamera",
+			Handler:    _CameraService_SelectCamera_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

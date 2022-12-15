@@ -126,6 +126,64 @@ type ServiceImpl struct{
 
        
     /*
+         Get a custom parameter.
+
+         If the type is wrong, the result will be `WRONG_TYPE`.
+
+         Parameters
+         ----------
+         name string
+
+         Returns
+         -------
+         False
+         Value : string
+              Value of the requested parameter
+
+         
+    */
+
+
+    func(s *ServiceImpl)GetParamCustom(ctx context.Context, name string) (*GetParamCustomResponse, error){
+        request := &GetParamCustomRequest{}
+    	request.Name = name
+        response, err := s.Client.GetParamCustom(ctx, request)
+        if err != nil {
+    		return nil, err
+    	}
+        return response, nil
+
+    }
+
+       
+    /*
+         Set a custom parameter.
+
+         If the type is wrong, the result will be `WRONG_TYPE`.
+
+         Parameters
+         ----------
+         name string
+
+         value string
+
+         
+    */
+
+    func(s *ServiceImpl)SetParamCustom(ctx context.Context, name string, value string)(*SetParamCustomResponse, error){
+        
+        request := &SetParamCustomRequest{}
+    	request.Name = name
+        request.Value = value
+        response, err := s.Client.SetParamCustom(ctx, request)
+        if err != nil {
+    		return nil, err
+        }
+        return response, nil
+    }
+
+       
+    /*
          Get all parameters.
 
          

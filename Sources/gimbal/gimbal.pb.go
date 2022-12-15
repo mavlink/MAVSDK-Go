@@ -25,7 +25,7 @@ type GimbalMode int32
 
 const (
 	GimbalMode_GIMBAL_MODE_YAW_FOLLOW GimbalMode = 0 // Yaw follow will point the gimbal to the vehicle heading
-	GimbalMode_GIMBAL_MODE_YAW_LOCK   GimbalMode = 1 // Yaw lock will fix the gimbal poiting to an absolute direction
+	GimbalMode_GIMBAL_MODE_YAW_LOCK   GimbalMode = 1 // Yaw lock will fix the gimbal pointing to an absolute direction
 )
 
 // Enum value maps for GimbalMode.

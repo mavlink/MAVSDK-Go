@@ -38,6 +38,14 @@ type ParamServiceClient interface {
 	//
 	// If the type is wrong, the result will be `WRONG_TYPE`.
 	SetParamFloat(ctx context.Context, in *SetParamFloatRequest, opts ...grpc.CallOption) (*SetParamFloatResponse, error)
+	// Get a custom parameter.
+	//
+	// If the type is wrong, the result will be `WRONG_TYPE`.
+	GetParamCustom(ctx context.Context, in *GetParamCustomRequest, opts ...grpc.CallOption) (*GetParamCustomResponse, error)
+	// Set a custom parameter.
+	//
+	// If the type is wrong, the result will be `WRONG_TYPE`.
+	SetParamCustom(ctx context.Context, in *SetParamCustomRequest, opts ...grpc.CallOption) (*SetParamCustomResponse, error)
 	// Get all parameters.
 	GetAllParams(ctx context.Context, in *GetAllParamsRequest, opts ...grpc.CallOption) (*GetAllParamsResponse, error)
 }
@@ -86,6 +94,24 @@ func (c *paramServiceClient) SetParamFloat(ctx context.Context, in *SetParamFloa
 	return out, nil
 }
 
+func (c *paramServiceClient) GetParamCustom(ctx context.Context, in *GetParamCustomRequest, opts ...grpc.CallOption) (*GetParamCustomResponse, error) {
+	out := new(GetParamCustomResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.param.ParamService/GetParamCustom", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paramServiceClient) SetParamCustom(ctx context.Context, in *SetParamCustomRequest, opts ...grpc.CallOption) (*SetParamCustomResponse, error) {
+	out := new(SetParamCustomResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.param.ParamService/SetParamCustom", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *paramServiceClient) GetAllParams(ctx context.Context, in *GetAllParamsRequest, opts ...grpc.CallOption) (*GetAllParamsResponse, error) {
 	out := new(GetAllParamsResponse)
 	err := c.cc.Invoke(ctx, "/mavsdk.rpc.param.ParamService/GetAllParams", in, out, opts...)
@@ -115,6 +141,14 @@ type ParamServiceServer interface {
 	//
 	// If the type is wrong, the result will be `WRONG_TYPE`.
 	SetParamFloat(context.Context, *SetParamFloatRequest) (*SetParamFloatResponse, error)
+	// Get a custom parameter.
+	//
+	// If the type is wrong, the result will be `WRONG_TYPE`.
+	GetParamCustom(context.Context, *GetParamCustomRequest) (*GetParamCustomResponse, error)
+	// Set a custom parameter.
+	//
+	// If the type is wrong, the result will be `WRONG_TYPE`.
+	SetParamCustom(context.Context, *SetParamCustomRequest) (*SetParamCustomResponse, error)
 	// Get all parameters.
 	GetAllParams(context.Context, *GetAllParamsRequest) (*GetAllParamsResponse, error)
 	mustEmbedUnimplementedParamServiceServer()
@@ -135,6 +169,12 @@ func (UnimplementedParamServiceServer) GetParamFloat(context.Context, *GetParamF
 }
 func (UnimplementedParamServiceServer) SetParamFloat(context.Context, *SetParamFloatRequest) (*SetParamFloatResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetParamFloat not implemented")
+}
+func (UnimplementedParamServiceServer) GetParamCustom(context.Context, *GetParamCustomRequest) (*GetParamCustomResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetParamCustom not implemented")
+}
+func (UnimplementedParamServiceServer) SetParamCustom(context.Context, *SetParamCustomRequest) (*SetParamCustomResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetParamCustom not implemented")
 }
 func (UnimplementedParamServiceServer) GetAllParams(context.Context, *GetAllParamsRequest) (*GetAllParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllParams not implemented")
@@ -224,6 +264,42 @@ func _ParamService_SetParamFloat_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ParamService_GetParamCustom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetParamCustomRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ParamServiceServer).GetParamCustom(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.param.ParamService/GetParamCustom",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ParamServiceServer).GetParamCustom(ctx, req.(*GetParamCustomRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ParamService_SetParamCustom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetParamCustomRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ParamServiceServer).SetParamCustom(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.param.ParamService/SetParamCustom",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ParamServiceServer).SetParamCustom(ctx, req.(*SetParamCustomRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ParamService_GetAllParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetAllParamsRequest)
 	if err := dec(in); err != nil {
@@ -264,6 +340,14 @@ var ParamService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetParamFloat",
 			Handler:    _ParamService_SetParamFloat_Handler,
+		},
+		{
+			MethodName: "GetParamCustom",
+			Handler:    _ParamService_GetParamCustom_Handler,
+		},
+		{
+			MethodName: "SetParamCustom",
+			Handler:    _ParamService_SetParamCustom_Handler,
 		},
 		{
 			MethodName: "GetAllParams",

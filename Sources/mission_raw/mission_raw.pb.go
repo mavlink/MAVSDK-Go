@@ -24,19 +24,25 @@ const (
 type MissionRawResult_Result int32
 
 const (
-	MissionRawResult_RESULT_UNKNOWN                  MissionRawResult_Result = 0  // Unknown result
-	MissionRawResult_RESULT_SUCCESS                  MissionRawResult_Result = 1  // Request succeeded
-	MissionRawResult_RESULT_ERROR                    MissionRawResult_Result = 2  // Error
-	MissionRawResult_RESULT_TOO_MANY_MISSION_ITEMS   MissionRawResult_Result = 3  // Too many mission items in the mission
-	MissionRawResult_RESULT_BUSY                     MissionRawResult_Result = 4  // Vehicle is busy
-	MissionRawResult_RESULT_TIMEOUT                  MissionRawResult_Result = 5  // Request timed out
-	MissionRawResult_RESULT_INVALID_ARGUMENT         MissionRawResult_Result = 6  // Invalid argument
-	MissionRawResult_RESULT_UNSUPPORTED              MissionRawResult_Result = 7  // Mission downloaded from the system is not supported
-	MissionRawResult_RESULT_NO_MISSION_AVAILABLE     MissionRawResult_Result = 8  // No mission available on the system
-	MissionRawResult_RESULT_TRANSFER_CANCELLED       MissionRawResult_Result = 9  // Mission transfer (upload or download) has been cancelled
-	MissionRawResult_RESULT_FAILED_TO_OPEN_QGC_PLAN  MissionRawResult_Result = 10 // Failed to open the QGroundControl plan
-	MissionRawResult_RESULT_FAILED_TO_PARSE_QGC_PLAN MissionRawResult_Result = 11 // Failed to parse the QGroundControl plan
-	MissionRawResult_RESULT_NO_SYSTEM                MissionRawResult_Result = 12 // No system connected
+	MissionRawResult_RESULT_UNKNOWN                     MissionRawResult_Result = 0  // Unknown result
+	MissionRawResult_RESULT_SUCCESS                     MissionRawResult_Result = 1  // Request succeeded
+	MissionRawResult_RESULT_ERROR                       MissionRawResult_Result = 2  // Error
+	MissionRawResult_RESULT_TOO_MANY_MISSION_ITEMS      MissionRawResult_Result = 3  // Too many mission items in the mission
+	MissionRawResult_RESULT_BUSY                        MissionRawResult_Result = 4  // Vehicle is busy
+	MissionRawResult_RESULT_TIMEOUT                     MissionRawResult_Result = 5  // Request timed out
+	MissionRawResult_RESULT_INVALID_ARGUMENT            MissionRawResult_Result = 6  // Invalid argument
+	MissionRawResult_RESULT_UNSUPPORTED                 MissionRawResult_Result = 7  // Mission downloaded from the system is not supported
+	MissionRawResult_RESULT_NO_MISSION_AVAILABLE        MissionRawResult_Result = 8  // No mission available on the system
+	MissionRawResult_RESULT_TRANSFER_CANCELLED          MissionRawResult_Result = 9  // Mission transfer (upload or download) has been cancelled
+	MissionRawResult_RESULT_FAILED_TO_OPEN_QGC_PLAN     MissionRawResult_Result = 10 // Failed to open the QGroundControl plan
+	MissionRawResult_RESULT_FAILED_TO_PARSE_QGC_PLAN    MissionRawResult_Result = 11 // Failed to parse the QGroundControl plan
+	MissionRawResult_RESULT_NO_SYSTEM                   MissionRawResult_Result = 12 // No system connected
+	MissionRawResult_RESULT_DENIED                      MissionRawResult_Result = 13 // Request denied
+	MissionRawResult_RESULT_MISSION_TYPE_NOT_CONSISTENT MissionRawResult_Result = 14 // Mission type is not consistent
+	MissionRawResult_RESULT_INVALID_SEQUENCE            MissionRawResult_Result = 15 // The mission item sequences are not increasing correctly
+	MissionRawResult_RESULT_CURRENT_INVALID             MissionRawResult_Result = 16 // The current item is not set correctly
+	MissionRawResult_RESULT_PROTOCOL_ERROR              MissionRawResult_Result = 17 // There was a protocol error
+	MissionRawResult_RESULT_INT_MESSAGES_NOT_SUPPORTED  MissionRawResult_Result = 18 // The system does not support the MISSION_INT protocol
 )
 
 // Enum value maps for MissionRawResult_Result.
@@ -55,21 +61,33 @@ var (
 		10: "RESULT_FAILED_TO_OPEN_QGC_PLAN",
 		11: "RESULT_FAILED_TO_PARSE_QGC_PLAN",
 		12: "RESULT_NO_SYSTEM",
+		13: "RESULT_DENIED",
+		14: "RESULT_MISSION_TYPE_NOT_CONSISTENT",
+		15: "RESULT_INVALID_SEQUENCE",
+		16: "RESULT_CURRENT_INVALID",
+		17: "RESULT_PROTOCOL_ERROR",
+		18: "RESULT_INT_MESSAGES_NOT_SUPPORTED",
 	}
 	MissionRawResult_Result_value = map[string]int32{
-		"RESULT_UNKNOWN":                  0,
-		"RESULT_SUCCESS":                  1,
-		"RESULT_ERROR":                    2,
-		"RESULT_TOO_MANY_MISSION_ITEMS":   3,
-		"RESULT_BUSY":                     4,
-		"RESULT_TIMEOUT":                  5,
-		"RESULT_INVALID_ARGUMENT":         6,
-		"RESULT_UNSUPPORTED":              7,
-		"RESULT_NO_MISSION_AVAILABLE":     8,
-		"RESULT_TRANSFER_CANCELLED":       9,
-		"RESULT_FAILED_TO_OPEN_QGC_PLAN":  10,
-		"RESULT_FAILED_TO_PARSE_QGC_PLAN": 11,
-		"RESULT_NO_SYSTEM":                12,
+		"RESULT_UNKNOWN":                     0,
+		"RESULT_SUCCESS":                     1,
+		"RESULT_ERROR":                       2,
+		"RESULT_TOO_MANY_MISSION_ITEMS":      3,
+		"RESULT_BUSY":                        4,
+		"RESULT_TIMEOUT":                     5,
+		"RESULT_INVALID_ARGUMENT":            6,
+		"RESULT_UNSUPPORTED":                 7,
+		"RESULT_NO_MISSION_AVAILABLE":        8,
+		"RESULT_TRANSFER_CANCELLED":          9,
+		"RESULT_FAILED_TO_OPEN_QGC_PLAN":     10,
+		"RESULT_FAILED_TO_PARSE_QGC_PLAN":    11,
+		"RESULT_NO_SYSTEM":                   12,
+		"RESULT_DENIED":                      13,
+		"RESULT_MISSION_TYPE_NOT_CONSISTENT": 14,
+		"RESULT_INVALID_SEQUENCE":            15,
+		"RESULT_CURRENT_INVALID":             16,
+		"RESULT_PROTOCOL_ERROR":              17,
+		"RESULT_INT_MESSAGES_NOT_SUPPORTED":  18,
 	}
 )
 
@@ -97,7 +115,7 @@ func (x MissionRawResult_Result) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use MissionRawResult_Result.Descriptor instead.
 func (MissionRawResult_Result) EnumDescriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{25, 0}
+	return file_mission_raw_proto_rawDescGZIP(), []int{29, 0}
 }
 
 type UploadMissionRequest struct {
@@ -194,6 +212,194 @@ func (x *UploadMissionResponse) GetMissionRawResult() *MissionRawResult {
 	return nil
 }
 
+type UploadGeofenceRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	MissionItems []*MissionItem `protobuf:"bytes,1,rep,name=mission_items,json=missionItems,proto3" json:"mission_items,omitempty"` // The mission items
+}
+
+func (x *UploadGeofenceRequest) Reset() {
+	*x = UploadGeofenceRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_mission_raw_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UploadGeofenceRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadGeofenceRequest) ProtoMessage() {}
+
+func (x *UploadGeofenceRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_mission_raw_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadGeofenceRequest.ProtoReflect.Descriptor instead.
+func (*UploadGeofenceRequest) Descriptor() ([]byte, []int) {
+	return file_mission_raw_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *UploadGeofenceRequest) GetMissionItems() []*MissionItem {
+	if x != nil {
+		return x.MissionItems
+	}
+	return nil
+}
+
+type UploadGeofenceResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	MissionRawResult *MissionRawResult `protobuf:"bytes,1,opt,name=mission_raw_result,json=missionRawResult,proto3" json:"mission_raw_result,omitempty"`
+}
+
+func (x *UploadGeofenceResponse) Reset() {
+	*x = UploadGeofenceResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_mission_raw_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UploadGeofenceResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadGeofenceResponse) ProtoMessage() {}
+
+func (x *UploadGeofenceResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_mission_raw_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadGeofenceResponse.ProtoReflect.Descriptor instead.
+func (*UploadGeofenceResponse) Descriptor() ([]byte, []int) {
+	return file_mission_raw_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *UploadGeofenceResponse) GetMissionRawResult() *MissionRawResult {
+	if x != nil {
+		return x.MissionRawResult
+	}
+	return nil
+}
+
+type UploadRallyPointsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	MissionItems []*MissionItem `protobuf:"bytes,1,rep,name=mission_items,json=missionItems,proto3" json:"mission_items,omitempty"` // The mission items
+}
+
+func (x *UploadRallyPointsRequest) Reset() {
+	*x = UploadRallyPointsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_mission_raw_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UploadRallyPointsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadRallyPointsRequest) ProtoMessage() {}
+
+func (x *UploadRallyPointsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_mission_raw_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadRallyPointsRequest.ProtoReflect.Descriptor instead.
+func (*UploadRallyPointsRequest) Descriptor() ([]byte, []int) {
+	return file_mission_raw_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *UploadRallyPointsRequest) GetMissionItems() []*MissionItem {
+	if x != nil {
+		return x.MissionItems
+	}
+	return nil
+}
+
+type UploadRallyPointsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	MissionRawResult *MissionRawResult `protobuf:"bytes,1,opt,name=mission_raw_result,json=missionRawResult,proto3" json:"mission_raw_result,omitempty"`
+}
+
+func (x *UploadRallyPointsResponse) Reset() {
+	*x = UploadRallyPointsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_mission_raw_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UploadRallyPointsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadRallyPointsResponse) ProtoMessage() {}
+
+func (x *UploadRallyPointsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_mission_raw_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadRallyPointsResponse.ProtoReflect.Descriptor instead.
+func (*UploadRallyPointsResponse) Descriptor() ([]byte, []int) {
+	return file_mission_raw_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *UploadRallyPointsResponse) GetMissionRawResult() *MissionRawResult {
+	if x != nil {
+		return x.MissionRawResult
+	}
+	return nil
+}
+
 type CancelMissionUploadRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -203,7 +409,7 @@ type CancelMissionUploadRequest struct {
 func (x *CancelMissionUploadRequest) Reset() {
 	*x = CancelMissionUploadRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[2]
+		mi := &file_mission_raw_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -216,7 +422,7 @@ func (x *CancelMissionUploadRequest) String() string {
 func (*CancelMissionUploadRequest) ProtoMessage() {}
 
 func (x *CancelMissionUploadRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[2]
+	mi := &file_mission_raw_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -229,7 +435,7 @@ func (x *CancelMissionUploadRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelMissionUploadRequest.ProtoReflect.Descriptor instead.
 func (*CancelMissionUploadRequest) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{2}
+	return file_mission_raw_proto_rawDescGZIP(), []int{6}
 }
 
 type CancelMissionUploadResponse struct {
@@ -243,7 +449,7 @@ type CancelMissionUploadResponse struct {
 func (x *CancelMissionUploadResponse) Reset() {
 	*x = CancelMissionUploadResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[3]
+		mi := &file_mission_raw_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -256,7 +462,7 @@ func (x *CancelMissionUploadResponse) String() string {
 func (*CancelMissionUploadResponse) ProtoMessage() {}
 
 func (x *CancelMissionUploadResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[3]
+	mi := &file_mission_raw_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -269,7 +475,7 @@ func (x *CancelMissionUploadResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelMissionUploadResponse.ProtoReflect.Descriptor instead.
 func (*CancelMissionUploadResponse) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{3}
+	return file_mission_raw_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *CancelMissionUploadResponse) GetMissionRawResult() *MissionRawResult {
@@ -288,7 +494,7 @@ type DownloadMissionRequest struct {
 func (x *DownloadMissionRequest) Reset() {
 	*x = DownloadMissionRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[4]
+		mi := &file_mission_raw_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -301,7 +507,7 @@ func (x *DownloadMissionRequest) String() string {
 func (*DownloadMissionRequest) ProtoMessage() {}
 
 func (x *DownloadMissionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[4]
+	mi := &file_mission_raw_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -314,7 +520,7 @@ func (x *DownloadMissionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DownloadMissionRequest.ProtoReflect.Descriptor instead.
 func (*DownloadMissionRequest) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{4}
+	return file_mission_raw_proto_rawDescGZIP(), []int{8}
 }
 
 type DownloadMissionResponse struct {
@@ -329,7 +535,7 @@ type DownloadMissionResponse struct {
 func (x *DownloadMissionResponse) Reset() {
 	*x = DownloadMissionResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[5]
+		mi := &file_mission_raw_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -342,7 +548,7 @@ func (x *DownloadMissionResponse) String() string {
 func (*DownloadMissionResponse) ProtoMessage() {}
 
 func (x *DownloadMissionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[5]
+	mi := &file_mission_raw_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -355,7 +561,7 @@ func (x *DownloadMissionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DownloadMissionResponse.ProtoReflect.Descriptor instead.
 func (*DownloadMissionResponse) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{5}
+	return file_mission_raw_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *DownloadMissionResponse) GetMissionRawResult() *MissionRawResult {
@@ -381,7 +587,7 @@ type CancelMissionDownloadRequest struct {
 func (x *CancelMissionDownloadRequest) Reset() {
 	*x = CancelMissionDownloadRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[6]
+		mi := &file_mission_raw_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -394,7 +600,7 @@ func (x *CancelMissionDownloadRequest) String() string {
 func (*CancelMissionDownloadRequest) ProtoMessage() {}
 
 func (x *CancelMissionDownloadRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[6]
+	mi := &file_mission_raw_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -407,7 +613,7 @@ func (x *CancelMissionDownloadRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelMissionDownloadRequest.ProtoReflect.Descriptor instead.
 func (*CancelMissionDownloadRequest) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{6}
+	return file_mission_raw_proto_rawDescGZIP(), []int{10}
 }
 
 type CancelMissionDownloadResponse struct {
@@ -421,7 +627,7 @@ type CancelMissionDownloadResponse struct {
 func (x *CancelMissionDownloadResponse) Reset() {
 	*x = CancelMissionDownloadResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[7]
+		mi := &file_mission_raw_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -434,7 +640,7 @@ func (x *CancelMissionDownloadResponse) String() string {
 func (*CancelMissionDownloadResponse) ProtoMessage() {}
 
 func (x *CancelMissionDownloadResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[7]
+	mi := &file_mission_raw_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -447,7 +653,7 @@ func (x *CancelMissionDownloadResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelMissionDownloadResponse.ProtoReflect.Descriptor instead.
 func (*CancelMissionDownloadResponse) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{7}
+	return file_mission_raw_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *CancelMissionDownloadResponse) GetMissionRawResult() *MissionRawResult {
@@ -466,7 +672,7 @@ type StartMissionRequest struct {
 func (x *StartMissionRequest) Reset() {
 	*x = StartMissionRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[8]
+		mi := &file_mission_raw_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -479,7 +685,7 @@ func (x *StartMissionRequest) String() string {
 func (*StartMissionRequest) ProtoMessage() {}
 
 func (x *StartMissionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[8]
+	mi := &file_mission_raw_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -492,7 +698,7 @@ func (x *StartMissionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StartMissionRequest.ProtoReflect.Descriptor instead.
 func (*StartMissionRequest) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{8}
+	return file_mission_raw_proto_rawDescGZIP(), []int{12}
 }
 
 type StartMissionResponse struct {
@@ -506,7 +712,7 @@ type StartMissionResponse struct {
 func (x *StartMissionResponse) Reset() {
 	*x = StartMissionResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[9]
+		mi := &file_mission_raw_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -519,7 +725,7 @@ func (x *StartMissionResponse) String() string {
 func (*StartMissionResponse) ProtoMessage() {}
 
 func (x *StartMissionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[9]
+	mi := &file_mission_raw_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -532,7 +738,7 @@ func (x *StartMissionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StartMissionResponse.ProtoReflect.Descriptor instead.
 func (*StartMissionResponse) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{9}
+	return file_mission_raw_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *StartMissionResponse) GetMissionRawResult() *MissionRawResult {
@@ -551,7 +757,7 @@ type PauseMissionRequest struct {
 func (x *PauseMissionRequest) Reset() {
 	*x = PauseMissionRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[10]
+		mi := &file_mission_raw_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -564,7 +770,7 @@ func (x *PauseMissionRequest) String() string {
 func (*PauseMissionRequest) ProtoMessage() {}
 
 func (x *PauseMissionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[10]
+	mi := &file_mission_raw_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -577,7 +783,7 @@ func (x *PauseMissionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PauseMissionRequest.ProtoReflect.Descriptor instead.
 func (*PauseMissionRequest) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{10}
+	return file_mission_raw_proto_rawDescGZIP(), []int{14}
 }
 
 type PauseMissionResponse struct {
@@ -591,7 +797,7 @@ type PauseMissionResponse struct {
 func (x *PauseMissionResponse) Reset() {
 	*x = PauseMissionResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[11]
+		mi := &file_mission_raw_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -604,7 +810,7 @@ func (x *PauseMissionResponse) String() string {
 func (*PauseMissionResponse) ProtoMessage() {}
 
 func (x *PauseMissionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[11]
+	mi := &file_mission_raw_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -617,7 +823,7 @@ func (x *PauseMissionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PauseMissionResponse.ProtoReflect.Descriptor instead.
 func (*PauseMissionResponse) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{11}
+	return file_mission_raw_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *PauseMissionResponse) GetMissionRawResult() *MissionRawResult {
@@ -636,7 +842,7 @@ type ClearMissionRequest struct {
 func (x *ClearMissionRequest) Reset() {
 	*x = ClearMissionRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[12]
+		mi := &file_mission_raw_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -649,7 +855,7 @@ func (x *ClearMissionRequest) String() string {
 func (*ClearMissionRequest) ProtoMessage() {}
 
 func (x *ClearMissionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[12]
+	mi := &file_mission_raw_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -662,7 +868,7 @@ func (x *ClearMissionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClearMissionRequest.ProtoReflect.Descriptor instead.
 func (*ClearMissionRequest) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{12}
+	return file_mission_raw_proto_rawDescGZIP(), []int{16}
 }
 
 type ClearMissionResponse struct {
@@ -676,7 +882,7 @@ type ClearMissionResponse struct {
 func (x *ClearMissionResponse) Reset() {
 	*x = ClearMissionResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[13]
+		mi := &file_mission_raw_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -689,7 +895,7 @@ func (x *ClearMissionResponse) String() string {
 func (*ClearMissionResponse) ProtoMessage() {}
 
 func (x *ClearMissionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[13]
+	mi := &file_mission_raw_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -702,7 +908,7 @@ func (x *ClearMissionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClearMissionResponse.ProtoReflect.Descriptor instead.
 func (*ClearMissionResponse) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{13}
+	return file_mission_raw_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *ClearMissionResponse) GetMissionRawResult() *MissionRawResult {
@@ -723,7 +929,7 @@ type SetCurrentMissionItemRequest struct {
 func (x *SetCurrentMissionItemRequest) Reset() {
 	*x = SetCurrentMissionItemRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[14]
+		mi := &file_mission_raw_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -736,7 +942,7 @@ func (x *SetCurrentMissionItemRequest) String() string {
 func (*SetCurrentMissionItemRequest) ProtoMessage() {}
 
 func (x *SetCurrentMissionItemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[14]
+	mi := &file_mission_raw_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -749,7 +955,7 @@ func (x *SetCurrentMissionItemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetCurrentMissionItemRequest.ProtoReflect.Descriptor instead.
 func (*SetCurrentMissionItemRequest) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{14}
+	return file_mission_raw_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *SetCurrentMissionItemRequest) GetIndex() int32 {
@@ -770,7 +976,7 @@ type SetCurrentMissionItemResponse struct {
 func (x *SetCurrentMissionItemResponse) Reset() {
 	*x = SetCurrentMissionItemResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[15]
+		mi := &file_mission_raw_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -783,7 +989,7 @@ func (x *SetCurrentMissionItemResponse) String() string {
 func (*SetCurrentMissionItemResponse) ProtoMessage() {}
 
 func (x *SetCurrentMissionItemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[15]
+	mi := &file_mission_raw_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -796,7 +1002,7 @@ func (x *SetCurrentMissionItemResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetCurrentMissionItemResponse.ProtoReflect.Descriptor instead.
 func (*SetCurrentMissionItemResponse) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{15}
+	return file_mission_raw_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *SetCurrentMissionItemResponse) GetMissionRawResult() *MissionRawResult {
@@ -815,7 +1021,7 @@ type SubscribeMissionProgressRequest struct {
 func (x *SubscribeMissionProgressRequest) Reset() {
 	*x = SubscribeMissionProgressRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[16]
+		mi := &file_mission_raw_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -828,7 +1034,7 @@ func (x *SubscribeMissionProgressRequest) String() string {
 func (*SubscribeMissionProgressRequest) ProtoMessage() {}
 
 func (x *SubscribeMissionProgressRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[16]
+	mi := &file_mission_raw_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -841,7 +1047,7 @@ func (x *SubscribeMissionProgressRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubscribeMissionProgressRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeMissionProgressRequest) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{16}
+	return file_mission_raw_proto_rawDescGZIP(), []int{20}
 }
 
 type MissionProgressResponse struct {
@@ -855,7 +1061,7 @@ type MissionProgressResponse struct {
 func (x *MissionProgressResponse) Reset() {
 	*x = MissionProgressResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[17]
+		mi := &file_mission_raw_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -868,7 +1074,7 @@ func (x *MissionProgressResponse) String() string {
 func (*MissionProgressResponse) ProtoMessage() {}
 
 func (x *MissionProgressResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[17]
+	mi := &file_mission_raw_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -881,7 +1087,7 @@ func (x *MissionProgressResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MissionProgressResponse.ProtoReflect.Descriptor instead.
 func (*MissionProgressResponse) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{17}
+	return file_mission_raw_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *MissionProgressResponse) GetMissionProgress() *MissionProgress {
@@ -900,7 +1106,7 @@ type SubscribeMissionChangedRequest struct {
 func (x *SubscribeMissionChangedRequest) Reset() {
 	*x = SubscribeMissionChangedRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[18]
+		mi := &file_mission_raw_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -913,7 +1119,7 @@ func (x *SubscribeMissionChangedRequest) String() string {
 func (*SubscribeMissionChangedRequest) ProtoMessage() {}
 
 func (x *SubscribeMissionChangedRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[18]
+	mi := &file_mission_raw_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -926,7 +1132,7 @@ func (x *SubscribeMissionChangedRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubscribeMissionChangedRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeMissionChangedRequest) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{18}
+	return file_mission_raw_proto_rawDescGZIP(), []int{22}
 }
 
 type MissionChangedResponse struct {
@@ -940,7 +1146,7 @@ type MissionChangedResponse struct {
 func (x *MissionChangedResponse) Reset() {
 	*x = MissionChangedResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[19]
+		mi := &file_mission_raw_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -953,7 +1159,7 @@ func (x *MissionChangedResponse) String() string {
 func (*MissionChangedResponse) ProtoMessage() {}
 
 func (x *MissionChangedResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[19]
+	mi := &file_mission_raw_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -966,7 +1172,7 @@ func (x *MissionChangedResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MissionChangedResponse.ProtoReflect.Descriptor instead.
 func (*MissionChangedResponse) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{19}
+	return file_mission_raw_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *MissionChangedResponse) GetMissionChanged() bool {
@@ -987,7 +1193,7 @@ type ImportQgroundcontrolMissionRequest struct {
 func (x *ImportQgroundcontrolMissionRequest) Reset() {
 	*x = ImportQgroundcontrolMissionRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[20]
+		mi := &file_mission_raw_proto_msgTypes[24]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1000,7 +1206,7 @@ func (x *ImportQgroundcontrolMissionRequest) String() string {
 func (*ImportQgroundcontrolMissionRequest) ProtoMessage() {}
 
 func (x *ImportQgroundcontrolMissionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[20]
+	mi := &file_mission_raw_proto_msgTypes[24]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1013,7 +1219,7 @@ func (x *ImportQgroundcontrolMissionRequest) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use ImportQgroundcontrolMissionRequest.ProtoReflect.Descriptor instead.
 func (*ImportQgroundcontrolMissionRequest) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{20}
+	return file_mission_raw_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *ImportQgroundcontrolMissionRequest) GetQgcPlanPath() string {
@@ -1035,7 +1241,7 @@ type ImportQgroundcontrolMissionResponse struct {
 func (x *ImportQgroundcontrolMissionResponse) Reset() {
 	*x = ImportQgroundcontrolMissionResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[21]
+		mi := &file_mission_raw_proto_msgTypes[25]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1048,7 +1254,7 @@ func (x *ImportQgroundcontrolMissionResponse) String() string {
 func (*ImportQgroundcontrolMissionResponse) ProtoMessage() {}
 
 func (x *ImportQgroundcontrolMissionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[21]
+	mi := &file_mission_raw_proto_msgTypes[25]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1061,7 +1267,7 @@ func (x *ImportQgroundcontrolMissionResponse) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use ImportQgroundcontrolMissionResponse.ProtoReflect.Descriptor instead.
 func (*ImportQgroundcontrolMissionResponse) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{21}
+	return file_mission_raw_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *ImportQgroundcontrolMissionResponse) GetMissionRawResult() *MissionRawResult {
@@ -1091,7 +1297,7 @@ type MissionProgress struct {
 func (x *MissionProgress) Reset() {
 	*x = MissionProgress{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[22]
+		mi := &file_mission_raw_proto_msgTypes[26]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1104,7 +1310,7 @@ func (x *MissionProgress) String() string {
 func (*MissionProgress) ProtoMessage() {}
 
 func (x *MissionProgress) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[22]
+	mi := &file_mission_raw_proto_msgTypes[26]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1117,7 +1323,7 @@ func (x *MissionProgress) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MissionProgress.ProtoReflect.Descriptor instead.
 func (*MissionProgress) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{22}
+	return file_mission_raw_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *MissionProgress) GetCurrent() int32 {
@@ -1158,7 +1364,7 @@ type MissionItem struct {
 func (x *MissionItem) Reset() {
 	*x = MissionItem{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[23]
+		mi := &file_mission_raw_proto_msgTypes[27]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1171,7 +1377,7 @@ func (x *MissionItem) String() string {
 func (*MissionItem) ProtoMessage() {}
 
 func (x *MissionItem) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[23]
+	mi := &file_mission_raw_proto_msgTypes[27]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1184,7 +1390,7 @@ func (x *MissionItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MissionItem.ProtoReflect.Descriptor instead.
 func (*MissionItem) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{23}
+	return file_mission_raw_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *MissionItem) GetSeq() uint32 {
@@ -1292,7 +1498,7 @@ type MissionImportData struct {
 func (x *MissionImportData) Reset() {
 	*x = MissionImportData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[24]
+		mi := &file_mission_raw_proto_msgTypes[28]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1305,7 +1511,7 @@ func (x *MissionImportData) String() string {
 func (*MissionImportData) ProtoMessage() {}
 
 func (x *MissionImportData) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[24]
+	mi := &file_mission_raw_proto_msgTypes[28]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1318,7 +1524,7 @@ func (x *MissionImportData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MissionImportData.ProtoReflect.Descriptor instead.
 func (*MissionImportData) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{24}
+	return file_mission_raw_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *MissionImportData) GetMissionItems() []*MissionItem {
@@ -1355,7 +1561,7 @@ type MissionRawResult struct {
 func (x *MissionRawResult) Reset() {
 	*x = MissionRawResult{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_mission_raw_proto_msgTypes[25]
+		mi := &file_mission_raw_proto_msgTypes[29]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1368,7 +1574,7 @@ func (x *MissionRawResult) String() string {
 func (*MissionRawResult) ProtoMessage() {}
 
 func (x *MissionRawResult) ProtoReflect() protoreflect.Message {
-	mi := &file_mission_raw_proto_msgTypes[25]
+	mi := &file_mission_raw_proto_msgTypes[29]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1381,7 +1587,7 @@ func (x *MissionRawResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MissionRawResult.ProtoReflect.Descriptor instead.
 func (*MissionRawResult) Descriptor() ([]byte, []int) {
-	return file_mission_raw_proto_rawDescGZIP(), []int{25}
+	return file_mission_raw_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *MissionRawResult) GetResult() MissionRawResult_Result {
@@ -1413,6 +1619,33 @@ var file_mission_raw_proto_rawDesc = []byte{
 	0x6e, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x0c, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x49, 0x74,
 	0x65, 0x6d, 0x73, 0x22, 0x6f, 0x0a, 0x15, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x4d, 0x69, 0x73,
 	0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x56, 0x0a, 0x12,
+	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x5f, 0x72, 0x65, 0x73, 0x75,
+	0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x28, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64,
+	0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61,
+	0x77, 0x2e, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x61, 0x77, 0x52, 0x65, 0x73, 0x75,
+	0x6c, 0x74, 0x52, 0x10, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x61, 0x77, 0x52, 0x65,
+	0x73, 0x75, 0x6c, 0x74, 0x22, 0x61, 0x0a, 0x15, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x47, 0x65,
+	0x6f, 0x66, 0x65, 0x6e, 0x63, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x48, 0x0a,
+	0x0d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x74, 0x65, 0x6d, 0x73, 0x18, 0x01,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70,
+	0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x4d, 0x69,
+	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x0c, 0x6d, 0x69, 0x73, 0x73, 0x69,
+	0x6f, 0x6e, 0x49, 0x74, 0x65, 0x6d, 0x73, 0x22, 0x70, 0x0a, 0x16, 0x55, 0x70, 0x6c, 0x6f, 0x61,
+	0x64, 0x47, 0x65, 0x6f, 0x66, 0x65, 0x6e, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x56, 0x0a, 0x12, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77,
+	0x5f, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x28, 0x2e,
+	0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69,
+	0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x61,
+	0x77, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x10, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x52, 0x61, 0x77, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x64, 0x0a, 0x18, 0x55, 0x70, 0x6c,
+	0x6f, 0x61, 0x64, 0x52, 0x61, 0x6c, 0x6c, 0x79, 0x50, 0x6f, 0x69, 0x6e, 0x74, 0x73, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x48, 0x0a, 0x0d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x5f, 0x69, 0x74, 0x65, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x6d,
+	0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
+	0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x49, 0x74, 0x65,
+	0x6d, 0x52, 0x0c, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x49, 0x74, 0x65, 0x6d, 0x73, 0x22,
+	0x73, 0x0a, 0x19, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x52, 0x61, 0x6c, 0x6c, 0x79, 0x50, 0x6f,
+	0x69, 0x6e, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x56, 0x0a, 0x12,
 	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x5f, 0x72, 0x65, 0x73, 0x75,
 	0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x28, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64,
 	0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61,
@@ -1559,7 +1792,7 @@ var file_mission_raw_proto_rawDesc = []byte{
 	0x69, 0x74, 0x65, 0x6d, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x6d, 0x61,
 	0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
 	0x5f, 0x72, 0x61, 0x77, 0x2e, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x49, 0x74, 0x65, 0x6d,
-	0x52, 0x0a, 0x72, 0x61, 0x6c, 0x6c, 0x79, 0x49, 0x74, 0x65, 0x6d, 0x73, 0x22, 0xdb, 0x03, 0x0a,
+	0x52, 0x0a, 0x72, 0x61, 0x6c, 0x6c, 0x79, 0x49, 0x74, 0x65, 0x6d, 0x73, 0x22, 0x91, 0x05, 0x0a,
 	0x10, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x61, 0x77, 0x52, 0x65, 0x73, 0x75, 0x6c,
 	0x74, 0x12, 0x47, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28,
 	0x0e, 0x32, 0x2f, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d,
@@ -1567,7 +1800,7 @@ var file_mission_raw_proto_rawDesc = []byte{
 	0x6f, 0x6e, 0x52, 0x61, 0x77, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x52, 0x65, 0x73, 0x75,
 	0x6c, 0x74, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x72, 0x65,
 	0x73, 0x75, 0x6c, 0x74, 0x5f, 0x73, 0x74, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09,
-	0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x53, 0x74, 0x72, 0x22, 0xde, 0x02, 0x0a, 0x06, 0x52, 0x65,
+	0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x53, 0x74, 0x72, 0x22, 0x94, 0x04, 0x0a, 0x06, 0x52, 0x65,
 	0x73, 0x75, 0x6c, 0x74, 0x12, 0x12, 0x0a, 0x0e, 0x52, 0x45, 0x53, 0x55, 0x4c, 0x54, 0x5f, 0x55,
 	0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00, 0x12, 0x12, 0x0a, 0x0e, 0x52, 0x45, 0x53, 0x55,
 	0x4c, 0x54, 0x5f, 0x53, 0x55, 0x43, 0x43, 0x45, 0x53, 0x53, 0x10, 0x01, 0x12, 0x10, 0x0a, 0x0c,
@@ -1589,99 +1822,125 @@ var file_mission_raw_proto_rawDesc = []byte{
 	0x23, 0x0a, 0x1f, 0x52, 0x45, 0x53, 0x55, 0x4c, 0x54, 0x5f, 0x46, 0x41, 0x49, 0x4c, 0x45, 0x44,
 	0x5f, 0x54, 0x4f, 0x5f, 0x50, 0x41, 0x52, 0x53, 0x45, 0x5f, 0x51, 0x47, 0x43, 0x5f, 0x50, 0x4c,
 	0x41, 0x4e, 0x10, 0x0b, 0x12, 0x14, 0x0a, 0x10, 0x52, 0x45, 0x53, 0x55, 0x4c, 0x54, 0x5f, 0x4e,
-	0x4f, 0x5f, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x10, 0x0c, 0x32, 0x93, 0x0b, 0x0a, 0x11, 0x4d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x61, 0x77, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
-	0x12, 0x6e, 0x0a, 0x0d, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x12, 0x2c, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x55, 0x70, 0x6c, 0x6f, 0x61,
-	0x64, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x2d, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73,
-	0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x4d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00,
-	0x12, 0x84, 0x01, 0x0a, 0x13, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x4d, 0x69, 0x73, 0x73, 0x69,
-	0x6f, 0x6e, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x12, 0x32, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64,
-	0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61,
-	0x77, 0x2e, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x55,
-	0x70, 0x6c, 0x6f, 0x61, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x33, 0x2e, 0x6d,
-	0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x4d, 0x69, 0x73, 0x73,
-	0x69, 0x6f, 0x6e, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x22, 0x04, 0x80, 0xb5, 0x18, 0x01, 0x12, 0x74, 0x0a, 0x0f, 0x44, 0x6f, 0x77, 0x6e, 0x6c,
-	0x6f, 0x61, 0x64, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x2e, 0x2e, 0x6d, 0x61, 0x76,
-	0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f,
-	0x72, 0x61, 0x77, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x4d, 0x69, 0x73, 0x73,
-	0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2f, 0x2e, 0x6d, 0x61, 0x76,
-	0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f,
-	0x72, 0x61, 0x77, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x4d, 0x69, 0x73, 0x73,
-	0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x8a, 0x01,
-	0x0a, 0x15, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x44,
-	0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x12, 0x34, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b,
+	0x4f, 0x5f, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x10, 0x0c, 0x12, 0x11, 0x0a, 0x0d, 0x52, 0x45,
+	0x53, 0x55, 0x4c, 0x54, 0x5f, 0x44, 0x45, 0x4e, 0x49, 0x45, 0x44, 0x10, 0x0d, 0x12, 0x26, 0x0a,
+	0x22, 0x52, 0x45, 0x53, 0x55, 0x4c, 0x54, 0x5f, 0x4d, 0x49, 0x53, 0x53, 0x49, 0x4f, 0x4e, 0x5f,
+	0x54, 0x59, 0x50, 0x45, 0x5f, 0x4e, 0x4f, 0x54, 0x5f, 0x43, 0x4f, 0x4e, 0x53, 0x49, 0x53, 0x54,
+	0x45, 0x4e, 0x54, 0x10, 0x0e, 0x12, 0x1b, 0x0a, 0x17, 0x52, 0x45, 0x53, 0x55, 0x4c, 0x54, 0x5f,
+	0x49, 0x4e, 0x56, 0x41, 0x4c, 0x49, 0x44, 0x5f, 0x53, 0x45, 0x51, 0x55, 0x45, 0x4e, 0x43, 0x45,
+	0x10, 0x0f, 0x12, 0x1a, 0x0a, 0x16, 0x52, 0x45, 0x53, 0x55, 0x4c, 0x54, 0x5f, 0x43, 0x55, 0x52,
+	0x52, 0x45, 0x4e, 0x54, 0x5f, 0x49, 0x4e, 0x56, 0x41, 0x4c, 0x49, 0x44, 0x10, 0x10, 0x12, 0x19,
+	0x0a, 0x15, 0x52, 0x45, 0x53, 0x55, 0x4c, 0x54, 0x5f, 0x50, 0x52, 0x4f, 0x54, 0x4f, 0x43, 0x4f,
+	0x4c, 0x5f, 0x45, 0x52, 0x52, 0x4f, 0x52, 0x10, 0x11, 0x12, 0x25, 0x0a, 0x21, 0x52, 0x45, 0x53,
+	0x55, 0x4c, 0x54, 0x5f, 0x49, 0x4e, 0x54, 0x5f, 0x4d, 0x45, 0x53, 0x53, 0x41, 0x47, 0x45, 0x53,
+	0x5f, 0x4e, 0x4f, 0x54, 0x5f, 0x53, 0x55, 0x50, 0x50, 0x4f, 0x52, 0x54, 0x45, 0x44, 0x10, 0x12,
+	0x32, 0x82, 0x0d, 0x0a, 0x11, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x61, 0x77, 0x53,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x6e, 0x0a, 0x0d, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64,
+	0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x2c, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b,
 	0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77,
-	0x2e, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x44, 0x6f,
-	0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x35, 0x2e,
+	0x2e, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2d, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72,
+	0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x55,
+	0x70, 0x6c, 0x6f, 0x61, 0x64, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x71, 0x0a, 0x0e, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64,
+	0x47, 0x65, 0x6f, 0x66, 0x65, 0x6e, 0x63, 0x65, 0x12, 0x2d, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64,
+	0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61,
+	0x77, 0x2e, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x47, 0x65, 0x6f, 0x66, 0x65, 0x6e, 0x63, 0x65,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2e, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b,
+	0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77,
+	0x2e, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x47, 0x65, 0x6f, 0x66, 0x65, 0x6e, 0x63, 0x65, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x7a, 0x0a, 0x11, 0x55, 0x70, 0x6c,
+	0x6f, 0x61, 0x64, 0x52, 0x61, 0x6c, 0x6c, 0x79, 0x50, 0x6f, 0x69, 0x6e, 0x74, 0x73, 0x12, 0x30,
+	0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73,
+	0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x52, 0x61,
+	0x6c, 0x6c, 0x79, 0x50, 0x6f, 0x69, 0x6e, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x31, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69,
+	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64,
+	0x52, 0x61, 0x6c, 0x6c, 0x79, 0x50, 0x6f, 0x69, 0x6e, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x84, 0x01, 0x0a, 0x13, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c,
+	0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x12, 0x32, 0x2e,
 	0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69,
 	0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x4d, 0x69, 0x73,
-	0x73, 0x69, 0x6f, 0x6e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x04, 0x80, 0xb5, 0x18, 0x01, 0x12, 0x6b, 0x0a, 0x0c, 0x53, 0x74,
-	0x61, 0x72, 0x74, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x2b, 0x2e, 0x6d, 0x61, 0x76,
-	0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f,
-	0x72, 0x61, 0x77, 0x2e, 0x53, 0x74, 0x61, 0x72, 0x74, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2c, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b,
-	0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77,
-	0x2e, 0x53, 0x74, 0x61, 0x72, 0x74, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x6b, 0x0a, 0x0c, 0x50, 0x61, 0x75, 0x73, 0x65,
-	0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x2b, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b,
-	0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77,
-	0x2e, 0x50, 0x61, 0x75, 0x73, 0x65, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x2c, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70,
-	0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x50, 0x61,
-	0x75, 0x73, 0x65, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x00, 0x12, 0x6b, 0x0a, 0x0c, 0x43, 0x6c, 0x65, 0x61, 0x72, 0x4d, 0x69, 0x73,
-	0x73, 0x69, 0x6f, 0x6e, 0x12, 0x2b, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70,
-	0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x43, 0x6c,
-	0x65, 0x61, 0x72, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x2c, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x43, 0x6c, 0x65, 0x61, 0x72,
-	0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x00, 0x12, 0x86, 0x01, 0x0a, 0x15, 0x53, 0x65, 0x74, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74,
-	0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x49, 0x74, 0x65, 0x6d, 0x12, 0x34, 0x2e, 0x6d, 0x61,
-	0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
-	0x5f, 0x72, 0x61, 0x77, 0x2e, 0x53, 0x65, 0x74, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x4d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x35, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x53, 0x65, 0x74, 0x43, 0x75,
-	0x72, 0x72, 0x65, 0x6e, 0x74, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x49, 0x74, 0x65, 0x6d,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x88, 0x01, 0x0a, 0x18, 0x53,
-	0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50,
-	0x72, 0x6f, 0x67, 0x72, 0x65, 0x73, 0x73, 0x12, 0x37, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b,
-	0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77,
-	0x2e, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x50, 0x72, 0x6f, 0x67, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x2f, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69,
-	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x50, 0x72, 0x6f, 0x67, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x22, 0x00, 0x30, 0x01, 0x12, 0x89, 0x01, 0x0a, 0x17, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72,
-	0x69, 0x62, 0x65, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x43, 0x68, 0x61, 0x6e, 0x67, 0x65,
-	0x64, 0x12, 0x36, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x53, 0x75, 0x62, 0x73, 0x63,
-	0x72, 0x69, 0x62, 0x65, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x43, 0x68, 0x61, 0x6e, 0x67,
-	0x65, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2e, 0x2e, 0x6d, 0x61, 0x76, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x33, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d,
+	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x43, 0x61, 0x6e, 0x63, 0x65,
+	0x6c, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x04, 0x80, 0xb5, 0x18, 0x01, 0x12, 0x74, 0x0a, 0x0f,
+	0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12,
+	0x2e, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61,
+	0x64, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x2f, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61,
+	0x64, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x22, 0x00, 0x12, 0x8a, 0x01, 0x0a, 0x15, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x4d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x12, 0x34, 0x2e, 0x6d,
+	0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
+	0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x4d, 0x69, 0x73, 0x73,
+	0x69, 0x6f, 0x6e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x35, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e,
+	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x43, 0x61, 0x6e, 0x63,
+	0x65, 0x6c, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61,
+	0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x04, 0x80, 0xb5, 0x18, 0x01, 0x12,
+	0x6b, 0x0a, 0x0c, 0x53, 0x74, 0x61, 0x72, 0x74, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12,
+	0x2b, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x53, 0x74, 0x61, 0x72, 0x74, 0x4d, 0x69,
+	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2c, 0x2e, 0x6d,
+	0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
+	0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x53, 0x74, 0x61, 0x72, 0x74, 0x4d, 0x69, 0x73, 0x73, 0x69,
+	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x6b, 0x0a, 0x0c,
+	0x50, 0x61, 0x75, 0x73, 0x65, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x2b, 0x2e, 0x6d,
+	0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
+	0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x50, 0x61, 0x75, 0x73, 0x65, 0x4d, 0x69, 0x73, 0x73, 0x69,
+	0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2c, 0x2e, 0x6d, 0x61, 0x76, 0x73,
 	0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72,
-	0x61, 0x77, 0x2e, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x43, 0x68, 0x61, 0x6e, 0x67, 0x65,
-	0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x04, 0x80, 0xb5, 0x18, 0x00, 0x30,
-	0x01, 0x12, 0x9c, 0x01, 0x0a, 0x1b, 0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x51, 0x67, 0x72, 0x6f,
-	0x75, 0x6e, 0x64, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x12, 0x3a, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x49, 0x6d, 0x70, 0x6f, 0x72,
+	0x61, 0x77, 0x2e, 0x50, 0x61, 0x75, 0x73, 0x65, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x6b, 0x0a, 0x0c, 0x43, 0x6c, 0x65,
+	0x61, 0x72, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x2b, 0x2e, 0x6d, 0x61, 0x76, 0x73,
+	0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72,
+	0x61, 0x77, 0x2e, 0x43, 0x6c, 0x65, 0x61, 0x72, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2c, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e,
+	0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e,
+	0x43, 0x6c, 0x65, 0x61, 0x72, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x86, 0x01, 0x0a, 0x15, 0x53, 0x65, 0x74, 0x43, 0x75,
+	0x72, 0x72, 0x65, 0x6e, 0x74, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x49, 0x74, 0x65, 0x6d,
+	0x12, 0x34, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69,
+	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x53, 0x65, 0x74, 0x43, 0x75, 0x72,
+	0x72, 0x65, 0x6e, 0x74, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x49, 0x74, 0x65, 0x6d, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x35, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e,
+	0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e,
+	0x53, 0x65, 0x74, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f,
+	0x6e, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12,
+	0x88, 0x01, 0x0a, 0x18, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x4d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x67, 0x72, 0x65, 0x73, 0x73, 0x12, 0x37, 0x2e, 0x6d,
+	0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
+	0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x4d,
+	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x67, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2f, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72,
+	0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x4d,
+	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x67, 0x72, 0x65, 0x73, 0x73, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x30, 0x01, 0x12, 0x89, 0x01, 0x0a, 0x17, 0x53,
+	0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x43,
+	0x68, 0x61, 0x6e, 0x67, 0x65, 0x64, 0x12, 0x36, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e,
+	0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e,
+	0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x43, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2e,
+	0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73,
+	0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x43,
+	0x68, 0x61, 0x6e, 0x67, 0x65, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x04,
+	0x80, 0xb5, 0x18, 0x00, 0x30, 0x01, 0x12, 0x9c, 0x01, 0x0a, 0x1b, 0x49, 0x6d, 0x70, 0x6f, 0x72,
 	0x74, 0x51, 0x67, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x4d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x3b, 0x2e,
-	0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69,
-	0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x51, 0x67, 0x72,
-	0x6f, 0x75, 0x6e, 0x64, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x4d, 0x69, 0x73, 0x73, 0x69,
-	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x04, 0x80, 0xb5, 0x18, 0x01,
-	0x42, 0x20, 0x42, 0x0f, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x61, 0x77, 0x50, 0x72,
-	0x6f, 0x74, 0x6f, 0x5a, 0x0d, 0x2e, 0x3b, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72,
-	0x61, 0x77, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x3a, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e,
+	0x72, 0x70, 0x63, 0x2e, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e,
+	0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x51, 0x67, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x63, 0x6f, 0x6e,
+	0x74, 0x72, 0x6f, 0x6c, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x3b, 0x2e, 0x6d, 0x61, 0x76, 0x73, 0x64, 0x6b, 0x2e, 0x72, 0x70, 0x63, 0x2e,
+	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x2e, 0x49, 0x6d, 0x70, 0x6f,
+	0x72, 0x74, 0x51, 0x67, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c,
+	0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x04, 0x80, 0xb5, 0x18, 0x01, 0x42, 0x20, 0x42, 0x0f, 0x4d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x52, 0x61, 0x77, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x5a, 0x0d, 0x2e, 0x3b, 0x6d, 0x69, 0x73, 0x73,
+	0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x61, 0x77, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1697,81 +1956,93 @@ func file_mission_raw_proto_rawDescGZIP() []byte {
 }
 
 var file_mission_raw_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_mission_raw_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
+var file_mission_raw_proto_msgTypes = make([]protoimpl.MessageInfo, 30)
 var file_mission_raw_proto_goTypes = []interface{}{
 	(MissionRawResult_Result)(0),                // 0: mavsdk.rpc.mission_raw.MissionRawResult.Result
 	(*UploadMissionRequest)(nil),                // 1: mavsdk.rpc.mission_raw.UploadMissionRequest
 	(*UploadMissionResponse)(nil),               // 2: mavsdk.rpc.mission_raw.UploadMissionResponse
-	(*CancelMissionUploadRequest)(nil),          // 3: mavsdk.rpc.mission_raw.CancelMissionUploadRequest
-	(*CancelMissionUploadResponse)(nil),         // 4: mavsdk.rpc.mission_raw.CancelMissionUploadResponse
-	(*DownloadMissionRequest)(nil),              // 5: mavsdk.rpc.mission_raw.DownloadMissionRequest
-	(*DownloadMissionResponse)(nil),             // 6: mavsdk.rpc.mission_raw.DownloadMissionResponse
-	(*CancelMissionDownloadRequest)(nil),        // 7: mavsdk.rpc.mission_raw.CancelMissionDownloadRequest
-	(*CancelMissionDownloadResponse)(nil),       // 8: mavsdk.rpc.mission_raw.CancelMissionDownloadResponse
-	(*StartMissionRequest)(nil),                 // 9: mavsdk.rpc.mission_raw.StartMissionRequest
-	(*StartMissionResponse)(nil),                // 10: mavsdk.rpc.mission_raw.StartMissionResponse
-	(*PauseMissionRequest)(nil),                 // 11: mavsdk.rpc.mission_raw.PauseMissionRequest
-	(*PauseMissionResponse)(nil),                // 12: mavsdk.rpc.mission_raw.PauseMissionResponse
-	(*ClearMissionRequest)(nil),                 // 13: mavsdk.rpc.mission_raw.ClearMissionRequest
-	(*ClearMissionResponse)(nil),                // 14: mavsdk.rpc.mission_raw.ClearMissionResponse
-	(*SetCurrentMissionItemRequest)(nil),        // 15: mavsdk.rpc.mission_raw.SetCurrentMissionItemRequest
-	(*SetCurrentMissionItemResponse)(nil),       // 16: mavsdk.rpc.mission_raw.SetCurrentMissionItemResponse
-	(*SubscribeMissionProgressRequest)(nil),     // 17: mavsdk.rpc.mission_raw.SubscribeMissionProgressRequest
-	(*MissionProgressResponse)(nil),             // 18: mavsdk.rpc.mission_raw.MissionProgressResponse
-	(*SubscribeMissionChangedRequest)(nil),      // 19: mavsdk.rpc.mission_raw.SubscribeMissionChangedRequest
-	(*MissionChangedResponse)(nil),              // 20: mavsdk.rpc.mission_raw.MissionChangedResponse
-	(*ImportQgroundcontrolMissionRequest)(nil),  // 21: mavsdk.rpc.mission_raw.ImportQgroundcontrolMissionRequest
-	(*ImportQgroundcontrolMissionResponse)(nil), // 22: mavsdk.rpc.mission_raw.ImportQgroundcontrolMissionResponse
-	(*MissionProgress)(nil),                     // 23: mavsdk.rpc.mission_raw.MissionProgress
-	(*MissionItem)(nil),                         // 24: mavsdk.rpc.mission_raw.MissionItem
-	(*MissionImportData)(nil),                   // 25: mavsdk.rpc.mission_raw.MissionImportData
-	(*MissionRawResult)(nil),                    // 26: mavsdk.rpc.mission_raw.MissionRawResult
+	(*UploadGeofenceRequest)(nil),               // 3: mavsdk.rpc.mission_raw.UploadGeofenceRequest
+	(*UploadGeofenceResponse)(nil),              // 4: mavsdk.rpc.mission_raw.UploadGeofenceResponse
+	(*UploadRallyPointsRequest)(nil),            // 5: mavsdk.rpc.mission_raw.UploadRallyPointsRequest
+	(*UploadRallyPointsResponse)(nil),           // 6: mavsdk.rpc.mission_raw.UploadRallyPointsResponse
+	(*CancelMissionUploadRequest)(nil),          // 7: mavsdk.rpc.mission_raw.CancelMissionUploadRequest
+	(*CancelMissionUploadResponse)(nil),         // 8: mavsdk.rpc.mission_raw.CancelMissionUploadResponse
+	(*DownloadMissionRequest)(nil),              // 9: mavsdk.rpc.mission_raw.DownloadMissionRequest
+	(*DownloadMissionResponse)(nil),             // 10: mavsdk.rpc.mission_raw.DownloadMissionResponse
+	(*CancelMissionDownloadRequest)(nil),        // 11: mavsdk.rpc.mission_raw.CancelMissionDownloadRequest
+	(*CancelMissionDownloadResponse)(nil),       // 12: mavsdk.rpc.mission_raw.CancelMissionDownloadResponse
+	(*StartMissionRequest)(nil),                 // 13: mavsdk.rpc.mission_raw.StartMissionRequest
+	(*StartMissionResponse)(nil),                // 14: mavsdk.rpc.mission_raw.StartMissionResponse
+	(*PauseMissionRequest)(nil),                 // 15: mavsdk.rpc.mission_raw.PauseMissionRequest
+	(*PauseMissionResponse)(nil),                // 16: mavsdk.rpc.mission_raw.PauseMissionResponse
+	(*ClearMissionRequest)(nil),                 // 17: mavsdk.rpc.mission_raw.ClearMissionRequest
+	(*ClearMissionResponse)(nil),                // 18: mavsdk.rpc.mission_raw.ClearMissionResponse
+	(*SetCurrentMissionItemRequest)(nil),        // 19: mavsdk.rpc.mission_raw.SetCurrentMissionItemRequest
+	(*SetCurrentMissionItemResponse)(nil),       // 20: mavsdk.rpc.mission_raw.SetCurrentMissionItemResponse
+	(*SubscribeMissionProgressRequest)(nil),     // 21: mavsdk.rpc.mission_raw.SubscribeMissionProgressRequest
+	(*MissionProgressResponse)(nil),             // 22: mavsdk.rpc.mission_raw.MissionProgressResponse
+	(*SubscribeMissionChangedRequest)(nil),      // 23: mavsdk.rpc.mission_raw.SubscribeMissionChangedRequest
+	(*MissionChangedResponse)(nil),              // 24: mavsdk.rpc.mission_raw.MissionChangedResponse
+	(*ImportQgroundcontrolMissionRequest)(nil),  // 25: mavsdk.rpc.mission_raw.ImportQgroundcontrolMissionRequest
+	(*ImportQgroundcontrolMissionResponse)(nil), // 26: mavsdk.rpc.mission_raw.ImportQgroundcontrolMissionResponse
+	(*MissionProgress)(nil),                     // 27: mavsdk.rpc.mission_raw.MissionProgress
+	(*MissionItem)(nil),                         // 28: mavsdk.rpc.mission_raw.MissionItem
+	(*MissionImportData)(nil),                   // 29: mavsdk.rpc.mission_raw.MissionImportData
+	(*MissionRawResult)(nil),                    // 30: mavsdk.rpc.mission_raw.MissionRawResult
 }
 var file_mission_raw_proto_depIdxs = []int32{
-	24, // 0: mavsdk.rpc.mission_raw.UploadMissionRequest.mission_items:type_name -> mavsdk.rpc.mission_raw.MissionItem
-	26, // 1: mavsdk.rpc.mission_raw.UploadMissionResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
-	26, // 2: mavsdk.rpc.mission_raw.CancelMissionUploadResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
-	26, // 3: mavsdk.rpc.mission_raw.DownloadMissionResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
-	24, // 4: mavsdk.rpc.mission_raw.DownloadMissionResponse.mission_items:type_name -> mavsdk.rpc.mission_raw.MissionItem
-	26, // 5: mavsdk.rpc.mission_raw.CancelMissionDownloadResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
-	26, // 6: mavsdk.rpc.mission_raw.StartMissionResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
-	26, // 7: mavsdk.rpc.mission_raw.PauseMissionResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
-	26, // 8: mavsdk.rpc.mission_raw.ClearMissionResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
-	26, // 9: mavsdk.rpc.mission_raw.SetCurrentMissionItemResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
-	23, // 10: mavsdk.rpc.mission_raw.MissionProgressResponse.mission_progress:type_name -> mavsdk.rpc.mission_raw.MissionProgress
-	26, // 11: mavsdk.rpc.mission_raw.ImportQgroundcontrolMissionResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
-	25, // 12: mavsdk.rpc.mission_raw.ImportQgroundcontrolMissionResponse.mission_import_data:type_name -> mavsdk.rpc.mission_raw.MissionImportData
-	24, // 13: mavsdk.rpc.mission_raw.MissionImportData.mission_items:type_name -> mavsdk.rpc.mission_raw.MissionItem
-	24, // 14: mavsdk.rpc.mission_raw.MissionImportData.geofence_items:type_name -> mavsdk.rpc.mission_raw.MissionItem
-	24, // 15: mavsdk.rpc.mission_raw.MissionImportData.rally_items:type_name -> mavsdk.rpc.mission_raw.MissionItem
-	0,  // 16: mavsdk.rpc.mission_raw.MissionRawResult.result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult.Result
-	1,  // 17: mavsdk.rpc.mission_raw.MissionRawService.UploadMission:input_type -> mavsdk.rpc.mission_raw.UploadMissionRequest
-	3,  // 18: mavsdk.rpc.mission_raw.MissionRawService.CancelMissionUpload:input_type -> mavsdk.rpc.mission_raw.CancelMissionUploadRequest
-	5,  // 19: mavsdk.rpc.mission_raw.MissionRawService.DownloadMission:input_type -> mavsdk.rpc.mission_raw.DownloadMissionRequest
-	7,  // 20: mavsdk.rpc.mission_raw.MissionRawService.CancelMissionDownload:input_type -> mavsdk.rpc.mission_raw.CancelMissionDownloadRequest
-	9,  // 21: mavsdk.rpc.mission_raw.MissionRawService.StartMission:input_type -> mavsdk.rpc.mission_raw.StartMissionRequest
-	11, // 22: mavsdk.rpc.mission_raw.MissionRawService.PauseMission:input_type -> mavsdk.rpc.mission_raw.PauseMissionRequest
-	13, // 23: mavsdk.rpc.mission_raw.MissionRawService.ClearMission:input_type -> mavsdk.rpc.mission_raw.ClearMissionRequest
-	15, // 24: mavsdk.rpc.mission_raw.MissionRawService.SetCurrentMissionItem:input_type -> mavsdk.rpc.mission_raw.SetCurrentMissionItemRequest
-	17, // 25: mavsdk.rpc.mission_raw.MissionRawService.SubscribeMissionProgress:input_type -> mavsdk.rpc.mission_raw.SubscribeMissionProgressRequest
-	19, // 26: mavsdk.rpc.mission_raw.MissionRawService.SubscribeMissionChanged:input_type -> mavsdk.rpc.mission_raw.SubscribeMissionChangedRequest
-	21, // 27: mavsdk.rpc.mission_raw.MissionRawService.ImportQgroundcontrolMission:input_type -> mavsdk.rpc.mission_raw.ImportQgroundcontrolMissionRequest
-	2,  // 28: mavsdk.rpc.mission_raw.MissionRawService.UploadMission:output_type -> mavsdk.rpc.mission_raw.UploadMissionResponse
-	4,  // 29: mavsdk.rpc.mission_raw.MissionRawService.CancelMissionUpload:output_type -> mavsdk.rpc.mission_raw.CancelMissionUploadResponse
-	6,  // 30: mavsdk.rpc.mission_raw.MissionRawService.DownloadMission:output_type -> mavsdk.rpc.mission_raw.DownloadMissionResponse
-	8,  // 31: mavsdk.rpc.mission_raw.MissionRawService.CancelMissionDownload:output_type -> mavsdk.rpc.mission_raw.CancelMissionDownloadResponse
-	10, // 32: mavsdk.rpc.mission_raw.MissionRawService.StartMission:output_type -> mavsdk.rpc.mission_raw.StartMissionResponse
-	12, // 33: mavsdk.rpc.mission_raw.MissionRawService.PauseMission:output_type -> mavsdk.rpc.mission_raw.PauseMissionResponse
-	14, // 34: mavsdk.rpc.mission_raw.MissionRawService.ClearMission:output_type -> mavsdk.rpc.mission_raw.ClearMissionResponse
-	16, // 35: mavsdk.rpc.mission_raw.MissionRawService.SetCurrentMissionItem:output_type -> mavsdk.rpc.mission_raw.SetCurrentMissionItemResponse
-	18, // 36: mavsdk.rpc.mission_raw.MissionRawService.SubscribeMissionProgress:output_type -> mavsdk.rpc.mission_raw.MissionProgressResponse
-	20, // 37: mavsdk.rpc.mission_raw.MissionRawService.SubscribeMissionChanged:output_type -> mavsdk.rpc.mission_raw.MissionChangedResponse
-	22, // 38: mavsdk.rpc.mission_raw.MissionRawService.ImportQgroundcontrolMission:output_type -> mavsdk.rpc.mission_raw.ImportQgroundcontrolMissionResponse
-	28, // [28:39] is the sub-list for method output_type
-	17, // [17:28] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	28, // 0: mavsdk.rpc.mission_raw.UploadMissionRequest.mission_items:type_name -> mavsdk.rpc.mission_raw.MissionItem
+	30, // 1: mavsdk.rpc.mission_raw.UploadMissionResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
+	28, // 2: mavsdk.rpc.mission_raw.UploadGeofenceRequest.mission_items:type_name -> mavsdk.rpc.mission_raw.MissionItem
+	30, // 3: mavsdk.rpc.mission_raw.UploadGeofenceResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
+	28, // 4: mavsdk.rpc.mission_raw.UploadRallyPointsRequest.mission_items:type_name -> mavsdk.rpc.mission_raw.MissionItem
+	30, // 5: mavsdk.rpc.mission_raw.UploadRallyPointsResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
+	30, // 6: mavsdk.rpc.mission_raw.CancelMissionUploadResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
+	30, // 7: mavsdk.rpc.mission_raw.DownloadMissionResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
+	28, // 8: mavsdk.rpc.mission_raw.DownloadMissionResponse.mission_items:type_name -> mavsdk.rpc.mission_raw.MissionItem
+	30, // 9: mavsdk.rpc.mission_raw.CancelMissionDownloadResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
+	30, // 10: mavsdk.rpc.mission_raw.StartMissionResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
+	30, // 11: mavsdk.rpc.mission_raw.PauseMissionResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
+	30, // 12: mavsdk.rpc.mission_raw.ClearMissionResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
+	30, // 13: mavsdk.rpc.mission_raw.SetCurrentMissionItemResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
+	27, // 14: mavsdk.rpc.mission_raw.MissionProgressResponse.mission_progress:type_name -> mavsdk.rpc.mission_raw.MissionProgress
+	30, // 15: mavsdk.rpc.mission_raw.ImportQgroundcontrolMissionResponse.mission_raw_result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult
+	29, // 16: mavsdk.rpc.mission_raw.ImportQgroundcontrolMissionResponse.mission_import_data:type_name -> mavsdk.rpc.mission_raw.MissionImportData
+	28, // 17: mavsdk.rpc.mission_raw.MissionImportData.mission_items:type_name -> mavsdk.rpc.mission_raw.MissionItem
+	28, // 18: mavsdk.rpc.mission_raw.MissionImportData.geofence_items:type_name -> mavsdk.rpc.mission_raw.MissionItem
+	28, // 19: mavsdk.rpc.mission_raw.MissionImportData.rally_items:type_name -> mavsdk.rpc.mission_raw.MissionItem
+	0,  // 20: mavsdk.rpc.mission_raw.MissionRawResult.result:type_name -> mavsdk.rpc.mission_raw.MissionRawResult.Result
+	1,  // 21: mavsdk.rpc.mission_raw.MissionRawService.UploadMission:input_type -> mavsdk.rpc.mission_raw.UploadMissionRequest
+	3,  // 22: mavsdk.rpc.mission_raw.MissionRawService.UploadGeofence:input_type -> mavsdk.rpc.mission_raw.UploadGeofenceRequest
+	5,  // 23: mavsdk.rpc.mission_raw.MissionRawService.UploadRallyPoints:input_type -> mavsdk.rpc.mission_raw.UploadRallyPointsRequest
+	7,  // 24: mavsdk.rpc.mission_raw.MissionRawService.CancelMissionUpload:input_type -> mavsdk.rpc.mission_raw.CancelMissionUploadRequest
+	9,  // 25: mavsdk.rpc.mission_raw.MissionRawService.DownloadMission:input_type -> mavsdk.rpc.mission_raw.DownloadMissionRequest
+	11, // 26: mavsdk.rpc.mission_raw.MissionRawService.CancelMissionDownload:input_type -> mavsdk.rpc.mission_raw.CancelMissionDownloadRequest
+	13, // 27: mavsdk.rpc.mission_raw.MissionRawService.StartMission:input_type -> mavsdk.rpc.mission_raw.StartMissionRequest
+	15, // 28: mavsdk.rpc.mission_raw.MissionRawService.PauseMission:input_type -> mavsdk.rpc.mission_raw.PauseMissionRequest
+	17, // 29: mavsdk.rpc.mission_raw.MissionRawService.ClearMission:input_type -> mavsdk.rpc.mission_raw.ClearMissionRequest
+	19, // 30: mavsdk.rpc.mission_raw.MissionRawService.SetCurrentMissionItem:input_type -> mavsdk.rpc.mission_raw.SetCurrentMissionItemRequest
+	21, // 31: mavsdk.rpc.mission_raw.MissionRawService.SubscribeMissionProgress:input_type -> mavsdk.rpc.mission_raw.SubscribeMissionProgressRequest
+	23, // 32: mavsdk.rpc.mission_raw.MissionRawService.SubscribeMissionChanged:input_type -> mavsdk.rpc.mission_raw.SubscribeMissionChangedRequest
+	25, // 33: mavsdk.rpc.mission_raw.MissionRawService.ImportQgroundcontrolMission:input_type -> mavsdk.rpc.mission_raw.ImportQgroundcontrolMissionRequest
+	2,  // 34: mavsdk.rpc.mission_raw.MissionRawService.UploadMission:output_type -> mavsdk.rpc.mission_raw.UploadMissionResponse
+	4,  // 35: mavsdk.rpc.mission_raw.MissionRawService.UploadGeofence:output_type -> mavsdk.rpc.mission_raw.UploadGeofenceResponse
+	6,  // 36: mavsdk.rpc.mission_raw.MissionRawService.UploadRallyPoints:output_type -> mavsdk.rpc.mission_raw.UploadRallyPointsResponse
+	8,  // 37: mavsdk.rpc.mission_raw.MissionRawService.CancelMissionUpload:output_type -> mavsdk.rpc.mission_raw.CancelMissionUploadResponse
+	10, // 38: mavsdk.rpc.mission_raw.MissionRawService.DownloadMission:output_type -> mavsdk.rpc.mission_raw.DownloadMissionResponse
+	12, // 39: mavsdk.rpc.mission_raw.MissionRawService.CancelMissionDownload:output_type -> mavsdk.rpc.mission_raw.CancelMissionDownloadResponse
+	14, // 40: mavsdk.rpc.mission_raw.MissionRawService.StartMission:output_type -> mavsdk.rpc.mission_raw.StartMissionResponse
+	16, // 41: mavsdk.rpc.mission_raw.MissionRawService.PauseMission:output_type -> mavsdk.rpc.mission_raw.PauseMissionResponse
+	18, // 42: mavsdk.rpc.mission_raw.MissionRawService.ClearMission:output_type -> mavsdk.rpc.mission_raw.ClearMissionResponse
+	20, // 43: mavsdk.rpc.mission_raw.MissionRawService.SetCurrentMissionItem:output_type -> mavsdk.rpc.mission_raw.SetCurrentMissionItemResponse
+	22, // 44: mavsdk.rpc.mission_raw.MissionRawService.SubscribeMissionProgress:output_type -> mavsdk.rpc.mission_raw.MissionProgressResponse
+	24, // 45: mavsdk.rpc.mission_raw.MissionRawService.SubscribeMissionChanged:output_type -> mavsdk.rpc.mission_raw.MissionChangedResponse
+	26, // 46: mavsdk.rpc.mission_raw.MissionRawService.ImportQgroundcontrolMission:output_type -> mavsdk.rpc.mission_raw.ImportQgroundcontrolMissionResponse
+	34, // [34:47] is the sub-list for method output_type
+	21, // [21:34] is the sub-list for method input_type
+	21, // [21:21] is the sub-list for extension type_name
+	21, // [21:21] is the sub-list for extension extendee
+	0,  // [0:21] is the sub-list for field type_name
 }
 
 func init() { file_mission_raw_proto_init() }
@@ -1806,7 +2077,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CancelMissionUploadRequest); i {
+			switch v := v.(*UploadGeofenceRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1818,7 +2089,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CancelMissionUploadResponse); i {
+			switch v := v.(*UploadGeofenceResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1830,7 +2101,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DownloadMissionRequest); i {
+			switch v := v.(*UploadRallyPointsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1842,7 +2113,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DownloadMissionResponse); i {
+			switch v := v.(*UploadRallyPointsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1854,7 +2125,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CancelMissionDownloadRequest); i {
+			switch v := v.(*CancelMissionUploadRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1866,7 +2137,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CancelMissionDownloadResponse); i {
+			switch v := v.(*CancelMissionUploadResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1878,7 +2149,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*StartMissionRequest); i {
+			switch v := v.(*DownloadMissionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1890,7 +2161,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*StartMissionResponse); i {
+			switch v := v.(*DownloadMissionResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1902,7 +2173,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PauseMissionRequest); i {
+			switch v := v.(*CancelMissionDownloadRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1914,7 +2185,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PauseMissionResponse); i {
+			switch v := v.(*CancelMissionDownloadResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1926,7 +2197,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ClearMissionRequest); i {
+			switch v := v.(*StartMissionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1938,7 +2209,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ClearMissionResponse); i {
+			switch v := v.(*StartMissionResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1950,7 +2221,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SetCurrentMissionItemRequest); i {
+			switch v := v.(*PauseMissionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1962,7 +2233,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SetCurrentMissionItemResponse); i {
+			switch v := v.(*PauseMissionResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1974,7 +2245,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SubscribeMissionProgressRequest); i {
+			switch v := v.(*ClearMissionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1986,7 +2257,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MissionProgressResponse); i {
+			switch v := v.(*ClearMissionResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1998,7 +2269,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SubscribeMissionChangedRequest); i {
+			switch v := v.(*SetCurrentMissionItemRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2010,7 +2281,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MissionChangedResponse); i {
+			switch v := v.(*SetCurrentMissionItemResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2022,7 +2293,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ImportQgroundcontrolMissionRequest); i {
+			switch v := v.(*SubscribeMissionProgressRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2034,7 +2305,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ImportQgroundcontrolMissionResponse); i {
+			switch v := v.(*MissionProgressResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2046,7 +2317,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MissionProgress); i {
+			switch v := v.(*SubscribeMissionChangedRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2058,7 +2329,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MissionItem); i {
+			switch v := v.(*MissionChangedResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2070,7 +2341,7 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MissionImportData); i {
+			switch v := v.(*ImportQgroundcontrolMissionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2082,6 +2353,54 @@ func file_mission_raw_proto_init() {
 			}
 		}
 		file_mission_raw_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ImportQgroundcontrolMissionResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_mission_raw_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MissionProgress); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_mission_raw_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MissionItem); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_mission_raw_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MissionImportData); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_mission_raw_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MissionRawResult); i {
 			case 0:
 				return &v.state
@@ -2100,7 +2419,7 @@ func file_mission_raw_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_mission_raw_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   26,
+			NumMessages:   30,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

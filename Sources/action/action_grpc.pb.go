@@ -113,6 +113,11 @@ type ActionServiceClient interface {
 	GetReturnToLaunchAltitude(ctx context.Context, in *GetReturnToLaunchAltitudeRequest, opts ...grpc.CallOption) (*GetReturnToLaunchAltitudeResponse, error)
 	// Set the return to launch minimum return altitude (in meters).
 	SetReturnToLaunchAltitude(ctx context.Context, in *SetReturnToLaunchAltitudeRequest, opts ...grpc.CallOption) (*SetReturnToLaunchAltitudeResponse, error)
+	// Set current speed.
+	//
+	// This will set the speed during a mission, reposition, and similar.
+	// It is ephemeral, so not stored on the drone and does not survive a reboot.
+	SetCurrentSpeed(ctx context.Context, in *SetCurrentSpeedRequest, opts ...grpc.CallOption) (*SetCurrentSpeedResponse, error)
 }
 
 type actionServiceClient struct {
@@ -312,6 +317,15 @@ func (c *actionServiceClient) SetReturnToLaunchAltitude(ctx context.Context, in 
 	return out, nil
 }
 
+func (c *actionServiceClient) SetCurrentSpeed(ctx context.Context, in *SetCurrentSpeedRequest, opts ...grpc.CallOption) (*SetCurrentSpeedResponse, error) {
+	out := new(SetCurrentSpeedResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.action.ActionService/SetCurrentSpeed", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ActionServiceServer is the server API for ActionService service.
 // All implementations must embed UnimplementedActionServiceServer
 // for forward compatibility
@@ -407,6 +421,11 @@ type ActionServiceServer interface {
 	GetReturnToLaunchAltitude(context.Context, *GetReturnToLaunchAltitudeRequest) (*GetReturnToLaunchAltitudeResponse, error)
 	// Set the return to launch minimum return altitude (in meters).
 	SetReturnToLaunchAltitude(context.Context, *SetReturnToLaunchAltitudeRequest) (*SetReturnToLaunchAltitudeResponse, error)
+	// Set current speed.
+	//
+	// This will set the speed during a mission, reposition, and similar.
+	// It is ephemeral, so not stored on the drone and does not survive a reboot.
+	SetCurrentSpeed(context.Context, *SetCurrentSpeedRequest) (*SetCurrentSpeedResponse, error)
 	mustEmbedUnimplementedActionServiceServer()
 }
 
@@ -476,6 +495,9 @@ func (UnimplementedActionServiceServer) GetReturnToLaunchAltitude(context.Contex
 }
 func (UnimplementedActionServiceServer) SetReturnToLaunchAltitude(context.Context, *SetReturnToLaunchAltitudeRequest) (*SetReturnToLaunchAltitudeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetReturnToLaunchAltitude not implemented")
+}
+func (UnimplementedActionServiceServer) SetCurrentSpeed(context.Context, *SetCurrentSpeedRequest) (*SetCurrentSpeedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetCurrentSpeed not implemented")
 }
 func (UnimplementedActionServiceServer) mustEmbedUnimplementedActionServiceServer() {}
 
@@ -868,6 +890,24 @@ func _ActionService_SetReturnToLaunchAltitude_Handler(srv interface{}, ctx conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ActionService_SetCurrentSpeed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetCurrentSpeedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActionServiceServer).SetCurrentSpeed(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.action.ActionService/SetCurrentSpeed",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActionServiceServer).SetCurrentSpeed(ctx, req.(*SetCurrentSpeedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ActionService_ServiceDesc is the grpc.ServiceDesc for ActionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -958,6 +998,10 @@ var ActionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetReturnToLaunchAltitude",
 			Handler:    _ActionService_SetReturnToLaunchAltitude_Handler,
+		},
+		{
+			MethodName: "SetCurrentSpeed",
+			Handler:    _ActionService_SetCurrentSpeed_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

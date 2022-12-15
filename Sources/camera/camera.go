@@ -498,3 +498,27 @@ type ServiceImpl struct{
     }
 
        
+    /*
+         Select current camera .
+
+         Bind the plugin instance to a specific camera_id
+
+         Parameters
+         ----------
+         cameraId int32
+
+         
+    */
+
+    func(s *ServiceImpl)SelectCamera(ctx context.Context, cameraId int32)(*SelectCameraResponse, error){
+        
+        request := &SelectCameraRequest{}
+    	request.CameraId = cameraId
+        response, err := s.Client.SelectCamera(ctx, request)
+        if err != nil {
+    		return nil, err
+        }
+        return response, nil
+    }
+
+       

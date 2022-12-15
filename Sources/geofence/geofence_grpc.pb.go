@@ -22,9 +22,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GeofenceServiceClient interface {
-	// Upload a geofence.
+	// Upload geofences.
 	//
-	// Polygons are uploaded to a drone. Once uploaded, the geofence will remain
+	// Polygon and Circular geofences are uploaded to a drone. Once uploaded, the geofence will remain
 	// on the drone even if a connection is lost.
 	UploadGeofence(ctx context.Context, in *UploadGeofenceRequest, opts ...grpc.CallOption) (*UploadGeofenceResponse, error)
 	// Clear all geofences saved on the vehicle.
@@ -61,9 +61,9 @@ func (c *geofenceServiceClient) ClearGeofence(ctx context.Context, in *ClearGeof
 // All implementations must embed UnimplementedGeofenceServiceServer
 // for forward compatibility
 type GeofenceServiceServer interface {
-	// Upload a geofence.
+	// Upload geofences.
 	//
-	// Polygons are uploaded to a drone. Once uploaded, the geofence will remain
+	// Polygon and Circular geofences are uploaded to a drone. Once uploaded, the geofence will remain
 	// on the drone even if a connection is lost.
 	UploadGeofence(context.Context, *UploadGeofenceRequest) (*UploadGeofenceResponse, error)
 	// Clear all geofences saved on the vehicle.

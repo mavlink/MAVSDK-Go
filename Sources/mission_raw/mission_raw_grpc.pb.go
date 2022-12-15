@@ -27,6 +27,10 @@ type MissionRawServiceClient interface {
 	// The raw mission items are uploaded to a drone. Once uploaded the mission
 	// can be started and executed even if the connection is lost.
 	UploadMission(ctx context.Context, in *UploadMissionRequest, opts ...grpc.CallOption) (*UploadMissionResponse, error)
+	// Upload a list of geofence items to the system.
+	UploadGeofence(ctx context.Context, in *UploadGeofenceRequest, opts ...grpc.CallOption) (*UploadGeofenceResponse, error)
+	// Upload a list of rally point items to the system.
+	UploadRallyPoints(ctx context.Context, in *UploadRallyPointsRequest, opts ...grpc.CallOption) (*UploadRallyPointsResponse, error)
 	// Cancel an ongoing mission upload.
 	CancelMissionUpload(ctx context.Context, in *CancelMissionUploadRequest, opts ...grpc.CallOption) (*CancelMissionUploadResponse, error)
 	// Download a list of raw mission items from the system (asynchronous).
@@ -82,6 +86,24 @@ func NewMissionRawServiceClient(cc grpc.ClientConnInterface) MissionRawServiceCl
 func (c *missionRawServiceClient) UploadMission(ctx context.Context, in *UploadMissionRequest, opts ...grpc.CallOption) (*UploadMissionResponse, error) {
 	out := new(UploadMissionResponse)
 	err := c.cc.Invoke(ctx, "/mavsdk.rpc.mission_raw.MissionRawService/UploadMission", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *missionRawServiceClient) UploadGeofence(ctx context.Context, in *UploadGeofenceRequest, opts ...grpc.CallOption) (*UploadGeofenceResponse, error) {
+	out := new(UploadGeofenceResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.mission_raw.MissionRawService/UploadGeofence", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *missionRawServiceClient) UploadRallyPoints(ctx context.Context, in *UploadRallyPointsRequest, opts ...grpc.CallOption) (*UploadRallyPointsResponse, error) {
+	out := new(UploadRallyPointsResponse)
+	err := c.cc.Invoke(ctx, "/mavsdk.rpc.mission_raw.MissionRawService/UploadRallyPoints", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -233,6 +255,10 @@ type MissionRawServiceServer interface {
 	// The raw mission items are uploaded to a drone. Once uploaded the mission
 	// can be started and executed even if the connection is lost.
 	UploadMission(context.Context, *UploadMissionRequest) (*UploadMissionResponse, error)
+	// Upload a list of geofence items to the system.
+	UploadGeofence(context.Context, *UploadGeofenceRequest) (*UploadGeofenceResponse, error)
+	// Upload a list of rally point items to the system.
+	UploadRallyPoints(context.Context, *UploadRallyPointsRequest) (*UploadRallyPointsResponse, error)
 	// Cancel an ongoing mission upload.
 	CancelMissionUpload(context.Context, *CancelMissionUploadRequest) (*CancelMissionUploadResponse, error)
 	// Download a list of raw mission items from the system (asynchronous).
@@ -284,6 +310,12 @@ type UnimplementedMissionRawServiceServer struct {
 
 func (UnimplementedMissionRawServiceServer) UploadMission(context.Context, *UploadMissionRequest) (*UploadMissionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadMission not implemented")
+}
+func (UnimplementedMissionRawServiceServer) UploadGeofence(context.Context, *UploadGeofenceRequest) (*UploadGeofenceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UploadGeofence not implemented")
+}
+func (UnimplementedMissionRawServiceServer) UploadRallyPoints(context.Context, *UploadRallyPointsRequest) (*UploadRallyPointsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UploadRallyPoints not implemented")
 }
 func (UnimplementedMissionRawServiceServer) CancelMissionUpload(context.Context, *CancelMissionUploadRequest) (*CancelMissionUploadResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelMissionUpload not implemented")
@@ -342,6 +374,42 @@ func _MissionRawService_UploadMission_Handler(srv interface{}, ctx context.Conte
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MissionRawServiceServer).UploadMission(ctx, req.(*UploadMissionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MissionRawService_UploadGeofence_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UploadGeofenceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MissionRawServiceServer).UploadGeofence(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.mission_raw.MissionRawService/UploadGeofence",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MissionRawServiceServer).UploadGeofence(ctx, req.(*UploadGeofenceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MissionRawService_UploadRallyPoints_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UploadRallyPointsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MissionRawServiceServer).UploadRallyPoints(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mavsdk.rpc.mission_raw.MissionRawService/UploadRallyPoints",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MissionRawServiceServer).UploadRallyPoints(ctx, req.(*UploadRallyPointsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -542,6 +610,14 @@ var MissionRawService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UploadMission",
 			Handler:    _MissionRawService_UploadMission_Handler,
+		},
+		{
+			MethodName: "UploadGeofence",
+			Handler:    _MissionRawService_UploadGeofence_Handler,
+		},
+		{
+			MethodName: "UploadRallyPoints",
+			Handler:    _MissionRawService_UploadRallyPoints_Handler,
 		},
 		{
 			MethodName: "CancelMissionUpload",

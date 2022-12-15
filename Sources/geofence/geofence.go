@@ -10,22 +10,23 @@ type ServiceImpl struct{
     Client GeofenceServiceClient
 }
     /*
-         Upload a geofence.
+         Upload geofences.
 
-         Polygons are uploaded to a drone. Once uploaded, the geofence will remain
+         Polygon and Circular geofences are uploaded to a drone. Once uploaded, the geofence will remain
          on the drone even if a connection is lost.
 
          Parameters
          ----------
-         polygons []*Polygon
+         geofenceData *GeofenceData 
+            
 
          
     */
 
-    func(s *ServiceImpl)UploadGeofence(ctx context.Context, polygons []*Polygon)(*UploadGeofenceResponse, error){
+    func(s *ServiceImpl)UploadGeofence(ctx context.Context, geofenceData *GeofenceData )(*UploadGeofenceResponse, error){
         
         request := &UploadGeofenceRequest{}
-    	request.Polygons = polygons
+    	request.GeofenceData = geofenceData
             
         response, err := s.Client.UploadGeofence(ctx, request)
         if err != nil {

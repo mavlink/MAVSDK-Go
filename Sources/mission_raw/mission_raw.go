@@ -36,6 +36,52 @@ type ServiceImpl struct{
 
        
     /*
+         Upload a list of geofence items to the system.
+
+         Parameters
+         ----------
+         missionItems []*MissionItem
+
+         
+    */
+
+    func(s *ServiceImpl)UploadGeofence(ctx context.Context, missionItems []*MissionItem)(*UploadGeofenceResponse, error){
+        
+        request := &UploadGeofenceRequest{}
+    	request.MissionItems = missionItems
+            
+        response, err := s.Client.UploadGeofence(ctx, request)
+        if err != nil {
+    		return nil, err
+        }
+        return response, nil
+    }
+
+       
+    /*
+         Upload a list of rally point items to the system.
+
+         Parameters
+         ----------
+         missionItems []*MissionItem
+
+         
+    */
+
+    func(s *ServiceImpl)UploadRallyPoints(ctx context.Context, missionItems []*MissionItem)(*UploadRallyPointsResponse, error){
+        
+        request := &UploadRallyPointsRequest{}
+    	request.MissionItems = missionItems
+            
+        response, err := s.Client.UploadRallyPoints(ctx, request)
+        if err != nil {
+    		return nil, err
+        }
+        return response, nil
+    }
+
+       
+    /*
          Cancel an ongoing mission upload.
 
          
