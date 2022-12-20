@@ -10,4 +10,4 @@ services:
         environment:
             - NO_PXH=1
         links:
-            - mavsdk_server
+           - mavsdk_server
