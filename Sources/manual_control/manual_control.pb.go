@@ -577,7 +577,6 @@ func file_manual_control_proto_init() {
 	if File_manual_control_proto != nil {
 		return
 	}
-	file_mavsdk_options_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_manual_control_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*StartPositionControlRequest); i {

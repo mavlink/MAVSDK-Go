@@ -1223,7 +1223,6 @@ func file_info_proto_init() {
 	if File_info_proto != nil {
 		return
 	}
-	file_mavsdk_options_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_info_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetFlightInformationRequest); i {

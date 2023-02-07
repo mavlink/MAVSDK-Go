@@ -3920,7 +3920,6 @@ func file_camera_proto_init() {
 	if File_camera_proto != nil {
 		return
 	}
-	file_mavsdk_options_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_camera_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PrepareRequest); i {

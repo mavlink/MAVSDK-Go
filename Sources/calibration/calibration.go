@@ -6,178 +6,177 @@ import (
 	"io"
 )
 
-type ServiceImpl struct{
-    Client CalibrationServiceClient
+type ServiceImpl struct {
+	Client CalibrationServiceClient
 }
 
-     /*
-         Perform gyro calibration.
+/*
+   Perform gyro calibration.
 
-         
-    */
 
-    func (a *ServiceImpl) CalibrateGyro(ctx context.Context, ) (<-chan  *ProgressData , error){
-    		ch := make(chan  *ProgressData )
-    		request := &SubscribeCalibrateGyroRequest{}
-    		stream, err := a.Client.SubscribeCalibrateGyro(ctx, request)
-    		if err != nil {
-    			return nil, err
-    		}
-    		go func() {
-    			defer close(ch)
-    			for {
-    				m := &CalibrateGyroResponse{}
-    				err := stream.RecvMsg(m)
-    				if err == io.EOF {
-    					break
-    				}
-    				if err != nil {
-    					fmt.Printf("Unable to receive message %v", err)
-    					break
-    				}
-    				ch <- m.GetProgressData()
-    			}
-    		}()	
-    	return ch, nil
-    }
+*/
 
-     /*
-         Perform accelerometer calibration.
+func (a *ServiceImpl) CalibrateGyro(ctx context.Context) (<-chan *ProgressData, error) {
+	ch := make(chan *ProgressData)
+	request := &SubscribeCalibrateGyroRequest{}
+	stream, err := a.Client.SubscribeCalibrateGyro(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	go func() {
+		defer close(ch)
+		for {
+			m := &CalibrateGyroResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			ch <- m.GetProgressData()
+		}
+	}()
+	return ch, nil
+}
 
-         
-    */
+/*
+   Perform accelerometer calibration.
 
-    func (a *ServiceImpl) CalibrateAccelerometer(ctx context.Context, ) (<-chan  *ProgressData , error){
-    		ch := make(chan  *ProgressData )
-    		request := &SubscribeCalibrateAccelerometerRequest{}
-    		stream, err := a.Client.SubscribeCalibrateAccelerometer(ctx, request)
-    		if err != nil {
-    			return nil, err
-    		}
-    		go func() {
-    			defer close(ch)
-    			for {
-    				m := &CalibrateAccelerometerResponse{}
-    				err := stream.RecvMsg(m)
-    				if err == io.EOF {
-    					break
-    				}
-    				if err != nil {
-    					fmt.Printf("Unable to receive message %v", err)
-    					break
-    				}
-    				ch <- m.GetProgressData()
-    			}
-    		}()	
-    	return ch, nil
-    }
 
-     /*
-         Perform magnetometer calibration.
+*/
 
-         
-    */
+func (a *ServiceImpl) CalibrateAccelerometer(ctx context.Context) (<-chan *ProgressData, error) {
+	ch := make(chan *ProgressData)
+	request := &SubscribeCalibrateAccelerometerRequest{}
+	stream, err := a.Client.SubscribeCalibrateAccelerometer(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	go func() {
+		defer close(ch)
+		for {
+			m := &CalibrateAccelerometerResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			ch <- m.GetProgressData()
+		}
+	}()
+	return ch, nil
+}
 
-    func (a *ServiceImpl) CalibrateMagnetometer(ctx context.Context, ) (<-chan  *ProgressData , error){
-    		ch := make(chan  *ProgressData )
-    		request := &SubscribeCalibrateMagnetometerRequest{}
-    		stream, err := a.Client.SubscribeCalibrateMagnetometer(ctx, request)
-    		if err != nil {
-    			return nil, err
-    		}
-    		go func() {
-    			defer close(ch)
-    			for {
-    				m := &CalibrateMagnetometerResponse{}
-    				err := stream.RecvMsg(m)
-    				if err == io.EOF {
-    					break
-    				}
-    				if err != nil {
-    					fmt.Printf("Unable to receive message %v", err)
-    					break
-    				}
-    				ch <- m.GetProgressData()
-    			}
-    		}()	
-    	return ch, nil
-    }
+/*
+   Perform magnetometer calibration.
 
-     /*
-         Perform board level horizon calibration.
 
-         
-    */
+*/
 
-    func (a *ServiceImpl) CalibrateLevelHorizon(ctx context.Context, ) (<-chan  *ProgressData , error){
-    		ch := make(chan  *ProgressData )
-    		request := &SubscribeCalibrateLevelHorizonRequest{}
-    		stream, err := a.Client.SubscribeCalibrateLevelHorizon(ctx, request)
-    		if err != nil {
-    			return nil, err
-    		}
-    		go func() {
-    			defer close(ch)
-    			for {
-    				m := &CalibrateLevelHorizonResponse{}
-    				err := stream.RecvMsg(m)
-    				if err == io.EOF {
-    					break
-    				}
-    				if err != nil {
-    					fmt.Printf("Unable to receive message %v", err)
-    					break
-    				}
-    				ch <- m.GetProgressData()
-    			}
-    		}()	
-    	return ch, nil
-    }
+func (a *ServiceImpl) CalibrateMagnetometer(ctx context.Context) (<-chan *ProgressData, error) {
+	ch := make(chan *ProgressData)
+	request := &SubscribeCalibrateMagnetometerRequest{}
+	stream, err := a.Client.SubscribeCalibrateMagnetometer(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	go func() {
+		defer close(ch)
+		for {
+			m := &CalibrateMagnetometerResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			ch <- m.GetProgressData()
+		}
+	}()
+	return ch, nil
+}
 
-     /*
-         Perform gimbal accelerometer calibration.
+/*
+   Perform board level horizon calibration.
 
-         
-    */
 
-    func (a *ServiceImpl) CalibrateGimbalAccelerometer(ctx context.Context, ) (<-chan  *ProgressData , error){
-    		ch := make(chan  *ProgressData )
-    		request := &SubscribeCalibrateGimbalAccelerometerRequest{}
-    		stream, err := a.Client.SubscribeCalibrateGimbalAccelerometer(ctx, request)
-    		if err != nil {
-    			return nil, err
-    		}
-    		go func() {
-    			defer close(ch)
-    			for {
-    				m := &CalibrateGimbalAccelerometerResponse{}
-    				err := stream.RecvMsg(m)
-    				if err == io.EOF {
-    					break
-    				}
-    				if err != nil {
-    					fmt.Printf("Unable to receive message %v", err)
-    					break
-    				}
-    				ch <- m.GetProgressData()
-    			}
-    		}()	
-    	return ch, nil
-    }
-    /*
-         Cancel ongoing calibration process.
+*/
 
-         
-    */
+func (a *ServiceImpl) CalibrateLevelHorizon(ctx context.Context) (<-chan *ProgressData, error) {
+	ch := make(chan *ProgressData)
+	request := &SubscribeCalibrateLevelHorizonRequest{}
+	stream, err := a.Client.SubscribeCalibrateLevelHorizon(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	go func() {
+		defer close(ch)
+		for {
+			m := &CalibrateLevelHorizonResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			ch <- m.GetProgressData()
+		}
+	}()
+	return ch, nil
+}
 
-    func(s *ServiceImpl)Cancel(ctx context.Context, )(*CancelResponse, error){
-        
-        request := &CancelRequest{}
-    	response, err := s.Client.Cancel(ctx, request)
-        if err != nil {
-    		return nil, err
-        }
-        return response, nil
-    }
+/*
+   Perform gimbal accelerometer calibration.
 
-       
+
+*/
+
+func (a *ServiceImpl) CalibrateGimbalAccelerometer(ctx context.Context) (<-chan *ProgressData, error) {
+	ch := make(chan *ProgressData)
+	request := &SubscribeCalibrateGimbalAccelerometerRequest{}
+	stream, err := a.Client.SubscribeCalibrateGimbalAccelerometer(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	go func() {
+		defer close(ch)
+		for {
+			m := &CalibrateGimbalAccelerometerResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			ch <- m.GetProgressData()
+		}
+	}()
+	return ch, nil
+}
+
+/*
+   Cancel ongoing calibration process.
+
+
+*/
+
+func (s *ServiceImpl) Cancel(ctx context.Context) (*CancelResponse, error) {
+
+	request := &CancelRequest{}
+	response, err := s.Client.Cancel(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}

@@ -3,14 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
-	"os/exec"
 
 	"github.com/mavlink/MAVSDK-Go/Sources/action"
 	"github.com/mavlink/MAVSDK-Go/Sources/core"
 	"github.com/mavlink/MAVSDK-Go/Sources/geofence"
 	"github.com/mavlink/MAVSDK-Go/Sources/telemetry"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 //Drone creates a drone object to interact with drone related plugins
@@ -25,8 +26,6 @@ type Drone struct {
 
 //Connect Starts a mavsdk server and create a connection to it
 func (s *Drone) Connect() {
-	//start mavsdk server
-	// s.startMAVSDKServer()
 	grpcConnection := s.connectToMAVSDKServer()
 	s.InitPlugins(grpcConnection)
 
@@ -52,18 +51,8 @@ func (s *Drone) InitPlugins(cc *grpc.ClientConn) {
 	}
 }
 
-func (s *Drone) startMAVSDKServer() {
-	cmd := exec.Command("C:\\Users\\ykhedar\\Downloads\\mavsdk_server_win32", "-p", "50051")
-	print("Command [%s]", cmd)
-	cmd.Stdout = os.Stdout
-	err := cmd.Start()
-	if err != nil {
-		print("Error starting mavsdkserver %s", err)
-	}
-}
-
 func (s *Drone) connectToMAVSDKServer() *grpc.ClientConn {
-	dialoption := grpc.WithInsecure()
+	dialoption := grpc.WithTransportCredentials(insecure.NewCredentials())
 
 	serverAddr := s.mavsdkServer + ":" + s.port
 	cc, err := grpc.Dial(serverAddr, dialoption)
@@ -75,23 +64,12 @@ func (s *Drone) connectToMAVSDKServer() *grpc.ClientConn {
 }
 
 func main() {
-	drone := &Drone{port: "50051", mavsdkServer: "192.168.0.119"}
+	drone := &Drone{port: "50051", mavsdkServer: "127.0.0.1"}
 	drone.Connect()
-	// drone.core.Init()
-	// x := drone.core.ListRunningPlugins()
-	// fmt.Printf("%v\n", x)
-	//ch := drone.telemetry.Position()
-	//for x := range ch {
-	//	fmt.Printf("%v\n", x)
-	//}
 	drone.action.Arm(context.Background())
 	drone.action.Takeoff(context.Background())
 	drone.action.Land(context.Background())
-	// drone.telemetry.SetRatePosition(60)
-
-	// drone.action.GotoLocation(54, 56, 0.5, 30)
 	drone.core.ConnectionState(context.Background())
-	// fmt.Printf("channel value %v \n", <-ch1)
 	lat := 47.3977508
 	lon := 8.5456074
 	p1 := &geofence.Point{
@@ -110,10 +88,16 @@ func main() {
 		LatitudeDeg:  lat - 0.0001,
 		LongitudeDeg: lon + 0.0001,
 	}
-
+	// this is not a test or verification package. this only checks the sanity of geofence api
 	polygon := &geofence.Polygon{
 		Points:    []*geofence.Point{p1, p2, p3, p4},
-		FenceType: geofence.Polygon_FENCE_TYPE_EXCLUSION}
-	drone.geofence.UploadGeofence(context.Background(), []*geofence.Polygon{polygon})
-
+		FenceType: geofence.FenceType_FENCE_TYPE_EXCLUSION}
+	response, err := drone.geofence.UploadGeofence(context.Background(), &geofence.GeofenceData{
+		Polygons: []*geofence.Polygon{polygon},
+	})
+	if err != nil {
+		log.Print(err.Error())
+		os.Exit(1)
+	}
+	log.Printf("response %v", response)
 }

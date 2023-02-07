@@ -1239,7 +1239,6 @@ func file_follow_me_proto_init() {
 	if File_follow_me_proto != nil {
 		return
 	}
-	file_mavsdk_options_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_follow_me_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Config); i {

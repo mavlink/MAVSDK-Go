@@ -541,7 +541,6 @@ func file_failure_proto_init() {
 	if File_failure_proto != nil {
 		return
 	}
-	file_mavsdk_options_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_failure_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*InjectRequest); i {

@@ -2365,7 +2365,6 @@ func file_offboard_proto_init() {
 	if File_offboard_proto != nil {
 		return
 	}
-	file_mavsdk_options_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_offboard_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*StartRequest); i {

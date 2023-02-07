@@ -2,210 +2,197 @@ package param
 
 import (
 	"context"
-	"fmt"
-	"io"
 )
 
-type ServiceImpl struct{
-    Client ParamServiceClient
+type ServiceImpl struct {
+	Client ParamServiceClient
 }
-    /*
-         Get an int parameter.
 
-         If the type is wrong, the result will be `WRONG_TYPE`.
+/*
+   Get an int parameter.
 
-         Parameters
-         ----------
-         name string
+   If the type is wrong, the result will be `WRONG_TYPE`.
 
-         Returns
-         -------
-         False
-         Value : int32
-              Value of the requested parameter
+   Parameters
+   ----------
+   name string
 
-         
-    */
+   Returns
+   -------
+   False
+   Value : int32
+        Value of the requested parameter
 
 
-    func(s *ServiceImpl)GetParamInt(ctx context.Context, name string) (*GetParamIntResponse, error){
-        request := &GetParamIntRequest{}
-    	request.Name = name
-        response, err := s.Client.GetParamInt(ctx, request)
-        if err != nil {
-    		return nil, err
-    	}
-        return response, nil
+*/
 
-    }
+func (s *ServiceImpl) GetParamInt(ctx context.Context, name string) (*GetParamIntResponse, error) {
+	request := &GetParamIntRequest{}
+	request.Name = name
+	response, err := s.Client.GetParamInt(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
 
-       
-    /*
-         Set an int parameter.
+}
 
-         If the type is wrong, the result will be `WRONG_TYPE`.
+/*
+   Set an int parameter.
 
-         Parameters
-         ----------
-         name string
+   If the type is wrong, the result will be `WRONG_TYPE`.
 
-         value int32
+   Parameters
+   ----------
+   name string
 
-         
-    */
-
-    func(s *ServiceImpl)SetParamInt(ctx context.Context, name string, value int32)(*SetParamIntResponse, error){
-        
-        request := &SetParamIntRequest{}
-    	request.Name = name
-        request.Value = value
-        response, err := s.Client.SetParamInt(ctx, request)
-        if err != nil {
-    		return nil, err
-        }
-        return response, nil
-    }
-
-       
-    /*
-         Get a float parameter.
-
-         If the type is wrong, the result will be `WRONG_TYPE`.
-
-         Parameters
-         ----------
-         name string
-
-         Returns
-         -------
-         False
-         Value : float32
-              Value of the requested parameter
-
-         
-    */
+   value int32
 
 
-    func(s *ServiceImpl)GetParamFloat(ctx context.Context, name string) (*GetParamFloatResponse, error){
-        request := &GetParamFloatRequest{}
-    	request.Name = name
-        response, err := s.Client.GetParamFloat(ctx, request)
-        if err != nil {
-    		return nil, err
-    	}
-        return response, nil
+*/
 
-    }
+func (s *ServiceImpl) SetParamInt(ctx context.Context, name string, value int32) (*SetParamIntResponse, error) {
 
-       
-    /*
-         Set a float parameter.
+	request := &SetParamIntRequest{}
+	request.Name = name
+	request.Value = value
+	response, err := s.Client.SetParamInt(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
 
-         If the type is wrong, the result will be `WRONG_TYPE`.
+/*
+   Get a float parameter.
 
-         Parameters
-         ----------
-         name string
+   If the type is wrong, the result will be `WRONG_TYPE`.
 
-         value float32
+   Parameters
+   ----------
+   name string
 
-         
-    */
-
-    func(s *ServiceImpl)SetParamFloat(ctx context.Context, name string, value float32)(*SetParamFloatResponse, error){
-        
-        request := &SetParamFloatRequest{}
-    	request.Name = name
-        request.Value = value
-        response, err := s.Client.SetParamFloat(ctx, request)
-        if err != nil {
-    		return nil, err
-        }
-        return response, nil
-    }
-
-       
-    /*
-         Get a custom parameter.
-
-         If the type is wrong, the result will be `WRONG_TYPE`.
-
-         Parameters
-         ----------
-         name string
-
-         Returns
-         -------
-         False
-         Value : string
-              Value of the requested parameter
-
-         
-    */
+   Returns
+   -------
+   False
+   Value : float32
+        Value of the requested parameter
 
 
-    func(s *ServiceImpl)GetParamCustom(ctx context.Context, name string) (*GetParamCustomResponse, error){
-        request := &GetParamCustomRequest{}
-    	request.Name = name
-        response, err := s.Client.GetParamCustom(ctx, request)
-        if err != nil {
-    		return nil, err
-    	}
-        return response, nil
+*/
 
-    }
+func (s *ServiceImpl) GetParamFloat(ctx context.Context, name string) (*GetParamFloatResponse, error) {
+	request := &GetParamFloatRequest{}
+	request.Name = name
+	response, err := s.Client.GetParamFloat(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
 
-       
-    /*
-         Set a custom parameter.
+}
 
-         If the type is wrong, the result will be `WRONG_TYPE`.
+/*
+   Set a float parameter.
 
-         Parameters
-         ----------
-         name string
+   If the type is wrong, the result will be `WRONG_TYPE`.
 
-         value string
+   Parameters
+   ----------
+   name string
 
-         
-    */
-
-    func(s *ServiceImpl)SetParamCustom(ctx context.Context, name string, value string)(*SetParamCustomResponse, error){
-        
-        request := &SetParamCustomRequest{}
-    	request.Name = name
-        request.Value = value
-        response, err := s.Client.SetParamCustom(ctx, request)
-        if err != nil {
-    		return nil, err
-        }
-        return response, nil
-    }
-
-       
-    /*
-         Get all parameters.
-
-         
-
-         Returns
-         -------
-         False
-         Params : AllParams
-              Collection of all parameters
-
-         
-    */
+   value float32
 
 
-    func(s *ServiceImpl)GetAllParams(ctx context.Context, ) (*GetAllParamsResponse, error){
-        request := &GetAllParamsRequest{}
-    	response, err := s.Client.GetAllParams(ctx, request)
-        if err != nil {
-    		return nil, err
-    	}
-        return response, nil
+*/
 
-    }
+func (s *ServiceImpl) SetParamFloat(ctx context.Context, name string, value float32) (*SetParamFloatResponse, error) {
 
-       
+	request := &SetParamFloatRequest{}
+	request.Name = name
+	request.Value = value
+	response, err := s.Client.SetParamFloat(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+   Get a custom parameter.
+
+   If the type is wrong, the result will be `WRONG_TYPE`.
+
+   Parameters
+   ----------
+   name string
+
+   Returns
+   -------
+   False
+   Value : string
+        Value of the requested parameter
+
+
+*/
+
+func (s *ServiceImpl) GetParamCustom(ctx context.Context, name string) (*GetParamCustomResponse, error) {
+	request := &GetParamCustomRequest{}
+	request.Name = name
+	response, err := s.Client.GetParamCustom(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+
+}
+
+/*
+   Set a custom parameter.
+
+   If the type is wrong, the result will be `WRONG_TYPE`.
+
+   Parameters
+   ----------
+   name string
+
+   value string
+
+
+*/
+
+func (s *ServiceImpl) SetParamCustom(ctx context.Context, name string, value string) (*SetParamCustomResponse, error) {
+
+	request := &SetParamCustomRequest{}
+	request.Name = name
+	request.Value = value
+	response, err := s.Client.SetParamCustom(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+   Get all parameters.
+
+
+
+   Returns
+   -------
+   False
+   Params : AllParams
+        Collection of all parameters
+
+
+*/
+
+func (s *ServiceImpl) GetAllParams(ctx context.Context) (*GetAllParamsResponse, error) {
+	request := &GetAllParamsRequest{}
+	response, err := s.Client.GetAllParams(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+
+}

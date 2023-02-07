@@ -1309,7 +1309,6 @@ func file_param_proto_init() {
 	if File_param_proto != nil {
 		return
 	}
-	file_mavsdk_options_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_param_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetParamIntRequest); i {

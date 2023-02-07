@@ -406,7 +406,6 @@ func file_shell_proto_init() {
 	if File_shell_proto != nil {
 		return
 	}
-	file_mavsdk_options_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_shell_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*SendRequest); i {
