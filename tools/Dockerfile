@@ -18,5 +18,7 @@ RUN apt-get install -y -q python3-pip git
 RUN cd / && git clone https://github.com/mavlink/MAVSDK-Proto.git
 RUN cd /MAVSDK-Proto/pb_plugins && pip3 install -r requirements.txt && pip3 install -e .
 RUN pip3 install grpcio-tools
+RUN apt install protobuf-compiler
+ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 
 ENTRYPOINT ["/bin/bash", "-l", "-c"]

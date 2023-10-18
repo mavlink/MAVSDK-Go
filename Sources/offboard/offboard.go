@@ -262,6 +262,39 @@ func (s *ServiceImpl) SetPositionVelocityNed(ctx context.Context, positionNedYaw
 }
 
 /*
+   Set the position, velocity and acceleration in NED coordinates, with velocity and acceleration used as feed-forward.
+
+   Parameters
+   ----------
+   positionNedYaw *PositionNedYaw
+
+
+   velocityNedYaw *VelocityNedYaw
+
+
+   accelerationNed *AccelerationNed
+
+
+
+*/
+
+func (s *ServiceImpl) SetPositionVelocityAccelerationNed(ctx context.Context, positionNedYaw *PositionNedYaw, velocityNedYaw *VelocityNedYaw, accelerationNed *AccelerationNed) (*SetPositionVelocityAccelerationNedResponse, error) {
+
+	request := &SetPositionVelocityAccelerationNedRequest{}
+	request.PositionNedYaw = positionNedYaw
+
+	request.VelocityNedYaw = velocityNedYaw
+
+	request.AccelerationNed = accelerationNed
+
+	response, err := s.Client.SetPositionVelocityAccelerationNed(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
    Set the acceleration in NED coordinates.
 
    Parameters

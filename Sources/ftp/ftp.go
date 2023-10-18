@@ -11,34 +11,19 @@ type ServiceImpl struct {
 }
 
 /*
-   Resets FTP server in case there are stale open sessions.
-
-
-*/
-
-func (s *ServiceImpl) Reset(ctx context.Context) (*ResetResponse, error) {
-
-	request := &ResetRequest{}
-	response, err := s.Client.Reset(ctx, request)
-	if err != nil {
-		return nil, err
-	}
-	return response, nil
-}
-
-/*
    Downloads a file to local directory.
 
    Parameters
    ----------
-   remoteFilePath string, localDir string
+   remoteFilePath string, localDir string, useBurst bool
 */
 
-func (a *ServiceImpl) Download(ctx context.Context, remoteFilePath string, localDir string) (<-chan *ProgressData, error) {
+func (a *ServiceImpl) Download(ctx context.Context, remoteFilePath string, localDir string, useBurst bool) (<-chan *ProgressData, error) {
 	ch := make(chan *ProgressData)
 	request := &SubscribeDownloadRequest{}
 	request.RemoteFilePath = remoteFilePath
 	request.LocalDir = localDir
+	request.UseBurst = useBurst
 	stream, err := a.Client.SubscribeDownload(ctx, request)
 	if err != nil {
 		return nil, err
@@ -239,27 +224,6 @@ func (s *ServiceImpl) AreFilesIdentical(ctx context.Context, localFilePath strin
 }
 
 /*
-   Set root directory for MAVLink FTP server.
-
-   Parameters
-   ----------
-   rootDir string
-
-
-*/
-
-func (s *ServiceImpl) SetRootDirectory(ctx context.Context, rootDir string) (*SetRootDirectoryResponse, error) {
-
-	request := &SetRootDirectoryRequest{}
-	request.RootDir = rootDir
-	response, err := s.Client.SetRootDirectory(ctx, request)
-	if err != nil {
-		return nil, err
-	}
-	return response, nil
-}
-
-/*
    Set target component ID. By default it is the autopilot.
 
    Parameters
@@ -278,28 +242,4 @@ func (s *ServiceImpl) SetTargetCompid(ctx context.Context, compid uint32) (*SetT
 		return nil, err
 	}
 	return response, nil
-}
-
-/*
-   Get our own component ID.
-
-
-
-   Returns
-   -------
-   False
-   Compid : uint32
-        Our component ID.
-
-
-*/
-
-func (s *ServiceImpl) GetOurCompid(ctx context.Context) (*GetOurCompidResponse, error) {
-	request := &GetOurCompidRequest{}
-	response, err := s.Client.GetOurCompid(ctx, request)
-	if err != nil {
-		return nil, err
-	}
-	return response, nil
-
 }

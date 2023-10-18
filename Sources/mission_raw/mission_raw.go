@@ -283,7 +283,7 @@ func (a *ServiceImpl) MissionChanged(ctx context.Context) (<-chan bool, error) {
 }
 
 /*
-   Import a QGroundControl missions in JSON .plan format.
+   Import a QGroundControl missions in JSON .plan format, from a file.
 
    Supported:
    - Waypoints
@@ -308,6 +308,39 @@ func (s *ServiceImpl) ImportQgroundcontrolMission(ctx context.Context, qgcPlanPa
 	request := &ImportQgroundcontrolMissionRequest{}
 	request.QgcPlanPath = qgcPlanPath
 	response, err := s.Client.ImportQgroundcontrolMission(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+
+}
+
+/*
+   Import a QGroundControl missions in JSON .plan format, from a string.
+
+   Supported:
+   - Waypoints
+   - Survey
+   Not supported:
+   - Structure Scan
+
+   Parameters
+   ----------
+   qgcPlan string
+
+   Returns
+   -------
+   False
+   MissionImportData : MissionImportData
+        The imported mission data
+
+
+*/
+
+func (s *ServiceImpl) ImportQgroundcontrolMissionFromString(ctx context.Context, qgcPlan string) (*ImportQgroundcontrolMissionFromStringResponse, error) {
+	request := &ImportQgroundcontrolMissionFromStringRequest{}
+	request.QgcPlan = qgcPlan
+	response, err := s.Client.ImportQgroundcontrolMissionFromString(ctx, request)
 	if err != nil {
 		return nil, err
 	}

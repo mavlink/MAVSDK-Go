@@ -62,7 +62,9 @@ echo "Generating final plugins."
 for plugin in ${PLUGIN_LIST}; do
 	echo "+=> Doing $plugin"
 	python3 -m grpc_tools.protoc --plugin=protoc-gen-custom=$(which protoc-gen-mavsdk) -I${PROTO_DIR}/$plugin --custom_out=${OUTPUT_DIR}/$plugin --custom_opt=file_ext=go ${plugin}.proto
-    mv ${OUTPUT_DIR}/$plugin/$(snake_case_to_camel_case ${plugin}).go ${OUTPUT_DIR}/$plugin/$plugin.go
+    # Again move generated file to its place.
+    mv ${OUTPUT_DIR}/$plugin/$(snake_case_to_camel_case ${plugin}).go ${OUTPUT_DIR}/$plugin/temp.go
+    mv ${OUTPUT_DIR}/$plugin/temp.go ${OUTPUT_DIR}/$plugin/$plugin.go
 done
 
 # Remove the temp directory.

@@ -196,3 +196,30 @@ func (s *ServiceImpl) GetAllParams(ctx context.Context) (*GetAllParamsResponse, 
 	return response, nil
 
 }
+
+/*
+   Select component ID of parameter component to talk to and param protocol version.
+
+   Default is the autopilot component (1), and Version (0).
+
+   Parameters
+   ----------
+   componentId int32
+
+   protocolVersion *ProtocolVersion
+
+
+
+*/
+
+func (s *ServiceImpl) SelectComponent(ctx context.Context, componentId int32, protocolVersion *ProtocolVersion) (*SelectComponentResponse, error) {
+
+	request := &SelectComponentRequest{}
+	request.ComponentId = componentId
+	request.ProtocolVersion = *protocolVersion
+	response, err := s.Client.SelectComponent(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
