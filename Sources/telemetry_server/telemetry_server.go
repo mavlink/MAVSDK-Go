@@ -360,3 +360,26 @@ func (s *ServiceImpl) PublishUnixEpochTime(ctx context.Context, timeUs uint64) (
 	}
 	return response, nil
 }
+
+/*
+   Publish to "distance sensor" updates.
+
+   Parameters
+   ----------
+   distanceSensor *DistanceSensor
+
+
+
+*/
+
+func (s *ServiceImpl) PublishDistanceSensor(ctx context.Context, distanceSensor *DistanceSensor) (*PublishDistanceSensorResponse, error) {
+
+	request := &PublishDistanceSensorRequest{}
+	request.DistanceSensor = distanceSensor
+
+	response, err := s.Client.PublishDistanceSensor(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
