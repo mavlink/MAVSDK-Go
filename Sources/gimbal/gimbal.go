@@ -11,6 +11,37 @@ type ServiceImpl struct {
 }
 
 /*
+   Set gimbal roll, pitch and yaw angles.
+
+   This sets the desired roll, pitch and yaw angles of a gimbal.
+   Will return when the command is accepted, however, it might
+   take the gimbal longer to actually be set to the new angles.
+
+   Parameters
+   ----------
+   rollDeg float32
+
+   pitchDeg float32
+
+   yawDeg float32
+
+
+*/
+
+func (s *ServiceImpl) SetAngles(ctx context.Context, rollDeg float32, pitchDeg float32, yawDeg float32) (*SetAnglesResponse, error) {
+
+	request := &SetAnglesRequest{}
+	request.RollDeg = rollDeg
+	request.PitchDeg = pitchDeg
+	request.YawDeg = yawDeg
+	response, err := s.Client.SetAngles(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
    Set gimbal pitch and yaw angles.
 
    This sets the desired pitch and yaw angles of a gimbal.
@@ -203,6 +234,39 @@ func (a *ServiceImpl) Control(ctx context.Context) (<-chan *ControlStatus, error
 				break
 			}
 			ch <- m.GetControlStatus()
+		}
+	}()
+	return ch, nil
+}
+
+/*
+   Subscribe to attitude updates.
+
+   This gets you the gimbal's attitude and angular rate.
+
+
+*/
+
+func (a *ServiceImpl) Attitude(ctx context.Context) (<-chan *Attitude, error) {
+	ch := make(chan *Attitude)
+	request := &SubscribeAttitudeRequest{}
+	stream, err := a.Client.SubscribeAttitude(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	go func() {
+		defer close(ch)
+		for {
+			m := &AttitudeResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			ch <- m.GetAttitude()
 		}
 	}()
 	return ch, nil

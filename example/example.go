@@ -14,7 +14,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-//Drone creates a drone object to interact with drone related plugins
+// Drone creates a drone object to interact with drone related plugins
 type Drone struct {
 	port         string
 	mavsdkServer string
@@ -24,14 +24,14 @@ type Drone struct {
 	geofence     geofence.ServiceImpl
 }
 
-//Connect Starts a mavsdk server and create a connection to it
+// Connect Starts a mavsdk server and create a connection to it
 func (s *Drone) Connect() {
 	grpcConnection := s.connectToMAVSDKServer()
 	s.InitPlugins(grpcConnection)
 
 }
 
-//InitPlugins initializes all the plugins
+// InitPlugins initializes all the plugins
 func (s *Drone) InitPlugins(cc *grpc.ClientConn) {
 
 	s.telemetry = telemetry.ServiceImpl{

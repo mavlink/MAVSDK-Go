@@ -2,6 +2,8 @@ package info
 
 import (
 	"context"
+	"fmt"
+	"io"
 )
 
 type ServiceImpl struct {
@@ -126,4 +128,35 @@ func (s *ServiceImpl) GetSpeedFactor(ctx context.Context) (*GetSpeedFactorRespon
 	}
 	return response, nil
 
+}
+
+/*
+   Subscribe to 'flight information' updates.
+
+
+*/
+
+func (a *ServiceImpl) FlightInformation(ctx context.Context) (<-chan *FlightInfo, error) {
+	ch := make(chan *FlightInfo)
+	request := &SubscribeFlightInformationRequest{}
+	stream, err := a.Client.SubscribeFlightInformation(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	go func() {
+		defer close(ch)
+		for {
+			m := &FlightInformationResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				fmt.Printf("Unable to receive message %v", err)
+				break
+			}
+			ch <- m.GetFlightInfo()
+		}
+	}()
+	return ch, nil
 }
