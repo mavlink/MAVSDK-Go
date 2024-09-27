@@ -34,10 +34,13 @@ func (a *ServiceImpl) {{ name.upper_camel_case }}(ctx context.Context, {% for pa
 						m := &{{ name.upper_camel_case }}Response{}
 						err := stream.RecvMsg(m)
 						if err == io.EOF {
-							break
+							return
 						}
 						if err != nil {
-							fmt.Printf("Unable to receive message %v", err)
+							if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+								return
+							}
+							fmt.Printf("Unable to receive message: %v\n", err)
 							break
 						}
 						ch <- m.Get{{ return_name.upper_camel_case }}()

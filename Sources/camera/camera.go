@@ -4,6 +4,9 @@ import (
 	"context"
 	"fmt"
 	"io"
+
+	codes "google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -226,10 +229,13 @@ func (a *ServiceImpl) Mode(ctx context.Context) (<-chan Mode, error) {
 				m := &ModeResponse{}
 				err := stream.RecvMsg(m)
 				if err == io.EOF {
-					break
+					return
 				}
 				if err != nil {
-					fmt.Printf("Unable to receive message %v", err)
+					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+						return
+					}
+					fmt.Printf("Unable to receive message: %v\n", err)
 					break
 				}
 				ch <- m.GetMode()
@@ -262,10 +268,13 @@ func (a *ServiceImpl) Information(ctx context.Context) (<-chan *Information, err
 				m := &InformationResponse{}
 				err := stream.RecvMsg(m)
 				if err == io.EOF {
-					break
+					return
 				}
 				if err != nil {
-					fmt.Printf("Unable to receive message %v", err)
+					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+						return
+					}
+					fmt.Printf("Unable to receive message: %v\n", err)
 					break
 				}
 				ch <- m.GetInformation()
@@ -298,10 +307,13 @@ func (a *ServiceImpl) VideoStreamInfo(ctx context.Context) (<-chan *VideoStreamI
 				m := &VideoStreamInfoResponse{}
 				err := stream.RecvMsg(m)
 				if err == io.EOF {
-					break
+					return
 				}
 				if err != nil {
-					fmt.Printf("Unable to receive message %v", err)
+					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+						return
+					}
+					fmt.Printf("Unable to receive message: %v\n", err)
 					break
 				}
 				ch <- m.GetVideoStreamInfo()
@@ -334,10 +346,13 @@ func (a *ServiceImpl) CaptureInfo(ctx context.Context) (<-chan *CaptureInfo, err
 				m := &CaptureInfoResponse{}
 				err := stream.RecvMsg(m)
 				if err == io.EOF {
-					break
+					return
 				}
 				if err != nil {
-					fmt.Printf("Unable to receive message %v", err)
+					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+						return
+					}
+					fmt.Printf("Unable to receive message: %v\n", err)
 					break
 				}
 				ch <- m.GetCaptureInfo()
@@ -370,10 +385,13 @@ func (a *ServiceImpl) Status(ctx context.Context) (<-chan *Status, error) {
 				m := &StatusResponse{}
 				err := stream.RecvMsg(m)
 				if err == io.EOF {
-					break
+					return
 				}
 				if err != nil {
-					fmt.Printf("Unable to receive message %v", err)
+					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+						return
+					}
+					fmt.Printf("Unable to receive message: %v\n", err)
 					break
 				}
 				ch <- m.GetCameraStatus()
@@ -406,10 +424,13 @@ func (a *ServiceImpl) CurrentSettings(ctx context.Context) (<-chan []*Setting, e
 				m := &CurrentSettingsResponse{}
 				err := stream.RecvMsg(m)
 				if err == io.EOF {
-					break
+					return
 				}
 				if err != nil {
-					fmt.Printf("Unable to receive message %v", err)
+					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+						return
+					}
+					fmt.Printf("Unable to receive message: %v\n", err)
 					break
 				}
 				ch <- m.GetCurrentSettings()
@@ -442,10 +463,13 @@ func (a *ServiceImpl) PossibleSettingOptions(ctx context.Context) (<-chan []*Set
 				m := &PossibleSettingOptionsResponse{}
 				err := stream.RecvMsg(m)
 				if err == io.EOF {
-					break
+					return
 				}
 				if err != nil {
-					fmt.Printf("Unable to receive message %v", err)
+					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+						return
+					}
+					fmt.Printf("Unable to receive message: %v\n", err)
 					break
 				}
 				ch <- m.GetSettingOptions()
@@ -628,7 +652,7 @@ func (s *ServiceImpl) ZoomStop(ctx context.Context) (*ZoomStopResponse, error) {
 
    Parameters
    ----------
-   zoomRange float32
+   range float32
 
 
 */
@@ -770,7 +794,7 @@ func (s *ServiceImpl) FocusStop(ctx context.Context) (*FocusStopResponse, error)
 
    Parameters
    ----------
-   focusRange float32
+   range float32
 
 
 */

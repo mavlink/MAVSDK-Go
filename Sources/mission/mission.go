@@ -4,6 +4,9 @@ import (
 	"context"
 	"fmt"
 	"io"
+
+	codes "google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -66,10 +69,13 @@ func (a *ServiceImpl) UploadMissionWithProgress(ctx context.Context, missionPlan
 				m := &UploadMissionWithProgressResponse{}
 				err := stream.RecvMsg(m)
 				if err == io.EOF {
-					break
+					return
 				}
 				if err != nil {
-					fmt.Printf("Unable to receive message %v", err)
+					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+						return
+					}
+					fmt.Printf("Unable to receive message: %v\n", err)
 					break
 				}
 				ch <- m.GetProgressData()
@@ -148,10 +154,13 @@ func (a *ServiceImpl) DownloadMissionWithProgress(ctx context.Context) (<-chan *
 				m := &DownloadMissionWithProgressResponse{}
 				err := stream.RecvMsg(m)
 				if err == io.EOF {
-					break
+					return
 				}
 				if err != nil {
-					fmt.Printf("Unable to receive message %v", err)
+					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+						return
+					}
+					fmt.Printf("Unable to receive message: %v\n", err)
 					break
 				}
 				ch <- m.GetProgressData()
@@ -306,10 +315,13 @@ func (a *ServiceImpl) MissionProgress(ctx context.Context) (<-chan *MissionProgr
 				m := &MissionProgressResponse{}
 				err := stream.RecvMsg(m)
 				if err == io.EOF {
-					break
+					return
 				}
 				if err != nil {
-					fmt.Printf("Unable to receive message %v", err)
+					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+						return
+					}
+					fmt.Printf("Unable to receive message: %v\n", err)
 					break
 				}
 				ch <- m.GetMissionProgress()
