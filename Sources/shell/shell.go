@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 
-	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	codes "google.golang.org/grpc/codes"
 )
 
 type ServiceImpl struct {
@@ -52,24 +52,19 @@ func (a *ServiceImpl) Receive(ctx context.Context) (<-chan string, error) {
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &ReceiveResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &ReceiveResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetData()
+				fmt.Printf("Unable to receive Receive messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetData()
 		}
 	}()
 	return ch, nil

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 
-	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	codes "google.golang.org/grpc/codes"
 )
 
 type ServiceImpl struct {
@@ -149,24 +149,19 @@ func (a *ServiceImpl) FlightInformation(ctx context.Context) (<-chan *FlightInfo
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &FlightInformationResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &FlightInformationResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetFlightInfo()
+				fmt.Printf("Unable to receive FlightInformation messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetFlightInfo()
 		}
 	}()
 	return ch, nil

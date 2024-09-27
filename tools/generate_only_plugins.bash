@@ -54,3 +54,6 @@ for plugin in ${PLUGIN_LIST}; do
         # rm "$temp_file_path"
     fi
 done
+
+# Remove the temp directory.
+rm -rf ${PROTO_DIR_TMP}

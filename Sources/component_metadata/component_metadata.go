@@ -68,24 +68,19 @@ func (a *ServiceImpl) MetadataAvailable(ctx context.Context) (<-chan *MetadataUp
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &MetadataAvailableResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &MetadataAvailableResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetData()
+				fmt.Printf("Unable to receive MetadataAvailable messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetData()
 		}
 	}()
 	return ch, nil

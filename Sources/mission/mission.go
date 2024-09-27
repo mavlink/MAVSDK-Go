@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 
-	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	codes "google.golang.org/grpc/codes"
 )
 
 type ServiceImpl struct {
@@ -62,24 +62,19 @@ func (a *ServiceImpl) UploadMissionWithProgress(ctx context.Context, missionPlan
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &UploadMissionWithProgressResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &UploadMissionWithProgressResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetProgressData()
+				fmt.Printf("Unable to receive UploadMissionWithProgress messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetProgressData()
 		}
 	}()
 	return ch, nil
@@ -147,24 +142,19 @@ func (a *ServiceImpl) DownloadMissionWithProgress(ctx context.Context) (<-chan *
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &DownloadMissionWithProgressResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &DownloadMissionWithProgressResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetProgressData()
+				fmt.Printf("Unable to receive DownloadMissionWithProgress messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetProgressData()
 		}
 	}()
 	return ch, nil
@@ -308,24 +298,19 @@ func (a *ServiceImpl) MissionProgress(ctx context.Context) (<-chan *MissionProgr
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &MissionProgressResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &MissionProgressResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetMissionProgress()
+				fmt.Printf("Unable to receive MissionProgress messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetMissionProgress()
 		}
 	}()
 	return ch, nil

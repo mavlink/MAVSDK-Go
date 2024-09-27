@@ -27,24 +27,19 @@ func (a *ServiceImpl) {{ name.upper_camel_case }}(ctx context.Context, {% for pa
 		go func() {
 			defer close(ch)
 			for {
-				select {
-					case <-ctx.Done():
-						return
-					default:
-						m := &{{ name.upper_camel_case }}Response{}
-						err := stream.RecvMsg(m)
-						if err == io.EOF {
-							return
-						}
-						if err != nil {
-							if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-								return
-							}
-							fmt.Printf("Unable to receive message: %v\n", err)
-							break
-						}
-						ch <- m.Get{{ return_name.upper_camel_case }}()
+				m := &{{ name.upper_camel_case }}Response{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					return
 				}
+				if err != nil {
+					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+						return
+					}
+					fmt.Printf("Unable to receive {{ name.upper_camel_case }} messages, err: %v\n", err)
+					break
+				}
+				ch <- m.Get{{ return_name.upper_camel_case }}()
 			}
 		}()	
 	return ch, nil

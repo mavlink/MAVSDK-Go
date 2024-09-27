@@ -58,24 +58,19 @@ func (a *ServiceImpl) DownloadLogFile(ctx context.Context, entry *Entry, path st
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &DownloadLogFileResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &DownloadLogFileResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetProgress()
+				fmt.Printf("Unable to receive DownloadLogFile messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetProgress()
 		}
 	}()
 	return ch, nil

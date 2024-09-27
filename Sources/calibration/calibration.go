@@ -29,24 +29,19 @@ func (a *ServiceImpl) CalibrateGyro(ctx context.Context) (<-chan *ProgressData, 
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &CalibrateGyroResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &CalibrateGyroResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetProgressData()
+				fmt.Printf("Unable to receive CalibrateGyro messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetProgressData()
 		}
 	}()
 	return ch, nil
@@ -68,24 +63,19 @@ func (a *ServiceImpl) CalibrateAccelerometer(ctx context.Context) (<-chan *Progr
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &CalibrateAccelerometerResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &CalibrateAccelerometerResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetProgressData()
+				fmt.Printf("Unable to receive CalibrateAccelerometer messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetProgressData()
 		}
 	}()
 	return ch, nil
@@ -107,24 +97,19 @@ func (a *ServiceImpl) CalibrateMagnetometer(ctx context.Context) (<-chan *Progre
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &CalibrateMagnetometerResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &CalibrateMagnetometerResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetProgressData()
+				fmt.Printf("Unable to receive CalibrateMagnetometer messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetProgressData()
 		}
 	}()
 	return ch, nil
@@ -146,24 +131,19 @@ func (a *ServiceImpl) CalibrateLevelHorizon(ctx context.Context) (<-chan *Progre
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &CalibrateLevelHorizonResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &CalibrateLevelHorizonResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetProgressData()
+				fmt.Printf("Unable to receive CalibrateLevelHorizon messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetProgressData()
 		}
 	}()
 	return ch, nil
@@ -185,24 +165,19 @@ func (a *ServiceImpl) CalibrateGimbalAccelerometer(ctx context.Context) (<-chan 
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &CalibrateGimbalAccelerometerResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &CalibrateGimbalAccelerometerResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetProgressData()
+				fmt.Printf("Unable to receive CalibrateGimbalAccelerometer messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetProgressData()
 		}
 	}()
 	return ch, nil

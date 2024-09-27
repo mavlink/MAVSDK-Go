@@ -29,24 +29,19 @@ func (a *ServiceImpl) IncomingMission(ctx context.Context) (<-chan *MissionPlan,
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &IncomingMissionResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &IncomingMissionResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetMissionPlan()
+				fmt.Printf("Unable to receive IncomingMission messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetMissionPlan()
 		}
 	}()
 	return ch, nil
@@ -68,24 +63,19 @@ func (a *ServiceImpl) CurrentItemChanged(ctx context.Context) (<-chan *MissionIt
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &CurrentItemChangedResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &CurrentItemChangedResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetMissionItem()
+				fmt.Printf("Unable to receive CurrentItemChanged messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetMissionItem()
 		}
 	}()
 	return ch, nil
@@ -123,24 +113,19 @@ func (a *ServiceImpl) ClearAll(ctx context.Context) (<-chan uint32, error) {
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &ClearAllResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &ClearAllResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetClearType()
+				fmt.Printf("Unable to receive ClearAll messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetClearType()
 		}
 	}()
 	return ch, nil

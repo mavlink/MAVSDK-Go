@@ -233,24 +233,19 @@ func (a *ServiceImpl) MissionProgress(ctx context.Context) (<-chan *MissionProgr
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &MissionProgressResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &MissionProgressResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetMissionProgress()
+				fmt.Printf("Unable to receive MissionProgress messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetMissionProgress()
 		}
 	}()
 	return ch, nil
@@ -278,24 +273,19 @@ func (a *ServiceImpl) MissionChanged(ctx context.Context) (<-chan bool, error) {
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &MissionChangedResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &MissionChangedResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetMissionChanged()
+				fmt.Printf("Unable to receive MissionChanged messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetMissionChanged()
 		}
 	}()
 	return ch, nil

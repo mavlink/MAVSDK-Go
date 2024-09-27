@@ -218,24 +218,19 @@ func (a *ServiceImpl) ChangedParamInt(ctx context.Context) (<-chan *IntParam, er
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &ChangedParamIntResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &ChangedParamIntResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetParam()
+				fmt.Printf("Unable to receive ChangedParamInt messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetParam()
 		}
 	}()
 	return ch, nil
@@ -257,24 +252,19 @@ func (a *ServiceImpl) ChangedParamFloat(ctx context.Context) (<-chan *FloatParam
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &ChangedParamFloatResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &ChangedParamFloatResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetParam()
+				fmt.Printf("Unable to receive ChangedParamFloat messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetParam()
 		}
 	}()
 	return ch, nil
@@ -296,24 +286,19 @@ func (a *ServiceImpl) ChangedParamCustom(ctx context.Context) (<-chan *CustomPar
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &ChangedParamCustomResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &ChangedParamCustomResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetParam()
+				fmt.Printf("Unable to receive ChangedParamCustom messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetParam()
 		}
 	}()
 	return ch, nil

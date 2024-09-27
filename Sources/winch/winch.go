@@ -29,24 +29,19 @@ func (a *ServiceImpl) Status(ctx context.Context) (<-chan *Status, error) {
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &StatusResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &StatusResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetStatus()
+				fmt.Printf("Unable to receive Status messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetStatus()
 		}
 	}()
 	return ch, nil

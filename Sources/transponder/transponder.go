@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 
-	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	codes "google.golang.org/grpc/codes"
 )
 
 type ServiceImpl struct {
@@ -29,24 +29,19 @@ func (a *ServiceImpl) Transponder(ctx context.Context) (<-chan *AdsbVehicle, err
 	go func() {
 		defer close(ch)
 		for {
-			select {
-			case <-ctx.Done():
+			m := &TransponderResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
 				return
-			default:
-				m := &TransponderResponse{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive message: %v\n", err)
-					break
-				}
-				ch <- m.GetTransponder()
+				fmt.Printf("Unable to receive Transponder messages, err: %v\n", err)
+				break
 			}
+			ch <- m.GetTransponder()
 		}
 	}()
 	return ch, nil
