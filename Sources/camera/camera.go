@@ -219,16 +219,21 @@ func (a *ServiceImpl) Mode(ctx context.Context) (<-chan Mode, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &ModeResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ModeResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetMode()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetMode()
 		}
 	}()
 	return ch, nil
@@ -250,16 +255,21 @@ func (a *ServiceImpl) Information(ctx context.Context) (<-chan *Information, err
 	go func() {
 		defer close(ch)
 		for {
-			m := &InformationResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &InformationResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetInformation()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetInformation()
 		}
 	}()
 	return ch, nil
@@ -281,16 +291,21 @@ func (a *ServiceImpl) VideoStreamInfo(ctx context.Context) (<-chan *VideoStreamI
 	go func() {
 		defer close(ch)
 		for {
-			m := &VideoStreamInfoResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &VideoStreamInfoResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetVideoStreamInfo()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetVideoStreamInfo()
 		}
 	}()
 	return ch, nil
@@ -312,16 +327,21 @@ func (a *ServiceImpl) CaptureInfo(ctx context.Context) (<-chan *CaptureInfo, err
 	go func() {
 		defer close(ch)
 		for {
-			m := &CaptureInfoResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &CaptureInfoResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetCaptureInfo()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetCaptureInfo()
 		}
 	}()
 	return ch, nil
@@ -343,16 +363,21 @@ func (a *ServiceImpl) Status(ctx context.Context) (<-chan *Status, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &StatusResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &StatusResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetCameraStatus()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetCameraStatus()
 		}
 	}()
 	return ch, nil
@@ -374,16 +399,21 @@ func (a *ServiceImpl) CurrentSettings(ctx context.Context) (<-chan []*Setting, e
 	go func() {
 		defer close(ch)
 		for {
-			m := &CurrentSettingsResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &CurrentSettingsResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetCurrentSettings()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetCurrentSettings()
 		}
 	}()
 	return ch, nil
@@ -405,16 +435,21 @@ func (a *ServiceImpl) PossibleSettingOptions(ctx context.Context) (<-chan []*Set
 	go func() {
 		defer close(ch)
 		for {
-			m := &PossibleSettingOptionsResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &PossibleSettingOptionsResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetSettingOptions()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetSettingOptions()
 		}
 	}()
 	return ch, nil

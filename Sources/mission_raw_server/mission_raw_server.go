@@ -26,16 +26,21 @@ func (a *ServiceImpl) IncomingMission(ctx context.Context) (<-chan *MissionPlan,
 	go func() {
 		defer close(ch)
 		for {
-			m := &IncomingMissionResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &IncomingMissionResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetMissionPlan()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetMissionPlan()
 		}
 	}()
 	return ch, nil
@@ -57,16 +62,21 @@ func (a *ServiceImpl) CurrentItemChanged(ctx context.Context) (<-chan *MissionIt
 	go func() {
 		defer close(ch)
 		for {
-			m := &CurrentItemChangedResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &CurrentItemChangedResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetMissionItem()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetMissionItem()
 		}
 	}()
 	return ch, nil
@@ -104,16 +114,21 @@ func (a *ServiceImpl) ClearAll(ctx context.Context) (<-chan uint32, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &ClearAllResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ClearAllResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetClearType()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetClearType()
 		}
 	}()
 	return ch, nil

@@ -26,16 +26,21 @@ func (a *ServiceImpl) CalibrateGyro(ctx context.Context) (<-chan *ProgressData, 
 	go func() {
 		defer close(ch)
 		for {
-			m := &CalibrateGyroResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &CalibrateGyroResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetProgressData()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetProgressData()
 		}
 	}()
 	return ch, nil
@@ -57,16 +62,21 @@ func (a *ServiceImpl) CalibrateAccelerometer(ctx context.Context) (<-chan *Progr
 	go func() {
 		defer close(ch)
 		for {
-			m := &CalibrateAccelerometerResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &CalibrateAccelerometerResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetProgressData()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetProgressData()
 		}
 	}()
 	return ch, nil
@@ -88,16 +98,21 @@ func (a *ServiceImpl) CalibrateMagnetometer(ctx context.Context) (<-chan *Progre
 	go func() {
 		defer close(ch)
 		for {
-			m := &CalibrateMagnetometerResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &CalibrateMagnetometerResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetProgressData()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetProgressData()
 		}
 	}()
 	return ch, nil
@@ -119,16 +134,21 @@ func (a *ServiceImpl) CalibrateLevelHorizon(ctx context.Context) (<-chan *Progre
 	go func() {
 		defer close(ch)
 		for {
-			m := &CalibrateLevelHorizonResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &CalibrateLevelHorizonResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetProgressData()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetProgressData()
 		}
 	}()
 	return ch, nil
@@ -150,16 +170,21 @@ func (a *ServiceImpl) CalibrateGimbalAccelerometer(ctx context.Context) (<-chan 
 	go func() {
 		defer close(ch)
 		for {
-			m := &CalibrateGimbalAccelerometerResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &CalibrateGimbalAccelerometerResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetProgressData()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetProgressData()
 		}
 	}()
 	return ch, nil

@@ -230,16 +230,21 @@ func (a *ServiceImpl) MissionProgress(ctx context.Context) (<-chan *MissionProgr
 	go func() {
 		defer close(ch)
 		for {
-			m := &MissionProgressResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &MissionProgressResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetMissionProgress()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetMissionProgress()
 		}
 	}()
 	return ch, nil
@@ -267,16 +272,21 @@ func (a *ServiceImpl) MissionChanged(ctx context.Context) (<-chan bool, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &MissionChangedResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &MissionChangedResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetMissionChanged()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetMissionChanged()
 		}
 	}()
 	return ch, nil

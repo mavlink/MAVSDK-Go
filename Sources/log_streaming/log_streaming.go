@@ -58,16 +58,21 @@ func (a *ServiceImpl) LogStreamingRaw(ctx context.Context) (<-chan *LogStreaming
 	go func() {
 		defer close(ch)
 		for {
-			m := &LogStreamingRawResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &LogStreamingRawResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetLoggingRaw()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetLoggingRaw()
 		}
 	}()
 	return ch, nil

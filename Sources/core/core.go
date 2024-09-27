@@ -26,16 +26,21 @@ func (a *ServiceImpl) ConnectionState(ctx context.Context) (<-chan *ConnectionSt
 	go func() {
 		defer close(ch)
 		for {
-			m := &ConnectionStateResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ConnectionStateResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetConnectionState()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetConnectionState()
 		}
 	}()
 	return ch, nil

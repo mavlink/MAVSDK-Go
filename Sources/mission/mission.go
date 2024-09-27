@@ -59,16 +59,21 @@ func (a *ServiceImpl) UploadMissionWithProgress(ctx context.Context, missionPlan
 	go func() {
 		defer close(ch)
 		for {
-			m := &UploadMissionWithProgressResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &UploadMissionWithProgressResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetProgressData()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetProgressData()
 		}
 	}()
 	return ch, nil
@@ -136,16 +141,21 @@ func (a *ServiceImpl) DownloadMissionWithProgress(ctx context.Context) (<-chan *
 	go func() {
 		defer close(ch)
 		for {
-			m := &DownloadMissionWithProgressResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &DownloadMissionWithProgressResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetProgressData()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetProgressData()
 		}
 	}()
 	return ch, nil
@@ -289,16 +299,21 @@ func (a *ServiceImpl) MissionProgress(ctx context.Context) (<-chan *MissionProgr
 	go func() {
 		defer close(ch)
 		for {
-			m := &MissionProgressResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &MissionProgressResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetMissionProgress()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetMissionProgress()
 		}
 	}()
 	return ch, nil

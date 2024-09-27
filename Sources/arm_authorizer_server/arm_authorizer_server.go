@@ -26,16 +26,21 @@ func (a *ServiceImpl) ArmAuthorization(ctx context.Context) (<-chan uint32, erro
 	go func() {
 		defer close(ch)
 		for {
-			m := &ArmAuthorizationResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ArmAuthorizationResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetSystemId()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetSystemId()
 		}
 	}()
 	return ch, nil

@@ -26,16 +26,21 @@ func (a *ServiceImpl) Position(ctx context.Context) (<-chan *Position, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &PositionResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &PositionResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetPosition()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetPosition()
 		}
 	}()
 	return ch, nil
@@ -57,16 +62,21 @@ func (a *ServiceImpl) Home(ctx context.Context) (<-chan *Position, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &HomeResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &HomeResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetHome()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetHome()
 		}
 	}()
 	return ch, nil
@@ -88,16 +98,21 @@ func (a *ServiceImpl) InAir(ctx context.Context) (<-chan bool, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &InAirResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &InAirResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetIsInAir()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetIsInAir()
 		}
 	}()
 	return ch, nil
@@ -119,16 +134,21 @@ func (a *ServiceImpl) LandedState(ctx context.Context) (<-chan LandedState, erro
 	go func() {
 		defer close(ch)
 		for {
-			m := &LandedStateResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &LandedStateResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetLandedState()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetLandedState()
 		}
 	}()
 	return ch, nil
@@ -150,16 +170,21 @@ func (a *ServiceImpl) Armed(ctx context.Context) (<-chan bool, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &ArmedResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ArmedResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetIsArmed()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetIsArmed()
 		}
 	}()
 	return ch, nil
@@ -181,16 +206,21 @@ func (a *ServiceImpl) VtolState(ctx context.Context) (<-chan VtolState, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &VtolStateResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &VtolStateResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetVtolState()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetVtolState()
 		}
 	}()
 	return ch, nil
@@ -212,16 +242,21 @@ func (a *ServiceImpl) AttitudeQuaternion(ctx context.Context) (<-chan *Quaternio
 	go func() {
 		defer close(ch)
 		for {
-			m := &AttitudeQuaternionResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &AttitudeQuaternionResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetAttitudeQuaternion()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetAttitudeQuaternion()
 		}
 	}()
 	return ch, nil
@@ -243,16 +278,21 @@ func (a *ServiceImpl) AttitudeEuler(ctx context.Context) (<-chan *EulerAngle, er
 	go func() {
 		defer close(ch)
 		for {
-			m := &AttitudeEulerResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &AttitudeEulerResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetAttitudeEuler()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetAttitudeEuler()
 		}
 	}()
 	return ch, nil
@@ -274,16 +314,21 @@ func (a *ServiceImpl) AttitudeAngularVelocityBody(ctx context.Context) (<-chan *
 	go func() {
 		defer close(ch)
 		for {
-			m := &AttitudeAngularVelocityBodyResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &AttitudeAngularVelocityBodyResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetAttitudeAngularVelocityBody()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetAttitudeAngularVelocityBody()
 		}
 	}()
 	return ch, nil
@@ -305,16 +350,21 @@ func (a *ServiceImpl) CameraAttitudeQuaternion(ctx context.Context) (<-chan *Qua
 	go func() {
 		defer close(ch)
 		for {
-			m := &CameraAttitudeQuaternionResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &CameraAttitudeQuaternionResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetAttitudeQuaternion()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetAttitudeQuaternion()
 		}
 	}()
 	return ch, nil
@@ -336,16 +386,21 @@ func (a *ServiceImpl) CameraAttitudeEuler(ctx context.Context) (<-chan *EulerAng
 	go func() {
 		defer close(ch)
 		for {
-			m := &CameraAttitudeEulerResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &CameraAttitudeEulerResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetAttitudeEuler()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetAttitudeEuler()
 		}
 	}()
 	return ch, nil
@@ -367,16 +422,21 @@ func (a *ServiceImpl) VelocityNed(ctx context.Context) (<-chan *VelocityNed, err
 	go func() {
 		defer close(ch)
 		for {
-			m := &VelocityNedResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &VelocityNedResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetVelocityNed()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetVelocityNed()
 		}
 	}()
 	return ch, nil
@@ -398,16 +458,21 @@ func (a *ServiceImpl) GpsInfo(ctx context.Context) (<-chan *GpsInfo, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &GpsInfoResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &GpsInfoResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetGpsInfo()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetGpsInfo()
 		}
 	}()
 	return ch, nil
@@ -429,16 +494,21 @@ func (a *ServiceImpl) RawGps(ctx context.Context) (<-chan *RawGps, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &RawGpsResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &RawGpsResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetRawGps()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetRawGps()
 		}
 	}()
 	return ch, nil
@@ -460,16 +530,21 @@ func (a *ServiceImpl) Battery(ctx context.Context) (<-chan *Battery, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &BatteryResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &BatteryResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetBattery()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetBattery()
 		}
 	}()
 	return ch, nil
@@ -491,16 +566,21 @@ func (a *ServiceImpl) FlightMode(ctx context.Context) (<-chan FlightMode, error)
 	go func() {
 		defer close(ch)
 		for {
-			m := &FlightModeResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &FlightModeResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetFlightMode()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetFlightMode()
 		}
 	}()
 	return ch, nil
@@ -522,16 +602,21 @@ func (a *ServiceImpl) Health(ctx context.Context) (<-chan *Health, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &HealthResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &HealthResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetHealth()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetHealth()
 		}
 	}()
 	return ch, nil
@@ -553,16 +638,21 @@ func (a *ServiceImpl) RcStatus(ctx context.Context) (<-chan *RcStatus, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &RcStatusResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &RcStatusResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetRcStatus()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetRcStatus()
 		}
 	}()
 	return ch, nil
@@ -584,16 +674,21 @@ func (a *ServiceImpl) StatusText(ctx context.Context) (<-chan *StatusText, error
 	go func() {
 		defer close(ch)
 		for {
-			m := &StatusTextResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &StatusTextResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetStatusText()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetStatusText()
 		}
 	}()
 	return ch, nil
@@ -615,16 +710,21 @@ func (a *ServiceImpl) ActuatorControlTarget(ctx context.Context) (<-chan *Actuat
 	go func() {
 		defer close(ch)
 		for {
-			m := &ActuatorControlTargetResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ActuatorControlTargetResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetActuatorControlTarget()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetActuatorControlTarget()
 		}
 	}()
 	return ch, nil
@@ -646,16 +746,21 @@ func (a *ServiceImpl) ActuatorOutputStatus(ctx context.Context) (<-chan *Actuato
 	go func() {
 		defer close(ch)
 		for {
-			m := &ActuatorOutputStatusResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ActuatorOutputStatusResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetActuatorOutputStatus()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetActuatorOutputStatus()
 		}
 	}()
 	return ch, nil
@@ -677,16 +782,21 @@ func (a *ServiceImpl) Odometry(ctx context.Context) (<-chan *Odometry, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &OdometryResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &OdometryResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetOdometry()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetOdometry()
 		}
 	}()
 	return ch, nil
@@ -708,16 +818,21 @@ func (a *ServiceImpl) PositionVelocityNed(ctx context.Context) (<-chan *Position
 	go func() {
 		defer close(ch)
 		for {
-			m := &PositionVelocityNedResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &PositionVelocityNedResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetPositionVelocityNed()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetPositionVelocityNed()
 		}
 	}()
 	return ch, nil
@@ -739,16 +854,21 @@ func (a *ServiceImpl) GroundTruth(ctx context.Context) (<-chan *GroundTruth, err
 	go func() {
 		defer close(ch)
 		for {
-			m := &GroundTruthResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &GroundTruthResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetGroundTruth()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetGroundTruth()
 		}
 	}()
 	return ch, nil
@@ -770,16 +890,21 @@ func (a *ServiceImpl) FixedwingMetrics(ctx context.Context) (<-chan *FixedwingMe
 	go func() {
 		defer close(ch)
 		for {
-			m := &FixedwingMetricsResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &FixedwingMetricsResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetFixedwingMetrics()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetFixedwingMetrics()
 		}
 	}()
 	return ch, nil
@@ -801,16 +926,21 @@ func (a *ServiceImpl) Imu(ctx context.Context) (<-chan *Imu, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &ImuResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ImuResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetImu()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetImu()
 		}
 	}()
 	return ch, nil
@@ -832,16 +962,21 @@ func (a *ServiceImpl) ScaledImu(ctx context.Context) (<-chan *Imu, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &ScaledImuResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ScaledImuResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetImu()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetImu()
 		}
 	}()
 	return ch, nil
@@ -863,16 +998,21 @@ func (a *ServiceImpl) RawImu(ctx context.Context) (<-chan *Imu, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &RawImuResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &RawImuResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetImu()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetImu()
 		}
 	}()
 	return ch, nil
@@ -894,16 +1034,21 @@ func (a *ServiceImpl) HealthAllOk(ctx context.Context) (<-chan bool, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &HealthAllOkResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &HealthAllOkResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetIsHealthAllOk()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetIsHealthAllOk()
 		}
 	}()
 	return ch, nil
@@ -925,16 +1070,21 @@ func (a *ServiceImpl) UnixEpochTime(ctx context.Context) (<-chan uint64, error) 
 	go func() {
 		defer close(ch)
 		for {
-			m := &UnixEpochTimeResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &UnixEpochTimeResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetTimeUs()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetTimeUs()
 		}
 	}()
 	return ch, nil
@@ -956,16 +1106,21 @@ func (a *ServiceImpl) DistanceSensor(ctx context.Context) (<-chan *DistanceSenso
 	go func() {
 		defer close(ch)
 		for {
-			m := &DistanceSensorResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &DistanceSensorResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetDistanceSensor()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetDistanceSensor()
 		}
 	}()
 	return ch, nil
@@ -987,16 +1142,21 @@ func (a *ServiceImpl) ScaledPressure(ctx context.Context) (<-chan *ScaledPressur
 	go func() {
 		defer close(ch)
 		for {
-			m := &ScaledPressureResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ScaledPressureResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetScaledPressure()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetScaledPressure()
 		}
 	}()
 	return ch, nil
@@ -1018,16 +1178,21 @@ func (a *ServiceImpl) Heading(ctx context.Context) (<-chan *Heading, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &HeadingResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &HeadingResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetHeadingDeg()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetHeadingDeg()
 		}
 	}()
 	return ch, nil
@@ -1049,16 +1214,21 @@ func (a *ServiceImpl) Altitude(ctx context.Context) (<-chan *Altitude, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &AltitudeResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &AltitudeResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetAltitude()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetAltitude()
 		}
 	}()
 	return ch, nil

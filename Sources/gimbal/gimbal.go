@@ -224,16 +224,21 @@ func (a *ServiceImpl) Control(ctx context.Context) (<-chan *ControlStatus, error
 	go func() {
 		defer close(ch)
 		for {
-			m := &ControlResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ControlResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetControlStatus()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetControlStatus()
 		}
 	}()
 	return ch, nil
@@ -257,16 +262,21 @@ func (a *ServiceImpl) Attitude(ctx context.Context) (<-chan *Attitude, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &AttitudeResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &AttitudeResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetAttitude()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetAttitude()
 		}
 	}()
 	return ch, nil

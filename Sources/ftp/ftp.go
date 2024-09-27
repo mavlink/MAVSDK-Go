@@ -31,16 +31,21 @@ func (a *ServiceImpl) Download(ctx context.Context, remoteFilePath string, local
 	go func() {
 		defer close(ch)
 		for {
-			m := &DownloadResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &DownloadResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetProgressData()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetProgressData()
 		}
 	}()
 	return ch, nil
@@ -66,16 +71,21 @@ func (a *ServiceImpl) Upload(ctx context.Context, localFilePath string, remoteDi
 	go func() {
 		defer close(ch)
 		for {
-			m := &UploadResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &UploadResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetProgressData()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetProgressData()
 		}
 	}()
 	return ch, nil

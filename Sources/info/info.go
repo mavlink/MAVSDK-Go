@@ -146,16 +146,21 @@ func (a *ServiceImpl) FlightInformation(ctx context.Context) (<-chan *FlightInfo
 	go func() {
 		defer close(ch)
 		for {
-			m := &FlightInformationResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &FlightInformationResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetFlightInfo()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetFlightInfo()
 		}
 	}()
 	return ch, nil

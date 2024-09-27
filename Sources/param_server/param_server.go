@@ -215,16 +215,21 @@ func (a *ServiceImpl) ChangedParamInt(ctx context.Context) (<-chan *IntParam, er
 	go func() {
 		defer close(ch)
 		for {
-			m := &ChangedParamIntResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ChangedParamIntResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetParam()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetParam()
 		}
 	}()
 	return ch, nil
@@ -246,16 +251,21 @@ func (a *ServiceImpl) ChangedParamFloat(ctx context.Context) (<-chan *FloatParam
 	go func() {
 		defer close(ch)
 		for {
-			m := &ChangedParamFloatResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ChangedParamFloatResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetParam()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetParam()
 		}
 	}()
 	return ch, nil
@@ -277,16 +287,21 @@ func (a *ServiceImpl) ChangedParamCustom(ctx context.Context) (<-chan *CustomPar
 	go func() {
 		defer close(ch)
 		for {
-			m := &ChangedParamCustomResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ChangedParamCustomResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetParam()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetParam()
 		}
 	}()
 	return ch, nil

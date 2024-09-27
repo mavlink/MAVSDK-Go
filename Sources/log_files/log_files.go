@@ -55,16 +55,21 @@ func (a *ServiceImpl) DownloadLogFile(ctx context.Context, entry *Entry, path st
 	go func() {
 		defer close(ch)
 		for {
-			m := &DownloadLogFileResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &DownloadLogFileResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetProgress()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetProgress()
 		}
 	}()
 	return ch, nil

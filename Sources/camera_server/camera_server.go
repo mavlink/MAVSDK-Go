@@ -93,16 +93,21 @@ func (a *ServiceImpl) TakePhoto(ctx context.Context) (<-chan int32, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &TakePhotoResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &TakePhotoResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetIndex()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetIndex()
 		}
 	}()
 	return ch, nil
@@ -151,16 +156,21 @@ func (a *ServiceImpl) StartVideo(ctx context.Context) (<-chan int32, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &StartVideoResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &StartVideoResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetStreamId()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetStreamId()
 		}
 	}()
 	return ch, nil
@@ -204,16 +214,21 @@ func (a *ServiceImpl) StopVideo(ctx context.Context) (<-chan int32, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &StopVideoResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &StopVideoResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetStreamId()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetStreamId()
 		}
 	}()
 	return ch, nil
@@ -257,16 +272,21 @@ func (a *ServiceImpl) StartVideoStreaming(ctx context.Context) (<-chan int32, er
 	go func() {
 		defer close(ch)
 		for {
-			m := &StartVideoStreamingResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &StartVideoStreamingResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetStreamId()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetStreamId()
 		}
 	}()
 	return ch, nil
@@ -310,16 +330,21 @@ func (a *ServiceImpl) StopVideoStreaming(ctx context.Context) (<-chan int32, err
 	go func() {
 		defer close(ch)
 		for {
-			m := &StopVideoStreamingResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &StopVideoStreamingResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetStreamId()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetStreamId()
 		}
 	}()
 	return ch, nil
@@ -363,16 +388,21 @@ func (a *ServiceImpl) SetMode(ctx context.Context) (<-chan Mode, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &SetModeResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &SetModeResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetMode()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetMode()
 		}
 	}()
 	return ch, nil
@@ -416,16 +446,21 @@ func (a *ServiceImpl) StorageInformation(ctx context.Context) (<-chan int32, err
 	go func() {
 		defer close(ch)
 		for {
-			m := &StorageInformationResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &StorageInformationResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetStorageId()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetStorageId()
 		}
 	}()
 	return ch, nil
@@ -474,16 +509,21 @@ func (a *ServiceImpl) CaptureStatus(ctx context.Context) (<-chan int32, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &CaptureStatusResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &CaptureStatusResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetReserved()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetReserved()
 		}
 	}()
 	return ch, nil
@@ -532,16 +572,21 @@ func (a *ServiceImpl) FormatStorage(ctx context.Context) (<-chan int32, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &FormatStorageResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &FormatStorageResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetStorageId()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetStorageId()
 		}
 	}()
 	return ch, nil
@@ -585,16 +630,21 @@ func (a *ServiceImpl) ResetSettings(ctx context.Context) (<-chan int32, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &ResetSettingsResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ResetSettingsResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetReserved()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetReserved()
 		}
 	}()
 	return ch, nil
@@ -638,16 +688,21 @@ func (a *ServiceImpl) ZoomInStart(ctx context.Context) (<-chan int32, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &ZoomInStartResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ZoomInStartResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetReserved()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetReserved()
 		}
 	}()
 	return ch, nil
@@ -691,16 +746,21 @@ func (a *ServiceImpl) ZoomOutStart(ctx context.Context) (<-chan int32, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &ZoomOutStartResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ZoomOutStartResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetReserved()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetReserved()
 		}
 	}()
 	return ch, nil
@@ -744,16 +804,21 @@ func (a *ServiceImpl) ZoomStop(ctx context.Context) (<-chan int32, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &ZoomStopResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ZoomStopResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetReserved()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetReserved()
 		}
 	}()
 	return ch, nil
@@ -797,16 +862,21 @@ func (a *ServiceImpl) ZoomRange(ctx context.Context) (<-chan float32, error) {
 	go func() {
 		defer close(ch)
 		for {
-			m := &ZoomRangeResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &ZoomRangeResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetFactor()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetFactor()
 		}
 	}()
 	return ch, nil
@@ -889,16 +959,21 @@ func (a *ServiceImpl) TrackingPointCommand(ctx context.Context) (<-chan *TrackPo
 	go func() {
 		defer close(ch)
 		for {
-			m := &TrackingPointCommandResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &TrackingPointCommandResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetTrackPoint()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetTrackPoint()
 		}
 	}()
 	return ch, nil
@@ -920,16 +995,21 @@ func (a *ServiceImpl) TrackingRectangleCommand(ctx context.Context) (<-chan *Tra
 	go func() {
 		defer close(ch)
 		for {
-			m := &TrackingRectangleCommandResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &TrackingRectangleCommandResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetTrackRectangle()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetTrackRectangle()
 		}
 	}()
 	return ch, nil
@@ -951,16 +1031,21 @@ func (a *ServiceImpl) TrackingOffCommand(ctx context.Context) (<-chan int32, err
 	go func() {
 		defer close(ch)
 		for {
-			m := &TrackingOffCommandResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				break
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				m := &TrackingOffCommandResponse{}
+				err := stream.RecvMsg(m)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					fmt.Printf("Unable to receive message %v", err)
+					break
+				}
+				ch <- m.GetDummy()
 			}
-			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
-				break
-			}
-			ch <- m.GetDummy()
 		}
 	}()
 	return ch, nil
