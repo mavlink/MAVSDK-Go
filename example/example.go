@@ -14,7 +14,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-//Drone creates a drone object to interact with drone related plugins
+// Drone creates a drone object to interact with drone related plugins
 type Drone struct {
 	port         string
 	mavsdkServer string
@@ -24,14 +24,14 @@ type Drone struct {
 	geofence     geofence.ServiceImpl
 }
 
-//Connect Starts a mavsdk server and create a connection to it
+// Connect Starts a mavsdk server and create a connection to it
 func (s *Drone) Connect() {
 	grpcConnection := s.connectToMAVSDKServer()
 	s.InitPlugins(grpcConnection)
 
 }
 
-//InitPlugins initializes all the plugins
+// InitPlugins initializes all the plugins
 func (s *Drone) InitPlugins(cc *grpc.ClientConn) {
 
 	s.telemetry = telemetry.ServiceImpl{
@@ -55,7 +55,7 @@ func (s *Drone) connectToMAVSDKServer() *grpc.ClientConn {
 	dialoption := grpc.WithTransportCredentials(insecure.NewCredentials())
 
 	serverAddr := s.mavsdkServer + ":" + s.port
-	cc, err := grpc.Dial(serverAddr, dialoption)
+	cc, err := grpc.NewClient(serverAddr, dialoption)
 	if err != nil {
 		fmt.Printf("Error while dialing %v", err)
 	}
@@ -66,10 +66,18 @@ func (s *Drone) connectToMAVSDKServer() *grpc.ClientConn {
 func main() {
 	drone := &Drone{port: "50051", mavsdkServer: "127.0.0.1"}
 	drone.Connect()
-	drone.action.Arm(context.Background())
-	drone.action.Takeoff(context.Background())
-	drone.action.Land(context.Background())
-	drone.core.ConnectionState(context.Background())
+	if _, err := drone.action.Arm(context.Background()); err != nil {
+		log.Fatalf("Error while arming %v", err)
+	}
+	if _, err := drone.action.Takeoff(context.Background()); err != nil {
+		log.Fatalf("Error while taking off %v", err)
+	}
+	if _, err := drone.action.Land(context.Background()); err != nil {
+		log.Fatalf("Error while landing %v", err)
+	}
+	if _, err := drone.core.ConnectionState(context.Background()); err != nil {
+		log.Fatalf("Error while getting connection state %v", err)
+	}
 	lat := 47.3977508
 	lon := 8.5456074
 	p1 := &geofence.Point{

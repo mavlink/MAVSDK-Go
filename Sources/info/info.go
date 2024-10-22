@@ -2,6 +2,11 @@ package info
 
 import (
 	"context"
+	"fmt"
+	"io"
+
+	codes "google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -126,4 +131,38 @@ func (s *ServiceImpl) GetSpeedFactor(ctx context.Context) (*GetSpeedFactorRespon
 	}
 	return response, nil
 
+}
+
+/*
+   Subscribe to 'flight information' updates.
+
+
+*/
+
+func (a *ServiceImpl) FlightInformation(ctx context.Context) (<-chan *FlightInfo, error) {
+	ch := make(chan *FlightInfo)
+	request := &SubscribeFlightInformationRequest{}
+	stream, err := a.Client.SubscribeFlightInformation(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	go func() {
+		defer close(ch)
+		for {
+			m := &FlightInformationResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				return
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				fmt.Printf("Unable to receive FlightInformation messages, err: %v\n", err)
+				break
+			}
+			ch <- m.GetFlightInfo()
+		}
+	}()
+	return ch, nil
 }

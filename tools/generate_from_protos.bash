@@ -14,9 +14,10 @@ OUTPUT_DIR=${OUTPUT_DIR:-"${SCRIPT_DIR}/../Sources/"}
 PROTO_DIR_TMP=${PROTO_DIR_TMP:-"${SCRIPT_DIR}/tmp/protos"}
 export TEMPLATE_PATH="$(pwd)/../templates/"
 
-PLUGIN_LIST="action calibration camera core failure follow_me ftp geofence gimbal info log_files manual_control mission mission_raw
-             mocap offboard param shell telemetry transponder tune
-             action_server mission_raw_server param_server telemetry_server tracking_server"
+PLUGIN_LIST="action failure manual_control server_utility action_server follow_me shell
+arm_authorizer_server ftp mission telemetry calibration ftp_server mission_raw telemetry_server
+camera geofence mission_raw_server transponder camera_server gimbal mocap tune component_metadata
+gripper offboard winch component_metadata_server info param core log_files param_server log_streaming rtk"
 
 echo "Plugin List consist of: " ${PLUGIN_LIST}
 rm -rf ${PROTO_DIR_TMP}
@@ -63,8 +64,22 @@ for plugin in ${PLUGIN_LIST}; do
 	echo "+=> Doing $plugin"
 	python3 -m grpc_tools.protoc --plugin=protoc-gen-custom=$(which protoc-gen-mavsdk) -I${PROTO_DIR}/$plugin --custom_out=${OUTPUT_DIR}/$plugin --custom_opt=file_ext=go ${plugin}.proto
     # Again move generated file to its place.
-    mv ${OUTPUT_DIR}/$plugin/$(snake_case_to_camel_case ${plugin}).go ${OUTPUT_DIR}/$plugin/temp.go
-    mv ${OUTPUT_DIR}/$plugin/temp.go ${OUTPUT_DIR}/$plugin/$plugin.go
+    camel_case_filename="$(snake_case_to_camel_case "$plugin").go"
+    actual_file_path="${OUTPUT_DIR}/$plugin/$camel_case_filename"
+    new_file_path="${OUTPUT_DIR}/$plugin/${plugin}.go"
+    temp_file_path="${OUTPUT_DIR}/$plugin/temp.go"
+
+    # Check if the plugin is in snake_case and if the corresponding file exists
+    if [[ -f "$actual_file_path" ]]; then
+        echo "Renaming $actual_file_path to $new_file_path"
+        
+        # Move the original CamelCase file to a temporary name
+        mv "$actual_file_path" "$temp_file_path"
+        
+        # Rename the temporary file to the new name
+        mv "$temp_file_path" "$new_file_path"
+        
+    fi
 done
 
 # Remove the temp directory.

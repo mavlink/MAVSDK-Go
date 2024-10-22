@@ -4,27 +4,13 @@ MAVSDK server (also called backend) needs to be running on the same system as th
 
 MAVSDK uses Google Protobuf based message definitions in the protobuf files. [MAVSDK-ProtoBuf](https://github.com/mavlink/MAVSDK-Proto)
 
-The wrapper can be used directly using the generated files in Source folder.
-A example file is provided in the example folder which contains example for take-off, land, geofence upload and telemetry data.
+A example is also provided which contains example usage of the mavsdk-go package.
 
 
 ## Contributing
 For general users, it is enough to use the generated files as such. But in order to keep the sources updated based on the latest proto definitions it is required to generate the source file again.
 This can be done using the instructions from ```Contributing.md```
 
-
-## Supported Plugins
-
-Currently only the following plugins are supported.
-1. Action: action.proto
-2. Telemetry: telemetry.proto
-3. Geofence: geofence.proto
-4. Mission: mission.proto
-5. Log Files: log_files.proto 
-6. Core: core.proto
-
-
-## Issues/Questions
-For any problems with the wrapper please create an issue.
+If you have any issues or questions, please feel free to open an issue in the repository. We will try to address them as soon as possible.
 
 Happy flying :)

@@ -2,6 +2,11 @@ package param_server
 
 import (
 	"context"
+	"fmt"
+	"io"
+
+	codes "google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -195,4 +200,106 @@ func (s *ServiceImpl) RetrieveAllParams(ctx context.Context) (*RetrieveAllParams
 	}
 	return response, nil
 
+}
+
+/*
+   Subscribe to changed int param.
+
+
+*/
+
+func (a *ServiceImpl) ChangedParamInt(ctx context.Context) (<-chan *IntParam, error) {
+	ch := make(chan *IntParam)
+	request := &SubscribeChangedParamIntRequest{}
+	stream, err := a.Client.SubscribeChangedParamInt(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	go func() {
+		defer close(ch)
+		for {
+			m := &ChangedParamIntResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				return
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				fmt.Printf("Unable to receive ChangedParamInt messages, err: %v\n", err)
+				break
+			}
+			ch <- m.GetParam()
+		}
+	}()
+	return ch, nil
+}
+
+/*
+   Subscribe to changed float param.
+
+
+*/
+
+func (a *ServiceImpl) ChangedParamFloat(ctx context.Context) (<-chan *FloatParam, error) {
+	ch := make(chan *FloatParam)
+	request := &SubscribeChangedParamFloatRequest{}
+	stream, err := a.Client.SubscribeChangedParamFloat(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	go func() {
+		defer close(ch)
+		for {
+			m := &ChangedParamFloatResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				return
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				fmt.Printf("Unable to receive ChangedParamFloat messages, err: %v\n", err)
+				break
+			}
+			ch <- m.GetParam()
+		}
+	}()
+	return ch, nil
+}
+
+/*
+   Subscribe to changed custom param.
+
+
+*/
+
+func (a *ServiceImpl) ChangedParamCustom(ctx context.Context) (<-chan *CustomParam, error) {
+	ch := make(chan *CustomParam)
+	request := &SubscribeChangedParamCustomRequest{}
+	stream, err := a.Client.SubscribeChangedParamCustom(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	go func() {
+		defer close(ch)
+		for {
+			m := &ChangedParamCustomResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				return
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				fmt.Printf("Unable to receive ChangedParamCustom messages, err: %v\n", err)
+				break
+			}
+			ch <- m.GetParam()
+		}
+	}()
+	return ch, nil
 }

@@ -28,6 +28,27 @@ func (s *ServiceImpl) Arm(ctx context.Context) (*ArmResponse, error) {
 }
 
 /*
+   Send command to force-arm the drone without any checks.
+
+   Attention: this is not to be used for normal flying but only bench tests!
+
+   Arming a drone normally causes motors to spin at idle.
+   Before arming take all safety precautions and stand clear of the drone!
+
+
+*/
+
+func (s *ServiceImpl) ArmForce(ctx context.Context) (*ArmForceResponse, error) {
+
+	request := &ArmForceRequest{}
+	response, err := s.Client.ArmForce(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
    Send command to disarm the drone.
 
    This will disarm a drone that considers itself landed. If flying, the drone should
@@ -278,6 +299,8 @@ func (s *ServiceImpl) Hold(ctx context.Context) (*HoldResponse, error) {
 
 /*
    Send command to set the value of an actuator.
+
+   Note that the index of the actuator starts at 1 and that the value goes from -1 to 1.
 
    Parameters
    ----------

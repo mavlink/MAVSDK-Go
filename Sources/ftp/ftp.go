@@ -4,6 +4,9 @@ import (
 	"context"
 	"fmt"
 	"io"
+
+	codes "google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -34,10 +37,13 @@ func (a *ServiceImpl) Download(ctx context.Context, remoteFilePath string, local
 			m := &DownloadResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
-				break
+				return
 			}
 			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				fmt.Printf("Unable to receive Download messages, err: %v\n", err)
 				break
 			}
 			ch <- m.GetProgressData()
@@ -69,10 +75,13 @@ func (a *ServiceImpl) Upload(ctx context.Context, localFilePath string, remoteDi
 			m := &UploadResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
-				break
+				return
 			}
 			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				fmt.Printf("Unable to receive Upload messages, err: %v\n", err)
 				break
 			}
 			ch <- m.GetProgressData()

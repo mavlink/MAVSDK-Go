@@ -4,6 +4,9 @@ import (
 	"context"
 	"fmt"
 	"io"
+
+	codes "google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -114,12 +117,17 @@ func (s *ServiceImpl) StopVideo(ctx context.Context) (*StopVideoResponse, error)
 /*
    Start video streaming.
 
+   Parameters
+   ----------
+   streamId int32
+
 
 */
 
-func (s *ServiceImpl) StartVideoStreaming(ctx context.Context) (*StartVideoStreamingResponse, error) {
+func (s *ServiceImpl) StartVideoStreaming(ctx context.Context, streamId int32) (*StartVideoStreamingResponse, error) {
 
 	request := &StartVideoStreamingRequest{}
+	request.StreamId = streamId
 	response, err := s.Client.StartVideoStreaming(ctx, request)
 	if err != nil {
 		return nil, err
@@ -130,12 +138,17 @@ func (s *ServiceImpl) StartVideoStreaming(ctx context.Context) (*StartVideoStrea
 /*
    Stop current video streaming.
 
+   Parameters
+   ----------
+   streamId int32
+
 
 */
 
-func (s *ServiceImpl) StopVideoStreaming(ctx context.Context) (*StopVideoStreamingResponse, error) {
+func (s *ServiceImpl) StopVideoStreaming(ctx context.Context, streamId int32) (*StopVideoStreamingResponse, error) {
 
 	request := &StopVideoStreamingRequest{}
+	request.StreamId = streamId
 	response, err := s.Client.StopVideoStreaming(ctx, request)
 	if err != nil {
 		return nil, err
@@ -212,10 +225,13 @@ func (a *ServiceImpl) Mode(ctx context.Context) (<-chan Mode, error) {
 			m := &ModeResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
-				break
+				return
 			}
 			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				fmt.Printf("Unable to receive Mode messages, err: %v\n", err)
 				break
 			}
 			ch <- m.GetMode()
@@ -243,10 +259,13 @@ func (a *ServiceImpl) Information(ctx context.Context) (<-chan *Information, err
 			m := &InformationResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
-				break
+				return
 			}
 			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				fmt.Printf("Unable to receive Information messages, err: %v\n", err)
 				break
 			}
 			ch <- m.GetInformation()
@@ -274,10 +293,13 @@ func (a *ServiceImpl) VideoStreamInfo(ctx context.Context) (<-chan *VideoStreamI
 			m := &VideoStreamInfoResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
-				break
+				return
 			}
 			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				fmt.Printf("Unable to receive VideoStreamInfo messages, err: %v\n", err)
 				break
 			}
 			ch <- m.GetVideoStreamInfo()
@@ -305,10 +327,13 @@ func (a *ServiceImpl) CaptureInfo(ctx context.Context) (<-chan *CaptureInfo, err
 			m := &CaptureInfoResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
-				break
+				return
 			}
 			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				fmt.Printf("Unable to receive CaptureInfo messages, err: %v\n", err)
 				break
 			}
 			ch <- m.GetCaptureInfo()
@@ -336,10 +361,13 @@ func (a *ServiceImpl) Status(ctx context.Context) (<-chan *Status, error) {
 			m := &StatusResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
-				break
+				return
 			}
 			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				fmt.Printf("Unable to receive Status messages, err: %v\n", err)
 				break
 			}
 			ch <- m.GetCameraStatus()
@@ -367,10 +395,13 @@ func (a *ServiceImpl) CurrentSettings(ctx context.Context) (<-chan []*Setting, e
 			m := &CurrentSettingsResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
-				break
+				return
 			}
 			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				fmt.Printf("Unable to receive CurrentSettings messages, err: %v\n", err)
 				break
 			}
 			ch <- m.GetCurrentSettings()
@@ -398,10 +429,13 @@ func (a *ServiceImpl) PossibleSettingOptions(ctx context.Context) (<-chan []*Set
 			m := &PossibleSettingOptionsResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
-				break
+				return
 			}
 			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				fmt.Printf("Unable to receive PossibleSettingOptions messages, err: %v\n", err)
 				break
 			}
 			ch <- m.GetSettingOptions()
@@ -471,12 +505,17 @@ func (s *ServiceImpl) GetSetting(ctx context.Context, setting *Setting) (*GetSet
 
    This will delete all content of the camera storage!
 
+   Parameters
+   ----------
+   storageId int32
+
 
 */
 
-func (s *ServiceImpl) FormatStorage(ctx context.Context) (*FormatStorageResponse, error) {
+func (s *ServiceImpl) FormatStorage(ctx context.Context, storageId int32) (*FormatStorageResponse, error) {
 
 	request := &FormatStorageRequest{}
+	request.StorageId = storageId
 	response, err := s.Client.FormatStorage(ctx, request)
 	if err != nil {
 		return nil, err
@@ -501,6 +540,235 @@ func (s *ServiceImpl) SelectCamera(ctx context.Context, cameraId int32) (*Select
 	request := &SelectCameraRequest{}
 	request.CameraId = cameraId
 	response, err := s.Client.SelectCamera(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+   Reset all settings in camera.
+
+   This will reset all camera settings to default value
+
+
+*/
+
+func (s *ServiceImpl) ResetSettings(ctx context.Context) (*ResetSettingsResponse, error) {
+
+	request := &ResetSettingsRequest{}
+	response, err := s.Client.ResetSettings(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+   Start zooming in.
+
+
+*/
+
+func (s *ServiceImpl) ZoomInStart(ctx context.Context) (*ZoomInStartResponse, error) {
+
+	request := &ZoomInStartRequest{}
+	response, err := s.Client.ZoomInStart(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+   Start zooming out.
+
+
+*/
+
+func (s *ServiceImpl) ZoomOutStart(ctx context.Context) (*ZoomOutStartResponse, error) {
+
+	request := &ZoomOutStartRequest{}
+	response, err := s.Client.ZoomOutStart(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+   Stop zooming.
+
+
+*/
+
+func (s *ServiceImpl) ZoomStop(ctx context.Context) (*ZoomStopResponse, error) {
+
+	request := &ZoomStopRequest{}
+	response, err := s.Client.ZoomStop(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+   Zoom to value as proportion of full camera range (percentage between 0.0 and 100.0).
+
+   Parameters
+   ----------
+   range float32
+
+
+*/
+
+func (s *ServiceImpl) ZoomRange(ctx context.Context, zoomRange float32) (*ZoomRangeResponse, error) {
+
+	request := &ZoomRangeRequest{}
+	request.Range = zoomRange
+	response, err := s.Client.ZoomRange(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+   Track point.
+
+   Parameters
+   ----------
+   pointX float32
+
+   pointY float32
+
+   radius float32
+
+
+*/
+
+func (s *ServiceImpl) TrackPoint(ctx context.Context, pointX float32, pointY float32, radius float32) (*TrackPointResponse, error) {
+
+	request := &TrackPointRequest{}
+	request.PointX = pointX
+	request.PointY = pointY
+	request.Radius = radius
+	response, err := s.Client.TrackPoint(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+   Track rectangle.
+
+   Parameters
+   ----------
+   topLeftX float32
+
+   topLeftY float32
+
+   bottomRightX float32
+
+   bottomRightY float32
+
+
+*/
+
+func (s *ServiceImpl) TrackRectangle(ctx context.Context, topLeftX float32, topLeftY float32, bottomRightX float32, bottomRightY float32) (*TrackRectangleResponse, error) {
+
+	request := &TrackRectangleRequest{}
+	request.TopLeftX = topLeftX
+	request.TopLeftY = topLeftY
+	request.BottomRightX = bottomRightX
+	request.BottomRightY = bottomRightY
+	response, err := s.Client.TrackRectangle(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+   Stop tracking.
+
+
+*/
+
+func (s *ServiceImpl) TrackStop(ctx context.Context) (*TrackStopResponse, error) {
+
+	request := &TrackStopRequest{}
+	response, err := s.Client.TrackStop(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+   Start focusing in.
+
+
+*/
+
+func (s *ServiceImpl) FocusInStart(ctx context.Context) (*FocusInStartResponse, error) {
+
+	request := &FocusInStartRequest{}
+	response, err := s.Client.FocusInStart(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+   Start focusing out.
+
+
+*/
+
+func (s *ServiceImpl) FocusOutStart(ctx context.Context) (*FocusOutStartResponse, error) {
+
+	request := &FocusOutStartRequest{}
+	response, err := s.Client.FocusOutStart(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+   Stop focus.
+
+
+*/
+
+func (s *ServiceImpl) FocusStop(ctx context.Context) (*FocusStopResponse, error) {
+
+	request := &FocusStopRequest{}
+	response, err := s.Client.FocusStop(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+   Focus with range value of full range (value between 0.0 and 100.0).
+
+   Parameters
+   ----------
+   range float32
+
+
+*/
+
+func (s *ServiceImpl) FocusRange(ctx context.Context, focusRange float32) (*FocusRangeResponse, error) {
+
+	request := &FocusRangeRequest{}
+	request.Range = focusRange
+	response, err := s.Client.FocusRange(ctx, request)
 	if err != nil {
 		return nil, err
 	}

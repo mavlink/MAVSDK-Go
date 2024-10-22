@@ -4,6 +4,9 @@ import (
 	"context"
 	"fmt"
 	"io"
+
+	codes "google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -29,10 +32,13 @@ func (a *ServiceImpl) IncomingMission(ctx context.Context) (<-chan *MissionPlan,
 			m := &IncomingMissionResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
-				break
+				return
 			}
 			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				fmt.Printf("Unable to receive IncomingMission messages, err: %v\n", err)
 				break
 			}
 			ch <- m.GetMissionPlan()
@@ -60,10 +66,13 @@ func (a *ServiceImpl) CurrentItemChanged(ctx context.Context) (<-chan *MissionIt
 			m := &CurrentItemChangedResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
-				break
+				return
 			}
 			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				fmt.Printf("Unable to receive CurrentItemChanged messages, err: %v\n", err)
 				break
 			}
 			ch <- m.GetMissionItem()
@@ -107,10 +116,13 @@ func (a *ServiceImpl) ClearAll(ctx context.Context) (<-chan uint32, error) {
 			m := &ClearAllResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
-				break
+				return
 			}
 			if err != nil {
-				fmt.Printf("Unable to receive message %v", err)
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				fmt.Printf("Unable to receive ClearAll messages, err: %v\n", err)
 				break
 			}
 			ch <- m.GetClearType()
