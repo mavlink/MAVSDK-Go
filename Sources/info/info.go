@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 
-	"google.golang.org/grpc/status"
 	codes "google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {

@@ -50,8 +50,6 @@ for plugin in ${PLUGIN_LIST}; do
         # Rename the temporary file to the new name
         mv "$temp_file_path" "$new_file_path"
         
-        # Optional: Uncomment the following line if you want to ensure the temp file is deleted
-        # rm "$temp_file_path"
     fi
 done
 
