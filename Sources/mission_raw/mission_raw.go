@@ -2,8 +2,8 @@ package mission_raw
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -242,7 +242,7 @@ func (a *ServiceImpl) MissionProgress(ctx context.Context) (<-chan *MissionProgr
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive MissionProgress messages, err: %v\n", err)
+				log.Fatalf("Unable to receive MissionProgress messages, err: %v", err)
 				break
 			}
 			ch <- m.GetMissionProgress()
@@ -282,7 +282,7 @@ func (a *ServiceImpl) MissionChanged(ctx context.Context) (<-chan bool, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive MissionChanged messages, err: %v\n", err)
+				log.Fatalf("Unable to receive MissionChanged messages, err: %v", err)
 				break
 			}
 			ch <- m.GetMissionChanged()

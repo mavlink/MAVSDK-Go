@@ -2,11 +2,11 @@ package ftp
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
-	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	codes "google.golang.org/grpc/codes"
 )
 
 type ServiceImpl struct {
@@ -43,7 +43,7 @@ func (a *ServiceImpl) Download(ctx context.Context, remoteFilePath string, local
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Download messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Download messages, err: %v", err)
 				break
 			}
 			ch <- m.GetProgressData()
@@ -81,7 +81,7 @@ func (a *ServiceImpl) Upload(ctx context.Context, localFilePath string, remoteDi
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Upload messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Upload messages, err: %v", err)
 				break
 			}
 			ch <- m.GetProgressData()

@@ -2,8 +2,8 @@ package component_metadata
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -77,7 +77,7 @@ func (a *ServiceImpl) MetadataAvailable(ctx context.Context) (<-chan *MetadataUp
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive MetadataAvailable messages, err: %v\n", err)
+				log.Fatalf("Unable to receive MetadataAvailable messages, err: %v", err)
 				break
 			}
 			ch <- m.GetData()

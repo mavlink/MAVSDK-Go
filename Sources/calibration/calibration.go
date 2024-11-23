@@ -2,8 +2,8 @@ package calibration
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -38,7 +38,7 @@ func (a *ServiceImpl) CalibrateGyro(ctx context.Context) (<-chan *ProgressData, 
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive CalibrateGyro messages, err: %v\n", err)
+				log.Fatalf("Unable to receive CalibrateGyro messages, err: %v", err)
 				break
 			}
 			ch <- m.GetProgressData()
@@ -72,7 +72,7 @@ func (a *ServiceImpl) CalibrateAccelerometer(ctx context.Context) (<-chan *Progr
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive CalibrateAccelerometer messages, err: %v\n", err)
+				log.Fatalf("Unable to receive CalibrateAccelerometer messages, err: %v", err)
 				break
 			}
 			ch <- m.GetProgressData()
@@ -106,7 +106,7 @@ func (a *ServiceImpl) CalibrateMagnetometer(ctx context.Context) (<-chan *Progre
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive CalibrateMagnetometer messages, err: %v\n", err)
+				log.Fatalf("Unable to receive CalibrateMagnetometer messages, err: %v", err)
 				break
 			}
 			ch <- m.GetProgressData()
@@ -140,7 +140,7 @@ func (a *ServiceImpl) CalibrateLevelHorizon(ctx context.Context) (<-chan *Progre
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive CalibrateLevelHorizon messages, err: %v\n", err)
+				log.Fatalf("Unable to receive CalibrateLevelHorizon messages, err: %v", err)
 				break
 			}
 			ch <- m.GetProgressData()
@@ -174,7 +174,7 @@ func (a *ServiceImpl) CalibrateGimbalAccelerometer(ctx context.Context) (<-chan 
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive CalibrateGimbalAccelerometer messages, err: %v\n", err)
+				log.Fatalf("Unable to receive CalibrateGimbalAccelerometer messages, err: %v", err)
 				break
 			}
 			ch <- m.GetProgressData()

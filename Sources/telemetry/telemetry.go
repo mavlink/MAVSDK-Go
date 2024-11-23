@@ -2,11 +2,11 @@ package telemetry
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
-	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	codes "google.golang.org/grpc/codes"
 )
 
 type ServiceImpl struct {
@@ -38,7 +38,7 @@ func (a *ServiceImpl) Position(ctx context.Context) (<-chan *Position, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Position messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Position messages, err: %v", err)
 				break
 			}
 			ch <- m.GetPosition()
@@ -72,7 +72,7 @@ func (a *ServiceImpl) Home(ctx context.Context) (<-chan *Position, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Home messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Home messages, err: %v", err)
 				break
 			}
 			ch <- m.GetHome()
@@ -106,7 +106,7 @@ func (a *ServiceImpl) InAir(ctx context.Context) (<-chan bool, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive InAir messages, err: %v\n", err)
+				log.Fatalf("Unable to receive InAir messages, err: %v", err)
 				break
 			}
 			ch <- m.GetIsInAir()
@@ -140,7 +140,7 @@ func (a *ServiceImpl) LandedState(ctx context.Context) (<-chan LandedState, erro
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive LandedState messages, err: %v\n", err)
+				log.Fatalf("Unable to receive LandedState messages, err: %v", err)
 				break
 			}
 			ch <- m.GetLandedState()
@@ -174,7 +174,7 @@ func (a *ServiceImpl) Armed(ctx context.Context) (<-chan bool, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Armed messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Armed messages, err: %v", err)
 				break
 			}
 			ch <- m.GetIsArmed()
@@ -208,7 +208,7 @@ func (a *ServiceImpl) VtolState(ctx context.Context) (<-chan VtolState, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive VtolState messages, err: %v\n", err)
+				log.Fatalf("Unable to receive VtolState messages, err: %v", err)
 				break
 			}
 			ch <- m.GetVtolState()
@@ -242,7 +242,7 @@ func (a *ServiceImpl) AttitudeQuaternion(ctx context.Context) (<-chan *Quaternio
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive AttitudeQuaternion messages, err: %v\n", err)
+				log.Fatalf("Unable to receive AttitudeQuaternion messages, err: %v", err)
 				break
 			}
 			ch <- m.GetAttitudeQuaternion()
@@ -276,7 +276,7 @@ func (a *ServiceImpl) AttitudeEuler(ctx context.Context) (<-chan *EulerAngle, er
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive AttitudeEuler messages, err: %v\n", err)
+				log.Fatalf("Unable to receive AttitudeEuler messages, err: %v", err)
 				break
 			}
 			ch <- m.GetAttitudeEuler()
@@ -310,7 +310,7 @@ func (a *ServiceImpl) AttitudeAngularVelocityBody(ctx context.Context) (<-chan *
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive AttitudeAngularVelocityBody messages, err: %v\n", err)
+				log.Fatalf("Unable to receive AttitudeAngularVelocityBody messages, err: %v", err)
 				break
 			}
 			ch <- m.GetAttitudeAngularVelocityBody()
@@ -344,7 +344,7 @@ func (a *ServiceImpl) CameraAttitudeQuaternion(ctx context.Context) (<-chan *Qua
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive CameraAttitudeQuaternion messages, err: %v\n", err)
+				log.Fatalf("Unable to receive CameraAttitudeQuaternion messages, err: %v", err)
 				break
 			}
 			ch <- m.GetAttitudeQuaternion()
@@ -378,7 +378,7 @@ func (a *ServiceImpl) CameraAttitudeEuler(ctx context.Context) (<-chan *EulerAng
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive CameraAttitudeEuler messages, err: %v\n", err)
+				log.Fatalf("Unable to receive CameraAttitudeEuler messages, err: %v", err)
 				break
 			}
 			ch <- m.GetAttitudeEuler()
@@ -412,7 +412,7 @@ func (a *ServiceImpl) VelocityNed(ctx context.Context) (<-chan *VelocityNed, err
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive VelocityNed messages, err: %v\n", err)
+				log.Fatalf("Unable to receive VelocityNed messages, err: %v", err)
 				break
 			}
 			ch <- m.GetVelocityNed()
@@ -446,7 +446,7 @@ func (a *ServiceImpl) GpsInfo(ctx context.Context) (<-chan *GpsInfo, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive GpsInfo messages, err: %v\n", err)
+				log.Fatalf("Unable to receive GpsInfo messages, err: %v", err)
 				break
 			}
 			ch <- m.GetGpsInfo()
@@ -480,7 +480,7 @@ func (a *ServiceImpl) RawGps(ctx context.Context) (<-chan *RawGps, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive RawGps messages, err: %v\n", err)
+				log.Fatalf("Unable to receive RawGps messages, err: %v", err)
 				break
 			}
 			ch <- m.GetRawGps()
@@ -514,7 +514,7 @@ func (a *ServiceImpl) Battery(ctx context.Context) (<-chan *Battery, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Battery messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Battery messages, err: %v", err)
 				break
 			}
 			ch <- m.GetBattery()
@@ -548,7 +548,7 @@ func (a *ServiceImpl) FlightMode(ctx context.Context) (<-chan FlightMode, error)
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive FlightMode messages, err: %v\n", err)
+				log.Fatalf("Unable to receive FlightMode messages, err: %v", err)
 				break
 			}
 			ch <- m.GetFlightMode()
@@ -582,7 +582,7 @@ func (a *ServiceImpl) Health(ctx context.Context) (<-chan *Health, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Health messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Health messages, err: %v", err)
 				break
 			}
 			ch <- m.GetHealth()
@@ -616,7 +616,7 @@ func (a *ServiceImpl) RcStatus(ctx context.Context) (<-chan *RcStatus, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive RcStatus messages, err: %v\n", err)
+				log.Fatalf("Unable to receive RcStatus messages, err: %v", err)
 				break
 			}
 			ch <- m.GetRcStatus()
@@ -650,7 +650,7 @@ func (a *ServiceImpl) StatusText(ctx context.Context) (<-chan *StatusText, error
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive StatusText messages, err: %v\n", err)
+				log.Fatalf("Unable to receive StatusText messages, err: %v", err)
 				break
 			}
 			ch <- m.GetStatusText()
@@ -684,7 +684,7 @@ func (a *ServiceImpl) ActuatorControlTarget(ctx context.Context) (<-chan *Actuat
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive ActuatorControlTarget messages, err: %v\n", err)
+				log.Fatalf("Unable to receive ActuatorControlTarget messages, err: %v", err)
 				break
 			}
 			ch <- m.GetActuatorControlTarget()
@@ -718,7 +718,7 @@ func (a *ServiceImpl) ActuatorOutputStatus(ctx context.Context) (<-chan *Actuato
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive ActuatorOutputStatus messages, err: %v\n", err)
+				log.Fatalf("Unable to receive ActuatorOutputStatus messages, err: %v", err)
 				break
 			}
 			ch <- m.GetActuatorOutputStatus()
@@ -752,7 +752,7 @@ func (a *ServiceImpl) Odometry(ctx context.Context) (<-chan *Odometry, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Odometry messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Odometry messages, err: %v", err)
 				break
 			}
 			ch <- m.GetOdometry()
@@ -786,7 +786,7 @@ func (a *ServiceImpl) PositionVelocityNed(ctx context.Context) (<-chan *Position
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive PositionVelocityNed messages, err: %v\n", err)
+				log.Fatalf("Unable to receive PositionVelocityNed messages, err: %v", err)
 				break
 			}
 			ch <- m.GetPositionVelocityNed()
@@ -820,7 +820,7 @@ func (a *ServiceImpl) GroundTruth(ctx context.Context) (<-chan *GroundTruth, err
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive GroundTruth messages, err: %v\n", err)
+				log.Fatalf("Unable to receive GroundTruth messages, err: %v", err)
 				break
 			}
 			ch <- m.GetGroundTruth()
@@ -854,7 +854,7 @@ func (a *ServiceImpl) FixedwingMetrics(ctx context.Context) (<-chan *FixedwingMe
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive FixedwingMetrics messages, err: %v\n", err)
+				log.Fatalf("Unable to receive FixedwingMetrics messages, err: %v", err)
 				break
 			}
 			ch <- m.GetFixedwingMetrics()
@@ -888,7 +888,7 @@ func (a *ServiceImpl) Imu(ctx context.Context) (<-chan *Imu, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Imu messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Imu messages, err: %v", err)
 				break
 			}
 			ch <- m.GetImu()
@@ -922,7 +922,7 @@ func (a *ServiceImpl) ScaledImu(ctx context.Context) (<-chan *Imu, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive ScaledImu messages, err: %v\n", err)
+				log.Fatalf("Unable to receive ScaledImu messages, err: %v", err)
 				break
 			}
 			ch <- m.GetImu()
@@ -956,7 +956,7 @@ func (a *ServiceImpl) RawImu(ctx context.Context) (<-chan *Imu, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive RawImu messages, err: %v\n", err)
+				log.Fatalf("Unable to receive RawImu messages, err: %v", err)
 				break
 			}
 			ch <- m.GetImu()
@@ -990,7 +990,7 @@ func (a *ServiceImpl) HealthAllOk(ctx context.Context) (<-chan bool, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive HealthAllOk messages, err: %v\n", err)
+				log.Fatalf("Unable to receive HealthAllOk messages, err: %v", err)
 				break
 			}
 			ch <- m.GetIsHealthAllOk()
@@ -1024,7 +1024,7 @@ func (a *ServiceImpl) UnixEpochTime(ctx context.Context) (<-chan uint64, error) 
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive UnixEpochTime messages, err: %v\n", err)
+				log.Fatalf("Unable to receive UnixEpochTime messages, err: %v", err)
 				break
 			}
 			ch <- m.GetTimeUs()
@@ -1058,7 +1058,7 @@ func (a *ServiceImpl) DistanceSensor(ctx context.Context) (<-chan *DistanceSenso
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive DistanceSensor messages, err: %v\n", err)
+				log.Fatalf("Unable to receive DistanceSensor messages, err: %v", err)
 				break
 			}
 			ch <- m.GetDistanceSensor()
@@ -1092,7 +1092,7 @@ func (a *ServiceImpl) ScaledPressure(ctx context.Context) (<-chan *ScaledPressur
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive ScaledPressure messages, err: %v\n", err)
+				log.Fatalf("Unable to receive ScaledPressure messages, err: %v", err)
 				break
 			}
 			ch <- m.GetScaledPressure()
@@ -1126,7 +1126,7 @@ func (a *ServiceImpl) Heading(ctx context.Context) (<-chan *Heading, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Heading messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Heading messages, err: %v", err)
 				break
 			}
 			ch <- m.GetHeadingDeg()
@@ -1160,7 +1160,7 @@ func (a *ServiceImpl) Altitude(ctx context.Context) (<-chan *Altitude, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Altitude messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Altitude messages, err: %v", err)
 				break
 			}
 			ch <- m.GetAltitude()

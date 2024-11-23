@@ -2,11 +2,11 @@ package shell
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
-	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	codes "google.golang.org/grpc/codes"
 )
 
 type ServiceImpl struct {
@@ -61,7 +61,7 @@ func (a *ServiceImpl) Receive(ctx context.Context) (<-chan string, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Receive messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Receive messages, err: %v", err)
 				break
 			}
 			ch <- m.GetData()

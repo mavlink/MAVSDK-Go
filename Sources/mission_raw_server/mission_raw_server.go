@@ -2,8 +2,8 @@ package mission_raw_server
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -38,7 +38,7 @@ func (a *ServiceImpl) IncomingMission(ctx context.Context) (<-chan *MissionPlan,
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive IncomingMission messages, err: %v\n", err)
+				log.Fatalf("Unable to receive IncomingMission messages, err: %v", err)
 				break
 			}
 			ch <- m.GetMissionPlan()
@@ -72,7 +72,7 @@ func (a *ServiceImpl) CurrentItemChanged(ctx context.Context) (<-chan *MissionIt
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive CurrentItemChanged messages, err: %v\n", err)
+				log.Fatalf("Unable to receive CurrentItemChanged messages, err: %v", err)
 				break
 			}
 			ch <- m.GetMissionItem()
@@ -122,7 +122,7 @@ func (a *ServiceImpl) ClearAll(ctx context.Context) (<-chan uint32, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive ClearAll messages, err: %v\n", err)
+				log.Fatalf("Unable to receive ClearAll messages, err: %v", err)
 				break
 			}
 			ch <- m.GetClearType()

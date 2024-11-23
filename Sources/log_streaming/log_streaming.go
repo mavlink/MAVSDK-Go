@@ -2,8 +2,8 @@ package log_streaming
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -70,7 +70,7 @@ func (a *ServiceImpl) LogStreamingRaw(ctx context.Context) (<-chan *LogStreaming
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive LogStreamingRaw messages, err: %v\n", err)
+				log.Fatalf("Unable to receive LogStreamingRaw messages, err: %v", err)
 				break
 			}
 			ch <- m.GetLoggingRaw()

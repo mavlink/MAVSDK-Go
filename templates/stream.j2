@@ -36,7 +36,7 @@ func (a *ServiceImpl) {{ name.upper_camel_case }}(ctx context.Context, {% for pa
 					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 						return
 					}
-					fmt.Printf("Unable to receive {{ name.upper_camel_case }} messages, err: %v\n", err)
+					log.Fatalf("Unable to receive {{ name.upper_camel_case }} messages, err: %v", err)
 					break
 				}
 				ch <- m.Get{{ return_name.upper_camel_case }}()

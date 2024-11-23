@@ -2,8 +2,8 @@ package log_files
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -67,7 +67,7 @@ func (a *ServiceImpl) DownloadLogFile(ctx context.Context, entry *Entry, path st
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive DownloadLogFile messages, err: %v\n", err)
+				log.Fatalf("Unable to receive DownloadLogFile messages, err: %v", err)
 				break
 			}
 			ch <- m.GetProgress()

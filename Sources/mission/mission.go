@@ -2,11 +2,11 @@ package mission
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
-	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	codes "google.golang.org/grpc/codes"
 )
 
 type ServiceImpl struct {
@@ -71,7 +71,7 @@ func (a *ServiceImpl) UploadMissionWithProgress(ctx context.Context, missionPlan
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive UploadMissionWithProgress messages, err: %v\n", err)
+				log.Fatalf("Unable to receive UploadMissionWithProgress messages, err: %v", err)
 				break
 			}
 			ch <- m.GetProgressData()
@@ -151,7 +151,7 @@ func (a *ServiceImpl) DownloadMissionWithProgress(ctx context.Context) (<-chan *
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive DownloadMissionWithProgress messages, err: %v\n", err)
+				log.Fatalf("Unable to receive DownloadMissionWithProgress messages, err: %v", err)
 				break
 			}
 			ch <- m.GetProgressData()
@@ -307,7 +307,7 @@ func (a *ServiceImpl) MissionProgress(ctx context.Context) (<-chan *MissionProgr
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive MissionProgress messages, err: %v\n", err)
+				log.Fatalf("Unable to receive MissionProgress messages, err: %v", err)
 				break
 			}
 			ch <- m.GetMissionProgress()

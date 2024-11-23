@@ -2,11 +2,11 @@ package gimbal
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
-	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	codes "google.golang.org/grpc/codes"
 )
 
 type ServiceImpl struct {
@@ -236,7 +236,7 @@ func (a *ServiceImpl) Control(ctx context.Context) (<-chan *ControlStatus, error
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Control messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Control messages, err: %v", err)
 				break
 			}
 			ch <- m.GetControlStatus()
@@ -272,7 +272,7 @@ func (a *ServiceImpl) Attitude(ctx context.Context) (<-chan *Attitude, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Attitude messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Attitude messages, err: %v", err)
 				break
 			}
 			ch <- m.GetAttitude()

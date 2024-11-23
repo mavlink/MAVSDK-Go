@@ -13,7 +13,7 @@ type ServiceImpl struct {
 
    Parameters
    ----------
-   type *StatusTextType
+   statusTextType *StatusTextType
 
 
    text string

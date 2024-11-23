@@ -2,8 +2,8 @@ package core
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	"google.golang.org/grpc/status"
 	codes "google.golang.org/grpc/codes"
@@ -38,7 +38,7 @@ func (a *ServiceImpl) ConnectionState(ctx context.Context) (<-chan *ConnectionSt
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive ConnectionState messages, err: %v\n", err)
+				log.Fatalf("Unable to receive ConnectionState messages, err: %v", err)
 				break
 			}
 			ch <- m.GetConnectionState()

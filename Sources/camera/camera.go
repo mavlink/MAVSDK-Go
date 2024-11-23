@@ -2,8 +2,8 @@ package camera
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -231,7 +231,7 @@ func (a *ServiceImpl) Mode(ctx context.Context) (<-chan Mode, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Mode messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Mode messages, err: %v", err)
 				break
 			}
 			ch <- m.GetMode()
@@ -265,7 +265,7 @@ func (a *ServiceImpl) Information(ctx context.Context) (<-chan *Information, err
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Information messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Information messages, err: %v", err)
 				break
 			}
 			ch <- m.GetInformation()
@@ -299,7 +299,7 @@ func (a *ServiceImpl) VideoStreamInfo(ctx context.Context) (<-chan *VideoStreamI
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive VideoStreamInfo messages, err: %v\n", err)
+				log.Fatalf("Unable to receive VideoStreamInfo messages, err: %v", err)
 				break
 			}
 			ch <- m.GetVideoStreamInfo()
@@ -333,7 +333,7 @@ func (a *ServiceImpl) CaptureInfo(ctx context.Context) (<-chan *CaptureInfo, err
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive CaptureInfo messages, err: %v\n", err)
+				log.Fatalf("Unable to receive CaptureInfo messages, err: %v", err)
 				break
 			}
 			ch <- m.GetCaptureInfo()
@@ -367,7 +367,7 @@ func (a *ServiceImpl) Status(ctx context.Context) (<-chan *Status, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Status messages, err: %v\n", err)
+				log.Fatalf("Unable to receive Status messages, err: %v", err)
 				break
 			}
 			ch <- m.GetCameraStatus()
@@ -401,7 +401,7 @@ func (a *ServiceImpl) CurrentSettings(ctx context.Context) (<-chan []*Setting, e
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive CurrentSettings messages, err: %v\n", err)
+				log.Fatalf("Unable to receive CurrentSettings messages, err: %v", err)
 				break
 			}
 			ch <- m.GetCurrentSettings()
@@ -435,7 +435,7 @@ func (a *ServiceImpl) PossibleSettingOptions(ctx context.Context) (<-chan []*Set
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive PossibleSettingOptions messages, err: %v\n", err)
+				log.Fatalf("Unable to receive PossibleSettingOptions messages, err: %v", err)
 				break
 			}
 			ch <- m.GetSettingOptions()
@@ -617,7 +617,7 @@ func (s *ServiceImpl) ZoomStop(ctx context.Context) (*ZoomStopResponse, error) {
 
    Parameters
    ----------
-   range float32
+   zoomRange float32
 
 
 */
@@ -759,7 +759,7 @@ func (s *ServiceImpl) FocusStop(ctx context.Context) (*FocusStopResponse, error)
 
    Parameters
    ----------
-   range float32
+   focusRange float32
 
 
 */

@@ -2,8 +2,8 @@ package param_server
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -227,7 +227,7 @@ func (a *ServiceImpl) ChangedParamInt(ctx context.Context) (<-chan *IntParam, er
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive ChangedParamInt messages, err: %v\n", err)
+				log.Fatalf("Unable to receive ChangedParamInt messages, err: %v", err)
 				break
 			}
 			ch <- m.GetParam()
@@ -261,7 +261,7 @@ func (a *ServiceImpl) ChangedParamFloat(ctx context.Context) (<-chan *FloatParam
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive ChangedParamFloat messages, err: %v\n", err)
+				log.Fatalf("Unable to receive ChangedParamFloat messages, err: %v", err)
 				break
 			}
 			ch <- m.GetParam()
@@ -295,7 +295,7 @@ func (a *ServiceImpl) ChangedParamCustom(ctx context.Context) (<-chan *CustomPar
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive ChangedParamCustom messages, err: %v\n", err)
+				log.Fatalf("Unable to receive ChangedParamCustom messages, err: %v", err)
 				break
 			}
 			ch <- m.GetParam()

@@ -2,8 +2,8 @@ package camera_server
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	codes "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -105,7 +105,7 @@ func (a *ServiceImpl) TakePhoto(ctx context.Context) (<-chan int32, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive TakePhoto messages, err: %v\n", err)
+				log.Fatalf("Unable to receive TakePhoto messages, err: %v", err)
 				break
 			}
 			ch <- m.GetIndex()
@@ -166,7 +166,7 @@ func (a *ServiceImpl) StartVideo(ctx context.Context) (<-chan int32, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive StartVideo messages, err: %v\n", err)
+				log.Fatalf("Unable to receive StartVideo messages, err: %v", err)
 				break
 			}
 			ch <- m.GetStreamId()
@@ -222,7 +222,7 @@ func (a *ServiceImpl) StopVideo(ctx context.Context) (<-chan int32, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive StopVideo messages, err: %v\n", err)
+				log.Fatalf("Unable to receive StopVideo messages, err: %v", err)
 				break
 			}
 			ch <- m.GetStreamId()
@@ -278,7 +278,7 @@ func (a *ServiceImpl) StartVideoStreaming(ctx context.Context) (<-chan int32, er
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive StartVideoStreaming messages, err: %v\n", err)
+				log.Fatalf("Unable to receive StartVideoStreaming messages, err: %v", err)
 				break
 			}
 			ch <- m.GetStreamId()
@@ -334,7 +334,7 @@ func (a *ServiceImpl) StopVideoStreaming(ctx context.Context) (<-chan int32, err
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive StopVideoStreaming messages, err: %v\n", err)
+				log.Fatalf("Unable to receive StopVideoStreaming messages, err: %v", err)
 				break
 			}
 			ch <- m.GetStreamId()
@@ -390,7 +390,7 @@ func (a *ServiceImpl) SetMode(ctx context.Context) (<-chan Mode, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive SetMode messages, err: %v\n", err)
+				log.Fatalf("Unable to receive SetMode messages, err: %v", err)
 				break
 			}
 			ch <- m.GetMode()
@@ -446,7 +446,7 @@ func (a *ServiceImpl) StorageInformation(ctx context.Context) (<-chan int32, err
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive StorageInformation messages, err: %v\n", err)
+				log.Fatalf("Unable to receive StorageInformation messages, err: %v", err)
 				break
 			}
 			ch <- m.GetStorageId()
@@ -507,7 +507,7 @@ func (a *ServiceImpl) CaptureStatus(ctx context.Context) (<-chan int32, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive CaptureStatus messages, err: %v\n", err)
+				log.Fatalf("Unable to receive CaptureStatus messages, err: %v", err)
 				break
 			}
 			ch <- m.GetReserved()
@@ -568,7 +568,7 @@ func (a *ServiceImpl) FormatStorage(ctx context.Context) (<-chan int32, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive FormatStorage messages, err: %v\n", err)
+				log.Fatalf("Unable to receive FormatStorage messages, err: %v", err)
 				break
 			}
 			ch <- m.GetStorageId()
@@ -624,7 +624,7 @@ func (a *ServiceImpl) ResetSettings(ctx context.Context) (<-chan int32, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive ResetSettings messages, err: %v\n", err)
+				log.Fatalf("Unable to receive ResetSettings messages, err: %v", err)
 				break
 			}
 			ch <- m.GetReserved()
@@ -680,7 +680,7 @@ func (a *ServiceImpl) ZoomInStart(ctx context.Context) (<-chan int32, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive ZoomInStart messages, err: %v\n", err)
+				log.Fatalf("Unable to receive ZoomInStart messages, err: %v", err)
 				break
 			}
 			ch <- m.GetReserved()
@@ -736,7 +736,7 @@ func (a *ServiceImpl) ZoomOutStart(ctx context.Context) (<-chan int32, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive ZoomOutStart messages, err: %v\n", err)
+				log.Fatalf("Unable to receive ZoomOutStart messages, err: %v", err)
 				break
 			}
 			ch <- m.GetReserved()
@@ -792,7 +792,7 @@ func (a *ServiceImpl) ZoomStop(ctx context.Context) (<-chan int32, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive ZoomStop messages, err: %v\n", err)
+				log.Fatalf("Unable to receive ZoomStop messages, err: %v", err)
 				break
 			}
 			ch <- m.GetReserved()
@@ -848,7 +848,7 @@ func (a *ServiceImpl) ZoomRange(ctx context.Context) (<-chan float32, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive ZoomRange messages, err: %v\n", err)
+				log.Fatalf("Unable to receive ZoomRange messages, err: %v", err)
 				break
 			}
 			ch <- m.GetFactor()
@@ -943,7 +943,7 @@ func (a *ServiceImpl) TrackingPointCommand(ctx context.Context) (<-chan *TrackPo
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive TrackingPointCommand messages, err: %v\n", err)
+				log.Fatalf("Unable to receive TrackingPointCommand messages, err: %v", err)
 				break
 			}
 			ch <- m.GetTrackPoint()
@@ -977,7 +977,7 @@ func (a *ServiceImpl) TrackingRectangleCommand(ctx context.Context) (<-chan *Tra
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive TrackingRectangleCommand messages, err: %v\n", err)
+				log.Fatalf("Unable to receive TrackingRectangleCommand messages, err: %v", err)
 				break
 			}
 			ch <- m.GetTrackRectangle()
@@ -1011,7 +1011,7 @@ func (a *ServiceImpl) TrackingOffCommand(ctx context.Context) (<-chan int32, err
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive TrackingOffCommand messages, err: %v\n", err)
+				log.Fatalf("Unable to receive TrackingOffCommand messages, err: %v", err)
 				break
 			}
 			ch <- m.GetDummy()
