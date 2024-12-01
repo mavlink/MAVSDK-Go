@@ -5,8 +5,8 @@ import (
 	"io"
 	"log"
 
-	"google.golang.org/grpc/status"
 	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,24 +14,19 @@ type ServiceImpl struct {
 }
 
 /*
-   Upload a list of mission items to the system.
+UploadMission Upload a list of mission items to the system.
 
-   The mission items are uploaded to a drone. Once uploaded the mission can be started and
-   executed even if the connection is lost.
-
-   Parameters
-   ----------
-   missionPlan *MissionPlan
-
-
-
+	The mission items are uploaded to a drone. Once uploaded the mission can be started and
+	executed even if the connection is lost.
 */
+func (s *ServiceImpl) UploadMission(
+	ctx context.Context,
+	missionPlan *MissionPlan,
 
-func (s *ServiceImpl) UploadMission(ctx context.Context, missionPlan *MissionPlan) (*UploadMissionResponse, error) {
-
-	request := &UploadMissionRequest{}
-	request.MissionPlan = missionPlan
-
+) (*UploadMissionResponse, error) {
+	request := &UploadMissionRequest{
+		MissionPlan: missionPlan,
+	}
 	response, err := s.Client.UploadMission(ctx, request)
 	if err != nil {
 		return nil, err
@@ -40,21 +35,20 @@ func (s *ServiceImpl) UploadMission(ctx context.Context, missionPlan *MissionPla
 }
 
 /*
-   Upload a list of mission items to the system and report upload progress.
+UploadMissionWithProgress Upload a list of mission items to the system and report upload progress.
 
-   The mission items are uploaded to a drone. Once uploaded the mission can be started and
-   executed even if the connection is lost.
-
-   Parameters
-   ----------
-   missionPlan *MissionPlan
+	The mission items are uploaded to a drone. Once uploaded the mission can be started and
+	executed even if the connection is lost.
 */
+func (a *ServiceImpl) UploadMissionWithProgress(
+	ctx context.Context,
+	missionPlan *MissionPlan,
 
-func (a *ServiceImpl) UploadMissionWithProgress(ctx context.Context, missionPlan *MissionPlan) (<-chan *ProgressData, error) {
+) (<-chan *ProgressData, error) {
 	ch := make(chan *ProgressData)
-	request := &SubscribeUploadMissionWithProgressRequest{}
-	request.MissionPlan = missionPlan
-
+	request := &SubscribeUploadMissionWithProgressRequest{
+		MissionPlan: missionPlan,
+	}
 	stream, err := a.Client.SubscribeUploadMissionWithProgress(ctx, request)
 	if err != nil {
 		return nil, err
@@ -72,7 +66,6 @@ func (a *ServiceImpl) UploadMissionWithProgress(ctx context.Context, missionPlan
 					return
 				}
 				log.Fatalf("Unable to receive UploadMissionWithProgress messages, err: %v", err)
-				break
 			}
 			ch <- m.GetProgressData()
 		}
@@ -81,13 +74,12 @@ func (a *ServiceImpl) UploadMissionWithProgress(ctx context.Context, missionPlan
 }
 
 /*
-   Cancel an ongoing mission upload.
-
-
+CancelMissionUpload Cancel an ongoing mission upload.
 */
+func (s *ServiceImpl) CancelMissionUpload(
+	ctx context.Context,
 
-func (s *ServiceImpl) CancelMissionUpload(ctx context.Context) (*CancelMissionUploadResponse, error) {
-
+) (*CancelMissionUploadResponse, error) {
 	request := &CancelMissionUploadRequest{}
 	response, err := s.Client.CancelMissionUpload(ctx, request)
 	if err != nil {
@@ -97,42 +89,33 @@ func (s *ServiceImpl) CancelMissionUpload(ctx context.Context) (*CancelMissionUp
 }
 
 /*
-   Download a list of mission items from the system (asynchronous).
+DownloadMission Download a list of mission items from the system (asynchronous).
 
-   Will fail if any of the downloaded mission items are not supported
-   by the MAVSDK API.
-
-
-
-   Returns
-   -------
-   False
-   MissionPlan : MissionPlan
-        The mission plan
-
-
+	Will fail if any of the downloaded mission items are not supported
+	by the MAVSDK API.
 */
+func (s *ServiceImpl) DownloadMission(
+	ctx context.Context,
 
-func (s *ServiceImpl) DownloadMission(ctx context.Context) (*DownloadMissionResponse, error) {
+) (*DownloadMissionResponse, error) {
 	request := &DownloadMissionRequest{}
 	response, err := s.Client.DownloadMission(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Download a list of mission items from the system (asynchronous) and report progress.
+DownloadMissionWithProgress Download a list of mission items from the system (asynchronous) and report progress.
 
-   Will fail if any of the downloaded mission items are not supported
-   by the MAVSDK API.
-
-
+	Will fail if any of the downloaded mission items are not supported
+	by the MAVSDK API.
 */
+func (a *ServiceImpl) DownloadMissionWithProgress(
+	ctx context.Context,
 
-func (a *ServiceImpl) DownloadMissionWithProgress(ctx context.Context) (<-chan *ProgressDataOrMission, error) {
+) (<-chan *ProgressDataOrMission, error) {
 	ch := make(chan *ProgressDataOrMission)
 	request := &SubscribeDownloadMissionWithProgressRequest{}
 	stream, err := a.Client.SubscribeDownloadMissionWithProgress(ctx, request)
@@ -152,7 +135,6 @@ func (a *ServiceImpl) DownloadMissionWithProgress(ctx context.Context) (<-chan *
 					return
 				}
 				log.Fatalf("Unable to receive DownloadMissionWithProgress messages, err: %v", err)
-				break
 			}
 			ch <- m.GetProgressData()
 		}
@@ -161,13 +143,12 @@ func (a *ServiceImpl) DownloadMissionWithProgress(ctx context.Context) (<-chan *
 }
 
 /*
-   Cancel an ongoing mission download.
-
-
+CancelMissionDownload Cancel an ongoing mission download.
 */
+func (s *ServiceImpl) CancelMissionDownload(
+	ctx context.Context,
 
-func (s *ServiceImpl) CancelMissionDownload(ctx context.Context) (*CancelMissionDownloadResponse, error) {
-
+) (*CancelMissionDownloadResponse, error) {
 	request := &CancelMissionDownloadRequest{}
 	response, err := s.Client.CancelMissionDownload(ctx, request)
 	if err != nil {
@@ -177,15 +158,14 @@ func (s *ServiceImpl) CancelMissionDownload(ctx context.Context) (*CancelMission
 }
 
 /*
-   Start the mission.
+StartMission Start the mission.
 
-   A mission must be uploaded to the vehicle before this can be called.
-
-
+	A mission must be uploaded to the vehicle before this can be called.
 */
+func (s *ServiceImpl) StartMission(
+	ctx context.Context,
 
-func (s *ServiceImpl) StartMission(ctx context.Context) (*StartMissionResponse, error) {
-
+) (*StartMissionResponse, error) {
 	request := &StartMissionRequest{}
 	response, err := s.Client.StartMission(ctx, request)
 	if err != nil {
@@ -195,18 +175,17 @@ func (s *ServiceImpl) StartMission(ctx context.Context) (*StartMissionResponse, 
 }
 
 /*
-   Pause the mission.
+PauseMission Pause the mission.
 
-   Pausing the mission puts the vehicle into
-   [HOLD mode](https://docs.px4.io/en/flight_modes/hold.html).
-   A multicopter should just hover at the spot while a fixedwing vehicle should loiter
-   around the location where it paused.
-
-
+	Pausing the mission puts the vehicle into
+	[HOLD mode](https://docs.px4.io/en/flight_modes/hold.html).
+	A multicopter should just hover at the spot while a fixedwing vehicle should loiter
+	around the location where it paused.
 */
+func (s *ServiceImpl) PauseMission(
+	ctx context.Context,
 
-func (s *ServiceImpl) PauseMission(ctx context.Context) (*PauseMissionResponse, error) {
-
+) (*PauseMissionResponse, error) {
 	request := &PauseMissionRequest{}
 	response, err := s.Client.PauseMission(ctx, request)
 	if err != nil {
@@ -216,13 +195,12 @@ func (s *ServiceImpl) PauseMission(ctx context.Context) (*PauseMissionResponse, 
 }
 
 /*
-   Clear the mission saved on the vehicle.
-
-
+ClearMission Clear the mission saved on the vehicle.
 */
+func (s *ServiceImpl) ClearMission(
+	ctx context.Context,
 
-func (s *ServiceImpl) ClearMission(ctx context.Context) (*ClearMissionResponse, error) {
-
+) (*ClearMissionResponse, error) {
 	request := &ClearMissionRequest{}
 	response, err := s.Client.ClearMission(ctx, request)
 	if err != nil {
@@ -232,25 +210,22 @@ func (s *ServiceImpl) ClearMission(ctx context.Context) (*ClearMissionResponse, 
 }
 
 /*
-   Sets the mission item index to go to.
+SetCurrentMissionItem Sets the mission item index to go to.
 
-   By setting the current index to 0, the mission is restarted from the beginning. If it is set
-   to a specific index of a mission item, the mission will be set to this item.
+	By setting the current index to 0, the mission is restarted from the beginning. If it is set
+	to a specific index of a mission item, the mission will be set to this item.
 
-   Note that this is not necessarily true for general missions using MAVLink if loop counters
-   are used.
-
-   Parameters
-   ----------
-   index int32
-
-
+	Note that this is not necessarily true for general missions using MAVLink if loop counters
+	are used.
 */
+func (s *ServiceImpl) SetCurrentMissionItem(
+	ctx context.Context,
+	index int32,
 
-func (s *ServiceImpl) SetCurrentMissionItem(ctx context.Context, index int32) (*SetCurrentMissionItemResponse, error) {
-
-	request := &SetCurrentMissionItemRequest{}
-	request.Index = index
+) (*SetCurrentMissionItemResponse, error) {
+	request := &SetCurrentMissionItemRequest{
+		Index: index,
+	}
 	response, err := s.Client.SetCurrentMissionItem(ctx, request)
 	if err != nil {
 		return nil, err
@@ -259,36 +234,27 @@ func (s *ServiceImpl) SetCurrentMissionItem(ctx context.Context, index int32) (*
 }
 
 /*
-   Check if the mission has been finished.
-
-
-
-   Returns
-   -------
-   False
-   IsFinished : bool
-        True if the mission is finished and the last mission item has been reached
-
-
+IsMissionFinished Check if the mission has been finished.
 */
+func (s *ServiceImpl) IsMissionFinished(
+	ctx context.Context,
 
-func (s *ServiceImpl) IsMissionFinished(ctx context.Context) (*IsMissionFinishedResponse, error) {
+) (*IsMissionFinishedResponse, error) {
 	request := &IsMissionFinishedRequest{}
 	response, err := s.Client.IsMissionFinished(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Subscribe to mission progress updates.
-
-
+MissionProgress Subscribe to mission progress updates.
 */
+func (a *ServiceImpl) MissionProgress(
+	ctx context.Context,
 
-func (a *ServiceImpl) MissionProgress(ctx context.Context) (<-chan *MissionProgress, error) {
+) (<-chan *MissionProgress, error) {
 	ch := make(chan *MissionProgress)
 	request := &SubscribeMissionProgressRequest{}
 	stream, err := a.Client.SubscribeMissionProgress(ctx, request)
@@ -308,7 +274,6 @@ func (a *ServiceImpl) MissionProgress(ctx context.Context) (<-chan *MissionProgr
 					return
 				}
 				log.Fatalf("Unable to receive MissionProgress messages, err: %v", err)
-				break
 			}
 			ch <- m.GetMissionProgress()
 		}
@@ -317,49 +282,37 @@ func (a *ServiceImpl) MissionProgress(ctx context.Context) (<-chan *MissionProgr
 }
 
 /*
-   Get whether to trigger Return-to-Launch (RTL) after mission is complete.
+GetReturnToLaunchAfterMission Get whether to trigger Return-to-Launch (RTL) after mission is complete.
 
-   Before getting this option, it needs to be set, or a mission
-   needs to be downloaded.
-
-
-
-   Returns
-   -------
-   False
-   Enable : bool
-        If true, trigger an RTL at the end of the mission
-
-
+	Before getting this option, it needs to be set, or a mission
+	needs to be downloaded.
 */
+func (s *ServiceImpl) GetReturnToLaunchAfterMission(
+	ctx context.Context,
 
-func (s *ServiceImpl) GetReturnToLaunchAfterMission(ctx context.Context) (*GetReturnToLaunchAfterMissionResponse, error) {
+) (*GetReturnToLaunchAfterMissionResponse, error) {
 	request := &GetReturnToLaunchAfterMissionRequest{}
 	response, err := s.Client.GetReturnToLaunchAfterMission(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Set whether to trigger Return-to-Launch (RTL) after the mission is complete.
+SetReturnToLaunchAfterMission Set whether to trigger Return-to-Launch (RTL) after the mission is complete.
 
-   This will only take effect for the next mission upload, meaning that
-   the mission may have to be uploaded again.
-
-   Parameters
-   ----------
-   enable bool
-
-
+	This will only take effect for the next mission upload, meaning that
+	the mission may have to be uploaded again.
 */
+func (s *ServiceImpl) SetReturnToLaunchAfterMission(
+	ctx context.Context,
+	enable bool,
 
-func (s *ServiceImpl) SetReturnToLaunchAfterMission(ctx context.Context, enable bool) (*SetReturnToLaunchAfterMissionResponse, error) {
-
-	request := &SetReturnToLaunchAfterMissionRequest{}
-	request.Enable = enable
+) (*SetReturnToLaunchAfterMissionResponse, error) {
+	request := &SetReturnToLaunchAfterMissionRequest{
+		Enable: enable,
+	}
 	response, err := s.Client.SetReturnToLaunchAfterMission(ctx, request)
 	if err != nil {
 		return nil, err

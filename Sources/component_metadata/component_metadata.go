@@ -6,7 +6,7 @@ import (
 	"log"
 
 	codes "google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,20 +14,18 @@ type ServiceImpl struct {
 }
 
 /*
-   Request metadata from a specific component. This is used to start requesting metadata from a component.
-   The metadata can later be accessed via subscription (see below) or GetMetadata.
+RequestComponent Request metadata from a specific component. This is used to start requesting metadata from a component.
 
-   Parameters
-   ----------
-   compid uint32
-
-
+	The metadata can later be accessed via subscription (see below) or GetMetadata.
 */
+func (s *ServiceImpl) RequestComponent(
+	ctx context.Context,
+	compid uint32,
 
-func (s *ServiceImpl) RequestComponent(ctx context.Context, compid uint32) (*RequestComponentResponse, error) {
-
-	request := &RequestComponentRequest{}
-	request.Compid = compid
+) (*RequestComponentResponse, error) {
+	request := &RequestComponentRequest{
+		Compid: compid,
+	}
 	response, err := s.Client.RequestComponent(ctx, request)
 	if err != nil {
 		return nil, err
@@ -36,14 +34,14 @@ func (s *ServiceImpl) RequestComponent(ctx context.Context, compid uint32) (*Req
 }
 
 /*
-   Request metadata from the autopilot component. This is used to start requesting metadata from the autopilot.
-   The metadata can later be accessed via subscription (see below) or GetMetadata.
+RequestAutopilotComponent Request metadata from the autopilot component. This is used to start requesting metadata from the autopilot.
 
-
+	The metadata can later be accessed via subscription (see below) or GetMetadata.
 */
+func (s *ServiceImpl) RequestAutopilotComponent(
+	ctx context.Context,
 
-func (s *ServiceImpl) RequestAutopilotComponent(ctx context.Context) (*RequestAutopilotComponentResponse, error) {
-
+) (*RequestAutopilotComponentResponse, error) {
 	request := &RequestAutopilotComponentRequest{}
 	response, err := s.Client.RequestAutopilotComponent(ctx, request)
 	if err != nil {
@@ -53,12 +51,12 @@ func (s *ServiceImpl) RequestAutopilotComponent(ctx context.Context) (*RequestAu
 }
 
 /*
-   Register a callback that gets called when metadata is available
-
-
+MetadataAvailable Register a callback that gets called when metadata is available
 */
+func (a *ServiceImpl) MetadataAvailable(
+	ctx context.Context,
 
-func (a *ServiceImpl) MetadataAvailable(ctx context.Context) (<-chan *MetadataUpdate, error) {
+) (<-chan *MetadataUpdate, error) {
 	ch := make(chan *MetadataUpdate)
 	request := &SubscribeMetadataAvailableRequest{}
 	stream, err := a.Client.SubscribeMetadataAvailable(ctx, request)
@@ -78,7 +76,6 @@ func (a *ServiceImpl) MetadataAvailable(ctx context.Context) (<-chan *MetadataUp
 					return
 				}
 				log.Fatalf("Unable to receive MetadataAvailable messages, err: %v", err)
-				break
 			}
 			ch <- m.GetData()
 		}
@@ -87,30 +84,23 @@ func (a *ServiceImpl) MetadataAvailable(ctx context.Context) (<-chan *MetadataUp
 }
 
 /*
-   Access metadata. This can be used if you know the metadata is available already, otherwise use
-   the subscription to get notified when it becomes available.
+GetMetadata Access metadata. This can be used if you know the metadata is available already, otherwise use
 
-   Parameters
-   ----------
-   compid uint32metadataType *MetadataType
-
-
-   Returns
-   -------
-   False
-   Response : MetadataData
-
-
+	the subscription to get notified when it becomes available.
 */
+func (s *ServiceImpl) GetMetadata(
+	ctx context.Context,
+	compid uint32,
+	metadataType *MetadataType,
 
-func (s *ServiceImpl) GetMetadata(ctx context.Context, compid uint32, metadataType *MetadataType) (*GetMetadataResponse, error) {
-	request := &GetMetadataRequest{}
-	request.Compid = compid
-	request.MetadataType = *metadataType
+) (*GetMetadataResponse, error) {
+	request := &GetMetadataRequest{
+		Compid:       compid,
+		MetadataType: *metadataType,
+	}
 	response, err := s.Client.GetMetadata(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }

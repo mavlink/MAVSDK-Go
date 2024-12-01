@@ -9,16 +9,15 @@ type ServiceImpl struct {
 }
 
 /*
-   Send command to arm the drone.
+Arm Send command to arm the drone.
 
-   Arming a drone normally causes motors to spin at idle.
-   Before arming take all safety precautions and stand clear of the drone!
-
-
+	Arming a drone normally causes motors to spin at idle.
+	Before arming take all safety precautions and stand clear of the drone!
 */
+func (s *ServiceImpl) Arm(
+	ctx context.Context,
 
-func (s *ServiceImpl) Arm(ctx context.Context) (*ArmResponse, error) {
-
+) (*ArmResponse, error) {
 	request := &ArmRequest{}
 	response, err := s.Client.Arm(ctx, request)
 	if err != nil {
@@ -28,18 +27,17 @@ func (s *ServiceImpl) Arm(ctx context.Context) (*ArmResponse, error) {
 }
 
 /*
-   Send command to force-arm the drone without any checks.
+ArmForce Send command to force-arm the drone without any checks.
 
-   Attention: this is not to be used for normal flying but only bench tests!
+	Attention: this is not to be used for normal flying but only bench tests!
 
-   Arming a drone normally causes motors to spin at idle.
-   Before arming take all safety precautions and stand clear of the drone!
-
-
+	Arming a drone normally causes motors to spin at idle.
+	Before arming take all safety precautions and stand clear of the drone!
 */
+func (s *ServiceImpl) ArmForce(
+	ctx context.Context,
 
-func (s *ServiceImpl) ArmForce(ctx context.Context) (*ArmForceResponse, error) {
-
+) (*ArmForceResponse, error) {
 	request := &ArmForceRequest{}
 	response, err := s.Client.ArmForce(ctx, request)
 	if err != nil {
@@ -49,16 +47,15 @@ func (s *ServiceImpl) ArmForce(ctx context.Context) (*ArmForceResponse, error) {
 }
 
 /*
-   Send command to disarm the drone.
+Disarm Send command to disarm the drone.
 
-   This will disarm a drone that considers itself landed. If flying, the drone should
-   reject the disarm command. Disarming means that all motors will stop.
-
-
+	This will disarm a drone that considers itself landed. If flying, the drone should
+	reject the disarm command. Disarming means that all motors will stop.
 */
+func (s *ServiceImpl) Disarm(
+	ctx context.Context,
 
-func (s *ServiceImpl) Disarm(ctx context.Context) (*DisarmResponse, error) {
-
+) (*DisarmResponse, error) {
 	request := &DisarmRequest{}
 	response, err := s.Client.Disarm(ctx, request)
 	if err != nil {
@@ -68,18 +65,17 @@ func (s *ServiceImpl) Disarm(ctx context.Context) (*DisarmResponse, error) {
 }
 
 /*
-   Send command to take off and hover.
+Takeoff Send command to take off and hover.
 
-   This switches the drone into position control mode and commands
-   it to take off and hover at the takeoff altitude.
+	This switches the drone into position control mode and commands
+	it to take off and hover at the takeoff altitude.
 
-   Note that the vehicle must be armed before it can take off.
-
-
+	Note that the vehicle must be armed before it can take off.
 */
+func (s *ServiceImpl) Takeoff(
+	ctx context.Context,
 
-func (s *ServiceImpl) Takeoff(ctx context.Context) (*TakeoffResponse, error) {
-
+) (*TakeoffResponse, error) {
 	request := &TakeoffRequest{}
 	response, err := s.Client.Takeoff(ctx, request)
 	if err != nil {
@@ -89,15 +85,14 @@ func (s *ServiceImpl) Takeoff(ctx context.Context) (*TakeoffResponse, error) {
 }
 
 /*
-   Send command to land at the current position.
+Land Send command to land at the current position.
 
-   This switches the drone to 'Land' flight mode.
-
-
+	This switches the drone to 'Land' flight mode.
 */
+func (s *ServiceImpl) Land(
+	ctx context.Context,
 
-func (s *ServiceImpl) Land(ctx context.Context) (*LandResponse, error) {
-
+) (*LandResponse, error) {
 	request := &LandRequest{}
 	response, err := s.Client.Land(ctx, request)
 	if err != nil {
@@ -107,15 +102,14 @@ func (s *ServiceImpl) Land(ctx context.Context) (*LandResponse, error) {
 }
 
 /*
-   Send command to reboot the drone components.
+Reboot Send command to reboot the drone components.
 
-   This will reboot the autopilot, companion computer, camera and gimbal.
-
-
+	This will reboot the autopilot, companion computer, camera and gimbal.
 */
+func (s *ServiceImpl) Reboot(
+	ctx context.Context,
 
-func (s *ServiceImpl) Reboot(ctx context.Context) (*RebootResponse, error) {
-
+) (*RebootResponse, error) {
 	request := &RebootRequest{}
 	response, err := s.Client.Reboot(ctx, request)
 	if err != nil {
@@ -125,17 +119,16 @@ func (s *ServiceImpl) Reboot(ctx context.Context) (*RebootResponse, error) {
 }
 
 /*
-   Send command to shut down the drone components.
+Shutdown Send command to shut down the drone components.
 
-   This will shut down the autopilot, onboard computer, camera and gimbal.
-   This command should only be used when the autopilot is disarmed and autopilots commonly
-   reject it if they are not already ready to shut down.
-
-
+	This will shut down the autopilot, onboard computer, camera and gimbal.
+	This command should only be used when the autopilot is disarmed and autopilots commonly
+	reject it if they are not already ready to shut down.
 */
+func (s *ServiceImpl) Shutdown(
+	ctx context.Context,
 
-func (s *ServiceImpl) Shutdown(ctx context.Context) (*ShutdownResponse, error) {
-
+) (*ShutdownResponse, error) {
 	request := &ShutdownRequest{}
 	response, err := s.Client.Shutdown(ctx, request)
 	if err != nil {
@@ -145,15 +138,14 @@ func (s *ServiceImpl) Shutdown(ctx context.Context) (*ShutdownResponse, error) {
 }
 
 /*
-   Send command to terminate the drone.
+Terminate Send command to terminate the drone.
 
-   This will run the terminate routine as configured on the drone (e.g. disarm and open the parachute).
-
-
+	This will run the terminate routine as configured on the drone (e.g. disarm and open the parachute).
 */
+func (s *ServiceImpl) Terminate(
+	ctx context.Context,
 
-func (s *ServiceImpl) Terminate(ctx context.Context) (*TerminateResponse, error) {
-
+) (*TerminateResponse, error) {
 	request := &TerminateRequest{}
 	response, err := s.Client.Terminate(ctx, request)
 	if err != nil {
@@ -163,16 +155,15 @@ func (s *ServiceImpl) Terminate(ctx context.Context) (*TerminateResponse, error)
 }
 
 /*
-   Send command to kill the drone.
+Kill Send command to kill the drone.
 
-   This will disarm a drone irrespective of whether it is landed or flying.
-   Note that the drone will fall out of the sky if this command is used while flying.
-
-
+	This will disarm a drone irrespective of whether it is landed or flying.
+	Note that the drone will fall out of the sky if this command is used while flying.
 */
+func (s *ServiceImpl) Kill(
+	ctx context.Context,
 
-func (s *ServiceImpl) Kill(ctx context.Context) (*KillResponse, error) {
-
+) (*KillResponse, error) {
 	request := &KillRequest{}
 	response, err := s.Client.Kill(ctx, request)
 	if err != nil {
@@ -182,17 +173,16 @@ func (s *ServiceImpl) Kill(ctx context.Context) (*KillResponse, error) {
 }
 
 /*
-   Send command to return to the launch (takeoff) position and land.
+ReturnToLaunch Send command to return to the launch (takeoff) position and land.
 
-   This switches the drone into [Return mode](https://docs.px4.io/master/en/flight_modes/return.html) which
-   generally means it will rise up to a certain altitude to clear any obstacles before heading
-   back to the launch (takeoff) position and land there.
-
-
+	This switches the drone into [Return mode](https://docs.px4.io/master/en/flight_modes/return.html) which
+	generally means it will rise up to a certain altitude to clear any obstacles before heading
+	back to the launch (takeoff) position and land there.
 */
+func (s *ServiceImpl) ReturnToLaunch(
+	ctx context.Context,
 
-func (s *ServiceImpl) ReturnToLaunch(ctx context.Context) (*ReturnToLaunchResponse, error) {
-
+) (*ReturnToLaunchResponse, error) {
 	request := &ReturnToLaunchRequest{}
 	response, err := s.Client.ReturnToLaunch(ctx, request)
 	if err != nil {
@@ -202,33 +192,27 @@ func (s *ServiceImpl) ReturnToLaunch(ctx context.Context) (*ReturnToLaunchRespon
 }
 
 /*
-   Send command to move the vehicle to a specific global position.
+GotoLocation Send command to move the vehicle to a specific global position.
 
-   The latitude and longitude are given in degrees (WGS84 frame) and the altitude
-   in meters AMSL (above mean sea level).
+	The latitude and longitude are given in degrees (WGS84 frame) and the altitude
+	in meters AMSL (above mean sea level).
 
-   The yaw angle is in degrees (frame is NED, 0 is North, positive is clockwise).
-
-   Parameters
-   ----------
-   latitudeDeg float64
-
-   longitudeDeg float64
-
-   absoluteAltitudeM float32
-
-   yawDeg float32
-
-
+	The yaw angle is in degrees (frame is NED, 0 is North, positive is clockwise).
 */
+func (s *ServiceImpl) GotoLocation(
+	ctx context.Context,
+	latitudeDeg float64,
+	longitudeDeg float64,
+	absoluteAltitudeM float32,
+	yawDeg float32,
 
-func (s *ServiceImpl) GotoLocation(ctx context.Context, latitudeDeg float64, longitudeDeg float64, absoluteAltitudeM float32, yawDeg float32) (*GotoLocationResponse, error) {
-
-	request := &GotoLocationRequest{}
-	request.LatitudeDeg = latitudeDeg
-	request.LongitudeDeg = longitudeDeg
-	request.AbsoluteAltitudeM = absoluteAltitudeM
-	request.YawDeg = yawDeg
+) (*GotoLocationResponse, error) {
+	request := &GotoLocationRequest{
+		LatitudeDeg:       latitudeDeg,
+		LongitudeDeg:      longitudeDeg,
+		AbsoluteAltitudeM: absoluteAltitudeM,
+		YawDeg:            yawDeg,
+	}
 	response, err := s.Client.GotoLocation(ctx, request)
 	if err != nil {
 		return nil, err
@@ -237,37 +221,29 @@ func (s *ServiceImpl) GotoLocation(ctx context.Context, latitudeDeg float64, lon
 }
 
 /*
-   Send command do orbit to the drone.
+DoOrbit Send command do orbit to the drone.
 
-   This will run the orbit routine with the given parameters.
-
-   Parameters
-   ----------
-   radiusM float32
-
-   velocityMs float32
-
-   yawBehavior *OrbitYawBehavior
-
-
-   latitudeDeg float64
-
-   longitudeDeg float64
-
-   absoluteAltitudeM float64
-
-
+	This will run the orbit routine with the given parameters.
 */
+func (s *ServiceImpl) DoOrbit(
+	ctx context.Context,
+	radiusM float32,
+	velocityMs float32,
+	yawBehavior *OrbitYawBehavior,
 
-func (s *ServiceImpl) DoOrbit(ctx context.Context, radiusM float32, velocityMs float32, yawBehavior *OrbitYawBehavior, latitudeDeg float64, longitudeDeg float64, absoluteAltitudeM float64) (*DoOrbitResponse, error) {
+	latitudeDeg float64,
+	longitudeDeg float64,
+	absoluteAltitudeM float64,
 
-	request := &DoOrbitRequest{}
-	request.RadiusM = radiusM
-	request.VelocityMs = velocityMs
-	request.YawBehavior = *yawBehavior
-	request.LatitudeDeg = latitudeDeg
-	request.LongitudeDeg = longitudeDeg
-	request.AbsoluteAltitudeM = absoluteAltitudeM
+) (*DoOrbitResponse, error) {
+	request := &DoOrbitRequest{
+		RadiusM:           radiusM,
+		VelocityMs:        velocityMs,
+		YawBehavior:       *yawBehavior,
+		LatitudeDeg:       latitudeDeg,
+		LongitudeDeg:      longitudeDeg,
+		AbsoluteAltitudeM: absoluteAltitudeM,
+	}
 	response, err := s.Client.DoOrbit(ctx, request)
 	if err != nil {
 		return nil, err
@@ -276,19 +252,18 @@ func (s *ServiceImpl) DoOrbit(ctx context.Context, radiusM float32, velocityMs f
 }
 
 /*
-   Send command to hold position (a.k.a. "Loiter").
+Hold Send command to hold position (a.k.a. "Loiter").
 
-   Sends a command to drone to change to Hold flight mode, causing the
-   vehicle to stop and maintain its current GPS position and altitude.
+	Sends a command to drone to change to Hold flight mode, causing the
+	vehicle to stop and maintain its current GPS position and altitude.
 
-   Note: this command is specific to the PX4 Autopilot flight stack as
-   it implies a change to a PX4-specific mode.
-
-
+	Note: this command is specific to the PX4 Autopilot flight stack as
+	it implies a change to a PX4-specific mode.
 */
+func (s *ServiceImpl) Hold(
+	ctx context.Context,
 
-func (s *ServiceImpl) Hold(ctx context.Context) (*HoldResponse, error) {
-
+) (*HoldResponse, error) {
 	request := &HoldRequest{}
 	response, err := s.Client.Hold(ctx, request)
 	if err != nil {
@@ -298,24 +273,20 @@ func (s *ServiceImpl) Hold(ctx context.Context) (*HoldResponse, error) {
 }
 
 /*
-   Send command to set the value of an actuator.
+SetActuator Send command to set the value of an actuator.
 
-   Note that the index of the actuator starts at 1 and that the value goes from -1 to 1.
-
-   Parameters
-   ----------
-   index int32
-
-   value float32
-
-
+	Note that the index of the actuator starts at 1 and that the value goes from -1 to 1.
 */
+func (s *ServiceImpl) SetActuator(
+	ctx context.Context,
+	index int32,
+	value float32,
 
-func (s *ServiceImpl) SetActuator(ctx context.Context, index int32, value float32) (*SetActuatorResponse, error) {
-
-	request := &SetActuatorRequest{}
-	request.Index = index
-	request.Value = value
+) (*SetActuatorResponse, error) {
+	request := &SetActuatorRequest{
+		Index: index,
+		Value: value,
+	}
 	response, err := s.Client.SetActuator(ctx, request)
 	if err != nil {
 		return nil, err
@@ -324,17 +295,16 @@ func (s *ServiceImpl) SetActuator(ctx context.Context, index int32, value float3
 }
 
 /*
-   Send command to transition the drone to fixedwing.
+TransitionToFixedwing Send command to transition the drone to fixedwing.
 
-   The associated action will only be executed for VTOL vehicles (on other vehicle types the
-   command will fail). The command will succeed if called when the vehicle
-   is already in fixedwing mode.
-
-
+	The associated action will only be executed for VTOL vehicles (on other vehicle types the
+	command will fail). The command will succeed if called when the vehicle
+	is already in fixedwing mode.
 */
+func (s *ServiceImpl) TransitionToFixedwing(
+	ctx context.Context,
 
-func (s *ServiceImpl) TransitionToFixedwing(ctx context.Context) (*TransitionToFixedwingResponse, error) {
-
+) (*TransitionToFixedwingResponse, error) {
 	request := &TransitionToFixedwingRequest{}
 	response, err := s.Client.TransitionToFixedwing(ctx, request)
 	if err != nil {
@@ -344,17 +314,16 @@ func (s *ServiceImpl) TransitionToFixedwing(ctx context.Context) (*TransitionToF
 }
 
 /*
-   Send command to transition the drone to multicopter.
+TransitionToMulticopter Send command to transition the drone to multicopter.
 
-   The associated action will only be executed for VTOL vehicles (on other vehicle types the
-   command will fail). The command will succeed if called when the vehicle
-   is already in multicopter mode.
-
-
+	The associated action will only be executed for VTOL vehicles (on other vehicle types the
+	command will fail). The command will succeed if called when the vehicle
+	is already in multicopter mode.
 */
+func (s *ServiceImpl) TransitionToMulticopter(
+	ctx context.Context,
 
-func (s *ServiceImpl) TransitionToMulticopter(ctx context.Context) (*TransitionToMulticopterResponse, error) {
-
+) (*TransitionToMulticopterResponse, error) {
 	request := &TransitionToMulticopterRequest{}
 	response, err := s.Client.TransitionToMulticopter(ctx, request)
 	if err != nil {
@@ -364,43 +333,31 @@ func (s *ServiceImpl) TransitionToMulticopter(ctx context.Context) (*TransitionT
 }
 
 /*
-   Get the takeoff altitude (in meters above ground).
-
-
-
-   Returns
-   -------
-   False
-   Altitude : float32
-        Takeoff altitude relative to ground/takeoff location (in meters)
-
-
+GetTakeoffAltitude Get the takeoff altitude (in meters above ground).
 */
+func (s *ServiceImpl) GetTakeoffAltitude(
+	ctx context.Context,
 
-func (s *ServiceImpl) GetTakeoffAltitude(ctx context.Context) (*GetTakeoffAltitudeResponse, error) {
+) (*GetTakeoffAltitudeResponse, error) {
 	request := &GetTakeoffAltitudeRequest{}
 	response, err := s.Client.GetTakeoffAltitude(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Set takeoff altitude (in meters above ground).
-
-   Parameters
-   ----------
-   altitude float32
-
-
+SetTakeoffAltitude Set takeoff altitude (in meters above ground).
 */
+func (s *ServiceImpl) SetTakeoffAltitude(
+	ctx context.Context,
+	altitude float32,
 
-func (s *ServiceImpl) SetTakeoffAltitude(ctx context.Context, altitude float32) (*SetTakeoffAltitudeResponse, error) {
-
-	request := &SetTakeoffAltitudeRequest{}
-	request.Altitude = altitude
+) (*SetTakeoffAltitudeResponse, error) {
+	request := &SetTakeoffAltitudeRequest{
+		Altitude: altitude,
+	}
 	response, err := s.Client.SetTakeoffAltitude(ctx, request)
 	if err != nil {
 		return nil, err
@@ -409,43 +366,31 @@ func (s *ServiceImpl) SetTakeoffAltitude(ctx context.Context, altitude float32) 
 }
 
 /*
-   Get the vehicle maximum speed (in metres/second).
-
-
-
-   Returns
-   -------
-   False
-   Speed : float32
-        Maximum speed (in metres/second)
-
-
+GetMaximumSpeed Get the vehicle maximum speed (in metres/second).
 */
+func (s *ServiceImpl) GetMaximumSpeed(
+	ctx context.Context,
 
-func (s *ServiceImpl) GetMaximumSpeed(ctx context.Context) (*GetMaximumSpeedResponse, error) {
+) (*GetMaximumSpeedResponse, error) {
 	request := &GetMaximumSpeedRequest{}
 	response, err := s.Client.GetMaximumSpeed(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Set vehicle maximum speed (in metres/second).
-
-   Parameters
-   ----------
-   speed float32
-
-
+SetMaximumSpeed Set vehicle maximum speed (in metres/second).
 */
+func (s *ServiceImpl) SetMaximumSpeed(
+	ctx context.Context,
+	speed float32,
 
-func (s *ServiceImpl) SetMaximumSpeed(ctx context.Context, speed float32) (*SetMaximumSpeedResponse, error) {
-
-	request := &SetMaximumSpeedRequest{}
-	request.Speed = speed
+) (*SetMaximumSpeedResponse, error) {
+	request := &SetMaximumSpeedRequest{
+		Speed: speed,
+	}
 	response, err := s.Client.SetMaximumSpeed(ctx, request)
 	if err != nil {
 		return nil, err
@@ -454,43 +399,31 @@ func (s *ServiceImpl) SetMaximumSpeed(ctx context.Context, speed float32) (*SetM
 }
 
 /*
-   Get the return to launch minimum return altitude (in meters).
-
-
-
-   Returns
-   -------
-   False
-   RelativeAltitudeM : float32
-        Return altitude relative to takeoff location (in meters)
-
-
+GetReturnToLaunchAltitude Get the return to launch minimum return altitude (in meters).
 */
+func (s *ServiceImpl) GetReturnToLaunchAltitude(
+	ctx context.Context,
 
-func (s *ServiceImpl) GetReturnToLaunchAltitude(ctx context.Context) (*GetReturnToLaunchAltitudeResponse, error) {
+) (*GetReturnToLaunchAltitudeResponse, error) {
 	request := &GetReturnToLaunchAltitudeRequest{}
 	response, err := s.Client.GetReturnToLaunchAltitude(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Set the return to launch minimum return altitude (in meters).
-
-   Parameters
-   ----------
-   relativeAltitudeM float32
-
-
+SetReturnToLaunchAltitude Set the return to launch minimum return altitude (in meters).
 */
+func (s *ServiceImpl) SetReturnToLaunchAltitude(
+	ctx context.Context,
+	relativeAltitudeM float32,
 
-func (s *ServiceImpl) SetReturnToLaunchAltitude(ctx context.Context, relativeAltitudeM float32) (*SetReturnToLaunchAltitudeResponse, error) {
-
-	request := &SetReturnToLaunchAltitudeRequest{}
-	request.RelativeAltitudeM = relativeAltitudeM
+) (*SetReturnToLaunchAltitudeResponse, error) {
+	request := &SetReturnToLaunchAltitudeRequest{
+		RelativeAltitudeM: relativeAltitudeM,
+	}
 	response, err := s.Client.SetReturnToLaunchAltitude(ctx, request)
 	if err != nil {
 		return nil, err
@@ -499,22 +432,19 @@ func (s *ServiceImpl) SetReturnToLaunchAltitude(ctx context.Context, relativeAlt
 }
 
 /*
-   Set current speed.
+SetCurrentSpeed Set current speed.
 
-   This will set the speed during a mission, reposition, and similar.
-   It is ephemeral, so not stored on the drone and does not survive a reboot.
-
-   Parameters
-   ----------
-   speedMS float32
-
-
+	This will set the speed during a mission, reposition, and similar.
+	It is ephemeral, so not stored on the drone and does not survive a reboot.
 */
+func (s *ServiceImpl) SetCurrentSpeed(
+	ctx context.Context,
+	speedMS float32,
 
-func (s *ServiceImpl) SetCurrentSpeed(ctx context.Context, speedMS float32) (*SetCurrentSpeedResponse, error) {
-
-	request := &SetCurrentSpeedRequest{}
-	request.SpeedMS = speedMS
+) (*SetCurrentSpeedResponse, error) {
+	request := &SetCurrentSpeedRequest{
+		SpeedMS: speedMS,
+	}
 	response, err := s.Client.SetCurrentSpeed(ctx, request)
 	if err != nil {
 		return nil, err

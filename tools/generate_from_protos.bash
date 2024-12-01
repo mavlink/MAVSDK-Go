@@ -56,6 +56,8 @@ echo "Generating proto definitions."
 for plugin in ${PLUGIN_LIST}; do
     mkdir -p ${OUTPUT_DIR}/$plugin 
     protoc ${plugin}.proto -I${PROTO_DIR}/$plugin --go_out=${OUTPUT_DIR}/$plugin --gogrpc_out=${OUTPUT_DIR}/$plugin --plugin=protoc-gen-go=${GO_GEN_CMD} --plugin=protoc-gen-gogrpc=${GO_GEN_RPC_CMD}
+    ## remove file_mavsdk_options_proto_init() line from generated file
+    sed -i '/file_mavsdk_options_proto_init/d' ${OUTPUT_DIR}/$plugin/${plugin}.pb.go
 done
 
 echo "Generating final plugins."

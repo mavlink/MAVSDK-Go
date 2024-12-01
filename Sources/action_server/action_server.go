@@ -6,7 +6,7 @@ import (
 	"log"
 
 	codes "google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,12 +14,12 @@ type ServiceImpl struct {
 }
 
 /*
-   Subscribe to ARM/DISARM commands
-
-
+ArmDisarm Subscribe to ARM/DISARM commands
 */
+func (a *ServiceImpl) ArmDisarm(
+	ctx context.Context,
 
-func (a *ServiceImpl) ArmDisarm(ctx context.Context) (<-chan *ArmDisarm, error) {
+) (<-chan *ArmDisarm, error) {
 	ch := make(chan *ArmDisarm)
 	request := &SubscribeArmDisarmRequest{}
 	stream, err := a.Client.SubscribeArmDisarm(ctx, request)
@@ -39,7 +39,6 @@ func (a *ServiceImpl) ArmDisarm(ctx context.Context) (<-chan *ArmDisarm, error) 
 					return
 				}
 				log.Fatalf("Unable to receive ArmDisarm messages, err: %v", err)
-				break
 			}
 			ch <- m.GetArm()
 		}
@@ -48,12 +47,12 @@ func (a *ServiceImpl) ArmDisarm(ctx context.Context) (<-chan *ArmDisarm, error) 
 }
 
 /*
-   Subscribe to DO_SET_MODE
-
-
+FlightModeChange Subscribe to DO_SET_MODE
 */
+func (a *ServiceImpl) FlightModeChange(
+	ctx context.Context,
 
-func (a *ServiceImpl) FlightModeChange(ctx context.Context) (<-chan FlightMode, error) {
+) (<-chan FlightMode, error) {
 	ch := make(chan FlightMode)
 	request := &SubscribeFlightModeChangeRequest{}
 	stream, err := a.Client.SubscribeFlightModeChange(ctx, request)
@@ -73,7 +72,6 @@ func (a *ServiceImpl) FlightModeChange(ctx context.Context) (<-chan FlightMode, 
 					return
 				}
 				log.Fatalf("Unable to receive FlightModeChange messages, err: %v", err)
-				break
 			}
 			ch <- m.GetFlightMode()
 		}
@@ -82,12 +80,12 @@ func (a *ServiceImpl) FlightModeChange(ctx context.Context) (<-chan FlightMode, 
 }
 
 /*
-   Subscribe to takeoff command
-
-
+Takeoff Subscribe to takeoff command
 */
+func (a *ServiceImpl) Takeoff(
+	ctx context.Context,
 
-func (a *ServiceImpl) Takeoff(ctx context.Context) (<-chan bool, error) {
+) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeTakeoffRequest{}
 	stream, err := a.Client.SubscribeTakeoff(ctx, request)
@@ -107,7 +105,6 @@ func (a *ServiceImpl) Takeoff(ctx context.Context) (<-chan bool, error) {
 					return
 				}
 				log.Fatalf("Unable to receive Takeoff messages, err: %v", err)
-				break
 			}
 			ch <- m.GetTakeoff()
 		}
@@ -116,12 +113,12 @@ func (a *ServiceImpl) Takeoff(ctx context.Context) (<-chan bool, error) {
 }
 
 /*
-   Subscribe to land command
-
-
+Land Subscribe to land command
 */
+func (a *ServiceImpl) Land(
+	ctx context.Context,
 
-func (a *ServiceImpl) Land(ctx context.Context) (<-chan bool, error) {
+) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeLandRequest{}
 	stream, err := a.Client.SubscribeLand(ctx, request)
@@ -141,7 +138,6 @@ func (a *ServiceImpl) Land(ctx context.Context) (<-chan bool, error) {
 					return
 				}
 				log.Fatalf("Unable to receive Land messages, err: %v", err)
-				break
 			}
 			ch <- m.GetLand()
 		}
@@ -150,12 +146,12 @@ func (a *ServiceImpl) Land(ctx context.Context) (<-chan bool, error) {
 }
 
 /*
-   Subscribe to reboot command
-
-
+Reboot Subscribe to reboot command
 */
+func (a *ServiceImpl) Reboot(
+	ctx context.Context,
 
-func (a *ServiceImpl) Reboot(ctx context.Context) (<-chan bool, error) {
+) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeRebootRequest{}
 	stream, err := a.Client.SubscribeReboot(ctx, request)
@@ -175,7 +171,6 @@ func (a *ServiceImpl) Reboot(ctx context.Context) (<-chan bool, error) {
 					return
 				}
 				log.Fatalf("Unable to receive Reboot messages, err: %v", err)
-				break
 			}
 			ch <- m.GetReboot()
 		}
@@ -184,12 +179,12 @@ func (a *ServiceImpl) Reboot(ctx context.Context) (<-chan bool, error) {
 }
 
 /*
-   Subscribe to shutdown command
-
-
+Shutdown Subscribe to shutdown command
 */
+func (a *ServiceImpl) Shutdown(
+	ctx context.Context,
 
-func (a *ServiceImpl) Shutdown(ctx context.Context) (<-chan bool, error) {
+) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeShutdownRequest{}
 	stream, err := a.Client.SubscribeShutdown(ctx, request)
@@ -209,7 +204,6 @@ func (a *ServiceImpl) Shutdown(ctx context.Context) (<-chan bool, error) {
 					return
 				}
 				log.Fatalf("Unable to receive Shutdown messages, err: %v", err)
-				break
 			}
 			ch <- m.GetShutdown()
 		}
@@ -218,12 +212,12 @@ func (a *ServiceImpl) Shutdown(ctx context.Context) (<-chan bool, error) {
 }
 
 /*
-   Subscribe to terminate command
-
-
+Terminate Subscribe to terminate command
 */
+func (a *ServiceImpl) Terminate(
+	ctx context.Context,
 
-func (a *ServiceImpl) Terminate(ctx context.Context) (<-chan bool, error) {
+) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeTerminateRequest{}
 	stream, err := a.Client.SubscribeTerminate(ctx, request)
@@ -243,7 +237,6 @@ func (a *ServiceImpl) Terminate(ctx context.Context) (<-chan bool, error) {
 					return
 				}
 				log.Fatalf("Unable to receive Terminate messages, err: %v", err)
-				break
 			}
 			ch <- m.GetTerminate()
 		}
@@ -252,19 +245,16 @@ func (a *ServiceImpl) Terminate(ctx context.Context) (<-chan bool, error) {
 }
 
 /*
-   Can the vehicle takeoff
-
-   Parameters
-   ----------
-   allowTakeoff bool
-
-
+SetAllowTakeoff Can the vehicle takeoff
 */
+func (s *ServiceImpl) SetAllowTakeoff(
+	ctx context.Context,
+	allowTakeoff bool,
 
-func (s *ServiceImpl) SetAllowTakeoff(ctx context.Context, allowTakeoff bool) (*SetAllowTakeoffResponse, error) {
-
-	request := &SetAllowTakeoffRequest{}
-	request.AllowTakeoff = allowTakeoff
+) (*SetAllowTakeoffResponse, error) {
+	request := &SetAllowTakeoffRequest{
+		AllowTakeoff: allowTakeoff,
+	}
 	response, err := s.Client.SetAllowTakeoff(ctx, request)
 	if err != nil {
 		return nil, err
@@ -273,22 +263,18 @@ func (s *ServiceImpl) SetAllowTakeoff(ctx context.Context, allowTakeoff bool) (*
 }
 
 /*
-   Can the vehicle arm when requested
-
-   Parameters
-   ----------
-   armable bool
-
-   forceArmable bool
-
-
+SetArmable Can the vehicle arm when requested
 */
+func (s *ServiceImpl) SetArmable(
+	ctx context.Context,
+	armable bool,
+	forceArmable bool,
 
-func (s *ServiceImpl) SetArmable(ctx context.Context, armable bool, forceArmable bool) (*SetArmableResponse, error) {
-
-	request := &SetArmableRequest{}
-	request.Armable = armable
-	request.ForceArmable = forceArmable
+) (*SetArmableResponse, error) {
+	request := &SetArmableRequest{
+		Armable:      armable,
+		ForceArmable: forceArmable,
+	}
 	response, err := s.Client.SetArmable(ctx, request)
 	if err != nil {
 		return nil, err
@@ -297,22 +283,18 @@ func (s *ServiceImpl) SetArmable(ctx context.Context, armable bool, forceArmable
 }
 
 /*
-   Can the vehicle disarm when requested
-
-   Parameters
-   ----------
-   disarmable bool
-
-   forceDisarmable bool
-
-
+SetDisarmable Can the vehicle disarm when requested
 */
+func (s *ServiceImpl) SetDisarmable(
+	ctx context.Context,
+	disarmable bool,
+	forceDisarmable bool,
 
-func (s *ServiceImpl) SetDisarmable(ctx context.Context, disarmable bool, forceDisarmable bool) (*SetDisarmableResponse, error) {
-
-	request := &SetDisarmableRequest{}
-	request.Disarmable = disarmable
-	request.ForceDisarmable = forceDisarmable
+) (*SetDisarmableResponse, error) {
+	request := &SetDisarmableRequest{
+		Disarmable:      disarmable,
+		ForceDisarmable: forceDisarmable,
+	}
 	response, err := s.Client.SetDisarmable(ctx, request)
 	if err != nil {
 		return nil, err
@@ -321,21 +303,16 @@ func (s *ServiceImpl) SetDisarmable(ctx context.Context, disarmable bool, forceD
 }
 
 /*
-   Set which modes the vehicle can transition to (Manual always allowed)
-
-   Parameters
-   ----------
-   flightModes *AllowableFlightModes
-
-
-
+SetAllowableFlightModes Set which modes the vehicle can transition to (Manual always allowed)
 */
+func (s *ServiceImpl) SetAllowableFlightModes(
+	ctx context.Context,
+	flightModes *AllowableFlightModes,
 
-func (s *ServiceImpl) SetAllowableFlightModes(ctx context.Context, flightModes *AllowableFlightModes) (*SetAllowableFlightModesResponse, error) {
-
-	request := &SetAllowableFlightModesRequest{}
-	request.FlightModes = flightModes
-
+) (*SetAllowableFlightModesResponse, error) {
+	request := &SetAllowableFlightModesRequest{
+		FlightModes: flightModes,
+	}
 	response, err := s.Client.SetAllowableFlightModes(ctx, request)
 	if err != nil {
 		return nil, err
@@ -344,24 +321,16 @@ func (s *ServiceImpl) SetAllowableFlightModes(ctx context.Context, flightModes *
 }
 
 /*
-   Get which modes the vehicle can transition to (Manual always allowed)
-
-
-
-   Returns
-   -------
-   False
-   FlightModes : AllowableFlightModes
-
-
+GetAllowableFlightModes Get which modes the vehicle can transition to (Manual always allowed)
 */
+func (s *ServiceImpl) GetAllowableFlightModes(
+	ctx context.Context,
 
-func (s *ServiceImpl) GetAllowableFlightModes(ctx context.Context) (*GetAllowableFlightModesResponse, error) {
+) (*GetAllowableFlightModesResponse, error) {
 	request := &GetAllowableFlightModesRequest{}
 	response, err := s.Client.GetAllowableFlightModes(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }

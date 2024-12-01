@@ -1,0 +1,13 @@
+{% for param in params %}
+    {%- if param.name.lower_camel_case == 'range' %}
+        {{ param.name.upper_camel_case }}: rangeVar,
+    {%- elif param.name.lower_camel_case == 'type' %}
+        {{ param.name.upper_camel_case }}: typeVar,
+    {%- elif param.type_info.is_primitive -%}
+        {{ param.name.upper_camel_case }}: {{ param.name.lower_camel_case }},
+    {%- elif param.type_info.is_enum -%}
+        {{ param.name.upper_camel_case }}: *{{ param.name.lower_camel_case }},
+    {%- else -%}
+        {{ param.name.upper_camel_case }}: {{ param.name.lower_camel_case }},
+    {% endif %}
+{% endfor %}

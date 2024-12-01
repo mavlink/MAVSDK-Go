@@ -5,8 +5,8 @@ import (
 	"io"
 	"log"
 
-	"google.golang.org/grpc/status"
 	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,12 +14,12 @@ type ServiceImpl struct {
 }
 
 /*
-   Subscribe to 'connection state' updates.
-
-
+ConnectionState Subscribe to 'connection state' updates.
 */
+func (a *ServiceImpl) ConnectionState(
+	ctx context.Context,
 
-func (a *ServiceImpl) ConnectionState(ctx context.Context) (<-chan *ConnectionState, error) {
+) (<-chan *ConnectionState, error) {
 	ch := make(chan *ConnectionState)
 	request := &SubscribeConnectionStateRequest{}
 	stream, err := a.Client.SubscribeConnectionState(ctx, request)
@@ -39,7 +39,6 @@ func (a *ServiceImpl) ConnectionState(ctx context.Context) (<-chan *ConnectionSt
 					return
 				}
 				log.Fatalf("Unable to receive ConnectionState messages, err: %v", err)
-				break
 			}
 			ch <- m.GetConnectionState()
 		}
@@ -48,24 +47,21 @@ func (a *ServiceImpl) ConnectionState(ctx context.Context) (<-chan *ConnectionSt
 }
 
 /*
-   Set timeout of MAVLink transfers.
+SetMavlinkTimeout Set timeout of MAVLink transfers.
 
-   The default timeout used is generally (0.5 seconds) seconds.
-   If MAVSDK is used on the same host this timeout can be reduced, while
-   if MAVSDK has to communicate over links with high latency it might
-   need to be increased to prevent timeouts.
-
-   Parameters
-   ----------
-   timeoutS float64
-
-
+	The default timeout used is generally (0.5 seconds) seconds.
+	If MAVSDK is used on the same host this timeout can be reduced, while
+	if MAVSDK has to communicate over links with high latency it might
+	need to be increased to prevent timeouts.
 */
+func (s *ServiceImpl) SetMavlinkTimeout(
+	ctx context.Context,
+	timeoutS float64,
 
-func (s *ServiceImpl) SetMavlinkTimeout(ctx context.Context, timeoutS float64) (*SetMavlinkTimeoutResponse, error) {
-
-	request := &SetMavlinkTimeoutRequest{}
-	request.TimeoutS = timeoutS
+) (*SetMavlinkTimeoutResponse, error) {
+	request := &SetMavlinkTimeoutRequest{
+		TimeoutS: timeoutS,
+	}
 	response, err := s.Client.SetMavlinkTimeout(ctx, request)
 	if err != nil {
 		return nil, err

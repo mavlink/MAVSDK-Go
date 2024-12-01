@@ -5,8 +5,8 @@ import (
 	"io"
 	"log"
 
-	"google.golang.org/grpc/status"
 	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,12 +14,12 @@ type ServiceImpl struct {
 }
 
 /*
-   Subscribe to 'position' updates.
-
-
+Position Subscribe to 'position' updates.
 */
+func (a *ServiceImpl) Position(
+	ctx context.Context,
 
-func (a *ServiceImpl) Position(ctx context.Context) (<-chan *Position, error) {
+) (<-chan *Position, error) {
 	ch := make(chan *Position)
 	request := &SubscribePositionRequest{}
 	stream, err := a.Client.SubscribePosition(ctx, request)
@@ -39,7 +39,6 @@ func (a *ServiceImpl) Position(ctx context.Context) (<-chan *Position, error) {
 					return
 				}
 				log.Fatalf("Unable to receive Position messages, err: %v", err)
-				break
 			}
 			ch <- m.GetPosition()
 		}
@@ -48,12 +47,12 @@ func (a *ServiceImpl) Position(ctx context.Context) (<-chan *Position, error) {
 }
 
 /*
-   Subscribe to 'home position' updates.
-
-
+Home Subscribe to 'home position' updates.
 */
+func (a *ServiceImpl) Home(
+	ctx context.Context,
 
-func (a *ServiceImpl) Home(ctx context.Context) (<-chan *Position, error) {
+) (<-chan *Position, error) {
 	ch := make(chan *Position)
 	request := &SubscribeHomeRequest{}
 	stream, err := a.Client.SubscribeHome(ctx, request)
@@ -73,7 +72,6 @@ func (a *ServiceImpl) Home(ctx context.Context) (<-chan *Position, error) {
 					return
 				}
 				log.Fatalf("Unable to receive Home messages, err: %v", err)
-				break
 			}
 			ch <- m.GetHome()
 		}
@@ -82,12 +80,12 @@ func (a *ServiceImpl) Home(ctx context.Context) (<-chan *Position, error) {
 }
 
 /*
-   Subscribe to in-air updates.
-
-
+InAir Subscribe to in-air updates.
 */
+func (a *ServiceImpl) InAir(
+	ctx context.Context,
 
-func (a *ServiceImpl) InAir(ctx context.Context) (<-chan bool, error) {
+) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeInAirRequest{}
 	stream, err := a.Client.SubscribeInAir(ctx, request)
@@ -107,7 +105,6 @@ func (a *ServiceImpl) InAir(ctx context.Context) (<-chan bool, error) {
 					return
 				}
 				log.Fatalf("Unable to receive InAir messages, err: %v", err)
-				break
 			}
 			ch <- m.GetIsInAir()
 		}
@@ -116,12 +113,12 @@ func (a *ServiceImpl) InAir(ctx context.Context) (<-chan bool, error) {
 }
 
 /*
-   Subscribe to landed state updates
-
-
+LandedState Subscribe to landed state updates
 */
+func (a *ServiceImpl) LandedState(
+	ctx context.Context,
 
-func (a *ServiceImpl) LandedState(ctx context.Context) (<-chan LandedState, error) {
+) (<-chan LandedState, error) {
 	ch := make(chan LandedState)
 	request := &SubscribeLandedStateRequest{}
 	stream, err := a.Client.SubscribeLandedState(ctx, request)
@@ -141,7 +138,6 @@ func (a *ServiceImpl) LandedState(ctx context.Context) (<-chan LandedState, erro
 					return
 				}
 				log.Fatalf("Unable to receive LandedState messages, err: %v", err)
-				break
 			}
 			ch <- m.GetLandedState()
 		}
@@ -150,12 +146,12 @@ func (a *ServiceImpl) LandedState(ctx context.Context) (<-chan LandedState, erro
 }
 
 /*
-   Subscribe to armed updates.
-
-
+Armed Subscribe to armed updates.
 */
+func (a *ServiceImpl) Armed(
+	ctx context.Context,
 
-func (a *ServiceImpl) Armed(ctx context.Context) (<-chan bool, error) {
+) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeArmedRequest{}
 	stream, err := a.Client.SubscribeArmed(ctx, request)
@@ -175,7 +171,6 @@ func (a *ServiceImpl) Armed(ctx context.Context) (<-chan bool, error) {
 					return
 				}
 				log.Fatalf("Unable to receive Armed messages, err: %v", err)
-				break
 			}
 			ch <- m.GetIsArmed()
 		}
@@ -184,12 +179,12 @@ func (a *ServiceImpl) Armed(ctx context.Context) (<-chan bool, error) {
 }
 
 /*
-   subscribe to vtol state Updates
-
-
+VtolState subscribe to vtol state Updates
 */
+func (a *ServiceImpl) VtolState(
+	ctx context.Context,
 
-func (a *ServiceImpl) VtolState(ctx context.Context) (<-chan VtolState, error) {
+) (<-chan VtolState, error) {
 	ch := make(chan VtolState)
 	request := &SubscribeVtolStateRequest{}
 	stream, err := a.Client.SubscribeVtolState(ctx, request)
@@ -209,7 +204,6 @@ func (a *ServiceImpl) VtolState(ctx context.Context) (<-chan VtolState, error) {
 					return
 				}
 				log.Fatalf("Unable to receive VtolState messages, err: %v", err)
-				break
 			}
 			ch <- m.GetVtolState()
 		}
@@ -218,12 +212,12 @@ func (a *ServiceImpl) VtolState(ctx context.Context) (<-chan VtolState, error) {
 }
 
 /*
-   Subscribe to 'attitude' updates (quaternion).
-
-
+AttitudeQuaternion Subscribe to 'attitude' updates (quaternion).
 */
+func (a *ServiceImpl) AttitudeQuaternion(
+	ctx context.Context,
 
-func (a *ServiceImpl) AttitudeQuaternion(ctx context.Context) (<-chan *Quaternion, error) {
+) (<-chan *Quaternion, error) {
 	ch := make(chan *Quaternion)
 	request := &SubscribeAttitudeQuaternionRequest{}
 	stream, err := a.Client.SubscribeAttitudeQuaternion(ctx, request)
@@ -243,7 +237,6 @@ func (a *ServiceImpl) AttitudeQuaternion(ctx context.Context) (<-chan *Quaternio
 					return
 				}
 				log.Fatalf("Unable to receive AttitudeQuaternion messages, err: %v", err)
-				break
 			}
 			ch <- m.GetAttitudeQuaternion()
 		}
@@ -252,12 +245,12 @@ func (a *ServiceImpl) AttitudeQuaternion(ctx context.Context) (<-chan *Quaternio
 }
 
 /*
-   Subscribe to 'attitude' updates (Euler).
-
-
+AttitudeEuler Subscribe to 'attitude' updates (Euler).
 */
+func (a *ServiceImpl) AttitudeEuler(
+	ctx context.Context,
 
-func (a *ServiceImpl) AttitudeEuler(ctx context.Context) (<-chan *EulerAngle, error) {
+) (<-chan *EulerAngle, error) {
 	ch := make(chan *EulerAngle)
 	request := &SubscribeAttitudeEulerRequest{}
 	stream, err := a.Client.SubscribeAttitudeEuler(ctx, request)
@@ -277,7 +270,6 @@ func (a *ServiceImpl) AttitudeEuler(ctx context.Context) (<-chan *EulerAngle, er
 					return
 				}
 				log.Fatalf("Unable to receive AttitudeEuler messages, err: %v", err)
-				break
 			}
 			ch <- m.GetAttitudeEuler()
 		}
@@ -286,12 +278,12 @@ func (a *ServiceImpl) AttitudeEuler(ctx context.Context) (<-chan *EulerAngle, er
 }
 
 /*
-   Subscribe to 'attitude' updates (angular velocity)
-
-
+AttitudeAngularVelocityBody Subscribe to 'attitude' updates (angular velocity)
 */
+func (a *ServiceImpl) AttitudeAngularVelocityBody(
+	ctx context.Context,
 
-func (a *ServiceImpl) AttitudeAngularVelocityBody(ctx context.Context) (<-chan *AngularVelocityBody, error) {
+) (<-chan *AngularVelocityBody, error) {
 	ch := make(chan *AngularVelocityBody)
 	request := &SubscribeAttitudeAngularVelocityBodyRequest{}
 	stream, err := a.Client.SubscribeAttitudeAngularVelocityBody(ctx, request)
@@ -311,7 +303,6 @@ func (a *ServiceImpl) AttitudeAngularVelocityBody(ctx context.Context) (<-chan *
 					return
 				}
 				log.Fatalf("Unable to receive AttitudeAngularVelocityBody messages, err: %v", err)
-				break
 			}
 			ch <- m.GetAttitudeAngularVelocityBody()
 		}
@@ -320,12 +311,12 @@ func (a *ServiceImpl) AttitudeAngularVelocityBody(ctx context.Context) (<-chan *
 }
 
 /*
-   Subscribe to 'camera attitude' updates (quaternion).
-
-
+CameraAttitudeQuaternion Subscribe to 'camera attitude' updates (quaternion).
 */
+func (a *ServiceImpl) CameraAttitudeQuaternion(
+	ctx context.Context,
 
-func (a *ServiceImpl) CameraAttitudeQuaternion(ctx context.Context) (<-chan *Quaternion, error) {
+) (<-chan *Quaternion, error) {
 	ch := make(chan *Quaternion)
 	request := &SubscribeCameraAttitudeQuaternionRequest{}
 	stream, err := a.Client.SubscribeCameraAttitudeQuaternion(ctx, request)
@@ -345,7 +336,6 @@ func (a *ServiceImpl) CameraAttitudeQuaternion(ctx context.Context) (<-chan *Qua
 					return
 				}
 				log.Fatalf("Unable to receive CameraAttitudeQuaternion messages, err: %v", err)
-				break
 			}
 			ch <- m.GetAttitudeQuaternion()
 		}
@@ -354,12 +344,12 @@ func (a *ServiceImpl) CameraAttitudeQuaternion(ctx context.Context) (<-chan *Qua
 }
 
 /*
-   Subscribe to 'camera attitude' updates (Euler).
-
-
+CameraAttitudeEuler Subscribe to 'camera attitude' updates (Euler).
 */
+func (a *ServiceImpl) CameraAttitudeEuler(
+	ctx context.Context,
 
-func (a *ServiceImpl) CameraAttitudeEuler(ctx context.Context) (<-chan *EulerAngle, error) {
+) (<-chan *EulerAngle, error) {
 	ch := make(chan *EulerAngle)
 	request := &SubscribeCameraAttitudeEulerRequest{}
 	stream, err := a.Client.SubscribeCameraAttitudeEuler(ctx, request)
@@ -379,7 +369,6 @@ func (a *ServiceImpl) CameraAttitudeEuler(ctx context.Context) (<-chan *EulerAng
 					return
 				}
 				log.Fatalf("Unable to receive CameraAttitudeEuler messages, err: %v", err)
-				break
 			}
 			ch <- m.GetAttitudeEuler()
 		}
@@ -388,12 +377,12 @@ func (a *ServiceImpl) CameraAttitudeEuler(ctx context.Context) (<-chan *EulerAng
 }
 
 /*
-   Subscribe to 'ground speed' updates (NED).
-
-
+VelocityNed Subscribe to 'ground speed' updates (NED).
 */
+func (a *ServiceImpl) VelocityNed(
+	ctx context.Context,
 
-func (a *ServiceImpl) VelocityNed(ctx context.Context) (<-chan *VelocityNed, error) {
+) (<-chan *VelocityNed, error) {
 	ch := make(chan *VelocityNed)
 	request := &SubscribeVelocityNedRequest{}
 	stream, err := a.Client.SubscribeVelocityNed(ctx, request)
@@ -413,7 +402,6 @@ func (a *ServiceImpl) VelocityNed(ctx context.Context) (<-chan *VelocityNed, err
 					return
 				}
 				log.Fatalf("Unable to receive VelocityNed messages, err: %v", err)
-				break
 			}
 			ch <- m.GetVelocityNed()
 		}
@@ -422,12 +410,12 @@ func (a *ServiceImpl) VelocityNed(ctx context.Context) (<-chan *VelocityNed, err
 }
 
 /*
-   Subscribe to 'GPS info' updates.
-
-
+GpsInfo Subscribe to 'GPS info' updates.
 */
+func (a *ServiceImpl) GpsInfo(
+	ctx context.Context,
 
-func (a *ServiceImpl) GpsInfo(ctx context.Context) (<-chan *GpsInfo, error) {
+) (<-chan *GpsInfo, error) {
 	ch := make(chan *GpsInfo)
 	request := &SubscribeGpsInfoRequest{}
 	stream, err := a.Client.SubscribeGpsInfo(ctx, request)
@@ -447,7 +435,6 @@ func (a *ServiceImpl) GpsInfo(ctx context.Context) (<-chan *GpsInfo, error) {
 					return
 				}
 				log.Fatalf("Unable to receive GpsInfo messages, err: %v", err)
-				break
 			}
 			ch <- m.GetGpsInfo()
 		}
@@ -456,12 +443,12 @@ func (a *ServiceImpl) GpsInfo(ctx context.Context) (<-chan *GpsInfo, error) {
 }
 
 /*
-   Subscribe to 'Raw GPS' updates.
-
-
+RawGps Subscribe to 'Raw GPS' updates.
 */
+func (a *ServiceImpl) RawGps(
+	ctx context.Context,
 
-func (a *ServiceImpl) RawGps(ctx context.Context) (<-chan *RawGps, error) {
+) (<-chan *RawGps, error) {
 	ch := make(chan *RawGps)
 	request := &SubscribeRawGpsRequest{}
 	stream, err := a.Client.SubscribeRawGps(ctx, request)
@@ -481,7 +468,6 @@ func (a *ServiceImpl) RawGps(ctx context.Context) (<-chan *RawGps, error) {
 					return
 				}
 				log.Fatalf("Unable to receive RawGps messages, err: %v", err)
-				break
 			}
 			ch <- m.GetRawGps()
 		}
@@ -490,12 +476,12 @@ func (a *ServiceImpl) RawGps(ctx context.Context) (<-chan *RawGps, error) {
 }
 
 /*
-   Subscribe to 'battery' updates.
-
-
+Battery Subscribe to 'battery' updates.
 */
+func (a *ServiceImpl) Battery(
+	ctx context.Context,
 
-func (a *ServiceImpl) Battery(ctx context.Context) (<-chan *Battery, error) {
+) (<-chan *Battery, error) {
 	ch := make(chan *Battery)
 	request := &SubscribeBatteryRequest{}
 	stream, err := a.Client.SubscribeBattery(ctx, request)
@@ -515,7 +501,6 @@ func (a *ServiceImpl) Battery(ctx context.Context) (<-chan *Battery, error) {
 					return
 				}
 				log.Fatalf("Unable to receive Battery messages, err: %v", err)
-				break
 			}
 			ch <- m.GetBattery()
 		}
@@ -524,12 +509,12 @@ func (a *ServiceImpl) Battery(ctx context.Context) (<-chan *Battery, error) {
 }
 
 /*
-   Subscribe to 'flight mode' updates.
-
-
+FlightMode Subscribe to 'flight mode' updates.
 */
+func (a *ServiceImpl) FlightMode(
+	ctx context.Context,
 
-func (a *ServiceImpl) FlightMode(ctx context.Context) (<-chan FlightMode, error) {
+) (<-chan FlightMode, error) {
 	ch := make(chan FlightMode)
 	request := &SubscribeFlightModeRequest{}
 	stream, err := a.Client.SubscribeFlightMode(ctx, request)
@@ -549,7 +534,6 @@ func (a *ServiceImpl) FlightMode(ctx context.Context) (<-chan FlightMode, error)
 					return
 				}
 				log.Fatalf("Unable to receive FlightMode messages, err: %v", err)
-				break
 			}
 			ch <- m.GetFlightMode()
 		}
@@ -558,12 +542,12 @@ func (a *ServiceImpl) FlightMode(ctx context.Context) (<-chan FlightMode, error)
 }
 
 /*
-   Subscribe to 'health' updates.
-
-
+Health Subscribe to 'health' updates.
 */
+func (a *ServiceImpl) Health(
+	ctx context.Context,
 
-func (a *ServiceImpl) Health(ctx context.Context) (<-chan *Health, error) {
+) (<-chan *Health, error) {
 	ch := make(chan *Health)
 	request := &SubscribeHealthRequest{}
 	stream, err := a.Client.SubscribeHealth(ctx, request)
@@ -583,7 +567,6 @@ func (a *ServiceImpl) Health(ctx context.Context) (<-chan *Health, error) {
 					return
 				}
 				log.Fatalf("Unable to receive Health messages, err: %v", err)
-				break
 			}
 			ch <- m.GetHealth()
 		}
@@ -592,12 +575,12 @@ func (a *ServiceImpl) Health(ctx context.Context) (<-chan *Health, error) {
 }
 
 /*
-   Subscribe to 'RC status' updates.
-
-
+RcStatus Subscribe to 'RC status' updates.
 */
+func (a *ServiceImpl) RcStatus(
+	ctx context.Context,
 
-func (a *ServiceImpl) RcStatus(ctx context.Context) (<-chan *RcStatus, error) {
+) (<-chan *RcStatus, error) {
 	ch := make(chan *RcStatus)
 	request := &SubscribeRcStatusRequest{}
 	stream, err := a.Client.SubscribeRcStatus(ctx, request)
@@ -617,7 +600,6 @@ func (a *ServiceImpl) RcStatus(ctx context.Context) (<-chan *RcStatus, error) {
 					return
 				}
 				log.Fatalf("Unable to receive RcStatus messages, err: %v", err)
-				break
 			}
 			ch <- m.GetRcStatus()
 		}
@@ -626,12 +608,12 @@ func (a *ServiceImpl) RcStatus(ctx context.Context) (<-chan *RcStatus, error) {
 }
 
 /*
-   Subscribe to 'status text' updates.
-
-
+StatusText Subscribe to 'status text' updates.
 */
+func (a *ServiceImpl) StatusText(
+	ctx context.Context,
 
-func (a *ServiceImpl) StatusText(ctx context.Context) (<-chan *StatusText, error) {
+) (<-chan *StatusText, error) {
 	ch := make(chan *StatusText)
 	request := &SubscribeStatusTextRequest{}
 	stream, err := a.Client.SubscribeStatusText(ctx, request)
@@ -651,7 +633,6 @@ func (a *ServiceImpl) StatusText(ctx context.Context) (<-chan *StatusText, error
 					return
 				}
 				log.Fatalf("Unable to receive StatusText messages, err: %v", err)
-				break
 			}
 			ch <- m.GetStatusText()
 		}
@@ -660,12 +641,12 @@ func (a *ServiceImpl) StatusText(ctx context.Context) (<-chan *StatusText, error
 }
 
 /*
-   Subscribe to 'actuator control target' updates.
-
-
+ActuatorControlTarget Subscribe to 'actuator control target' updates.
 */
+func (a *ServiceImpl) ActuatorControlTarget(
+	ctx context.Context,
 
-func (a *ServiceImpl) ActuatorControlTarget(ctx context.Context) (<-chan *ActuatorControlTarget, error) {
+) (<-chan *ActuatorControlTarget, error) {
 	ch := make(chan *ActuatorControlTarget)
 	request := &SubscribeActuatorControlTargetRequest{}
 	stream, err := a.Client.SubscribeActuatorControlTarget(ctx, request)
@@ -685,7 +666,6 @@ func (a *ServiceImpl) ActuatorControlTarget(ctx context.Context) (<-chan *Actuat
 					return
 				}
 				log.Fatalf("Unable to receive ActuatorControlTarget messages, err: %v", err)
-				break
 			}
 			ch <- m.GetActuatorControlTarget()
 		}
@@ -694,12 +674,12 @@ func (a *ServiceImpl) ActuatorControlTarget(ctx context.Context) (<-chan *Actuat
 }
 
 /*
-   Subscribe to 'actuator output status' updates.
-
-
+ActuatorOutputStatus Subscribe to 'actuator output status' updates.
 */
+func (a *ServiceImpl) ActuatorOutputStatus(
+	ctx context.Context,
 
-func (a *ServiceImpl) ActuatorOutputStatus(ctx context.Context) (<-chan *ActuatorOutputStatus, error) {
+) (<-chan *ActuatorOutputStatus, error) {
 	ch := make(chan *ActuatorOutputStatus)
 	request := &SubscribeActuatorOutputStatusRequest{}
 	stream, err := a.Client.SubscribeActuatorOutputStatus(ctx, request)
@@ -719,7 +699,6 @@ func (a *ServiceImpl) ActuatorOutputStatus(ctx context.Context) (<-chan *Actuato
 					return
 				}
 				log.Fatalf("Unable to receive ActuatorOutputStatus messages, err: %v", err)
-				break
 			}
 			ch <- m.GetActuatorOutputStatus()
 		}
@@ -728,12 +707,12 @@ func (a *ServiceImpl) ActuatorOutputStatus(ctx context.Context) (<-chan *Actuato
 }
 
 /*
-   Subscribe to 'odometry' updates.
-
-
+Odometry Subscribe to 'odometry' updates.
 */
+func (a *ServiceImpl) Odometry(
+	ctx context.Context,
 
-func (a *ServiceImpl) Odometry(ctx context.Context) (<-chan *Odometry, error) {
+) (<-chan *Odometry, error) {
 	ch := make(chan *Odometry)
 	request := &SubscribeOdometryRequest{}
 	stream, err := a.Client.SubscribeOdometry(ctx, request)
@@ -753,7 +732,6 @@ func (a *ServiceImpl) Odometry(ctx context.Context) (<-chan *Odometry, error) {
 					return
 				}
 				log.Fatalf("Unable to receive Odometry messages, err: %v", err)
-				break
 			}
 			ch <- m.GetOdometry()
 		}
@@ -762,12 +740,12 @@ func (a *ServiceImpl) Odometry(ctx context.Context) (<-chan *Odometry, error) {
 }
 
 /*
-   Subscribe to 'position velocity' updates.
-
-
+PositionVelocityNed Subscribe to 'position velocity' updates.
 */
+func (a *ServiceImpl) PositionVelocityNed(
+	ctx context.Context,
 
-func (a *ServiceImpl) PositionVelocityNed(ctx context.Context) (<-chan *PositionVelocityNed, error) {
+) (<-chan *PositionVelocityNed, error) {
 	ch := make(chan *PositionVelocityNed)
 	request := &SubscribePositionVelocityNedRequest{}
 	stream, err := a.Client.SubscribePositionVelocityNed(ctx, request)
@@ -787,7 +765,6 @@ func (a *ServiceImpl) PositionVelocityNed(ctx context.Context) (<-chan *Position
 					return
 				}
 				log.Fatalf("Unable to receive PositionVelocityNed messages, err: %v", err)
-				break
 			}
 			ch <- m.GetPositionVelocityNed()
 		}
@@ -796,12 +773,12 @@ func (a *ServiceImpl) PositionVelocityNed(ctx context.Context) (<-chan *Position
 }
 
 /*
-   Subscribe to 'ground truth' updates.
-
-
+GroundTruth Subscribe to 'ground truth' updates.
 */
+func (a *ServiceImpl) GroundTruth(
+	ctx context.Context,
 
-func (a *ServiceImpl) GroundTruth(ctx context.Context) (<-chan *GroundTruth, error) {
+) (<-chan *GroundTruth, error) {
 	ch := make(chan *GroundTruth)
 	request := &SubscribeGroundTruthRequest{}
 	stream, err := a.Client.SubscribeGroundTruth(ctx, request)
@@ -821,7 +798,6 @@ func (a *ServiceImpl) GroundTruth(ctx context.Context) (<-chan *GroundTruth, err
 					return
 				}
 				log.Fatalf("Unable to receive GroundTruth messages, err: %v", err)
-				break
 			}
 			ch <- m.GetGroundTruth()
 		}
@@ -830,12 +806,12 @@ func (a *ServiceImpl) GroundTruth(ctx context.Context) (<-chan *GroundTruth, err
 }
 
 /*
-   Subscribe to 'fixedwing metrics' updates.
-
-
+FixedwingMetrics Subscribe to 'fixedwing metrics' updates.
 */
+func (a *ServiceImpl) FixedwingMetrics(
+	ctx context.Context,
 
-func (a *ServiceImpl) FixedwingMetrics(ctx context.Context) (<-chan *FixedwingMetrics, error) {
+) (<-chan *FixedwingMetrics, error) {
 	ch := make(chan *FixedwingMetrics)
 	request := &SubscribeFixedwingMetricsRequest{}
 	stream, err := a.Client.SubscribeFixedwingMetrics(ctx, request)
@@ -855,7 +831,6 @@ func (a *ServiceImpl) FixedwingMetrics(ctx context.Context) (<-chan *FixedwingMe
 					return
 				}
 				log.Fatalf("Unable to receive FixedwingMetrics messages, err: %v", err)
-				break
 			}
 			ch <- m.GetFixedwingMetrics()
 		}
@@ -864,12 +839,12 @@ func (a *ServiceImpl) FixedwingMetrics(ctx context.Context) (<-chan *FixedwingMe
 }
 
 /*
-   Subscribe to 'IMU' updates (in SI units in NED body frame).
-
-
+Imu Subscribe to 'IMU' updates (in SI units in NED body frame).
 */
+func (a *ServiceImpl) Imu(
+	ctx context.Context,
 
-func (a *ServiceImpl) Imu(ctx context.Context) (<-chan *Imu, error) {
+) (<-chan *Imu, error) {
 	ch := make(chan *Imu)
 	request := &SubscribeImuRequest{}
 	stream, err := a.Client.SubscribeImu(ctx, request)
@@ -889,7 +864,6 @@ func (a *ServiceImpl) Imu(ctx context.Context) (<-chan *Imu, error) {
 					return
 				}
 				log.Fatalf("Unable to receive Imu messages, err: %v", err)
-				break
 			}
 			ch <- m.GetImu()
 		}
@@ -898,12 +872,12 @@ func (a *ServiceImpl) Imu(ctx context.Context) (<-chan *Imu, error) {
 }
 
 /*
-   Subscribe to 'Scaled IMU' updates.
-
-
+ScaledImu Subscribe to 'Scaled IMU' updates.
 */
+func (a *ServiceImpl) ScaledImu(
+	ctx context.Context,
 
-func (a *ServiceImpl) ScaledImu(ctx context.Context) (<-chan *Imu, error) {
+) (<-chan *Imu, error) {
 	ch := make(chan *Imu)
 	request := &SubscribeScaledImuRequest{}
 	stream, err := a.Client.SubscribeScaledImu(ctx, request)
@@ -923,7 +897,6 @@ func (a *ServiceImpl) ScaledImu(ctx context.Context) (<-chan *Imu, error) {
 					return
 				}
 				log.Fatalf("Unable to receive ScaledImu messages, err: %v", err)
-				break
 			}
 			ch <- m.GetImu()
 		}
@@ -932,12 +905,12 @@ func (a *ServiceImpl) ScaledImu(ctx context.Context) (<-chan *Imu, error) {
 }
 
 /*
-   Subscribe to 'Raw IMU' updates.
-
-
+RawImu Subscribe to 'Raw IMU' updates.
 */
+func (a *ServiceImpl) RawImu(
+	ctx context.Context,
 
-func (a *ServiceImpl) RawImu(ctx context.Context) (<-chan *Imu, error) {
+) (<-chan *Imu, error) {
 	ch := make(chan *Imu)
 	request := &SubscribeRawImuRequest{}
 	stream, err := a.Client.SubscribeRawImu(ctx, request)
@@ -957,7 +930,6 @@ func (a *ServiceImpl) RawImu(ctx context.Context) (<-chan *Imu, error) {
 					return
 				}
 				log.Fatalf("Unable to receive RawImu messages, err: %v", err)
-				break
 			}
 			ch <- m.GetImu()
 		}
@@ -966,12 +938,12 @@ func (a *ServiceImpl) RawImu(ctx context.Context) (<-chan *Imu, error) {
 }
 
 /*
-   Subscribe to 'HealthAllOk' updates.
-
-
+HealthAllOk Subscribe to 'HealthAllOk' updates.
 */
+func (a *ServiceImpl) HealthAllOk(
+	ctx context.Context,
 
-func (a *ServiceImpl) HealthAllOk(ctx context.Context) (<-chan bool, error) {
+) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeHealthAllOkRequest{}
 	stream, err := a.Client.SubscribeHealthAllOk(ctx, request)
@@ -991,7 +963,6 @@ func (a *ServiceImpl) HealthAllOk(ctx context.Context) (<-chan bool, error) {
 					return
 				}
 				log.Fatalf("Unable to receive HealthAllOk messages, err: %v", err)
-				break
 			}
 			ch <- m.GetIsHealthAllOk()
 		}
@@ -1000,12 +971,12 @@ func (a *ServiceImpl) HealthAllOk(ctx context.Context) (<-chan bool, error) {
 }
 
 /*
-   Subscribe to 'unix epoch time' updates.
-
-
+UnixEpochTime Subscribe to 'unix epoch time' updates.
 */
+func (a *ServiceImpl) UnixEpochTime(
+	ctx context.Context,
 
-func (a *ServiceImpl) UnixEpochTime(ctx context.Context) (<-chan uint64, error) {
+) (<-chan uint64, error) {
 	ch := make(chan uint64)
 	request := &SubscribeUnixEpochTimeRequest{}
 	stream, err := a.Client.SubscribeUnixEpochTime(ctx, request)
@@ -1025,7 +996,6 @@ func (a *ServiceImpl) UnixEpochTime(ctx context.Context) (<-chan uint64, error) 
 					return
 				}
 				log.Fatalf("Unable to receive UnixEpochTime messages, err: %v", err)
-				break
 			}
 			ch <- m.GetTimeUs()
 		}
@@ -1034,12 +1004,12 @@ func (a *ServiceImpl) UnixEpochTime(ctx context.Context) (<-chan uint64, error) 
 }
 
 /*
-   Subscribe to 'Distance Sensor' updates.
-
-
+DistanceSensor Subscribe to 'Distance Sensor' updates.
 */
+func (a *ServiceImpl) DistanceSensor(
+	ctx context.Context,
 
-func (a *ServiceImpl) DistanceSensor(ctx context.Context) (<-chan *DistanceSensor, error) {
+) (<-chan *DistanceSensor, error) {
 	ch := make(chan *DistanceSensor)
 	request := &SubscribeDistanceSensorRequest{}
 	stream, err := a.Client.SubscribeDistanceSensor(ctx, request)
@@ -1059,7 +1029,6 @@ func (a *ServiceImpl) DistanceSensor(ctx context.Context) (<-chan *DistanceSenso
 					return
 				}
 				log.Fatalf("Unable to receive DistanceSensor messages, err: %v", err)
-				break
 			}
 			ch <- m.GetDistanceSensor()
 		}
@@ -1068,12 +1037,12 @@ func (a *ServiceImpl) DistanceSensor(ctx context.Context) (<-chan *DistanceSenso
 }
 
 /*
-   Subscribe to 'Scaled Pressure' updates.
-
-
+ScaledPressure Subscribe to 'Scaled Pressure' updates.
 */
+func (a *ServiceImpl) ScaledPressure(
+	ctx context.Context,
 
-func (a *ServiceImpl) ScaledPressure(ctx context.Context) (<-chan *ScaledPressure, error) {
+) (<-chan *ScaledPressure, error) {
 	ch := make(chan *ScaledPressure)
 	request := &SubscribeScaledPressureRequest{}
 	stream, err := a.Client.SubscribeScaledPressure(ctx, request)
@@ -1093,7 +1062,6 @@ func (a *ServiceImpl) ScaledPressure(ctx context.Context) (<-chan *ScaledPressur
 					return
 				}
 				log.Fatalf("Unable to receive ScaledPressure messages, err: %v", err)
-				break
 			}
 			ch <- m.GetScaledPressure()
 		}
@@ -1102,12 +1070,12 @@ func (a *ServiceImpl) ScaledPressure(ctx context.Context) (<-chan *ScaledPressur
 }
 
 /*
-   Subscribe to 'Heading' updates.
-
-
+Heading Subscribe to 'Heading' updates.
 */
+func (a *ServiceImpl) Heading(
+	ctx context.Context,
 
-func (a *ServiceImpl) Heading(ctx context.Context) (<-chan *Heading, error) {
+) (<-chan *Heading, error) {
 	ch := make(chan *Heading)
 	request := &SubscribeHeadingRequest{}
 	stream, err := a.Client.SubscribeHeading(ctx, request)
@@ -1127,7 +1095,6 @@ func (a *ServiceImpl) Heading(ctx context.Context) (<-chan *Heading, error) {
 					return
 				}
 				log.Fatalf("Unable to receive Heading messages, err: %v", err)
-				break
 			}
 			ch <- m.GetHeadingDeg()
 		}
@@ -1136,12 +1103,12 @@ func (a *ServiceImpl) Heading(ctx context.Context) (<-chan *Heading, error) {
 }
 
 /*
-   Subscribe to 'Altitude' updates.
-
-
+Altitude Subscribe to 'Altitude' updates.
 */
+func (a *ServiceImpl) Altitude(
+	ctx context.Context,
 
-func (a *ServiceImpl) Altitude(ctx context.Context) (<-chan *Altitude, error) {
+) (<-chan *Altitude, error) {
 	ch := make(chan *Altitude)
 	request := &SubscribeAltitudeRequest{}
 	stream, err := a.Client.SubscribeAltitude(ctx, request)
@@ -1161,7 +1128,6 @@ func (a *ServiceImpl) Altitude(ctx context.Context) (<-chan *Altitude, error) {
 					return
 				}
 				log.Fatalf("Unable to receive Altitude messages, err: %v", err)
-				break
 			}
 			ch <- m.GetAltitude()
 		}
@@ -1170,19 +1136,16 @@ func (a *ServiceImpl) Altitude(ctx context.Context) (<-chan *Altitude, error) {
 }
 
 /*
-   Set rate to 'position' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRatePosition Set rate to 'position' updates.
 */
+func (s *ServiceImpl) SetRatePosition(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRatePosition(ctx context.Context, rateHz float64) (*SetRatePositionResponse, error) {
-
-	request := &SetRatePositionRequest{}
-	request.RateHz = rateHz
+) (*SetRatePositionResponse, error) {
+	request := &SetRatePositionRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRatePosition(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1191,19 +1154,16 @@ func (s *ServiceImpl) SetRatePosition(ctx context.Context, rateHz float64) (*Set
 }
 
 /*
-   Set rate to 'home position' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateHome Set rate to 'home position' updates.
 */
+func (s *ServiceImpl) SetRateHome(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateHome(ctx context.Context, rateHz float64) (*SetRateHomeResponse, error) {
-
-	request := &SetRateHomeRequest{}
-	request.RateHz = rateHz
+) (*SetRateHomeResponse, error) {
+	request := &SetRateHomeRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateHome(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1212,19 +1172,16 @@ func (s *ServiceImpl) SetRateHome(ctx context.Context, rateHz float64) (*SetRate
 }
 
 /*
-   Set rate to in-air updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateInAir Set rate to in-air updates.
 */
+func (s *ServiceImpl) SetRateInAir(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateInAir(ctx context.Context, rateHz float64) (*SetRateInAirResponse, error) {
-
-	request := &SetRateInAirRequest{}
-	request.RateHz = rateHz
+) (*SetRateInAirResponse, error) {
+	request := &SetRateInAirRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateInAir(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1233,19 +1190,16 @@ func (s *ServiceImpl) SetRateInAir(ctx context.Context, rateHz float64) (*SetRat
 }
 
 /*
-   Set rate to landed state updates
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateLandedState Set rate to landed state updates
 */
+func (s *ServiceImpl) SetRateLandedState(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateLandedState(ctx context.Context, rateHz float64) (*SetRateLandedStateResponse, error) {
-
-	request := &SetRateLandedStateRequest{}
-	request.RateHz = rateHz
+) (*SetRateLandedStateResponse, error) {
+	request := &SetRateLandedStateRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateLandedState(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1254,19 +1208,16 @@ func (s *ServiceImpl) SetRateLandedState(ctx context.Context, rateHz float64) (*
 }
 
 /*
-   Set rate to VTOL state updates
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateVtolState Set rate to VTOL state updates
 */
+func (s *ServiceImpl) SetRateVtolState(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateVtolState(ctx context.Context, rateHz float64) (*SetRateVtolStateResponse, error) {
-
-	request := &SetRateVtolStateRequest{}
-	request.RateHz = rateHz
+) (*SetRateVtolStateResponse, error) {
+	request := &SetRateVtolStateRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateVtolState(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1275,19 +1226,16 @@ func (s *ServiceImpl) SetRateVtolState(ctx context.Context, rateHz float64) (*Se
 }
 
 /*
-   Set rate to 'attitude euler angle' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateAttitudeQuaternion Set rate to 'attitude euler angle' updates.
 */
+func (s *ServiceImpl) SetRateAttitudeQuaternion(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateAttitudeQuaternion(ctx context.Context, rateHz float64) (*SetRateAttitudeQuaternionResponse, error) {
-
-	request := &SetRateAttitudeQuaternionRequest{}
-	request.RateHz = rateHz
+) (*SetRateAttitudeQuaternionResponse, error) {
+	request := &SetRateAttitudeQuaternionRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateAttitudeQuaternion(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1296,19 +1244,16 @@ func (s *ServiceImpl) SetRateAttitudeQuaternion(ctx context.Context, rateHz floa
 }
 
 /*
-   Set rate to 'attitude quaternion' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateAttitudeEuler Set rate to 'attitude quaternion' updates.
 */
+func (s *ServiceImpl) SetRateAttitudeEuler(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateAttitudeEuler(ctx context.Context, rateHz float64) (*SetRateAttitudeEulerResponse, error) {
-
-	request := &SetRateAttitudeEulerRequest{}
-	request.RateHz = rateHz
+) (*SetRateAttitudeEulerResponse, error) {
+	request := &SetRateAttitudeEulerRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateAttitudeEuler(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1317,19 +1262,16 @@ func (s *ServiceImpl) SetRateAttitudeEuler(ctx context.Context, rateHz float64) 
 }
 
 /*
-   Set rate of camera attitude updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateCameraAttitude Set rate of camera attitude updates.
 */
+func (s *ServiceImpl) SetRateCameraAttitude(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateCameraAttitude(ctx context.Context, rateHz float64) (*SetRateCameraAttitudeResponse, error) {
-
-	request := &SetRateCameraAttitudeRequest{}
-	request.RateHz = rateHz
+) (*SetRateCameraAttitudeResponse, error) {
+	request := &SetRateCameraAttitudeRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateCameraAttitude(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1338,19 +1280,16 @@ func (s *ServiceImpl) SetRateCameraAttitude(ctx context.Context, rateHz float64)
 }
 
 /*
-   Set rate to 'ground speed' updates (NED).
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateVelocityNed Set rate to 'ground speed' updates (NED).
 */
+func (s *ServiceImpl) SetRateVelocityNed(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateVelocityNed(ctx context.Context, rateHz float64) (*SetRateVelocityNedResponse, error) {
-
-	request := &SetRateVelocityNedRequest{}
-	request.RateHz = rateHz
+) (*SetRateVelocityNedResponse, error) {
+	request := &SetRateVelocityNedRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateVelocityNed(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1359,19 +1298,16 @@ func (s *ServiceImpl) SetRateVelocityNed(ctx context.Context, rateHz float64) (*
 }
 
 /*
-   Set rate to 'GPS info' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateGpsInfo Set rate to 'GPS info' updates.
 */
+func (s *ServiceImpl) SetRateGpsInfo(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateGpsInfo(ctx context.Context, rateHz float64) (*SetRateGpsInfoResponse, error) {
-
-	request := &SetRateGpsInfoRequest{}
-	request.RateHz = rateHz
+) (*SetRateGpsInfoResponse, error) {
+	request := &SetRateGpsInfoRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateGpsInfo(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1380,19 +1316,16 @@ func (s *ServiceImpl) SetRateGpsInfo(ctx context.Context, rateHz float64) (*SetR
 }
 
 /*
-   Set rate to 'battery' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateBattery Set rate to 'battery' updates.
 */
+func (s *ServiceImpl) SetRateBattery(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateBattery(ctx context.Context, rateHz float64) (*SetRateBatteryResponse, error) {
-
-	request := &SetRateBatteryRequest{}
-	request.RateHz = rateHz
+) (*SetRateBatteryResponse, error) {
+	request := &SetRateBatteryRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateBattery(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1401,19 +1334,16 @@ func (s *ServiceImpl) SetRateBattery(ctx context.Context, rateHz float64) (*SetR
 }
 
 /*
-   Set rate to 'RC status' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateRcStatus Set rate to 'RC status' updates.
 */
+func (s *ServiceImpl) SetRateRcStatus(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateRcStatus(ctx context.Context, rateHz float64) (*SetRateRcStatusResponse, error) {
-
-	request := &SetRateRcStatusRequest{}
-	request.RateHz = rateHz
+) (*SetRateRcStatusResponse, error) {
+	request := &SetRateRcStatusRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateRcStatus(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1422,19 +1352,16 @@ func (s *ServiceImpl) SetRateRcStatus(ctx context.Context, rateHz float64) (*Set
 }
 
 /*
-   Set rate to 'actuator control target' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateActuatorControlTarget Set rate to 'actuator control target' updates.
 */
+func (s *ServiceImpl) SetRateActuatorControlTarget(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateActuatorControlTarget(ctx context.Context, rateHz float64) (*SetRateActuatorControlTargetResponse, error) {
-
-	request := &SetRateActuatorControlTargetRequest{}
-	request.RateHz = rateHz
+) (*SetRateActuatorControlTargetResponse, error) {
+	request := &SetRateActuatorControlTargetRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateActuatorControlTarget(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1443,19 +1370,16 @@ func (s *ServiceImpl) SetRateActuatorControlTarget(ctx context.Context, rateHz f
 }
 
 /*
-   Set rate to 'actuator output status' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateActuatorOutputStatus Set rate to 'actuator output status' updates.
 */
+func (s *ServiceImpl) SetRateActuatorOutputStatus(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateActuatorOutputStatus(ctx context.Context, rateHz float64) (*SetRateActuatorOutputStatusResponse, error) {
-
-	request := &SetRateActuatorOutputStatusRequest{}
-	request.RateHz = rateHz
+) (*SetRateActuatorOutputStatusResponse, error) {
+	request := &SetRateActuatorOutputStatusRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateActuatorOutputStatus(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1464,19 +1388,16 @@ func (s *ServiceImpl) SetRateActuatorOutputStatus(ctx context.Context, rateHz fl
 }
 
 /*
-   Set rate to 'odometry' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateOdometry Set rate to 'odometry' updates.
 */
+func (s *ServiceImpl) SetRateOdometry(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateOdometry(ctx context.Context, rateHz float64) (*SetRateOdometryResponse, error) {
-
-	request := &SetRateOdometryRequest{}
-	request.RateHz = rateHz
+) (*SetRateOdometryResponse, error) {
+	request := &SetRateOdometryRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateOdometry(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1485,19 +1406,16 @@ func (s *ServiceImpl) SetRateOdometry(ctx context.Context, rateHz float64) (*Set
 }
 
 /*
-   Set rate to 'position velocity' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRatePositionVelocityNed Set rate to 'position velocity' updates.
 */
+func (s *ServiceImpl) SetRatePositionVelocityNed(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRatePositionVelocityNed(ctx context.Context, rateHz float64) (*SetRatePositionVelocityNedResponse, error) {
-
-	request := &SetRatePositionVelocityNedRequest{}
-	request.RateHz = rateHz
+) (*SetRatePositionVelocityNedResponse, error) {
+	request := &SetRatePositionVelocityNedRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRatePositionVelocityNed(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1506,19 +1424,16 @@ func (s *ServiceImpl) SetRatePositionVelocityNed(ctx context.Context, rateHz flo
 }
 
 /*
-   Set rate to 'ground truth' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateGroundTruth Set rate to 'ground truth' updates.
 */
+func (s *ServiceImpl) SetRateGroundTruth(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateGroundTruth(ctx context.Context, rateHz float64) (*SetRateGroundTruthResponse, error) {
-
-	request := &SetRateGroundTruthRequest{}
-	request.RateHz = rateHz
+) (*SetRateGroundTruthResponse, error) {
+	request := &SetRateGroundTruthRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateGroundTruth(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1527,19 +1442,16 @@ func (s *ServiceImpl) SetRateGroundTruth(ctx context.Context, rateHz float64) (*
 }
 
 /*
-   Set rate to 'fixedwing metrics' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateFixedwingMetrics Set rate to 'fixedwing metrics' updates.
 */
+func (s *ServiceImpl) SetRateFixedwingMetrics(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateFixedwingMetrics(ctx context.Context, rateHz float64) (*SetRateFixedwingMetricsResponse, error) {
-
-	request := &SetRateFixedwingMetricsRequest{}
-	request.RateHz = rateHz
+) (*SetRateFixedwingMetricsResponse, error) {
+	request := &SetRateFixedwingMetricsRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateFixedwingMetrics(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1548,19 +1460,16 @@ func (s *ServiceImpl) SetRateFixedwingMetrics(ctx context.Context, rateHz float6
 }
 
 /*
-   Set rate to 'IMU' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateImu Set rate to 'IMU' updates.
 */
+func (s *ServiceImpl) SetRateImu(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateImu(ctx context.Context, rateHz float64) (*SetRateImuResponse, error) {
-
-	request := &SetRateImuRequest{}
-	request.RateHz = rateHz
+) (*SetRateImuResponse, error) {
+	request := &SetRateImuRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateImu(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1569,19 +1478,16 @@ func (s *ServiceImpl) SetRateImu(ctx context.Context, rateHz float64) (*SetRateI
 }
 
 /*
-   Set rate to 'Scaled IMU' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateScaledImu Set rate to 'Scaled IMU' updates.
 */
+func (s *ServiceImpl) SetRateScaledImu(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateScaledImu(ctx context.Context, rateHz float64) (*SetRateScaledImuResponse, error) {
-
-	request := &SetRateScaledImuRequest{}
-	request.RateHz = rateHz
+) (*SetRateScaledImuResponse, error) {
+	request := &SetRateScaledImuRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateScaledImu(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1590,19 +1496,16 @@ func (s *ServiceImpl) SetRateScaledImu(ctx context.Context, rateHz float64) (*Se
 }
 
 /*
-   Set rate to 'Raw IMU' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateRawImu Set rate to 'Raw IMU' updates.
 */
+func (s *ServiceImpl) SetRateRawImu(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateRawImu(ctx context.Context, rateHz float64) (*SetRateRawImuResponse, error) {
-
-	request := &SetRateRawImuRequest{}
-	request.RateHz = rateHz
+) (*SetRateRawImuResponse, error) {
+	request := &SetRateRawImuRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateRawImu(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1611,19 +1514,16 @@ func (s *ServiceImpl) SetRateRawImu(ctx context.Context, rateHz float64) (*SetRa
 }
 
 /*
-   Set rate to 'unix epoch time' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateUnixEpochTime Set rate to 'unix epoch time' updates.
 */
+func (s *ServiceImpl) SetRateUnixEpochTime(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateUnixEpochTime(ctx context.Context, rateHz float64) (*SetRateUnixEpochTimeResponse, error) {
-
-	request := &SetRateUnixEpochTimeRequest{}
-	request.RateHz = rateHz
+) (*SetRateUnixEpochTimeResponse, error) {
+	request := &SetRateUnixEpochTimeRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateUnixEpochTime(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1632,19 +1532,16 @@ func (s *ServiceImpl) SetRateUnixEpochTime(ctx context.Context, rateHz float64) 
 }
 
 /*
-   Set rate to 'Distance Sensor' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateDistanceSensor Set rate to 'Distance Sensor' updates.
 */
+func (s *ServiceImpl) SetRateDistanceSensor(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateDistanceSensor(ctx context.Context, rateHz float64) (*SetRateDistanceSensorResponse, error) {
-
-	request := &SetRateDistanceSensorRequest{}
-	request.RateHz = rateHz
+) (*SetRateDistanceSensorResponse, error) {
+	request := &SetRateDistanceSensorRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateDistanceSensor(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1653,19 +1550,16 @@ func (s *ServiceImpl) SetRateDistanceSensor(ctx context.Context, rateHz float64)
 }
 
 /*
-   Set rate to 'Altitude' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateAltitude Set rate to 'Altitude' updates.
 */
+func (s *ServiceImpl) SetRateAltitude(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateAltitude(ctx context.Context, rateHz float64) (*SetRateAltitudeResponse, error) {
-
-	request := &SetRateAltitudeRequest{}
-	request.RateHz = rateHz
+) (*SetRateAltitudeResponse, error) {
+	request := &SetRateAltitudeRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateAltitude(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1674,24 +1568,16 @@ func (s *ServiceImpl) SetRateAltitude(ctx context.Context, rateHz float64) (*Set
 }
 
 /*
-   Get the GPS location of where the estimator has been initialized.
-
-
-
-   Returns
-   -------
-   False
-   GpsGlobalOrigin : GpsGlobalOrigin
-
-
+GetGpsGlobalOrigin Get the GPS location of where the estimator has been initialized.
 */
+func (s *ServiceImpl) GetGpsGlobalOrigin(
+	ctx context.Context,
 
-func (s *ServiceImpl) GetGpsGlobalOrigin(ctx context.Context) (*GetGpsGlobalOriginResponse, error) {
+) (*GetGpsGlobalOriginResponse, error) {
 	request := &GetGpsGlobalOriginRequest{}
 	response, err := s.Client.GetGpsGlobalOrigin(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }

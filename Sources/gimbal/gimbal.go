@@ -5,8 +5,8 @@ import (
 	"io"
 	"log"
 
-	"google.golang.org/grpc/status"
 	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,29 +14,24 @@ type ServiceImpl struct {
 }
 
 /*
-   Set gimbal roll, pitch and yaw angles.
+SetAngles Set gimbal roll, pitch and yaw angles.
 
-   This sets the desired roll, pitch and yaw angles of a gimbal.
-   Will return when the command is accepted, however, it might
-   take the gimbal longer to actually be set to the new angles.
-
-   Parameters
-   ----------
-   rollDeg float32
-
-   pitchDeg float32
-
-   yawDeg float32
-
-
+	This sets the desired roll, pitch and yaw angles of a gimbal.
+	Will return when the command is accepted, however, it might
+	take the gimbal longer to actually be set to the new angles.
 */
+func (s *ServiceImpl) SetAngles(
+	ctx context.Context,
+	rollDeg float32,
+	pitchDeg float32,
+	yawDeg float32,
 
-func (s *ServiceImpl) SetAngles(ctx context.Context, rollDeg float32, pitchDeg float32, yawDeg float32) (*SetAnglesResponse, error) {
-
-	request := &SetAnglesRequest{}
-	request.RollDeg = rollDeg
-	request.PitchDeg = pitchDeg
-	request.YawDeg = yawDeg
+) (*SetAnglesResponse, error) {
+	request := &SetAnglesRequest{
+		RollDeg:  rollDeg,
+		PitchDeg: pitchDeg,
+		YawDeg:   yawDeg,
+	}
 	response, err := s.Client.SetAngles(ctx, request)
 	if err != nil {
 		return nil, err
@@ -45,26 +40,22 @@ func (s *ServiceImpl) SetAngles(ctx context.Context, rollDeg float32, pitchDeg f
 }
 
 /*
-   Set gimbal pitch and yaw angles.
+SetPitchAndYaw Set gimbal pitch and yaw angles.
 
-   This sets the desired pitch and yaw angles of a gimbal.
-   Will return when the command is accepted, however, it might
-   take the gimbal longer to actually be set to the new angles.
-
-   Parameters
-   ----------
-   pitchDeg float32
-
-   yawDeg float32
-
-
+	This sets the desired pitch and yaw angles of a gimbal.
+	Will return when the command is accepted, however, it might
+	take the gimbal longer to actually be set to the new angles.
 */
+func (s *ServiceImpl) SetPitchAndYaw(
+	ctx context.Context,
+	pitchDeg float32,
+	yawDeg float32,
 
-func (s *ServiceImpl) SetPitchAndYaw(ctx context.Context, pitchDeg float32, yawDeg float32) (*SetPitchAndYawResponse, error) {
-
-	request := &SetPitchAndYawRequest{}
-	request.PitchDeg = pitchDeg
-	request.YawDeg = yawDeg
+) (*SetPitchAndYawResponse, error) {
+	request := &SetPitchAndYawRequest{
+		PitchDeg: pitchDeg,
+		YawDeg:   yawDeg,
+	}
 	response, err := s.Client.SetPitchAndYaw(ctx, request)
 	if err != nil {
 		return nil, err
@@ -73,26 +64,22 @@ func (s *ServiceImpl) SetPitchAndYaw(ctx context.Context, pitchDeg float32, yawD
 }
 
 /*
-   Set gimbal angular rates around pitch and yaw axes.
+SetPitchRateAndYawRate Set gimbal angular rates around pitch and yaw axes.
 
-   This sets the desired angular rates around pitch and yaw axes of a gimbal.
-   Will return when the command is accepted, however, it might
-   take the gimbal longer to actually reach the angular rate.
-
-   Parameters
-   ----------
-   pitchRateDegS float32
-
-   yawRateDegS float32
-
-
+	This sets the desired angular rates around pitch and yaw axes of a gimbal.
+	Will return when the command is accepted, however, it might
+	take the gimbal longer to actually reach the angular rate.
 */
+func (s *ServiceImpl) SetPitchRateAndYawRate(
+	ctx context.Context,
+	pitchRateDegS float32,
+	yawRateDegS float32,
 
-func (s *ServiceImpl) SetPitchRateAndYawRate(ctx context.Context, pitchRateDegS float32, yawRateDegS float32) (*SetPitchRateAndYawRateResponse, error) {
-
-	request := &SetPitchRateAndYawRateRequest{}
-	request.PitchRateDegS = pitchRateDegS
-	request.YawRateDegS = yawRateDegS
+) (*SetPitchRateAndYawRateResponse, error) {
+	request := &SetPitchRateAndYawRateRequest{
+		PitchRateDegS: pitchRateDegS,
+		YawRateDegS:   yawRateDegS,
+	}
 	response, err := s.Client.SetPitchRateAndYawRate(ctx, request)
 	if err != nil {
 		return nil, err
@@ -101,24 +88,20 @@ func (s *ServiceImpl) SetPitchRateAndYawRate(ctx context.Context, pitchRateDegS 
 }
 
 /*
-   Set gimbal mode.
+SetMode Set gimbal mode.
 
-   This sets the desired yaw mode of a gimbal.
-   Will return when the command is accepted. However, it might
-   take the gimbal longer to actually be set to the new angles.
-
-   Parameters
-   ----------
-   gimbalMode *GimbalMode
-
-
-
+	This sets the desired yaw mode of a gimbal.
+	Will return when the command is accepted. However, it might
+	take the gimbal longer to actually be set to the new angles.
 */
+func (s *ServiceImpl) SetMode(
+	ctx context.Context,
+	gimbalMode *GimbalMode,
 
-func (s *ServiceImpl) SetMode(ctx context.Context, gimbalMode *GimbalMode) (*SetModeResponse, error) {
-
-	request := &SetModeRequest{}
-	request.GimbalMode = *gimbalMode
+) (*SetModeResponse, error) {
+	request := &SetModeRequest{
+		GimbalMode: *gimbalMode,
+	}
 	response, err := s.Client.SetMode(ctx, request)
 	if err != nil {
 		return nil, err
@@ -127,31 +110,26 @@ func (s *ServiceImpl) SetMode(ctx context.Context, gimbalMode *GimbalMode) (*Set
 }
 
 /*
-   Set gimbal region of interest (ROI).
+SetRoiLocation Set gimbal region of interest (ROI).
 
-   This sets a region of interest that the gimbal will point to.
-   The gimbal will continue to point to the specified region until it
-   receives a new command.
-   The function will return when the command is accepted, however, it might
-   take the gimbal longer to actually rotate to the ROI.
-
-   Parameters
-   ----------
-   latitudeDeg float64
-
-   longitudeDeg float64
-
-   altitudeM float32
-
-
+	This sets a region of interest that the gimbal will point to.
+	The gimbal will continue to point to the specified region until it
+	receives a new command.
+	The function will return when the command is accepted, however, it might
+	take the gimbal longer to actually rotate to the ROI.
 */
+func (s *ServiceImpl) SetRoiLocation(
+	ctx context.Context,
+	latitudeDeg float64,
+	longitudeDeg float64,
+	altitudeM float32,
 
-func (s *ServiceImpl) SetRoiLocation(ctx context.Context, latitudeDeg float64, longitudeDeg float64, altitudeM float32) (*SetRoiLocationResponse, error) {
-
-	request := &SetRoiLocationRequest{}
-	request.LatitudeDeg = latitudeDeg
-	request.LongitudeDeg = longitudeDeg
-	request.AltitudeM = altitudeM
+) (*SetRoiLocationResponse, error) {
+	request := &SetRoiLocationRequest{
+		LatitudeDeg:  latitudeDeg,
+		LongitudeDeg: longitudeDeg,
+		AltitudeM:    altitudeM,
+	}
 	response, err := s.Client.SetRoiLocation(ctx, request)
 	if err != nil {
 		return nil, err
@@ -160,28 +138,24 @@ func (s *ServiceImpl) SetRoiLocation(ctx context.Context, latitudeDeg float64, l
 }
 
 /*
-   Take control.
+TakeControl Take control.
 
-   There can be only two components in control of a gimbal at any given time.
-   One with "primary" control, and one with "secondary" control. The way the
-   secondary control is implemented is not specified and hence depends on the
-   vehicle.
+	There can be only two components in control of a gimbal at any given time.
+	One with "primary" control, and one with "secondary" control. The way the
+	secondary control is implemented is not specified and hence depends on the
+	vehicle.
 
-   Components are expected to be cooperative, which means that they can
-   override each other and should therefore do it carefully.
-
-   Parameters
-   ----------
-   controlMode *ControlMode
-
-
-
+	Components are expected to be cooperative, which means that they can
+	override each other and should therefore do it carefully.
 */
+func (s *ServiceImpl) TakeControl(
+	ctx context.Context,
+	controlMode *ControlMode,
 
-func (s *ServiceImpl) TakeControl(ctx context.Context, controlMode *ControlMode) (*TakeControlResponse, error) {
-
-	request := &TakeControlRequest{}
-	request.ControlMode = *controlMode
+) (*TakeControlResponse, error) {
+	request := &TakeControlRequest{
+		ControlMode: *controlMode,
+	}
 	response, err := s.Client.TakeControl(ctx, request)
 	if err != nil {
 		return nil, err
@@ -190,15 +164,14 @@ func (s *ServiceImpl) TakeControl(ctx context.Context, controlMode *ControlMode)
 }
 
 /*
-   Release control.
+ReleaseControl Release control.
 
-   Release control, such that other components can control the gimbal.
-
-
+	Release control, such that other components can control the gimbal.
 */
+func (s *ServiceImpl) ReleaseControl(
+	ctx context.Context,
 
-func (s *ServiceImpl) ReleaseControl(ctx context.Context) (*ReleaseControlResponse, error) {
-
+) (*ReleaseControlResponse, error) {
 	request := &ReleaseControlRequest{}
 	response, err := s.Client.ReleaseControl(ctx, request)
 	if err != nil {
@@ -208,16 +181,16 @@ func (s *ServiceImpl) ReleaseControl(ctx context.Context) (*ReleaseControlRespon
 }
 
 /*
-   Subscribe to control status updates.
+Control Subscribe to control status updates.
 
-   This allows a component to know if it has primary, secondary or
-   no control over the gimbal. Also, it gives the system and component ids
-   of the other components in control (if any).
-
-
+	This allows a component to know if it has primary, secondary or
+	no control over the gimbal. Also, it gives the system and component ids
+	of the other components in control (if any).
 */
+func (a *ServiceImpl) Control(
+	ctx context.Context,
 
-func (a *ServiceImpl) Control(ctx context.Context) (<-chan *ControlStatus, error) {
+) (<-chan *ControlStatus, error) {
 	ch := make(chan *ControlStatus)
 	request := &SubscribeControlRequest{}
 	stream, err := a.Client.SubscribeControl(ctx, request)
@@ -237,7 +210,6 @@ func (a *ServiceImpl) Control(ctx context.Context) (<-chan *ControlStatus, error
 					return
 				}
 				log.Fatalf("Unable to receive Control messages, err: %v", err)
-				break
 			}
 			ch <- m.GetControlStatus()
 		}
@@ -246,14 +218,14 @@ func (a *ServiceImpl) Control(ctx context.Context) (<-chan *ControlStatus, error
 }
 
 /*
-   Subscribe to attitude updates.
+Attitude Subscribe to attitude updates.
 
-   This gets you the gimbal's attitude and angular rate.
-
-
+	This gets you the gimbal's attitude and angular rate.
 */
+func (a *ServiceImpl) Attitude(
+	ctx context.Context,
 
-func (a *ServiceImpl) Attitude(ctx context.Context) (<-chan *Attitude, error) {
+) (<-chan *Attitude, error) {
 	ch := make(chan *Attitude)
 	request := &SubscribeAttitudeRequest{}
 	stream, err := a.Client.SubscribeAttitude(ctx, request)
@@ -273,7 +245,6 @@ func (a *ServiceImpl) Attitude(ctx context.Context) (<-chan *Attitude, error) {
 					return
 				}
 				log.Fatalf("Unable to receive Attitude messages, err: %v", err)
-				break
 			}
 			ch <- m.GetAttitude()
 		}

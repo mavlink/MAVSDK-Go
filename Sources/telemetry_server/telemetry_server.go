@@ -9,31 +9,24 @@ type ServiceImpl struct {
 }
 
 /*
-   Publish to 'position' updates.
-
-   Parameters
-   ----------
-   position *Position
-
-
-   velocityNed *VelocityNed
-
-
-   heading *Heading
-
-
-
+PublishPosition Publish to 'position' updates.
 */
+func (s *ServiceImpl) PublishPosition(
+	ctx context.Context,
+	position *Position,
 
-func (s *ServiceImpl) PublishPosition(ctx context.Context, position *Position, velocityNed *VelocityNed, heading *Heading) (*PublishPositionResponse, error) {
+	velocityNed *VelocityNed,
 
-	request := &PublishPositionRequest{}
-	request.Position = position
+	heading *Heading,
 
-	request.VelocityNed = velocityNed
+) (*PublishPositionResponse, error) {
+	request := &PublishPositionRequest{
+		Position: position,
 
-	request.Heading = heading
+		VelocityNed: velocityNed,
 
+		Heading: heading,
+	}
 	response, err := s.Client.PublishPosition(ctx, request)
 	if err != nil {
 		return nil, err
@@ -42,21 +35,16 @@ func (s *ServiceImpl) PublishPosition(ctx context.Context, position *Position, v
 }
 
 /*
-   Publish to 'home position' updates.
-
-   Parameters
-   ----------
-   home *Position
-
-
-
+PublishHome Publish to 'home position' updates.
 */
+func (s *ServiceImpl) PublishHome(
+	ctx context.Context,
+	home *Position,
 
-func (s *ServiceImpl) PublishHome(ctx context.Context, home *Position) (*PublishHomeResponse, error) {
-
-	request := &PublishHomeRequest{}
-	request.Home = home
-
+) (*PublishHomeResponse, error) {
+	request := &PublishHomeRequest{
+		Home: home,
+	}
 	response, err := s.Client.PublishHome(ctx, request)
 	if err != nil {
 		return nil, err
@@ -65,36 +53,28 @@ func (s *ServiceImpl) PublishHome(ctx context.Context, home *Position) (*Publish
 }
 
 /*
-   Publish 'sys status' updates.
-
-   Parameters
-   ----------
-   battery *Battery
-
-
-   rcReceiverStatus bool
-
-   gyroStatus bool
-
-   accelStatus bool
-
-   magStatus bool
-
-   gpsStatus bool
-
-
+PublishSysStatus Publish 'sys status' updates.
 */
+func (s *ServiceImpl) PublishSysStatus(
+	ctx context.Context,
+	battery *Battery,
 
-func (s *ServiceImpl) PublishSysStatus(ctx context.Context, battery *Battery, rcReceiverStatus bool, gyroStatus bool, accelStatus bool, magStatus bool, gpsStatus bool) (*PublishSysStatusResponse, error) {
+	rcReceiverStatus bool,
+	gyroStatus bool,
+	accelStatus bool,
+	magStatus bool,
+	gpsStatus bool,
 
-	request := &PublishSysStatusRequest{}
-	request.Battery = battery
+) (*PublishSysStatusResponse, error) {
+	request := &PublishSysStatusRequest{
+		Battery: battery,
 
-	request.RcReceiverStatus = rcReceiverStatus
-	request.GyroStatus = gyroStatus
-	request.AccelStatus = accelStatus
-	request.MagStatus = magStatus
-	request.GpsStatus = gpsStatus
+		RcReceiverStatus: rcReceiverStatus,
+		GyroStatus:       gyroStatus,
+		AccelStatus:      accelStatus,
+		MagStatus:        magStatus,
+		GpsStatus:        gpsStatus,
+	}
 	response, err := s.Client.PublishSysStatus(ctx, request)
 	if err != nil {
 		return nil, err
@@ -103,24 +83,19 @@ func (s *ServiceImpl) PublishSysStatus(ctx context.Context, battery *Battery, rc
 }
 
 /*
-   Publish 'extended sys state' updates.
-
-   Parameters
-   ----------
-   vtolState *VtolState
-
-
-   landedState *LandedState
-
-
-
+PublishExtendedSysState Publish 'extended sys state' updates.
 */
+func (s *ServiceImpl) PublishExtendedSysState(
+	ctx context.Context,
+	vtolState *VtolState,
 
-func (s *ServiceImpl) PublishExtendedSysState(ctx context.Context, vtolState *VtolState, landedState *LandedState) (*PublishExtendedSysStateResponse, error) {
+	landedState *LandedState,
 
-	request := &PublishExtendedSysStateRequest{}
-	request.VtolState = *vtolState
-	request.LandedState = *landedState
+) (*PublishExtendedSysStateResponse, error) {
+	request := &PublishExtendedSysStateRequest{
+		VtolState:   *vtolState,
+		LandedState: *landedState,
+	}
 	response, err := s.Client.PublishExtendedSysState(ctx, request)
 	if err != nil {
 		return nil, err
@@ -129,26 +104,20 @@ func (s *ServiceImpl) PublishExtendedSysState(ctx context.Context, vtolState *Vt
 }
 
 /*
-   Publish to 'Raw GPS' updates.
-
-   Parameters
-   ----------
-   rawGps *RawGps
-
-
-   gpsInfo *GpsInfo
-
-
-
+PublishRawGps Publish to 'Raw GPS' updates.
 */
+func (s *ServiceImpl) PublishRawGps(
+	ctx context.Context,
+	rawGps *RawGps,
 
-func (s *ServiceImpl) PublishRawGps(ctx context.Context, rawGps *RawGps, gpsInfo *GpsInfo) (*PublishRawGpsResponse, error) {
+	gpsInfo *GpsInfo,
 
-	request := &PublishRawGpsRequest{}
-	request.RawGps = rawGps
+) (*PublishRawGpsResponse, error) {
+	request := &PublishRawGpsRequest{
+		RawGps: rawGps,
 
-	request.GpsInfo = gpsInfo
-
+		GpsInfo: gpsInfo,
+	}
 	response, err := s.Client.PublishRawGps(ctx, request)
 	if err != nil {
 		return nil, err
@@ -157,21 +126,16 @@ func (s *ServiceImpl) PublishRawGps(ctx context.Context, rawGps *RawGps, gpsInfo
 }
 
 /*
-   Publish to 'battery' updates.
-
-   Parameters
-   ----------
-   battery *Battery
-
-
-
+PublishBattery Publish to 'battery' updates.
 */
+func (s *ServiceImpl) PublishBattery(
+	ctx context.Context,
+	battery *Battery,
 
-func (s *ServiceImpl) PublishBattery(ctx context.Context, battery *Battery) (*PublishBatteryResponse, error) {
-
-	request := &PublishBatteryRequest{}
-	request.Battery = battery
-
+) (*PublishBatteryResponse, error) {
+	request := &PublishBatteryRequest{
+		Battery: battery,
+	}
 	response, err := s.Client.PublishBattery(ctx, request)
 	if err != nil {
 		return nil, err
@@ -180,21 +144,16 @@ func (s *ServiceImpl) PublishBattery(ctx context.Context, battery *Battery) (*Pu
 }
 
 /*
-   Publish to 'status text' updates.
-
-   Parameters
-   ----------
-   statusText *StatusText
-
-
-
+PublishStatusText Publish to 'status text' updates.
 */
+func (s *ServiceImpl) PublishStatusText(
+	ctx context.Context,
+	statusText *StatusText,
 
-func (s *ServiceImpl) PublishStatusText(ctx context.Context, statusText *StatusText) (*PublishStatusTextResponse, error) {
-
-	request := &PublishStatusTextRequest{}
-	request.StatusText = statusText
-
+) (*PublishStatusTextResponse, error) {
+	request := &PublishStatusTextRequest{
+		StatusText: statusText,
+	}
 	response, err := s.Client.PublishStatusText(ctx, request)
 	if err != nil {
 		return nil, err
@@ -203,21 +162,16 @@ func (s *ServiceImpl) PublishStatusText(ctx context.Context, statusText *StatusT
 }
 
 /*
-   Publish to 'odometry' updates.
-
-   Parameters
-   ----------
-   odometry *Odometry
-
-
-
+PublishOdometry Publish to 'odometry' updates.
 */
+func (s *ServiceImpl) PublishOdometry(
+	ctx context.Context,
+	odometry *Odometry,
 
-func (s *ServiceImpl) PublishOdometry(ctx context.Context, odometry *Odometry) (*PublishOdometryResponse, error) {
-
-	request := &PublishOdometryRequest{}
-	request.Odometry = odometry
-
+) (*PublishOdometryResponse, error) {
+	request := &PublishOdometryRequest{
+		Odometry: odometry,
+	}
 	response, err := s.Client.PublishOdometry(ctx, request)
 	if err != nil {
 		return nil, err
@@ -226,21 +180,16 @@ func (s *ServiceImpl) PublishOdometry(ctx context.Context, odometry *Odometry) (
 }
 
 /*
-   Publish to 'position velocity' updates.
-
-   Parameters
-   ----------
-   positionVelocityNed *PositionVelocityNed
-
-
-
+PublishPositionVelocityNed Publish to 'position velocity' updates.
 */
+func (s *ServiceImpl) PublishPositionVelocityNed(
+	ctx context.Context,
+	positionVelocityNed *PositionVelocityNed,
 
-func (s *ServiceImpl) PublishPositionVelocityNed(ctx context.Context, positionVelocityNed *PositionVelocityNed) (*PublishPositionVelocityNedResponse, error) {
-
-	request := &PublishPositionVelocityNedRequest{}
-	request.PositionVelocityNed = positionVelocityNed
-
+) (*PublishPositionVelocityNedResponse, error) {
+	request := &PublishPositionVelocityNedRequest{
+		PositionVelocityNed: positionVelocityNed,
+	}
 	response, err := s.Client.PublishPositionVelocityNed(ctx, request)
 	if err != nil {
 		return nil, err
@@ -249,21 +198,16 @@ func (s *ServiceImpl) PublishPositionVelocityNed(ctx context.Context, positionVe
 }
 
 /*
-   Publish to 'ground truth' updates.
-
-   Parameters
-   ----------
-   groundTruth *GroundTruth
-
-
-
+PublishGroundTruth Publish to 'ground truth' updates.
 */
+func (s *ServiceImpl) PublishGroundTruth(
+	ctx context.Context,
+	groundTruth *GroundTruth,
 
-func (s *ServiceImpl) PublishGroundTruth(ctx context.Context, groundTruth *GroundTruth) (*PublishGroundTruthResponse, error) {
-
-	request := &PublishGroundTruthRequest{}
-	request.GroundTruth = groundTruth
-
+) (*PublishGroundTruthResponse, error) {
+	request := &PublishGroundTruthRequest{
+		GroundTruth: groundTruth,
+	}
 	response, err := s.Client.PublishGroundTruth(ctx, request)
 	if err != nil {
 		return nil, err
@@ -272,21 +216,16 @@ func (s *ServiceImpl) PublishGroundTruth(ctx context.Context, groundTruth *Groun
 }
 
 /*
-   Publish to 'IMU' updates (in SI units in NED body frame).
-
-   Parameters
-   ----------
-   imu *Imu
-
-
-
+PublishImu Publish to 'IMU' updates (in SI units in NED body frame).
 */
+func (s *ServiceImpl) PublishImu(
+	ctx context.Context,
+	imu *Imu,
 
-func (s *ServiceImpl) PublishImu(ctx context.Context, imu *Imu) (*PublishImuResponse, error) {
-
-	request := &PublishImuRequest{}
-	request.Imu = imu
-
+) (*PublishImuResponse, error) {
+	request := &PublishImuRequest{
+		Imu: imu,
+	}
 	response, err := s.Client.PublishImu(ctx, request)
 	if err != nil {
 		return nil, err
@@ -295,21 +234,16 @@ func (s *ServiceImpl) PublishImu(ctx context.Context, imu *Imu) (*PublishImuResp
 }
 
 /*
-   Publish to 'Scaled IMU' updates.
-
-   Parameters
-   ----------
-   imu *Imu
-
-
-
+PublishScaledImu Publish to 'Scaled IMU' updates.
 */
+func (s *ServiceImpl) PublishScaledImu(
+	ctx context.Context,
+	imu *Imu,
 
-func (s *ServiceImpl) PublishScaledImu(ctx context.Context, imu *Imu) (*PublishScaledImuResponse, error) {
-
-	request := &PublishScaledImuRequest{}
-	request.Imu = imu
-
+) (*PublishScaledImuResponse, error) {
+	request := &PublishScaledImuRequest{
+		Imu: imu,
+	}
 	response, err := s.Client.PublishScaledImu(ctx, request)
 	if err != nil {
 		return nil, err
@@ -318,21 +252,16 @@ func (s *ServiceImpl) PublishScaledImu(ctx context.Context, imu *Imu) (*PublishS
 }
 
 /*
-   Publish to 'Raw IMU' updates.
-
-   Parameters
-   ----------
-   imu *Imu
-
-
-
+PublishRawImu Publish to 'Raw IMU' updates.
 */
+func (s *ServiceImpl) PublishRawImu(
+	ctx context.Context,
+	imu *Imu,
 
-func (s *ServiceImpl) PublishRawImu(ctx context.Context, imu *Imu) (*PublishRawImuResponse, error) {
-
-	request := &PublishRawImuRequest{}
-	request.Imu = imu
-
+) (*PublishRawImuResponse, error) {
+	request := &PublishRawImuRequest{
+		Imu: imu,
+	}
 	response, err := s.Client.PublishRawImu(ctx, request)
 	if err != nil {
 		return nil, err
@@ -341,19 +270,16 @@ func (s *ServiceImpl) PublishRawImu(ctx context.Context, imu *Imu) (*PublishRawI
 }
 
 /*
-   Publish to 'unix epoch time' updates.
-
-   Parameters
-   ----------
-   timeUs uint64
-
-
+PublishUnixEpochTime Publish to 'unix epoch time' updates.
 */
+func (s *ServiceImpl) PublishUnixEpochTime(
+	ctx context.Context,
+	timeUs uint64,
 
-func (s *ServiceImpl) PublishUnixEpochTime(ctx context.Context, timeUs uint64) (*PublishUnixEpochTimeResponse, error) {
-
-	request := &PublishUnixEpochTimeRequest{}
-	request.TimeUs = timeUs
+) (*PublishUnixEpochTimeResponse, error) {
+	request := &PublishUnixEpochTimeRequest{
+		TimeUs: timeUs,
+	}
 	response, err := s.Client.PublishUnixEpochTime(ctx, request)
 	if err != nil {
 		return nil, err
@@ -362,21 +288,16 @@ func (s *ServiceImpl) PublishUnixEpochTime(ctx context.Context, timeUs uint64) (
 }
 
 /*
-   Publish to "distance sensor" updates.
-
-   Parameters
-   ----------
-   distanceSensor *DistanceSensor
-
-
-
+PublishDistanceSensor Publish to "distance sensor" updates.
 */
+func (s *ServiceImpl) PublishDistanceSensor(
+	ctx context.Context,
+	distanceSensor *DistanceSensor,
 
-func (s *ServiceImpl) PublishDistanceSensor(ctx context.Context, distanceSensor *DistanceSensor) (*PublishDistanceSensorResponse, error) {
-
-	request := &PublishDistanceSensorRequest{}
-	request.DistanceSensor = distanceSensor
-
+) (*PublishDistanceSensorResponse, error) {
+	request := &PublishDistanceSensorRequest{
+		DistanceSensor: distanceSensor,
+	}
 	response, err := s.Client.PublishDistanceSensor(ctx, request)
 	if err != nil {
 		return nil, err

@@ -9,21 +9,16 @@ type ServiceImpl struct {
 }
 
 /*
-   Send Global position/attitude estimate from a vision source.
-
-   Parameters
-   ----------
-   visionPositionEstimate *VisionPositionEstimate
-
-
-
+SetVisionPositionEstimate Send Global position/attitude estimate from a vision source.
 */
+func (s *ServiceImpl) SetVisionPositionEstimate(
+	ctx context.Context,
+	visionPositionEstimate *VisionPositionEstimate,
 
-func (s *ServiceImpl) SetVisionPositionEstimate(ctx context.Context, visionPositionEstimate *VisionPositionEstimate) (*SetVisionPositionEstimateResponse, error) {
-
-	request := &SetVisionPositionEstimateRequest{}
-	request.VisionPositionEstimate = visionPositionEstimate
-
+) (*SetVisionPositionEstimateResponse, error) {
+	request := &SetVisionPositionEstimateRequest{
+		VisionPositionEstimate: visionPositionEstimate,
+	}
 	response, err := s.Client.SetVisionPositionEstimate(ctx, request)
 	if err != nil {
 		return nil, err
@@ -32,21 +27,16 @@ func (s *ServiceImpl) SetVisionPositionEstimate(ctx context.Context, visionPosit
 }
 
 /*
-   Send motion capture attitude and position.
-
-   Parameters
-   ----------
-   attitudePositionMocap *AttitudePositionMocap
-
-
-
+SetAttitudePositionMocap Send motion capture attitude and position.
 */
+func (s *ServiceImpl) SetAttitudePositionMocap(
+	ctx context.Context,
+	attitudePositionMocap *AttitudePositionMocap,
 
-func (s *ServiceImpl) SetAttitudePositionMocap(ctx context.Context, attitudePositionMocap *AttitudePositionMocap) (*SetAttitudePositionMocapResponse, error) {
-
-	request := &SetAttitudePositionMocapRequest{}
-	request.AttitudePositionMocap = attitudePositionMocap
-
+) (*SetAttitudePositionMocapResponse, error) {
+	request := &SetAttitudePositionMocapRequest{
+		AttitudePositionMocap: attitudePositionMocap,
+	}
 	response, err := s.Client.SetAttitudePositionMocap(ctx, request)
 	if err != nil {
 		return nil, err
@@ -55,21 +45,16 @@ func (s *ServiceImpl) SetAttitudePositionMocap(ctx context.Context, attitudePosi
 }
 
 /*
-   Send odometry information with an external interface.
-
-   Parameters
-   ----------
-   odometry *Odometry
-
-
-
+SetOdometry Send odometry information with an external interface.
 */
+func (s *ServiceImpl) SetOdometry(
+	ctx context.Context,
+	odometry *Odometry,
 
-func (s *ServiceImpl) SetOdometry(ctx context.Context, odometry *Odometry) (*SetOdometryResponse, error) {
-
-	request := &SetOdometryRequest{}
-	request.Odometry = odometry
-
+) (*SetOdometryResponse, error) {
+	request := &SetOdometryRequest{
+		Odometry: odometry,
+	}
 	response, err := s.Client.SetOdometry(ctx, request)
 	if err != nil {
 		return nil, err

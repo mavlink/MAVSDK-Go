@@ -9,19 +9,16 @@ type ServiceImpl struct {
 }
 
 /*
-   Gripper grab cargo.
-
-   Parameters
-   ----------
-   instance uint32
-
-
+Grab Gripper grab cargo.
 */
+func (s *ServiceImpl) Grab(
+	ctx context.Context,
+	instance uint32,
 
-func (s *ServiceImpl) Grab(ctx context.Context, instance uint32) (*GrabResponse, error) {
-
-	request := &GrabRequest{}
-	request.Instance = instance
+) (*GrabResponse, error) {
+	request := &GrabRequest{
+		Instance: instance,
+	}
 	response, err := s.Client.Grab(ctx, request)
 	if err != nil {
 		return nil, err
@@ -30,19 +27,16 @@ func (s *ServiceImpl) Grab(ctx context.Context, instance uint32) (*GrabResponse,
 }
 
 /*
-   Gripper release cargo.
-
-   Parameters
-   ----------
-   instance uint32
-
-
+Release Gripper release cargo.
 */
+func (s *ServiceImpl) Release(
+	ctx context.Context,
+	instance uint32,
 
-func (s *ServiceImpl) Release(ctx context.Context, instance uint32) (*ReleaseResponse, error) {
-
-	request := &ReleaseRequest{}
-	request.Instance = instance
+) (*ReleaseResponse, error) {
+	request := &ReleaseRequest{
+		Instance: instance,
+	}
 	response, err := s.Client.Release(ctx, request)
 	if err != nil {
 		return nil, err

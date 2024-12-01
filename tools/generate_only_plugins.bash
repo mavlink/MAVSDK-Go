@@ -45,13 +45,15 @@ for plugin in ${PLUGIN_LIST}; do
         echo "Renaming $actual_file_path to $new_file_path"
         
         # Move the original CamelCase file to a temporary name
-        mv "$actual_file_path" "$temp_file_path"
-        
+        cat "$actual_file_path" > "$temp_file_path"
+        # Remove the original CamelCase file
+        rm "$actual_file_path"
         # Rename the temporary file to the new name
         mv "$temp_file_path" "$new_file_path"
         
     fi
 done
+
 
 # Remove the temp directory.
 rm -rf ${PROTO_DIR_TMP}

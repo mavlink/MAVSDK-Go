@@ -9,45 +9,31 @@ type ServiceImpl struct {
 }
 
 /*
-   Get current configuration.
-
-
-
-   Returns
-   -------
-   False
-   Config : Config
-        The current configuration
-
-
+GetConfig Get current configuration.
 */
+func (s *ServiceImpl) GetConfig(
+	ctx context.Context,
 
-func (s *ServiceImpl) GetConfig(ctx context.Context) (*GetConfigResponse, error) {
+) (*GetConfigResponse, error) {
 	request := &GetConfigRequest{}
 	response, err := s.Client.GetConfig(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Apply configuration by sending it to the system.
-
-   Parameters
-   ----------
-   config *Config
-
-
-
+SetConfig Apply configuration by sending it to the system.
 */
+func (s *ServiceImpl) SetConfig(
+	ctx context.Context,
+	config *Config,
 
-func (s *ServiceImpl) SetConfig(ctx context.Context, config *Config) (*SetConfigResponse, error) {
-
-	request := &SetConfigRequest{}
-	request.Config = config
-
+) (*SetConfigResponse, error) {
+	request := &SetConfigRequest{
+		Config: config,
+	}
 	response, err := s.Client.SetConfig(ctx, request)
 	if err != nil {
 		return nil, err
@@ -56,45 +42,31 @@ func (s *ServiceImpl) SetConfig(ctx context.Context, config *Config) (*SetConfig
 }
 
 /*
-   Check if FollowMe is active.
-
-
-
-   Returns
-   -------
-   False
-   IsActive : bool
-        Whether follow me is active or not
-
-
+IsActive Check if FollowMe is active.
 */
+func (s *ServiceImpl) IsActive(
+	ctx context.Context,
 
-func (s *ServiceImpl) IsActive(ctx context.Context) (*IsActiveResponse, error) {
+) (*IsActiveResponse, error) {
 	request := &IsActiveRequest{}
 	response, err := s.Client.IsActive(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Set location of the moving target.
-
-   Parameters
-   ----------
-   location *TargetLocation
-
-
-
+SetTargetLocation Set location of the moving target.
 */
+func (s *ServiceImpl) SetTargetLocation(
+	ctx context.Context,
+	location *TargetLocation,
 
-func (s *ServiceImpl) SetTargetLocation(ctx context.Context, location *TargetLocation) (*SetTargetLocationResponse, error) {
-
-	request := &SetTargetLocationRequest{}
-	request.Location = location
-
+) (*SetTargetLocationResponse, error) {
+	request := &SetTargetLocationRequest{
+		Location: location,
+	}
 	response, err := s.Client.SetTargetLocation(ctx, request)
 	if err != nil {
 		return nil, err
@@ -103,37 +75,27 @@ func (s *ServiceImpl) SetTargetLocation(ctx context.Context, location *TargetLoc
 }
 
 /*
-   Get the last location of the target.
-
-
-
-   Returns
-   -------
-   False
-   Location : TargetLocation
-        The last target location that was set
-
-
+GetLastLocation Get the last location of the target.
 */
+func (s *ServiceImpl) GetLastLocation(
+	ctx context.Context,
 
-func (s *ServiceImpl) GetLastLocation(ctx context.Context) (*GetLastLocationResponse, error) {
+) (*GetLastLocationResponse, error) {
 	request := &GetLastLocationRequest{}
 	response, err := s.Client.GetLastLocation(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Start FollowMe mode.
-
-
+Start Start FollowMe mode.
 */
+func (s *ServiceImpl) Start(
+	ctx context.Context,
 
-func (s *ServiceImpl) Start(ctx context.Context) (*StartResponse, error) {
-
+) (*StartResponse, error) {
 	request := &StartRequest{}
 	response, err := s.Client.Start(ctx, request)
 	if err != nil {
@@ -143,13 +105,12 @@ func (s *ServiceImpl) Start(ctx context.Context) (*StartResponse, error) {
 }
 
 /*
-   Stop FollowMe mode.
-
-
+Stop Stop FollowMe mode.
 */
+func (s *ServiceImpl) Stop(
+	ctx context.Context,
 
-func (s *ServiceImpl) Stop(ctx context.Context) (*StopResponse, error) {
-
+) (*StopResponse, error) {
 	request := &StopRequest{}
 	response, err := s.Client.Stop(ctx, request)
 	if err != nil {

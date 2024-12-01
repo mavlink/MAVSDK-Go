@@ -6,7 +6,7 @@ import (
 	"log"
 
 	codes "google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,53 +14,40 @@ type ServiceImpl struct {
 }
 
 /*
-   Retrieve an int parameter.
+RetrieveParamInt Retrieve an int parameter.
 
-   If the type is wrong, the result will be `WRONG_TYPE`.
-
-   Parameters
-   ----------
-   name string
-
-   Returns
-   -------
-   False
-   Value : int32
-        Value of the requested parameter
-
-
+	If the type is wrong, the result will be `WRONG_TYPE`.
 */
+func (s *ServiceImpl) RetrieveParamInt(
+	ctx context.Context,
+	name string,
 
-func (s *ServiceImpl) RetrieveParamInt(ctx context.Context, name string) (*RetrieveParamIntResponse, error) {
-	request := &RetrieveParamIntRequest{}
-	request.Name = name
+) (*RetrieveParamIntResponse, error) {
+	request := &RetrieveParamIntRequest{
+		Name: name,
+	}
 	response, err := s.Client.RetrieveParamInt(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Provide an int parameter.
+ProvideParamInt Provide an int parameter.
 
-   If the type is wrong, the result will be `WRONG_TYPE`.
-
-   Parameters
-   ----------
-   name string
-
-   value int32
-
-
+	If the type is wrong, the result will be `WRONG_TYPE`.
 */
+func (s *ServiceImpl) ProvideParamInt(
+	ctx context.Context,
+	name string,
+	value int32,
 
-func (s *ServiceImpl) ProvideParamInt(ctx context.Context, name string, value int32) (*ProvideParamIntResponse, error) {
-
-	request := &ProvideParamIntRequest{}
-	request.Name = name
-	request.Value = value
+) (*ProvideParamIntResponse, error) {
+	request := &ProvideParamIntRequest{
+		Name:  name,
+		Value: value,
+	}
 	response, err := s.Client.ProvideParamInt(ctx, request)
 	if err != nil {
 		return nil, err
@@ -69,53 +56,40 @@ func (s *ServiceImpl) ProvideParamInt(ctx context.Context, name string, value in
 }
 
 /*
-   Retrieve a float parameter.
+RetrieveParamFloat Retrieve a float parameter.
 
-   If the type is wrong, the result will be `WRONG_TYPE`.
-
-   Parameters
-   ----------
-   name string
-
-   Returns
-   -------
-   False
-   Value : float32
-        Value of the requested parameter
-
-
+	If the type is wrong, the result will be `WRONG_TYPE`.
 */
+func (s *ServiceImpl) RetrieveParamFloat(
+	ctx context.Context,
+	name string,
 
-func (s *ServiceImpl) RetrieveParamFloat(ctx context.Context, name string) (*RetrieveParamFloatResponse, error) {
-	request := &RetrieveParamFloatRequest{}
-	request.Name = name
+) (*RetrieveParamFloatResponse, error) {
+	request := &RetrieveParamFloatRequest{
+		Name: name,
+	}
 	response, err := s.Client.RetrieveParamFloat(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Provide a float parameter.
+ProvideParamFloat Provide a float parameter.
 
-   If the type is wrong, the result will be `WRONG_TYPE`.
-
-   Parameters
-   ----------
-   name string
-
-   value float32
-
-
+	If the type is wrong, the result will be `WRONG_TYPE`.
 */
+func (s *ServiceImpl) ProvideParamFloat(
+	ctx context.Context,
+	name string,
+	value float32,
 
-func (s *ServiceImpl) ProvideParamFloat(ctx context.Context, name string, value float32) (*ProvideParamFloatResponse, error) {
-
-	request := &ProvideParamFloatRequest{}
-	request.Name = name
-	request.Value = value
+) (*ProvideParamFloatResponse, error) {
+	request := &ProvideParamFloatRequest{
+		Name:  name,
+		Value: value,
+	}
 	response, err := s.Client.ProvideParamFloat(ctx, request)
 	if err != nil {
 		return nil, err
@@ -124,53 +98,40 @@ func (s *ServiceImpl) ProvideParamFloat(ctx context.Context, name string, value 
 }
 
 /*
-   Retrieve a custom parameter.
+RetrieveParamCustom Retrieve a custom parameter.
 
-   If the type is wrong, the result will be `WRONG_TYPE`.
-
-   Parameters
-   ----------
-   name string
-
-   Returns
-   -------
-   False
-   Value : string
-        Value of the requested parameter
-
-
+	If the type is wrong, the result will be `WRONG_TYPE`.
 */
+func (s *ServiceImpl) RetrieveParamCustom(
+	ctx context.Context,
+	name string,
 
-func (s *ServiceImpl) RetrieveParamCustom(ctx context.Context, name string) (*RetrieveParamCustomResponse, error) {
-	request := &RetrieveParamCustomRequest{}
-	request.Name = name
+) (*RetrieveParamCustomResponse, error) {
+	request := &RetrieveParamCustomRequest{
+		Name: name,
+	}
 	response, err := s.Client.RetrieveParamCustom(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Provide a custom parameter.
+ProvideParamCustom Provide a custom parameter.
 
-   If the type is wrong, the result will be `WRONG_TYPE`.
-
-   Parameters
-   ----------
-   name string
-
-   value string
-
-
+	If the type is wrong, the result will be `WRONG_TYPE`.
 */
+func (s *ServiceImpl) ProvideParamCustom(
+	ctx context.Context,
+	name string,
+	value string,
 
-func (s *ServiceImpl) ProvideParamCustom(ctx context.Context, name string, value string) (*ProvideParamCustomResponse, error) {
-
-	request := &ProvideParamCustomRequest{}
-	request.Name = name
-	request.Value = value
+) (*ProvideParamCustomResponse, error) {
+	request := &ProvideParamCustomRequest{
+		Name:  name,
+		Value: value,
+	}
 	response, err := s.Client.ProvideParamCustom(ctx, request)
 	if err != nil {
 		return nil, err
@@ -179,36 +140,27 @@ func (s *ServiceImpl) ProvideParamCustom(ctx context.Context, name string, value
 }
 
 /*
-   Retrieve all parameters.
-
-
-
-   Returns
-   -------
-   False
-   Params : AllParams
-        Collection of all parameters
-
-
+RetrieveAllParams Retrieve all parameters.
 */
+func (s *ServiceImpl) RetrieveAllParams(
+	ctx context.Context,
 
-func (s *ServiceImpl) RetrieveAllParams(ctx context.Context) (*RetrieveAllParamsResponse, error) {
+) (*RetrieveAllParamsResponse, error) {
 	request := &RetrieveAllParamsRequest{}
 	response, err := s.Client.RetrieveAllParams(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Subscribe to changed int param.
-
-
+ChangedParamInt Subscribe to changed int param.
 */
+func (a *ServiceImpl) ChangedParamInt(
+	ctx context.Context,
 
-func (a *ServiceImpl) ChangedParamInt(ctx context.Context) (<-chan *IntParam, error) {
+) (<-chan *IntParam, error) {
 	ch := make(chan *IntParam)
 	request := &SubscribeChangedParamIntRequest{}
 	stream, err := a.Client.SubscribeChangedParamInt(ctx, request)
@@ -228,7 +180,6 @@ func (a *ServiceImpl) ChangedParamInt(ctx context.Context) (<-chan *IntParam, er
 					return
 				}
 				log.Fatalf("Unable to receive ChangedParamInt messages, err: %v", err)
-				break
 			}
 			ch <- m.GetParam()
 		}
@@ -237,12 +188,12 @@ func (a *ServiceImpl) ChangedParamInt(ctx context.Context) (<-chan *IntParam, er
 }
 
 /*
-   Subscribe to changed float param.
-
-
+ChangedParamFloat Subscribe to changed float param.
 */
+func (a *ServiceImpl) ChangedParamFloat(
+	ctx context.Context,
 
-func (a *ServiceImpl) ChangedParamFloat(ctx context.Context) (<-chan *FloatParam, error) {
+) (<-chan *FloatParam, error) {
 	ch := make(chan *FloatParam)
 	request := &SubscribeChangedParamFloatRequest{}
 	stream, err := a.Client.SubscribeChangedParamFloat(ctx, request)
@@ -262,7 +213,6 @@ func (a *ServiceImpl) ChangedParamFloat(ctx context.Context) (<-chan *FloatParam
 					return
 				}
 				log.Fatalf("Unable to receive ChangedParamFloat messages, err: %v", err)
-				break
 			}
 			ch <- m.GetParam()
 		}
@@ -271,12 +221,12 @@ func (a *ServiceImpl) ChangedParamFloat(ctx context.Context) (<-chan *FloatParam
 }
 
 /*
-   Subscribe to changed custom param.
-
-
+ChangedParamCustom Subscribe to changed custom param.
 */
+func (a *ServiceImpl) ChangedParamCustom(
+	ctx context.Context,
 
-func (a *ServiceImpl) ChangedParamCustom(ctx context.Context) (<-chan *CustomParam, error) {
+) (<-chan *CustomParam, error) {
 	ch := make(chan *CustomParam)
 	request := &SubscribeChangedParamCustomRequest{}
 	stream, err := a.Client.SubscribeChangedParamCustom(ctx, request)
@@ -296,7 +246,6 @@ func (a *ServiceImpl) ChangedParamCustom(ctx context.Context) (<-chan *CustomPar
 					return
 				}
 				log.Fatalf("Unable to receive ChangedParamCustom messages, err: %v", err)
-				break
 			}
 			ch <- m.GetParam()
 		}

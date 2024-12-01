@@ -9,27 +9,22 @@ type ServiceImpl struct {
 }
 
 /*
-   Injects a failure.
-
-   Parameters
-   ----------
-   failureUnit *FailureUnit
-
-
-   failureType *FailureType
-
-
-   instance int32
-
-
+Inject Injects a failure.
 */
+func (s *ServiceImpl) Inject(
+	ctx context.Context,
+	failureUnit *FailureUnit,
 
-func (s *ServiceImpl) Inject(ctx context.Context, failureUnit *FailureUnit, failureType *FailureType, instance int32) (*InjectResponse, error) {
+	failureType *FailureType,
 
-	request := &InjectRequest{}
-	request.FailureUnit = *failureUnit
-	request.FailureType = *failureType
-	request.Instance = instance
+	instance int32,
+
+) (*InjectResponse, error) {
+	request := &InjectRequest{
+		FailureUnit: *failureUnit,
+		FailureType: *failureType,
+		Instance:    instance,
+	}
 	response, err := s.Client.Inject(ctx, request)
 	if err != nil {
 		return nil, err

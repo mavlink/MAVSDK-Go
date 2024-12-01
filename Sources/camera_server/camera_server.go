@@ -6,7 +6,7 @@ import (
 	"log"
 
 	codes "google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,21 +14,16 @@ type ServiceImpl struct {
 }
 
 /*
-   Sets the camera information. This must be called as soon as the camera server is created.
-
-   Parameters
-   ----------
-   information *Information
-
-
-
+SetInformation Sets the camera information. This must be called as soon as the camera server is created.
 */
+func (s *ServiceImpl) SetInformation(
+	ctx context.Context,
+	information *Information,
 
-func (s *ServiceImpl) SetInformation(ctx context.Context, information *Information) (*SetInformationResponse, error) {
-
-	request := &SetInformationRequest{}
-	request.Information = information
-
+) (*SetInformationResponse, error) {
+	request := &SetInformationRequest{
+		Information: information,
+	}
 	response, err := s.Client.SetInformation(ctx, request)
 	if err != nil {
 		return nil, err
@@ -37,21 +32,16 @@ func (s *ServiceImpl) SetInformation(ctx context.Context, information *Informati
 }
 
 /*
-   Sets video streaming settings.
-
-   Parameters
-   ----------
-   videoStreaming *VideoStreaming
-
-
-
+SetVideoStreaming Sets video streaming settings.
 */
+func (s *ServiceImpl) SetVideoStreaming(
+	ctx context.Context,
+	videoStreaming *VideoStreaming,
 
-func (s *ServiceImpl) SetVideoStreaming(ctx context.Context, videoStreaming *VideoStreaming) (*SetVideoStreamingResponse, error) {
-
-	request := &SetVideoStreamingRequest{}
-	request.VideoStreaming = videoStreaming
-
+) (*SetVideoStreamingResponse, error) {
+	request := &SetVideoStreamingRequest{
+		VideoStreaming: videoStreaming,
+	}
 	response, err := s.Client.SetVideoStreaming(ctx, request)
 	if err != nil {
 		return nil, err
@@ -60,19 +50,16 @@ func (s *ServiceImpl) SetVideoStreaming(ctx context.Context, videoStreaming *Vid
 }
 
 /*
-   Sets image capture in progress status flags. This should be set to true when the camera is busy taking a photo and false when it is done.
-
-   Parameters
-   ----------
-   inProgress bool
-
-
+SetInProgress Sets image capture in progress status flags. This should be set to true when the camera is busy taking a photo and false when it is done.
 */
+func (s *ServiceImpl) SetInProgress(
+	ctx context.Context,
+	inProgress bool,
 
-func (s *ServiceImpl) SetInProgress(ctx context.Context, inProgress bool) (*SetInProgressResponse, error) {
-
-	request := &SetInProgressRequest{}
-	request.InProgress = inProgress
+) (*SetInProgressResponse, error) {
+	request := &SetInProgressRequest{
+		InProgress: inProgress,
+	}
 	response, err := s.Client.SetInProgress(ctx, request)
 	if err != nil {
 		return nil, err
@@ -81,12 +68,12 @@ func (s *ServiceImpl) SetInProgress(ctx context.Context, inProgress bool) (*SetI
 }
 
 /*
-   Subscribe to image capture requests. Each request received should respond to using RespondTakePhoto.
-
-
+TakePhoto Subscribe to image capture requests. Each request received should respond to using RespondTakePhoto.
 */
+func (a *ServiceImpl) TakePhoto(
+	ctx context.Context,
 
-func (a *ServiceImpl) TakePhoto(ctx context.Context) (<-chan int32, error) {
+) (<-chan int32, error) {
 	ch := make(chan int32)
 	request := &SubscribeTakePhotoRequest{}
 	stream, err := a.Client.SubscribeTakePhoto(ctx, request)
@@ -106,7 +93,6 @@ func (a *ServiceImpl) TakePhoto(ctx context.Context) (<-chan int32, error) {
 					return
 				}
 				log.Fatalf("Unable to receive TakePhoto messages, err: %v", err)
-				break
 			}
 			ch <- m.GetIndex()
 		}
@@ -115,25 +101,19 @@ func (a *ServiceImpl) TakePhoto(ctx context.Context) (<-chan int32, error) {
 }
 
 /*
-   Respond to an image capture request from SubscribeTakePhoto.
-
-   Parameters
-   ----------
-   takePhotoFeedback *CameraFeedback
-
-
-   captureInfo *CaptureInfo
-
-
-
+RespondTakePhoto Respond to an image capture request from SubscribeTakePhoto.
 */
+func (s *ServiceImpl) RespondTakePhoto(
+	ctx context.Context,
+	takePhotoFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondTakePhoto(ctx context.Context, takePhotoFeedback *CameraFeedback, captureInfo *CaptureInfo) (*RespondTakePhotoResponse, error) {
+	captureInfo *CaptureInfo,
 
-	request := &RespondTakePhotoRequest{}
-	request.TakePhotoFeedback = *takePhotoFeedback
-	request.CaptureInfo = captureInfo
-
+) (*RespondTakePhotoResponse, error) {
+	request := &RespondTakePhotoRequest{
+		TakePhotoFeedback: *takePhotoFeedback,
+		CaptureInfo:       captureInfo,
+	}
 	response, err := s.Client.RespondTakePhoto(ctx, request)
 	if err != nil {
 		return nil, err
@@ -142,12 +122,12 @@ func (s *ServiceImpl) RespondTakePhoto(ctx context.Context, takePhotoFeedback *C
 }
 
 /*
-   Subscribe to start video requests. Each request received should respond to using RespondStartVideo
-
-
+StartVideo Subscribe to start video requests. Each request received should respond to using RespondStartVideo
 */
+func (a *ServiceImpl) StartVideo(
+	ctx context.Context,
 
-func (a *ServiceImpl) StartVideo(ctx context.Context) (<-chan int32, error) {
+) (<-chan int32, error) {
 	ch := make(chan int32)
 	request := &SubscribeStartVideoRequest{}
 	stream, err := a.Client.SubscribeStartVideo(ctx, request)
@@ -167,7 +147,6 @@ func (a *ServiceImpl) StartVideo(ctx context.Context) (<-chan int32, error) {
 					return
 				}
 				log.Fatalf("Unable to receive StartVideo messages, err: %v", err)
-				break
 			}
 			ch <- m.GetStreamId()
 		}
@@ -176,20 +155,16 @@ func (a *ServiceImpl) StartVideo(ctx context.Context) (<-chan int32, error) {
 }
 
 /*
-   Subscribe to stop video requests. Each request received should respond using StopVideoResponse
-
-   Parameters
-   ----------
-   startVideoFeedback *CameraFeedback
-
-
-
+RespondStartVideo Subscribe to stop video requests. Each request received should respond using StopVideoResponse
 */
+func (s *ServiceImpl) RespondStartVideo(
+	ctx context.Context,
+	startVideoFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondStartVideo(ctx context.Context, startVideoFeedback *CameraFeedback) (*RespondStartVideoResponse, error) {
-
-	request := &RespondStartVideoRequest{}
-	request.StartVideoFeedback = *startVideoFeedback
+) (*RespondStartVideoResponse, error) {
+	request := &RespondStartVideoRequest{
+		StartVideoFeedback: *startVideoFeedback,
+	}
 	response, err := s.Client.RespondStartVideo(ctx, request)
 	if err != nil {
 		return nil, err
@@ -198,12 +173,12 @@ func (s *ServiceImpl) RespondStartVideo(ctx context.Context, startVideoFeedback 
 }
 
 /*
-   Subscribe to stop video requests. Each request received should response to using RespondStopVideo
-
-
+StopVideo Subscribe to stop video requests. Each request received should response to using RespondStopVideo
 */
+func (a *ServiceImpl) StopVideo(
+	ctx context.Context,
 
-func (a *ServiceImpl) StopVideo(ctx context.Context) (<-chan int32, error) {
+) (<-chan int32, error) {
 	ch := make(chan int32)
 	request := &SubscribeStopVideoRequest{}
 	stream, err := a.Client.SubscribeStopVideo(ctx, request)
@@ -223,7 +198,6 @@ func (a *ServiceImpl) StopVideo(ctx context.Context) (<-chan int32, error) {
 					return
 				}
 				log.Fatalf("Unable to receive StopVideo messages, err: %v", err)
-				break
 			}
 			ch <- m.GetStreamId()
 		}
@@ -232,20 +206,16 @@ func (a *ServiceImpl) StopVideo(ctx context.Context) (<-chan int32, error) {
 }
 
 /*
-   Respond to stop video request from SubscribeStopVideo.
-
-   Parameters
-   ----------
-   stopVideoFeedback *CameraFeedback
-
-
-
+RespondStopVideo Respond to stop video request from SubscribeStopVideo.
 */
+func (s *ServiceImpl) RespondStopVideo(
+	ctx context.Context,
+	stopVideoFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondStopVideo(ctx context.Context, stopVideoFeedback *CameraFeedback) (*RespondStopVideoResponse, error) {
-
-	request := &RespondStopVideoRequest{}
-	request.StopVideoFeedback = *stopVideoFeedback
+) (*RespondStopVideoResponse, error) {
+	request := &RespondStopVideoRequest{
+		StopVideoFeedback: *stopVideoFeedback,
+	}
 	response, err := s.Client.RespondStopVideo(ctx, request)
 	if err != nil {
 		return nil, err
@@ -254,12 +224,12 @@ func (s *ServiceImpl) RespondStopVideo(ctx context.Context, stopVideoFeedback *C
 }
 
 /*
-   Subscribe to start video streaming requests. Each request received should response to using RespondStartVideoStreaming
-
-
+StartVideoStreaming Subscribe to start video streaming requests. Each request received should response to using RespondStartVideoStreaming
 */
+func (a *ServiceImpl) StartVideoStreaming(
+	ctx context.Context,
 
-func (a *ServiceImpl) StartVideoStreaming(ctx context.Context) (<-chan int32, error) {
+) (<-chan int32, error) {
 	ch := make(chan int32)
 	request := &SubscribeStartVideoStreamingRequest{}
 	stream, err := a.Client.SubscribeStartVideoStreaming(ctx, request)
@@ -279,7 +249,6 @@ func (a *ServiceImpl) StartVideoStreaming(ctx context.Context) (<-chan int32, er
 					return
 				}
 				log.Fatalf("Unable to receive StartVideoStreaming messages, err: %v", err)
-				break
 			}
 			ch <- m.GetStreamId()
 		}
@@ -288,20 +257,16 @@ func (a *ServiceImpl) StartVideoStreaming(ctx context.Context) (<-chan int32, er
 }
 
 /*
-   Respond to start video streaming from SubscribeStartVideoStreaming.
-
-   Parameters
-   ----------
-   startVideoStreamingFeedback *CameraFeedback
-
-
-
+RespondStartVideoStreaming Respond to start video streaming from SubscribeStartVideoStreaming.
 */
+func (s *ServiceImpl) RespondStartVideoStreaming(
+	ctx context.Context,
+	startVideoStreamingFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondStartVideoStreaming(ctx context.Context, startVideoStreamingFeedback *CameraFeedback) (*RespondStartVideoStreamingResponse, error) {
-
-	request := &RespondStartVideoStreamingRequest{}
-	request.StartVideoStreamingFeedback = *startVideoStreamingFeedback
+) (*RespondStartVideoStreamingResponse, error) {
+	request := &RespondStartVideoStreamingRequest{
+		StartVideoStreamingFeedback: *startVideoStreamingFeedback,
+	}
 	response, err := s.Client.RespondStartVideoStreaming(ctx, request)
 	if err != nil {
 		return nil, err
@@ -310,12 +275,12 @@ func (s *ServiceImpl) RespondStartVideoStreaming(ctx context.Context, startVideo
 }
 
 /*
-   Subscribe to stop video streaming requests. Each request received should response to using RespondStopVideoStreaming
-
-
+StopVideoStreaming Subscribe to stop video streaming requests. Each request received should response to using RespondStopVideoStreaming
 */
+func (a *ServiceImpl) StopVideoStreaming(
+	ctx context.Context,
 
-func (a *ServiceImpl) StopVideoStreaming(ctx context.Context) (<-chan int32, error) {
+) (<-chan int32, error) {
 	ch := make(chan int32)
 	request := &SubscribeStopVideoStreamingRequest{}
 	stream, err := a.Client.SubscribeStopVideoStreaming(ctx, request)
@@ -335,7 +300,6 @@ func (a *ServiceImpl) StopVideoStreaming(ctx context.Context) (<-chan int32, err
 					return
 				}
 				log.Fatalf("Unable to receive StopVideoStreaming messages, err: %v", err)
-				break
 			}
 			ch <- m.GetStreamId()
 		}
@@ -344,20 +308,16 @@ func (a *ServiceImpl) StopVideoStreaming(ctx context.Context) (<-chan int32, err
 }
 
 /*
-   Respond to stop video streaming from SubscribeStopVideoStreaming.
-
-   Parameters
-   ----------
-   stopVideoStreamingFeedback *CameraFeedback
-
-
-
+RespondStopVideoStreaming Respond to stop video streaming from SubscribeStopVideoStreaming.
 */
+func (s *ServiceImpl) RespondStopVideoStreaming(
+	ctx context.Context,
+	stopVideoStreamingFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondStopVideoStreaming(ctx context.Context, stopVideoStreamingFeedback *CameraFeedback) (*RespondStopVideoStreamingResponse, error) {
-
-	request := &RespondStopVideoStreamingRequest{}
-	request.StopVideoStreamingFeedback = *stopVideoStreamingFeedback
+) (*RespondStopVideoStreamingResponse, error) {
+	request := &RespondStopVideoStreamingRequest{
+		StopVideoStreamingFeedback: *stopVideoStreamingFeedback,
+	}
 	response, err := s.Client.RespondStopVideoStreaming(ctx, request)
 	if err != nil {
 		return nil, err
@@ -366,12 +326,12 @@ func (s *ServiceImpl) RespondStopVideoStreaming(ctx context.Context, stopVideoSt
 }
 
 /*
-   Subscribe to set camera mode requests. Each request received should response to using RespondSetMode
-
-
+SetMode Subscribe to set camera mode requests. Each request received should response to using RespondSetMode
 */
+func (a *ServiceImpl) SetMode(
+	ctx context.Context,
 
-func (a *ServiceImpl) SetMode(ctx context.Context) (<-chan Mode, error) {
+) (<-chan Mode, error) {
 	ch := make(chan Mode)
 	request := &SubscribeSetModeRequest{}
 	stream, err := a.Client.SubscribeSetMode(ctx, request)
@@ -391,7 +351,6 @@ func (a *ServiceImpl) SetMode(ctx context.Context) (<-chan Mode, error) {
 					return
 				}
 				log.Fatalf("Unable to receive SetMode messages, err: %v", err)
-				break
 			}
 			ch <- m.GetMode()
 		}
@@ -400,20 +359,16 @@ func (a *ServiceImpl) SetMode(ctx context.Context) (<-chan Mode, error) {
 }
 
 /*
-   Respond to set camera mode from SubscribeSetMode.
-
-   Parameters
-   ----------
-   setModeFeedback *CameraFeedback
-
-
-
+RespondSetMode Respond to set camera mode from SubscribeSetMode.
 */
+func (s *ServiceImpl) RespondSetMode(
+	ctx context.Context,
+	setModeFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondSetMode(ctx context.Context, setModeFeedback *CameraFeedback) (*RespondSetModeResponse, error) {
-
-	request := &RespondSetModeRequest{}
-	request.SetModeFeedback = *setModeFeedback
+) (*RespondSetModeResponse, error) {
+	request := &RespondSetModeRequest{
+		SetModeFeedback: *setModeFeedback,
+	}
 	response, err := s.Client.RespondSetMode(ctx, request)
 	if err != nil {
 		return nil, err
@@ -422,12 +377,12 @@ func (s *ServiceImpl) RespondSetMode(ctx context.Context, setModeFeedback *Camer
 }
 
 /*
-   Subscribe to camera storage information requests. Each request received should response to using RespondStorageInformation
-
-
+StorageInformation Subscribe to camera storage information requests. Each request received should response to using RespondStorageInformation
 */
+func (a *ServiceImpl) StorageInformation(
+	ctx context.Context,
 
-func (a *ServiceImpl) StorageInformation(ctx context.Context) (<-chan int32, error) {
+) (<-chan int32, error) {
 	ch := make(chan int32)
 	request := &SubscribeStorageInformationRequest{}
 	stream, err := a.Client.SubscribeStorageInformation(ctx, request)
@@ -447,7 +402,6 @@ func (a *ServiceImpl) StorageInformation(ctx context.Context) (<-chan int32, err
 					return
 				}
 				log.Fatalf("Unable to receive StorageInformation messages, err: %v", err)
-				break
 			}
 			ch <- m.GetStorageId()
 		}
@@ -456,25 +410,19 @@ func (a *ServiceImpl) StorageInformation(ctx context.Context) (<-chan int32, err
 }
 
 /*
-   Respond to camera storage information from SubscribeStorageInformation.
-
-   Parameters
-   ----------
-   storageInformationFeedback *CameraFeedback
-
-
-   storageInformation *StorageInformation
-
-
-
+RespondStorageInformation Respond to camera storage information from SubscribeStorageInformation.
 */
+func (s *ServiceImpl) RespondStorageInformation(
+	ctx context.Context,
+	storageInformationFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondStorageInformation(ctx context.Context, storageInformationFeedback *CameraFeedback, storageInformation *StorageInformation) (*RespondStorageInformationResponse, error) {
+	storageInformation *StorageInformation,
 
-	request := &RespondStorageInformationRequest{}
-	request.StorageInformationFeedback = *storageInformationFeedback
-	request.StorageInformation = storageInformation
-
+) (*RespondStorageInformationResponse, error) {
+	request := &RespondStorageInformationRequest{
+		StorageInformationFeedback: *storageInformationFeedback,
+		StorageInformation:         storageInformation,
+	}
 	response, err := s.Client.RespondStorageInformation(ctx, request)
 	if err != nil {
 		return nil, err
@@ -483,12 +431,12 @@ func (s *ServiceImpl) RespondStorageInformation(ctx context.Context, storageInfo
 }
 
 /*
-   Subscribe to camera capture status requests. Each request received should response to using RespondCaptureStatus
-
-
+CaptureStatus Subscribe to camera capture status requests. Each request received should response to using RespondCaptureStatus
 */
+func (a *ServiceImpl) CaptureStatus(
+	ctx context.Context,
 
-func (a *ServiceImpl) CaptureStatus(ctx context.Context) (<-chan int32, error) {
+) (<-chan int32, error) {
 	ch := make(chan int32)
 	request := &SubscribeCaptureStatusRequest{}
 	stream, err := a.Client.SubscribeCaptureStatus(ctx, request)
@@ -508,7 +456,6 @@ func (a *ServiceImpl) CaptureStatus(ctx context.Context) (<-chan int32, error) {
 					return
 				}
 				log.Fatalf("Unable to receive CaptureStatus messages, err: %v", err)
-				break
 			}
 			ch <- m.GetReserved()
 		}
@@ -517,25 +464,19 @@ func (a *ServiceImpl) CaptureStatus(ctx context.Context) (<-chan int32, error) {
 }
 
 /*
-   Respond to camera capture status from SubscribeCaptureStatus.
-
-   Parameters
-   ----------
-   captureStatusFeedback *CameraFeedback
-
-
-   captureStatus *CaptureStatus
-
-
-
+RespondCaptureStatus Respond to camera capture status from SubscribeCaptureStatus.
 */
+func (s *ServiceImpl) RespondCaptureStatus(
+	ctx context.Context,
+	captureStatusFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondCaptureStatus(ctx context.Context, captureStatusFeedback *CameraFeedback, captureStatus *CaptureStatus) (*RespondCaptureStatusResponse, error) {
+	captureStatus *CaptureStatus,
 
-	request := &RespondCaptureStatusRequest{}
-	request.CaptureStatusFeedback = *captureStatusFeedback
-	request.CaptureStatus = captureStatus
-
+) (*RespondCaptureStatusResponse, error) {
+	request := &RespondCaptureStatusRequest{
+		CaptureStatusFeedback: *captureStatusFeedback,
+		CaptureStatus:         captureStatus,
+	}
 	response, err := s.Client.RespondCaptureStatus(ctx, request)
 	if err != nil {
 		return nil, err
@@ -544,12 +485,12 @@ func (s *ServiceImpl) RespondCaptureStatus(ctx context.Context, captureStatusFee
 }
 
 /*
-   Subscribe to format storage requests. Each request received should response to using RespondFormatStorage
-
-
+FormatStorage Subscribe to format storage requests. Each request received should response to using RespondFormatStorage
 */
+func (a *ServiceImpl) FormatStorage(
+	ctx context.Context,
 
-func (a *ServiceImpl) FormatStorage(ctx context.Context) (<-chan int32, error) {
+) (<-chan int32, error) {
 	ch := make(chan int32)
 	request := &SubscribeFormatStorageRequest{}
 	stream, err := a.Client.SubscribeFormatStorage(ctx, request)
@@ -569,7 +510,6 @@ func (a *ServiceImpl) FormatStorage(ctx context.Context) (<-chan int32, error) {
 					return
 				}
 				log.Fatalf("Unable to receive FormatStorage messages, err: %v", err)
-				break
 			}
 			ch <- m.GetStorageId()
 		}
@@ -578,20 +518,16 @@ func (a *ServiceImpl) FormatStorage(ctx context.Context) (<-chan int32, error) {
 }
 
 /*
-   Respond to format storage from SubscribeFormatStorage.
-
-   Parameters
-   ----------
-   formatStorageFeedback *CameraFeedback
-
-
-
+RespondFormatStorage Respond to format storage from SubscribeFormatStorage.
 */
+func (s *ServiceImpl) RespondFormatStorage(
+	ctx context.Context,
+	formatStorageFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondFormatStorage(ctx context.Context, formatStorageFeedback *CameraFeedback) (*RespondFormatStorageResponse, error) {
-
-	request := &RespondFormatStorageRequest{}
-	request.FormatStorageFeedback = *formatStorageFeedback
+) (*RespondFormatStorageResponse, error) {
+	request := &RespondFormatStorageRequest{
+		FormatStorageFeedback: *formatStorageFeedback,
+	}
 	response, err := s.Client.RespondFormatStorage(ctx, request)
 	if err != nil {
 		return nil, err
@@ -600,12 +536,12 @@ func (s *ServiceImpl) RespondFormatStorage(ctx context.Context, formatStorageFee
 }
 
 /*
-   Subscribe to reset settings requests. Each request received should response to using RespondResetSettings
-
-
+ResetSettings Subscribe to reset settings requests. Each request received should response to using RespondResetSettings
 */
+func (a *ServiceImpl) ResetSettings(
+	ctx context.Context,
 
-func (a *ServiceImpl) ResetSettings(ctx context.Context) (<-chan int32, error) {
+) (<-chan int32, error) {
 	ch := make(chan int32)
 	request := &SubscribeResetSettingsRequest{}
 	stream, err := a.Client.SubscribeResetSettings(ctx, request)
@@ -625,7 +561,6 @@ func (a *ServiceImpl) ResetSettings(ctx context.Context) (<-chan int32, error) {
 					return
 				}
 				log.Fatalf("Unable to receive ResetSettings messages, err: %v", err)
-				break
 			}
 			ch <- m.GetReserved()
 		}
@@ -634,20 +569,16 @@ func (a *ServiceImpl) ResetSettings(ctx context.Context) (<-chan int32, error) {
 }
 
 /*
-   Respond to reset settings from SubscribeResetSettings.
-
-   Parameters
-   ----------
-   resetSettingsFeedback *CameraFeedback
-
-
-
+RespondResetSettings Respond to reset settings from SubscribeResetSettings.
 */
+func (s *ServiceImpl) RespondResetSettings(
+	ctx context.Context,
+	resetSettingsFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondResetSettings(ctx context.Context, resetSettingsFeedback *CameraFeedback) (*RespondResetSettingsResponse, error) {
-
-	request := &RespondResetSettingsRequest{}
-	request.ResetSettingsFeedback = *resetSettingsFeedback
+) (*RespondResetSettingsResponse, error) {
+	request := &RespondResetSettingsRequest{
+		ResetSettingsFeedback: *resetSettingsFeedback,
+	}
 	response, err := s.Client.RespondResetSettings(ctx, request)
 	if err != nil {
 		return nil, err
@@ -656,12 +587,12 @@ func (s *ServiceImpl) RespondResetSettings(ctx context.Context, resetSettingsFee
 }
 
 /*
-   Subscribe to zoom in start command
-
-
+ZoomInStart Subscribe to zoom in start command
 */
+func (a *ServiceImpl) ZoomInStart(
+	ctx context.Context,
 
-func (a *ServiceImpl) ZoomInStart(ctx context.Context) (<-chan int32, error) {
+) (<-chan int32, error) {
 	ch := make(chan int32)
 	request := &SubscribeZoomInStartRequest{}
 	stream, err := a.Client.SubscribeZoomInStart(ctx, request)
@@ -681,7 +612,6 @@ func (a *ServiceImpl) ZoomInStart(ctx context.Context) (<-chan int32, error) {
 					return
 				}
 				log.Fatalf("Unable to receive ZoomInStart messages, err: %v", err)
-				break
 			}
 			ch <- m.GetReserved()
 		}
@@ -690,20 +620,16 @@ func (a *ServiceImpl) ZoomInStart(ctx context.Context) (<-chan int32, error) {
 }
 
 /*
-   Respond to zoom in start.
-
-   Parameters
-   ----------
-   zoomInStartFeedback *CameraFeedback
-
-
-
+RespondZoomInStart Respond to zoom in start.
 */
+func (s *ServiceImpl) RespondZoomInStart(
+	ctx context.Context,
+	zoomInStartFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondZoomInStart(ctx context.Context, zoomInStartFeedback *CameraFeedback) (*RespondZoomInStartResponse, error) {
-
-	request := &RespondZoomInStartRequest{}
-	request.ZoomInStartFeedback = *zoomInStartFeedback
+) (*RespondZoomInStartResponse, error) {
+	request := &RespondZoomInStartRequest{
+		ZoomInStartFeedback: *zoomInStartFeedback,
+	}
 	response, err := s.Client.RespondZoomInStart(ctx, request)
 	if err != nil {
 		return nil, err
@@ -712,12 +638,12 @@ func (s *ServiceImpl) RespondZoomInStart(ctx context.Context, zoomInStartFeedbac
 }
 
 /*
-   Subscribe to zoom out start command
-
-
+ZoomOutStart Subscribe to zoom out start command
 */
+func (a *ServiceImpl) ZoomOutStart(
+	ctx context.Context,
 
-func (a *ServiceImpl) ZoomOutStart(ctx context.Context) (<-chan int32, error) {
+) (<-chan int32, error) {
 	ch := make(chan int32)
 	request := &SubscribeZoomOutStartRequest{}
 	stream, err := a.Client.SubscribeZoomOutStart(ctx, request)
@@ -737,7 +663,6 @@ func (a *ServiceImpl) ZoomOutStart(ctx context.Context) (<-chan int32, error) {
 					return
 				}
 				log.Fatalf("Unable to receive ZoomOutStart messages, err: %v", err)
-				break
 			}
 			ch <- m.GetReserved()
 		}
@@ -746,20 +671,16 @@ func (a *ServiceImpl) ZoomOutStart(ctx context.Context) (<-chan int32, error) {
 }
 
 /*
-   Respond to zoom out start.
-
-   Parameters
-   ----------
-   zoomOutStartFeedback *CameraFeedback
-
-
-
+RespondZoomOutStart Respond to zoom out start.
 */
+func (s *ServiceImpl) RespondZoomOutStart(
+	ctx context.Context,
+	zoomOutStartFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondZoomOutStart(ctx context.Context, zoomOutStartFeedback *CameraFeedback) (*RespondZoomOutStartResponse, error) {
-
-	request := &RespondZoomOutStartRequest{}
-	request.ZoomOutStartFeedback = *zoomOutStartFeedback
+) (*RespondZoomOutStartResponse, error) {
+	request := &RespondZoomOutStartRequest{
+		ZoomOutStartFeedback: *zoomOutStartFeedback,
+	}
 	response, err := s.Client.RespondZoomOutStart(ctx, request)
 	if err != nil {
 		return nil, err
@@ -768,12 +689,12 @@ func (s *ServiceImpl) RespondZoomOutStart(ctx context.Context, zoomOutStartFeedb
 }
 
 /*
-   Subscribe to zoom stop command
-
-
+ZoomStop Subscribe to zoom stop command
 */
+func (a *ServiceImpl) ZoomStop(
+	ctx context.Context,
 
-func (a *ServiceImpl) ZoomStop(ctx context.Context) (<-chan int32, error) {
+) (<-chan int32, error) {
 	ch := make(chan int32)
 	request := &SubscribeZoomStopRequest{}
 	stream, err := a.Client.SubscribeZoomStop(ctx, request)
@@ -793,7 +714,6 @@ func (a *ServiceImpl) ZoomStop(ctx context.Context) (<-chan int32, error) {
 					return
 				}
 				log.Fatalf("Unable to receive ZoomStop messages, err: %v", err)
-				break
 			}
 			ch <- m.GetReserved()
 		}
@@ -802,20 +722,16 @@ func (a *ServiceImpl) ZoomStop(ctx context.Context) (<-chan int32, error) {
 }
 
 /*
-   Respond to zoom stop.
-
-   Parameters
-   ----------
-   zoomStopFeedback *CameraFeedback
-
-
-
+RespondZoomStop Respond to zoom stop.
 */
+func (s *ServiceImpl) RespondZoomStop(
+	ctx context.Context,
+	zoomStopFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondZoomStop(ctx context.Context, zoomStopFeedback *CameraFeedback) (*RespondZoomStopResponse, error) {
-
-	request := &RespondZoomStopRequest{}
-	request.ZoomStopFeedback = *zoomStopFeedback
+) (*RespondZoomStopResponse, error) {
+	request := &RespondZoomStopRequest{
+		ZoomStopFeedback: *zoomStopFeedback,
+	}
 	response, err := s.Client.RespondZoomStop(ctx, request)
 	if err != nil {
 		return nil, err
@@ -824,12 +740,12 @@ func (s *ServiceImpl) RespondZoomStop(ctx context.Context, zoomStopFeedback *Cam
 }
 
 /*
-   Subscribe to zoom range command
-
-
+ZoomRange Subscribe to zoom range command
 */
+func (a *ServiceImpl) ZoomRange(
+	ctx context.Context,
 
-func (a *ServiceImpl) ZoomRange(ctx context.Context) (<-chan float32, error) {
+) (<-chan float32, error) {
 	ch := make(chan float32)
 	request := &SubscribeZoomRangeRequest{}
 	stream, err := a.Client.SubscribeZoomRange(ctx, request)
@@ -849,7 +765,6 @@ func (a *ServiceImpl) ZoomRange(ctx context.Context) (<-chan float32, error) {
 					return
 				}
 				log.Fatalf("Unable to receive ZoomRange messages, err: %v", err)
-				break
 			}
 			ch <- m.GetFactor()
 		}
@@ -858,20 +773,16 @@ func (a *ServiceImpl) ZoomRange(ctx context.Context) (<-chan float32, error) {
 }
 
 /*
-   Respond to zoom range.
-
-   Parameters
-   ----------
-   zoomRangeFeedback *CameraFeedback
-
-
-
+RespondZoomRange Respond to zoom range.
 */
+func (s *ServiceImpl) RespondZoomRange(
+	ctx context.Context,
+	zoomRangeFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondZoomRange(ctx context.Context, zoomRangeFeedback *CameraFeedback) (*RespondZoomRangeResponse, error) {
-
-	request := &RespondZoomRangeRequest{}
-	request.ZoomRangeFeedback = *zoomRangeFeedback
+) (*RespondZoomRangeResponse, error) {
+	request := &RespondZoomRangeRequest{
+		ZoomRangeFeedback: *zoomRangeFeedback,
+	}
 	response, err := s.Client.RespondZoomRange(ctx, request)
 	if err != nil {
 		return nil, err
@@ -880,21 +791,16 @@ func (s *ServiceImpl) RespondZoomRange(ctx context.Context, zoomRangeFeedback *C
 }
 
 /*
-   Set/update the current rectangle tracking status.
-
-   Parameters
-   ----------
-   trackedRectangle *TrackRectangle
-
-
-
+SetTrackingRectangleStatus Set/update the current rectangle tracking status.
 */
+func (s *ServiceImpl) SetTrackingRectangleStatus(
+	ctx context.Context,
+	trackedRectangle *TrackRectangle,
 
-func (s *ServiceImpl) SetTrackingRectangleStatus(ctx context.Context, trackedRectangle *TrackRectangle) (*SetTrackingRectangleStatusResponse, error) {
-
-	request := &SetTrackingRectangleStatusRequest{}
-	request.TrackedRectangle = trackedRectangle
-
+) (*SetTrackingRectangleStatusResponse, error) {
+	request := &SetTrackingRectangleStatusRequest{
+		TrackedRectangle: trackedRectangle,
+	}
 	response, err := s.Client.SetTrackingRectangleStatus(ctx, request)
 	if err != nil {
 		return nil, err
@@ -903,13 +809,12 @@ func (s *ServiceImpl) SetTrackingRectangleStatus(ctx context.Context, trackedRec
 }
 
 /*
-   Set the current tracking status to off.
-
-
+SetTrackingOffStatus Set the current tracking status to off.
 */
+func (s *ServiceImpl) SetTrackingOffStatus(
+	ctx context.Context,
 
-func (s *ServiceImpl) SetTrackingOffStatus(ctx context.Context) (*SetTrackingOffStatusResponse, error) {
-
+) (*SetTrackingOffStatusResponse, error) {
 	request := &SetTrackingOffStatusRequest{}
 	response, err := s.Client.SetTrackingOffStatus(ctx, request)
 	if err != nil {
@@ -919,12 +824,12 @@ func (s *ServiceImpl) SetTrackingOffStatus(ctx context.Context) (*SetTrackingOff
 }
 
 /*
-   Subscribe to incoming tracking point command.
-
-
+TrackingPointCommand Subscribe to incoming tracking point command.
 */
+func (a *ServiceImpl) TrackingPointCommand(
+	ctx context.Context,
 
-func (a *ServiceImpl) TrackingPointCommand(ctx context.Context) (<-chan *TrackPoint, error) {
+) (<-chan *TrackPoint, error) {
 	ch := make(chan *TrackPoint)
 	request := &SubscribeTrackingPointCommandRequest{}
 	stream, err := a.Client.SubscribeTrackingPointCommand(ctx, request)
@@ -944,7 +849,6 @@ func (a *ServiceImpl) TrackingPointCommand(ctx context.Context) (<-chan *TrackPo
 					return
 				}
 				log.Fatalf("Unable to receive TrackingPointCommand messages, err: %v", err)
-				break
 			}
 			ch <- m.GetTrackPoint()
 		}
@@ -953,12 +857,12 @@ func (a *ServiceImpl) TrackingPointCommand(ctx context.Context) (<-chan *TrackPo
 }
 
 /*
-   Subscribe to incoming tracking rectangle command.
-
-
+TrackingRectangleCommand Subscribe to incoming tracking rectangle command.
 */
+func (a *ServiceImpl) TrackingRectangleCommand(
+	ctx context.Context,
 
-func (a *ServiceImpl) TrackingRectangleCommand(ctx context.Context) (<-chan *TrackRectangle, error) {
+) (<-chan *TrackRectangle, error) {
 	ch := make(chan *TrackRectangle)
 	request := &SubscribeTrackingRectangleCommandRequest{}
 	stream, err := a.Client.SubscribeTrackingRectangleCommand(ctx, request)
@@ -978,7 +882,6 @@ func (a *ServiceImpl) TrackingRectangleCommand(ctx context.Context) (<-chan *Tra
 					return
 				}
 				log.Fatalf("Unable to receive TrackingRectangleCommand messages, err: %v", err)
-				break
 			}
 			ch <- m.GetTrackRectangle()
 		}
@@ -987,12 +890,12 @@ func (a *ServiceImpl) TrackingRectangleCommand(ctx context.Context) (<-chan *Tra
 }
 
 /*
-   Subscribe to incoming tracking off command.
-
-
+TrackingOffCommand Subscribe to incoming tracking off command.
 */
+func (a *ServiceImpl) TrackingOffCommand(
+	ctx context.Context,
 
-func (a *ServiceImpl) TrackingOffCommand(ctx context.Context) (<-chan int32, error) {
+) (<-chan int32, error) {
 	ch := make(chan int32)
 	request := &SubscribeTrackingOffCommandRequest{}
 	stream, err := a.Client.SubscribeTrackingOffCommand(ctx, request)
@@ -1012,7 +915,6 @@ func (a *ServiceImpl) TrackingOffCommand(ctx context.Context) (<-chan int32, err
 					return
 				}
 				log.Fatalf("Unable to receive TrackingOffCommand messages, err: %v", err)
-				break
 			}
 			ch <- m.GetDummy()
 		}
@@ -1021,20 +923,16 @@ func (a *ServiceImpl) TrackingOffCommand(ctx context.Context) (<-chan int32, err
 }
 
 /*
-   Respond to an incoming tracking point command.
-
-   Parameters
-   ----------
-   stopVideoFeedback *CameraFeedback
-
-
-
+RespondTrackingPointCommand Respond to an incoming tracking point command.
 */
+func (s *ServiceImpl) RespondTrackingPointCommand(
+	ctx context.Context,
+	stopVideoFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondTrackingPointCommand(ctx context.Context, stopVideoFeedback *CameraFeedback) (*RespondTrackingPointCommandResponse, error) {
-
-	request := &RespondTrackingPointCommandRequest{}
-	request.StopVideoFeedback = *stopVideoFeedback
+) (*RespondTrackingPointCommandResponse, error) {
+	request := &RespondTrackingPointCommandRequest{
+		StopVideoFeedback: *stopVideoFeedback,
+	}
 	response, err := s.Client.RespondTrackingPointCommand(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1043,20 +941,16 @@ func (s *ServiceImpl) RespondTrackingPointCommand(ctx context.Context, stopVideo
 }
 
 /*
-   Respond to an incoming tracking rectangle command.
-
-   Parameters
-   ----------
-   stopVideoFeedback *CameraFeedback
-
-
-
+RespondTrackingRectangleCommand Respond to an incoming tracking rectangle command.
 */
+func (s *ServiceImpl) RespondTrackingRectangleCommand(
+	ctx context.Context,
+	stopVideoFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondTrackingRectangleCommand(ctx context.Context, stopVideoFeedback *CameraFeedback) (*RespondTrackingRectangleCommandResponse, error) {
-
-	request := &RespondTrackingRectangleCommandRequest{}
-	request.StopVideoFeedback = *stopVideoFeedback
+) (*RespondTrackingRectangleCommandResponse, error) {
+	request := &RespondTrackingRectangleCommandRequest{
+		StopVideoFeedback: *stopVideoFeedback,
+	}
 	response, err := s.Client.RespondTrackingRectangleCommand(ctx, request)
 	if err != nil {
 		return nil, err
@@ -1065,20 +959,16 @@ func (s *ServiceImpl) RespondTrackingRectangleCommand(ctx context.Context, stopV
 }
 
 /*
-   Respond to an incoming tracking off command.
-
-   Parameters
-   ----------
-   stopVideoFeedback *CameraFeedback
-
-
-
+RespondTrackingOffCommand Respond to an incoming tracking off command.
 */
+func (s *ServiceImpl) RespondTrackingOffCommand(
+	ctx context.Context,
+	stopVideoFeedback *CameraFeedback,
 
-func (s *ServiceImpl) RespondTrackingOffCommand(ctx context.Context, stopVideoFeedback *CameraFeedback) (*RespondTrackingOffCommandResponse, error) {
-
-	request := &RespondTrackingOffCommandRequest{}
-	request.StopVideoFeedback = *stopVideoFeedback
+) (*RespondTrackingOffCommandResponse, error) {
+	request := &RespondTrackingOffCommandRequest{
+		StopVideoFeedback: *stopVideoFeedback,
+	}
 	response, err := s.Client.RespondTrackingOffCommand(ctx, request)
 	if err != nil {
 		return nil, err

@@ -9,20 +9,16 @@ type ServiceImpl struct {
 }
 
 /*
-   Provide metadata (can only be called once)
-
-   Parameters
-   ----------
-   metadata []*Metadata
-
-
+SetMetadata Provide metadata (can only be called once)
 */
+func (s *ServiceImpl) SetMetadata(
+	ctx context.Context,
+	metadata []*Metadata,
 
-func (s *ServiceImpl) SetMetadata(ctx context.Context, metadata []*Metadata) (*SetMetadataResponse, error) {
-
-	request := &SetMetadataRequest{}
-	request.Metadata = metadata
-
+) (*SetMetadataResponse, error) {
+	request := &SetMetadataRequest{
+		Metadata: metadata,
+	}
 	response, err := s.Client.SetMetadata(ctx, request)
 	if err != nil {
 		return nil, err

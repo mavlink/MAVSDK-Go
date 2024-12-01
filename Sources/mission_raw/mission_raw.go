@@ -6,7 +6,7 @@ import (
 	"log"
 
 	codes "google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,23 +14,19 @@ type ServiceImpl struct {
 }
 
 /*
-   Upload a list of raw mission items to the system.
+UploadMission Upload a list of raw mission items to the system.
 
-   The raw mission items are uploaded to a drone. Once uploaded the mission
-   can be started and executed even if the connection is lost.
-
-   Parameters
-   ----------
-   missionItems []*MissionItem
-
-
+	The raw mission items are uploaded to a drone. Once uploaded the mission
+	can be started and executed even if the connection is lost.
 */
+func (s *ServiceImpl) UploadMission(
+	ctx context.Context,
+	missionItems []*MissionItem,
 
-func (s *ServiceImpl) UploadMission(ctx context.Context, missionItems []*MissionItem) (*UploadMissionResponse, error) {
-
-	request := &UploadMissionRequest{}
-	request.MissionItems = missionItems
-
+) (*UploadMissionResponse, error) {
+	request := &UploadMissionRequest{
+		MissionItems: missionItems,
+	}
 	response, err := s.Client.UploadMission(ctx, request)
 	if err != nil {
 		return nil, err
@@ -39,20 +35,16 @@ func (s *ServiceImpl) UploadMission(ctx context.Context, missionItems []*Mission
 }
 
 /*
-   Upload a list of geofence items to the system.
-
-   Parameters
-   ----------
-   missionItems []*MissionItem
-
-
+UploadGeofence Upload a list of geofence items to the system.
 */
+func (s *ServiceImpl) UploadGeofence(
+	ctx context.Context,
+	missionItems []*MissionItem,
 
-func (s *ServiceImpl) UploadGeofence(ctx context.Context, missionItems []*MissionItem) (*UploadGeofenceResponse, error) {
-
-	request := &UploadGeofenceRequest{}
-	request.MissionItems = missionItems
-
+) (*UploadGeofenceResponse, error) {
+	request := &UploadGeofenceRequest{
+		MissionItems: missionItems,
+	}
 	response, err := s.Client.UploadGeofence(ctx, request)
 	if err != nil {
 		return nil, err
@@ -61,20 +53,16 @@ func (s *ServiceImpl) UploadGeofence(ctx context.Context, missionItems []*Missio
 }
 
 /*
-   Upload a list of rally point items to the system.
-
-   Parameters
-   ----------
-   missionItems []*MissionItem
-
-
+UploadRallyPoints Upload a list of rally point items to the system.
 */
+func (s *ServiceImpl) UploadRallyPoints(
+	ctx context.Context,
+	missionItems []*MissionItem,
 
-func (s *ServiceImpl) UploadRallyPoints(ctx context.Context, missionItems []*MissionItem) (*UploadRallyPointsResponse, error) {
-
-	request := &UploadRallyPointsRequest{}
-	request.MissionItems = missionItems
-
+) (*UploadRallyPointsResponse, error) {
+	request := &UploadRallyPointsRequest{
+		MissionItems: missionItems,
+	}
 	response, err := s.Client.UploadRallyPoints(ctx, request)
 	if err != nil {
 		return nil, err
@@ -83,13 +71,12 @@ func (s *ServiceImpl) UploadRallyPoints(ctx context.Context, missionItems []*Mis
 }
 
 /*
-   Cancel an ongoing mission upload.
-
-
+CancelMissionUpload Cancel an ongoing mission upload.
 */
+func (s *ServiceImpl) CancelMissionUpload(
+	ctx context.Context,
 
-func (s *ServiceImpl) CancelMissionUpload(ctx context.Context) (*CancelMissionUploadResponse, error) {
-
+) (*CancelMissionUploadResponse, error) {
 	request := &CancelMissionUploadRequest{}
 	response, err := s.Client.CancelMissionUpload(ctx, request)
 	if err != nil {
@@ -99,37 +86,27 @@ func (s *ServiceImpl) CancelMissionUpload(ctx context.Context) (*CancelMissionUp
 }
 
 /*
-   Download a list of raw mission items from the system (asynchronous).
-
-
-
-   Returns
-   -------
-   True
-   MissionItems : []*MissionItem
-        The mission items
-
-
+DownloadMission Download a list of raw mission items from the system (asynchronous).
 */
+func (s *ServiceImpl) DownloadMission(
+	ctx context.Context,
 
-func (s *ServiceImpl) DownloadMission(ctx context.Context) (*DownloadMissionResponse, error) {
+) (*DownloadMissionResponse, error) {
 	request := &DownloadMissionRequest{}
 	response, err := s.Client.DownloadMission(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Cancel an ongoing mission download.
-
-
+CancelMissionDownload Cancel an ongoing mission download.
 */
+func (s *ServiceImpl) CancelMissionDownload(
+	ctx context.Context,
 
-func (s *ServiceImpl) CancelMissionDownload(ctx context.Context) (*CancelMissionDownloadResponse, error) {
-
+) (*CancelMissionDownloadResponse, error) {
 	request := &CancelMissionDownloadRequest{}
 	response, err := s.Client.CancelMissionDownload(ctx, request)
 	if err != nil {
@@ -139,15 +116,14 @@ func (s *ServiceImpl) CancelMissionDownload(ctx context.Context) (*CancelMission
 }
 
 /*
-   Start the mission.
+StartMission Start the mission.
 
-   A mission must be uploaded to the vehicle before this can be called.
-
-
+	A mission must be uploaded to the vehicle before this can be called.
 */
+func (s *ServiceImpl) StartMission(
+	ctx context.Context,
 
-func (s *ServiceImpl) StartMission(ctx context.Context) (*StartMissionResponse, error) {
-
+) (*StartMissionResponse, error) {
 	request := &StartMissionRequest{}
 	response, err := s.Client.StartMission(ctx, request)
 	if err != nil {
@@ -157,18 +133,17 @@ func (s *ServiceImpl) StartMission(ctx context.Context) (*StartMissionResponse, 
 }
 
 /*
-   Pause the mission.
+PauseMission Pause the mission.
 
-   Pausing the mission puts the vehicle into
-   [HOLD mode](https://docs.px4.io/en/flight_modes/hold.html).
-   A multicopter should just hover at the spot while a fixedwing vehicle should loiter
-   around the location where it paused.
-
-
+	Pausing the mission puts the vehicle into
+	[HOLD mode](https://docs.px4.io/en/flight_modes/hold.html).
+	A multicopter should just hover at the spot while a fixedwing vehicle should loiter
+	around the location where it paused.
 */
+func (s *ServiceImpl) PauseMission(
+	ctx context.Context,
 
-func (s *ServiceImpl) PauseMission(ctx context.Context) (*PauseMissionResponse, error) {
-
+) (*PauseMissionResponse, error) {
 	request := &PauseMissionRequest{}
 	response, err := s.Client.PauseMission(ctx, request)
 	if err != nil {
@@ -178,13 +153,12 @@ func (s *ServiceImpl) PauseMission(ctx context.Context) (*PauseMissionResponse, 
 }
 
 /*
-   Clear the mission saved on the vehicle.
-
-
+ClearMission Clear the mission saved on the vehicle.
 */
+func (s *ServiceImpl) ClearMission(
+	ctx context.Context,
 
-func (s *ServiceImpl) ClearMission(ctx context.Context) (*ClearMissionResponse, error) {
-
+) (*ClearMissionResponse, error) {
 	request := &ClearMissionRequest{}
 	response, err := s.Client.ClearMission(ctx, request)
 	if err != nil {
@@ -194,22 +168,19 @@ func (s *ServiceImpl) ClearMission(ctx context.Context) (*ClearMissionResponse, 
 }
 
 /*
-   Sets the raw mission item index to go to.
+SetCurrentMissionItem Sets the raw mission item index to go to.
 
-   By setting the current index to 0, the mission is restarted from the beginning. If it is set
-   to a specific index of a raw mission item, the mission will be set to this item.
-
-   Parameters
-   ----------
-   index int32
-
-
+	By setting the current index to 0, the mission is restarted from the beginning. If it is set
+	to a specific index of a raw mission item, the mission will be set to this item.
 */
+func (s *ServiceImpl) SetCurrentMissionItem(
+	ctx context.Context,
+	index int32,
 
-func (s *ServiceImpl) SetCurrentMissionItem(ctx context.Context, index int32) (*SetCurrentMissionItemResponse, error) {
-
-	request := &SetCurrentMissionItemRequest{}
-	request.Index = index
+) (*SetCurrentMissionItemResponse, error) {
+	request := &SetCurrentMissionItemRequest{
+		Index: index,
+	}
 	response, err := s.Client.SetCurrentMissionItem(ctx, request)
 	if err != nil {
 		return nil, err
@@ -218,12 +189,12 @@ func (s *ServiceImpl) SetCurrentMissionItem(ctx context.Context, index int32) (*
 }
 
 /*
-   Subscribe to mission progress updates.
-
-
+MissionProgress Subscribe to mission progress updates.
 */
+func (a *ServiceImpl) MissionProgress(
+	ctx context.Context,
 
-func (a *ServiceImpl) MissionProgress(ctx context.Context) (<-chan *MissionProgress, error) {
+) (<-chan *MissionProgress, error) {
 	ch := make(chan *MissionProgress)
 	request := &SubscribeMissionProgressRequest{}
 	stream, err := a.Client.SubscribeMissionProgress(ctx, request)
@@ -243,7 +214,6 @@ func (a *ServiceImpl) MissionProgress(ctx context.Context) (<-chan *MissionProgr
 					return
 				}
 				log.Fatalf("Unable to receive MissionProgress messages, err: %v", err)
-				break
 			}
 			ch <- m.GetMissionProgress()
 		}
@@ -252,18 +222,19 @@ func (a *ServiceImpl) MissionProgress(ctx context.Context) (<-chan *MissionProgr
 }
 
 /*
-   *
-   Subscribes to mission changed.
+MissionChanged *
 
-   This notification can be used to be informed if a ground station has
-   been uploaded or changed by a ground station or companion computer.
+	Subscribes to mission changed.
 
-   @param callback Callback to notify about change.
+	This notification can be used to be informed if a ground station has
+	been uploaded or changed by a ground station or companion computer.
 
-
+	@param callback Callback to notify about change.
 */
+func (a *ServiceImpl) MissionChanged(
+	ctx context.Context,
 
-func (a *ServiceImpl) MissionChanged(ctx context.Context) (<-chan bool, error) {
+) (<-chan bool, error) {
 	ch := make(chan bool)
 	request := &SubscribeMissionChangedRequest{}
 	stream, err := a.Client.SubscribeMissionChanged(ctx, request)
@@ -283,7 +254,6 @@ func (a *ServiceImpl) MissionChanged(ctx context.Context) (<-chan bool, error) {
 					return
 				}
 				log.Fatalf("Unable to receive MissionChanged messages, err: %v", err)
-				break
 			}
 			ch <- m.GetMissionChanged()
 		}
@@ -292,67 +262,49 @@ func (a *ServiceImpl) MissionChanged(ctx context.Context) (<-chan bool, error) {
 }
 
 /*
-   Import a QGroundControl missions in JSON .plan format, from a file.
+ImportQgroundcontrolMission Import a QGroundControl missions in JSON .plan format, from a file.
 
-   Supported:
-   - Waypoints
-   - Survey
-   Not supported:
-   - Structure Scan
-
-   Parameters
-   ----------
-   qgcPlanPath string
-
-   Returns
-   -------
-   False
-   MissionImportData : MissionImportData
-        The imported mission data
-
-
+	Supported:
+	- Waypoints
+	- Survey
+	Not supported:
+	- Structure Scan
 */
+func (s *ServiceImpl) ImportQgroundcontrolMission(
+	ctx context.Context,
+	qgcPlanPath string,
 
-func (s *ServiceImpl) ImportQgroundcontrolMission(ctx context.Context, qgcPlanPath string) (*ImportQgroundcontrolMissionResponse, error) {
-	request := &ImportQgroundcontrolMissionRequest{}
-	request.QgcPlanPath = qgcPlanPath
+) (*ImportQgroundcontrolMissionResponse, error) {
+	request := &ImportQgroundcontrolMissionRequest{
+		QgcPlanPath: qgcPlanPath,
+	}
 	response, err := s.Client.ImportQgroundcontrolMission(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Import a QGroundControl missions in JSON .plan format, from a string.
+ImportQgroundcontrolMissionFromString Import a QGroundControl missions in JSON .plan format, from a string.
 
-   Supported:
-   - Waypoints
-   - Survey
-   Not supported:
-   - Structure Scan
-
-   Parameters
-   ----------
-   qgcPlan string
-
-   Returns
-   -------
-   False
-   MissionImportData : MissionImportData
-        The imported mission data
-
-
+	Supported:
+	- Waypoints
+	- Survey
+	Not supported:
+	- Structure Scan
 */
+func (s *ServiceImpl) ImportQgroundcontrolMissionFromString(
+	ctx context.Context,
+	qgcPlan string,
 
-func (s *ServiceImpl) ImportQgroundcontrolMissionFromString(ctx context.Context, qgcPlan string) (*ImportQgroundcontrolMissionFromStringResponse, error) {
-	request := &ImportQgroundcontrolMissionFromStringRequest{}
-	request.QgcPlan = qgcPlan
+) (*ImportQgroundcontrolMissionFromStringResponse, error) {
+	request := &ImportQgroundcontrolMissionFromStringRequest{
+		QgcPlan: qgcPlan,
+	}
 	response, err := s.Client.ImportQgroundcontrolMissionFromString(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
