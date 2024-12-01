@@ -54,6 +54,17 @@ for plugin in ${PLUGIN_LIST}; do
     fi
 done
 
-
 # Remove the temp directory.
 rm -rf ${PROTO_DIR_TMP}
+
+# Navigate to OUTPUT_DIR and run the commands
+if cd "$OUTPUT_DIR"; then
+    echo "Running goimports..."
+    goimports -w .
+
+    echo "Running go fmt..."
+    go fmt ./... || { echo "go fmt failed"; exit 1; }
+else
+    echo "Error: Could not navigate to OUTPUT_DIR: $OUTPUT_DIR"
+    exit 1
+fi
