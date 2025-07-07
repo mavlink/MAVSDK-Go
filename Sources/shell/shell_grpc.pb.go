@@ -28,7 +28,6 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// *
 // Allow to communicate with the vehicle's system shell.
 type ShellServiceClient interface {
 	// Send a command line.
@@ -80,7 +79,6 @@ type ShellService_SubscribeReceiveClient = grpc.ServerStreamingClient[ReceiveRes
 // All implementations must embed UnimplementedShellServiceServer
 // for forward compatibility.
 //
-// *
 // Allow to communicate with the vehicle's system shell.
 type ShellServiceServer interface {
 	// Send a command line.

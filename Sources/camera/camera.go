@@ -14,28 +14,16 @@ type ServiceImpl struct {
 }
 
 /*
-Prepare Prepare the camera plugin (e.g. download the camera definition, etc).
-*/
-func (s *ServiceImpl) Prepare(
-	ctx context.Context,
-
-) (*PrepareResponse, error) {
-	request := &PrepareRequest{}
-	response, err := s.Client.Prepare(ctx, request)
-	if err != nil {
-		return nil, err
-	}
-	return response, nil
-}
-
-/*
 TakePhoto Take one photo.
 */
 func (s *ServiceImpl) TakePhoto(
 	ctx context.Context,
+	componentId int32,
 
 ) (*TakePhotoResponse, error) {
-	request := &TakePhotoRequest{}
+	request := &TakePhotoRequest{
+		ComponentId: componentId,
+	}
 	response, err := s.Client.TakePhoto(ctx, request)
 	if err != nil {
 		return nil, err
@@ -48,11 +36,13 @@ StartPhotoInterval Start photo timelapse with a given interval.
 */
 func (s *ServiceImpl) StartPhotoInterval(
 	ctx context.Context,
+	componentId int32,
 	intervalS float32,
 
 ) (*StartPhotoIntervalResponse, error) {
 	request := &StartPhotoIntervalRequest{
-		IntervalS: intervalS,
+		ComponentId: componentId,
+		IntervalS:   intervalS,
 	}
 	response, err := s.Client.StartPhotoInterval(ctx, request)
 	if err != nil {
@@ -66,9 +56,12 @@ StopPhotoInterval Stop a running photo timelapse.
 */
 func (s *ServiceImpl) StopPhotoInterval(
 	ctx context.Context,
+	componentId int32,
 
 ) (*StopPhotoIntervalResponse, error) {
-	request := &StopPhotoIntervalRequest{}
+	request := &StopPhotoIntervalRequest{
+		ComponentId: componentId,
+	}
 	response, err := s.Client.StopPhotoInterval(ctx, request)
 	if err != nil {
 		return nil, err
@@ -81,9 +74,12 @@ StartVideo Start a video recording.
 */
 func (s *ServiceImpl) StartVideo(
 	ctx context.Context,
+	componentId int32,
 
 ) (*StartVideoResponse, error) {
-	request := &StartVideoRequest{}
+	request := &StartVideoRequest{
+		ComponentId: componentId,
+	}
 	response, err := s.Client.StartVideo(ctx, request)
 	if err != nil {
 		return nil, err
@@ -96,9 +92,12 @@ StopVideo Stop a running video recording.
 */
 func (s *ServiceImpl) StopVideo(
 	ctx context.Context,
+	componentId int32,
 
 ) (*StopVideoResponse, error) {
-	request := &StopVideoRequest{}
+	request := &StopVideoRequest{
+		ComponentId: componentId,
+	}
 	response, err := s.Client.StopVideo(ctx, request)
 	if err != nil {
 		return nil, err
@@ -111,11 +110,13 @@ StartVideoStreaming Start video streaming.
 */
 func (s *ServiceImpl) StartVideoStreaming(
 	ctx context.Context,
+	componentId int32,
 	streamId int32,
 
 ) (*StartVideoStreamingResponse, error) {
 	request := &StartVideoStreamingRequest{
-		StreamId: streamId,
+		ComponentId: componentId,
+		StreamId:    streamId,
 	}
 	response, err := s.Client.StartVideoStreaming(ctx, request)
 	if err != nil {
@@ -129,11 +130,13 @@ StopVideoStreaming Stop current video streaming.
 */
 func (s *ServiceImpl) StopVideoStreaming(
 	ctx context.Context,
+	componentId int32,
 	streamId int32,
 
 ) (*StopVideoStreamingResponse, error) {
 	request := &StopVideoStreamingRequest{
-		StreamId: streamId,
+		ComponentId: componentId,
+		StreamId:    streamId,
 	}
 	response, err := s.Client.StopVideoStreaming(ctx, request)
 	if err != nil {
@@ -147,11 +150,13 @@ SetMode Set camera mode.
 */
 func (s *ServiceImpl) SetMode(
 	ctx context.Context,
+	componentId int32,
 	mode *Mode,
 
 ) (*SetModeResponse, error) {
 	request := &SetModeRequest{
-		Mode: *mode,
+		ComponentId: componentId,
+		Mode:        *mode,
 	}
 	response, err := s.Client.SetMode(ctx, request)
 	if err != nil {
@@ -162,13 +167,19 @@ func (s *ServiceImpl) SetMode(
 
 /*
 ListPhotos List photos available on the camera.
+
+	Note that this might need to be called initially to set the PhotosRange accordingly.
+	Once set to 'all' rather than 'since connection', it will try to request the previous
+	images over time.
 */
 func (s *ServiceImpl) ListPhotos(
 	ctx context.Context,
+	componentId int32,
 	photosRange *PhotosRange,
 
 ) (*ListPhotosResponse, error) {
 	request := &ListPhotosRequest{
+		ComponentId: componentId,
 		PhotosRange: *photosRange,
 	}
 	response, err := s.Client.ListPhotos(ctx, request)
@@ -179,13 +190,49 @@ func (s *ServiceImpl) ListPhotos(
 }
 
 /*
+CameraList Subscribe to list of cameras.
+
+	This allows to find out what cameras are connected to the system.
+	Based on the camera ID, we can then address a specific camera.
+*/
+func (a *ServiceImpl) CameraList(
+	ctx context.Context,
+
+) (<-chan *CameraList, error) {
+	ch := make(chan *CameraList)
+	request := &SubscribeCameraListRequest{}
+	stream, err := a.Client.SubscribeCameraList(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	go func() {
+		defer close(ch)
+		for {
+			m := &CameraListResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				return
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				log.Fatalf("Unable to receive CameraList messages, err: %v", err)
+			}
+			ch <- m.GetCameraList()
+		}
+	}()
+	return ch, nil
+}
+
+/*
 Mode Subscribe to camera mode updates.
 */
 func (a *ServiceImpl) Mode(
 	ctx context.Context,
 
-) (<-chan Mode, error) {
-	ch := make(chan Mode)
+) (<-chan *ModeUpdate, error) {
+	ch := make(chan *ModeUpdate)
 	request := &SubscribeModeRequest{}
 	stream, err := a.Client.SubscribeMode(ctx, request)
 	if err != nil {
@@ -205,43 +252,28 @@ func (a *ServiceImpl) Mode(
 				}
 				log.Fatalf("Unable to receive Mode messages, err: %v", err)
 			}
-			ch <- m.GetMode()
+			ch <- m.GetUpdate()
 		}
 	}()
 	return ch, nil
 }
 
 /*
-Information Subscribe to camera information updates.
+GetMode Get camera mode.
 */
-func (a *ServiceImpl) Information(
+func (s *ServiceImpl) GetMode(
 	ctx context.Context,
+	componentId int32,
 
-) (<-chan *Information, error) {
-	ch := make(chan *Information)
-	request := &SubscribeInformationRequest{}
-	stream, err := a.Client.SubscribeInformation(ctx, request)
+) (*GetModeResponse, error) {
+	request := &GetModeRequest{
+		ComponentId: componentId,
+	}
+	response, err := s.Client.GetMode(ctx, request)
 	if err != nil {
 		return nil, err
 	}
-	go func() {
-		defer close(ch)
-		for {
-			m := &InformationResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				return
-			}
-			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-					return
-				}
-				log.Fatalf("Unable to receive Information messages, err: %v", err)
-			}
-			ch <- m.GetInformation()
-		}
-	}()
-	return ch, nil
+	return response, nil
 }
 
 /*
@@ -250,8 +282,8 @@ VideoStreamInfo Subscribe to video stream info updates.
 func (a *ServiceImpl) VideoStreamInfo(
 	ctx context.Context,
 
-) (<-chan *VideoStreamInfo, error) {
-	ch := make(chan *VideoStreamInfo)
+) (<-chan *VideoStreamUpdate, error) {
+	ch := make(chan *VideoStreamUpdate)
 	request := &SubscribeVideoStreamInfoRequest{}
 	stream, err := a.Client.SubscribeVideoStreamInfo(ctx, request)
 	if err != nil {
@@ -271,10 +303,28 @@ func (a *ServiceImpl) VideoStreamInfo(
 				}
 				log.Fatalf("Unable to receive VideoStreamInfo messages, err: %v", err)
 			}
-			ch <- m.GetVideoStreamInfo()
+			ch <- m.GetUpdate()
 		}
 	}()
 	return ch, nil
+}
+
+/*
+GetVideoStreamInfo Get video stream info.
+*/
+func (s *ServiceImpl) GetVideoStreamInfo(
+	ctx context.Context,
+	componentId int32,
+
+) (*GetVideoStreamInfoResponse, error) {
+	request := &GetVideoStreamInfoRequest{
+		ComponentId: componentId,
+	}
+	response, err := s.Client.GetVideoStreamInfo(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
 }
 
 /*
@@ -311,22 +361,22 @@ func (a *ServiceImpl) CaptureInfo(
 }
 
 /*
-Status Subscribe to camera status updates.
+Storage Subscribe to camera's storage status updates.
 */
-func (a *ServiceImpl) Status(
+func (a *ServiceImpl) Storage(
 	ctx context.Context,
 
-) (<-chan *Status, error) {
-	ch := make(chan *Status)
-	request := &SubscribeStatusRequest{}
-	stream, err := a.Client.SubscribeStatus(ctx, request)
+) (<-chan *StorageUpdate, error) {
+	ch := make(chan *StorageUpdate)
+	request := &SubscribeStorageRequest{}
+	stream, err := a.Client.SubscribeStorage(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	go func() {
 		defer close(ch)
 		for {
-			m := &StatusResponse{}
+			m := &StorageResponse{}
 			err := stream.RecvMsg(m)
 			if err == io.EOF {
 				return
@@ -335,12 +385,30 @@ func (a *ServiceImpl) Status(
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				log.Fatalf("Unable to receive Status messages, err: %v", err)
+				log.Fatalf("Unable to receive Storage messages, err: %v", err)
 			}
-			ch <- m.GetCameraStatus()
+			ch <- m.GetUpdate()
 		}
 	}()
 	return ch, nil
+}
+
+/*
+GetStorage Get camera's storage status.
+*/
+func (s *ServiceImpl) GetStorage(
+	ctx context.Context,
+	componentId int32,
+
+) (*GetStorageResponse, error) {
+	request := &GetStorageRequest{
+		ComponentId: componentId,
+	}
+	response, err := s.Client.GetStorage(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
 }
 
 /*
@@ -349,8 +417,8 @@ CurrentSettings Get the list of current camera settings.
 func (a *ServiceImpl) CurrentSettings(
 	ctx context.Context,
 
-) (<-chan []*Setting, error) {
-	ch := make(chan []*Setting)
+) (<-chan *CurrentSettingsUpdate, error) {
+	ch := make(chan *CurrentSettingsUpdate)
 	request := &SubscribeCurrentSettingsRequest{}
 	stream, err := a.Client.SubscribeCurrentSettings(ctx, request)
 	if err != nil {
@@ -370,10 +438,28 @@ func (a *ServiceImpl) CurrentSettings(
 				}
 				log.Fatalf("Unable to receive CurrentSettings messages, err: %v", err)
 			}
-			ch <- m.GetCurrentSettings()
+			ch <- m.GetUpdate()
 		}
 	}()
 	return ch, nil
+}
+
+/*
+GetCurrentSettings Get current settings.
+*/
+func (s *ServiceImpl) GetCurrentSettings(
+	ctx context.Context,
+	componentId int32,
+
+) (*GetCurrentSettingsResponse, error) {
+	request := &GetCurrentSettingsRequest{
+		ComponentId: componentId,
+	}
+	response, err := s.Client.GetCurrentSettings(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
 }
 
 /*
@@ -382,8 +468,8 @@ PossibleSettingOptions Get the list of settings that can be changed.
 func (a *ServiceImpl) PossibleSettingOptions(
 	ctx context.Context,
 
-) (<-chan []*SettingOptions, error) {
-	ch := make(chan []*SettingOptions)
+) (<-chan *PossibleSettingOptionsUpdate, error) {
+	ch := make(chan *PossibleSettingOptionsUpdate)
 	request := &SubscribePossibleSettingOptionsRequest{}
 	stream, err := a.Client.SubscribePossibleSettingOptions(ctx, request)
 	if err != nil {
@@ -403,10 +489,28 @@ func (a *ServiceImpl) PossibleSettingOptions(
 				}
 				log.Fatalf("Unable to receive PossibleSettingOptions messages, err: %v", err)
 			}
-			ch <- m.GetSettingOptions()
+			ch <- m.GetUpdate()
 		}
 	}()
 	return ch, nil
+}
+
+/*
+GetPossibleSettingOptions Get possible setting options.
+*/
+func (s *ServiceImpl) GetPossibleSettingOptions(
+	ctx context.Context,
+	componentId int32,
+
+) (*GetPossibleSettingOptionsResponse, error) {
+	request := &GetPossibleSettingOptionsRequest{
+		ComponentId: componentId,
+	}
+	response, err := s.Client.GetPossibleSettingOptions(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
 }
 
 /*
@@ -416,11 +520,13 @@ SetSetting Set a setting to some value.
 */
 func (s *ServiceImpl) SetSetting(
 	ctx context.Context,
+	componentId int32,
 	setting *Setting,
 
 ) (*SetSettingResponse, error) {
 	request := &SetSettingRequest{
-		Setting: setting,
+		ComponentId: componentId,
+		Setting:     setting,
 	}
 	response, err := s.Client.SetSetting(ctx, request)
 	if err != nil {
@@ -436,11 +542,13 @@ GetSetting Get a setting.
 */
 func (s *ServiceImpl) GetSetting(
 	ctx context.Context,
+	componentId int32,
 	setting *Setting,
 
 ) (*GetSettingResponse, error) {
 	request := &GetSettingRequest{
-		Setting: setting,
+		ComponentId: componentId,
+		Setting:     setting,
 	}
 	response, err := s.Client.GetSetting(ctx, request)
 	if err != nil {
@@ -456,33 +564,15 @@ FormatStorage Format storage (e.g. SD card) in camera.
 */
 func (s *ServiceImpl) FormatStorage(
 	ctx context.Context,
+	componentId int32,
 	storageId int32,
 
 ) (*FormatStorageResponse, error) {
 	request := &FormatStorageRequest{
-		StorageId: storageId,
+		ComponentId: componentId,
+		StorageId:   storageId,
 	}
 	response, err := s.Client.FormatStorage(ctx, request)
-	if err != nil {
-		return nil, err
-	}
-	return response, nil
-}
-
-/*
-SelectCamera Select current camera .
-
-	Bind the plugin instance to a specific camera_id
-*/
-func (s *ServiceImpl) SelectCamera(
-	ctx context.Context,
-	cameraId int32,
-
-) (*SelectCameraResponse, error) {
-	request := &SelectCameraRequest{
-		CameraId: cameraId,
-	}
-	response, err := s.Client.SelectCamera(ctx, request)
 	if err != nil {
 		return nil, err
 	}
@@ -496,9 +586,12 @@ ResetSettings Reset all settings in camera.
 */
 func (s *ServiceImpl) ResetSettings(
 	ctx context.Context,
+	componentId int32,
 
 ) (*ResetSettingsResponse, error) {
-	request := &ResetSettingsRequest{}
+	request := &ResetSettingsRequest{
+		ComponentId: componentId,
+	}
 	response, err := s.Client.ResetSettings(ctx, request)
 	if err != nil {
 		return nil, err
@@ -511,9 +604,12 @@ ZoomInStart Start zooming in.
 */
 func (s *ServiceImpl) ZoomInStart(
 	ctx context.Context,
+	componentId int32,
 
 ) (*ZoomInStartResponse, error) {
-	request := &ZoomInStartRequest{}
+	request := &ZoomInStartRequest{
+		ComponentId: componentId,
+	}
 	response, err := s.Client.ZoomInStart(ctx, request)
 	if err != nil {
 		return nil, err
@@ -526,9 +622,12 @@ ZoomOutStart Start zooming out.
 */
 func (s *ServiceImpl) ZoomOutStart(
 	ctx context.Context,
+	componentId int32,
 
 ) (*ZoomOutStartResponse, error) {
-	request := &ZoomOutStartRequest{}
+	request := &ZoomOutStartRequest{
+		ComponentId: componentId,
+	}
 	response, err := s.Client.ZoomOutStart(ctx, request)
 	if err != nil {
 		return nil, err
@@ -541,9 +640,12 @@ ZoomStop Stop zooming.
 */
 func (s *ServiceImpl) ZoomStop(
 	ctx context.Context,
+	componentId int32,
 
 ) (*ZoomStopResponse, error) {
-	request := &ZoomStopRequest{}
+	request := &ZoomStopRequest{
+		ComponentId: componentId,
+	}
 	response, err := s.Client.ZoomStop(ctx, request)
 	if err != nil {
 		return nil, err
@@ -556,11 +658,13 @@ ZoomRange Zoom to value as proportion of full camera range (percentage between 0
 */
 func (s *ServiceImpl) ZoomRange(
 	ctx context.Context,
+	componentId int32,
 
 	rangeVar float32,
 
 ) (*ZoomRangeResponse, error) {
 	request := &ZoomRangeRequest{
+		ComponentId: componentId,
 
 		Range: rangeVar,
 	}
@@ -576,15 +680,17 @@ TrackPoint Track point.
 */
 func (s *ServiceImpl) TrackPoint(
 	ctx context.Context,
+	componentId int32,
 	pointX float32,
 	pointY float32,
 	radius float32,
 
 ) (*TrackPointResponse, error) {
 	request := &TrackPointRequest{
-		PointX: pointX,
-		PointY: pointY,
-		Radius: radius,
+		ComponentId: componentId,
+		PointX:      pointX,
+		PointY:      pointY,
+		Radius:      radius,
 	}
 	response, err := s.Client.TrackPoint(ctx, request)
 	if err != nil {
@@ -598,6 +704,7 @@ TrackRectangle Track rectangle.
 */
 func (s *ServiceImpl) TrackRectangle(
 	ctx context.Context,
+	componentId int32,
 	topLeftX float32,
 	topLeftY float32,
 	bottomRightX float32,
@@ -605,6 +712,7 @@ func (s *ServiceImpl) TrackRectangle(
 
 ) (*TrackRectangleResponse, error) {
 	request := &TrackRectangleRequest{
+		ComponentId:  componentId,
 		TopLeftX:     topLeftX,
 		TopLeftY:     topLeftY,
 		BottomRightX: bottomRightX,
@@ -622,9 +730,12 @@ TrackStop Stop tracking.
 */
 func (s *ServiceImpl) TrackStop(
 	ctx context.Context,
+	componentId int32,
 
 ) (*TrackStopResponse, error) {
-	request := &TrackStopRequest{}
+	request := &TrackStopRequest{
+		ComponentId: componentId,
+	}
 	response, err := s.Client.TrackStop(ctx, request)
 	if err != nil {
 		return nil, err
@@ -637,9 +748,12 @@ FocusInStart Start focusing in.
 */
 func (s *ServiceImpl) FocusInStart(
 	ctx context.Context,
+	componentId int32,
 
 ) (*FocusInStartResponse, error) {
-	request := &FocusInStartRequest{}
+	request := &FocusInStartRequest{
+		ComponentId: componentId,
+	}
 	response, err := s.Client.FocusInStart(ctx, request)
 	if err != nil {
 		return nil, err
@@ -652,9 +766,12 @@ FocusOutStart Start focusing out.
 */
 func (s *ServiceImpl) FocusOutStart(
 	ctx context.Context,
+	componentId int32,
 
 ) (*FocusOutStartResponse, error) {
-	request := &FocusOutStartRequest{}
+	request := &FocusOutStartRequest{
+		ComponentId: componentId,
+	}
 	response, err := s.Client.FocusOutStart(ctx, request)
 	if err != nil {
 		return nil, err
@@ -667,9 +784,12 @@ FocusStop Stop focus.
 */
 func (s *ServiceImpl) FocusStop(
 	ctx context.Context,
+	componentId int32,
 
 ) (*FocusStopResponse, error) {
-	request := &FocusStopRequest{}
+	request := &FocusStopRequest{
+		ComponentId: componentId,
+	}
 	response, err := s.Client.FocusStop(ctx, request)
 	if err != nil {
 		return nil, err
@@ -682,11 +802,13 @@ FocusRange Focus with range value of full range (value between 0.0 and 100.0).
 */
 func (s *ServiceImpl) FocusRange(
 	ctx context.Context,
+	componentId int32,
 
 	rangeVar float32,
 
 ) (*FocusRangeResponse, error) {
 	request := &FocusRangeRequest{
+		ComponentId: componentId,
 
 		Range: rangeVar,
 	}

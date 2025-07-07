@@ -101,6 +101,36 @@ func (s *ServiceImpl) DownloadMission(
 }
 
 /*
+DownloadGeofence Download a list of raw geofence items from the system (asynchronous).
+*/
+func (s *ServiceImpl) DownloadGeofence(
+	ctx context.Context,
+
+) (*DownloadGeofenceResponse, error) {
+	request := &DownloadGeofenceRequest{}
+	response, err := s.Client.DownloadGeofence(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+DownloadRallypoints Download a list of raw rallypoint items from the system (asynchronous).
+*/
+func (s *ServiceImpl) DownloadRallypoints(
+	ctx context.Context,
+
+) (*DownloadRallypointsResponse, error) {
+	request := &DownloadRallypointsRequest{}
+	response, err := s.Client.DownloadRallypoints(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
 CancelMissionDownload Cancel an ongoing mission download.
 */
 func (s *ServiceImpl) CancelMissionDownload(
@@ -222,9 +252,7 @@ func (a *ServiceImpl) MissionProgress(
 }
 
 /*
-MissionChanged *
-
-	Subscribes to mission changed.
+MissionChanged Subscribes to mission changed.
 
 	This notification can be used to be informed if a ground station has
 	been uploaded or changed by a ground station or companion computer.
@@ -303,6 +331,23 @@ func (s *ServiceImpl) ImportQgroundcontrolMissionFromString(
 		QgcPlan: qgcPlan,
 	}
 	response, err := s.Client.ImportQgroundcontrolMissionFromString(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+IsMissionFinished Check if the mission is finished.
+
+	Returns true if the mission is finished, false otherwise.
+*/
+func (s *ServiceImpl) IsMissionFinished(
+	ctx context.Context,
+
+) (*IsMissionFinishedResponse, error) {
+	request := &IsMissionFinishedRequest{}
+	response, err := s.Client.IsMissionFinished(ctx, request)
 	if err != nil {
 		return nil, err
 	}

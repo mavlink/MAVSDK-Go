@@ -3,8 +3,8 @@ FROM --platform=linux/amd64 ubuntu:22.04
 
 RUN apt-get update
 RUN apt-get install -y wget python3 python3-distutils python3-dev python3-pip
-RUN wget https://go.dev/dl/go1.22.3.linux-amd64.tar.gz
-RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.22.3.linux-amd64.tar.gz
+RUN wget https://go.dev/dl/go1.24.4.linux-amd64.tar.gz
+RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.24.4.linux-amd64.tar.gz
 ENV PATH $PATH:/usr/local/go/bin:/root/go/bin
 ENV PATH="$PATH:$(go env GOPATH)/bin"
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest

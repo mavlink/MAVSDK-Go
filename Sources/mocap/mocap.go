@@ -27,6 +27,24 @@ func (s *ServiceImpl) SetVisionPositionEstimate(
 }
 
 /*
+SetVisionSpeedEstimate Send Global speed estimate from a vision source.
+*/
+func (s *ServiceImpl) SetVisionSpeedEstimate(
+	ctx context.Context,
+	visionSpeedEstimate *VisionSpeedEstimate,
+
+) (*SetVisionSpeedEstimateResponse, error) {
+	request := &SetVisionSpeedEstimateRequest{
+		VisionSpeedEstimate: visionSpeedEstimate,
+	}
+	response, err := s.Client.SetVisionSpeedEstimate(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
 SetAttitudePositionMocap Send motion capture attitude and position.
 */
 func (s *ServiceImpl) SetAttitudePositionMocap(

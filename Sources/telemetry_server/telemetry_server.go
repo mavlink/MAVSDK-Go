@@ -304,3 +304,43 @@ func (s *ServiceImpl) PublishDistanceSensor(
 	}
 	return response, nil
 }
+
+/*
+PublishAttitude Publish to "attitude" updates.
+*/
+func (s *ServiceImpl) PublishAttitude(
+	ctx context.Context,
+	angle *EulerAngle,
+
+	angularVelocity *AngularVelocityBody,
+
+) (*PublishAttitudeResponse, error) {
+	request := &PublishAttitudeRequest{
+		Angle: angle,
+
+		AngularVelocity: angularVelocity,
+	}
+	response, err := s.Client.PublishAttitude(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+PublishVisualFlightRulesHud Publish to "Visual Flight Rules HUD" updates.
+*/
+func (s *ServiceImpl) PublishVisualFlightRulesHud(
+	ctx context.Context,
+	fixedWingMetrics *FixedwingMetrics,
+
+) (*PublishVisualFlightRulesHudResponse, error) {
+	request := &PublishVisualFlightRulesHudRequest{
+		FixedWingMetrics: fixedWingMetrics,
+	}
+	response, err := s.Client.PublishVisualFlightRulesHud(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}

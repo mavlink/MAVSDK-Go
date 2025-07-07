@@ -311,72 +311,6 @@ func (a *ServiceImpl) AttitudeAngularVelocityBody(
 }
 
 /*
-CameraAttitudeQuaternion Subscribe to 'camera attitude' updates (quaternion).
-*/
-func (a *ServiceImpl) CameraAttitudeQuaternion(
-	ctx context.Context,
-
-) (<-chan *Quaternion, error) {
-	ch := make(chan *Quaternion)
-	request := &SubscribeCameraAttitudeQuaternionRequest{}
-	stream, err := a.Client.SubscribeCameraAttitudeQuaternion(ctx, request)
-	if err != nil {
-		return nil, err
-	}
-	go func() {
-		defer close(ch)
-		for {
-			m := &CameraAttitudeQuaternionResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				return
-			}
-			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-					return
-				}
-				log.Fatalf("Unable to receive CameraAttitudeQuaternion messages, err: %v", err)
-			}
-			ch <- m.GetAttitudeQuaternion()
-		}
-	}()
-	return ch, nil
-}
-
-/*
-CameraAttitudeEuler Subscribe to 'camera attitude' updates (Euler).
-*/
-func (a *ServiceImpl) CameraAttitudeEuler(
-	ctx context.Context,
-
-) (<-chan *EulerAngle, error) {
-	ch := make(chan *EulerAngle)
-	request := &SubscribeCameraAttitudeEulerRequest{}
-	stream, err := a.Client.SubscribeCameraAttitudeEuler(ctx, request)
-	if err != nil {
-		return nil, err
-	}
-	go func() {
-		defer close(ch)
-		for {
-			m := &CameraAttitudeEulerResponse{}
-			err := stream.RecvMsg(m)
-			if err == io.EOF {
-				return
-			}
-			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-					return
-				}
-				log.Fatalf("Unable to receive CameraAttitudeEuler messages, err: %v", err)
-			}
-			ch <- m.GetAttitudeEuler()
-		}
-	}()
-	return ch, nil
-}
-
-/*
 VelocityNed Subscribe to 'ground speed' updates (NED).
 */
 func (a *ServiceImpl) VelocityNed(
@@ -1136,6 +1070,39 @@ func (a *ServiceImpl) Altitude(
 }
 
 /*
+Wind Subscribe to 'Wind Estimated' updates.
+*/
+func (a *ServiceImpl) Wind(
+	ctx context.Context,
+
+) (<-chan *Wind, error) {
+	ch := make(chan *Wind)
+	request := &SubscribeWindRequest{}
+	stream, err := a.Client.SubscribeWind(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	go func() {
+		defer close(ch)
+		for {
+			m := &WindResponse{}
+			err := stream.RecvMsg(m)
+			if err == io.EOF {
+				return
+			}
+			if err != nil {
+				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+					return
+				}
+				log.Fatalf("Unable to receive Wind messages, err: %v", err)
+			}
+			ch <- m.GetWind()
+		}
+	}()
+	return ch, nil
+}
+
+/*
 SetRatePosition Set rate to 'position' updates.
 */
 func (s *ServiceImpl) SetRatePosition(
@@ -1262,25 +1229,9 @@ func (s *ServiceImpl) SetRateAttitudeEuler(
 }
 
 /*
-SetRateCameraAttitude Set rate of camera attitude updates.
-*/
-func (s *ServiceImpl) SetRateCameraAttitude(
-	ctx context.Context,
-	rateHz float64,
+SetRateVelocityNed Set rate of camera attitude updates.
 
-) (*SetRateCameraAttitudeResponse, error) {
-	request := &SetRateCameraAttitudeRequest{
-		RateHz: rateHz,
-	}
-	response, err := s.Client.SetRateCameraAttitude(ctx, request)
-	if err != nil {
-		return nil, err
-	}
-	return response, nil
-}
-
-/*
-SetRateVelocityNed Set rate to 'ground speed' updates (NED).
+	Set rate to 'ground speed' updates (NED).
 */
 func (s *ServiceImpl) SetRateVelocityNed(
 	ctx context.Context,
@@ -1561,6 +1512,24 @@ func (s *ServiceImpl) SetRateAltitude(
 		RateHz: rateHz,
 	}
 	response, err := s.Client.SetRateAltitude(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+SetRateHealth Set rate to 'Health' updates.
+*/
+func (s *ServiceImpl) SetRateHealth(
+	ctx context.Context,
+	rateHz float64,
+
+) (*SetRateHealthResponse, error) {
+	request := &SetRateHealthRequest{
+		RateHz: rateHz,
+	}
+	response, err := s.Client.SetRateHealth(ctx, request)
 	if err != nil {
 		return nil, err
 	}

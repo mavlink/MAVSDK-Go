@@ -39,7 +39,6 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// *
 // Control a drone with position, velocity, attitude or motor commands.
 //
 // The module is called offboard because the commands can be sent from external sources
@@ -227,7 +226,6 @@ func (c *offboardServiceClient) SetAccelerationNed(ctx context.Context, in *SetA
 // All implementations must embed UnimplementedOffboardServiceServer
 // for forward compatibility.
 //
-// *
 // Control a drone with position, velocity, attitude or motor commands.
 //
 // The module is called offboard because the commands can be sent from external sources

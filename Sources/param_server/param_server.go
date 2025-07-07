@@ -14,6 +14,28 @@ type ServiceImpl struct {
 }
 
 /*
+SetProtocol Set param protocol.
+
+	The extended param protocol is used by default. This allows to use the previous/normal one.
+
+	Note that camera definition files are meant to implement/use the extended protocol.
+*/
+func (s *ServiceImpl) SetProtocol(
+	ctx context.Context,
+	extendedProtocol bool,
+
+) (*SetProtocolResponse, error) {
+	request := &SetProtocolRequest{
+		ExtendedProtocol: extendedProtocol,
+	}
+	response, err := s.Client.SetProtocol(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
 RetrieveParamInt Retrieve an int parameter.
 
 	If the type is wrong, the result will be `WRONG_TYPE`.

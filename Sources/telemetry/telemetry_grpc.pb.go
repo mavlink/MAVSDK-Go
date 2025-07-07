@@ -29,8 +29,6 @@ const (
 	TelemetryService_SubscribeAttitudeQuaternion_FullMethodName          = "/mavsdk.rpc.telemetry.TelemetryService/SubscribeAttitudeQuaternion"
 	TelemetryService_SubscribeAttitudeEuler_FullMethodName               = "/mavsdk.rpc.telemetry.TelemetryService/SubscribeAttitudeEuler"
 	TelemetryService_SubscribeAttitudeAngularVelocityBody_FullMethodName = "/mavsdk.rpc.telemetry.TelemetryService/SubscribeAttitudeAngularVelocityBody"
-	TelemetryService_SubscribeCameraAttitudeQuaternion_FullMethodName    = "/mavsdk.rpc.telemetry.TelemetryService/SubscribeCameraAttitudeQuaternion"
-	TelemetryService_SubscribeCameraAttitudeEuler_FullMethodName         = "/mavsdk.rpc.telemetry.TelemetryService/SubscribeCameraAttitudeEuler"
 	TelemetryService_SubscribeVelocityNed_FullMethodName                 = "/mavsdk.rpc.telemetry.TelemetryService/SubscribeVelocityNed"
 	TelemetryService_SubscribeGpsInfo_FullMethodName                     = "/mavsdk.rpc.telemetry.TelemetryService/SubscribeGpsInfo"
 	TelemetryService_SubscribeRawGps_FullMethodName                      = "/mavsdk.rpc.telemetry.TelemetryService/SubscribeRawGps"
@@ -54,6 +52,7 @@ const (
 	TelemetryService_SubscribeScaledPressure_FullMethodName              = "/mavsdk.rpc.telemetry.TelemetryService/SubscribeScaledPressure"
 	TelemetryService_SubscribeHeading_FullMethodName                     = "/mavsdk.rpc.telemetry.TelemetryService/SubscribeHeading"
 	TelemetryService_SubscribeAltitude_FullMethodName                    = "/mavsdk.rpc.telemetry.TelemetryService/SubscribeAltitude"
+	TelemetryService_SubscribeWind_FullMethodName                        = "/mavsdk.rpc.telemetry.TelemetryService/SubscribeWind"
 	TelemetryService_SetRatePosition_FullMethodName                      = "/mavsdk.rpc.telemetry.TelemetryService/SetRatePosition"
 	TelemetryService_SetRateHome_FullMethodName                          = "/mavsdk.rpc.telemetry.TelemetryService/SetRateHome"
 	TelemetryService_SetRateInAir_FullMethodName                         = "/mavsdk.rpc.telemetry.TelemetryService/SetRateInAir"
@@ -61,7 +60,6 @@ const (
 	TelemetryService_SetRateVtolState_FullMethodName                     = "/mavsdk.rpc.telemetry.TelemetryService/SetRateVtolState"
 	TelemetryService_SetRateAttitudeQuaternion_FullMethodName            = "/mavsdk.rpc.telemetry.TelemetryService/SetRateAttitudeQuaternion"
 	TelemetryService_SetRateAttitudeEuler_FullMethodName                 = "/mavsdk.rpc.telemetry.TelemetryService/SetRateAttitudeEuler"
-	TelemetryService_SetRateCameraAttitude_FullMethodName                = "/mavsdk.rpc.telemetry.TelemetryService/SetRateCameraAttitude"
 	TelemetryService_SetRateVelocityNed_FullMethodName                   = "/mavsdk.rpc.telemetry.TelemetryService/SetRateVelocityNed"
 	TelemetryService_SetRateGpsInfo_FullMethodName                       = "/mavsdk.rpc.telemetry.TelemetryService/SetRateGpsInfo"
 	TelemetryService_SetRateBattery_FullMethodName                       = "/mavsdk.rpc.telemetry.TelemetryService/SetRateBattery"
@@ -78,6 +76,7 @@ const (
 	TelemetryService_SetRateUnixEpochTime_FullMethodName                 = "/mavsdk.rpc.telemetry.TelemetryService/SetRateUnixEpochTime"
 	TelemetryService_SetRateDistanceSensor_FullMethodName                = "/mavsdk.rpc.telemetry.TelemetryService/SetRateDistanceSensor"
 	TelemetryService_SetRateAltitude_FullMethodName                      = "/mavsdk.rpc.telemetry.TelemetryService/SetRateAltitude"
+	TelemetryService_SetRateHealth_FullMethodName                        = "/mavsdk.rpc.telemetry.TelemetryService/SetRateHealth"
 	TelemetryService_GetGpsGlobalOrigin_FullMethodName                   = "/mavsdk.rpc.telemetry.TelemetryService/GetGpsGlobalOrigin"
 )
 
@@ -106,10 +105,6 @@ type TelemetryServiceClient interface {
 	SubscribeAttitudeEuler(ctx context.Context, in *SubscribeAttitudeEulerRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AttitudeEulerResponse], error)
 	// Subscribe to 'attitude' updates (angular velocity)
 	SubscribeAttitudeAngularVelocityBody(ctx context.Context, in *SubscribeAttitudeAngularVelocityBodyRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AttitudeAngularVelocityBodyResponse], error)
-	// Subscribe to 'camera attitude' updates (quaternion).
-	SubscribeCameraAttitudeQuaternion(ctx context.Context, in *SubscribeCameraAttitudeQuaternionRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[CameraAttitudeQuaternionResponse], error)
-	// Subscribe to 'camera attitude' updates (Euler).
-	SubscribeCameraAttitudeEuler(ctx context.Context, in *SubscribeCameraAttitudeEulerRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[CameraAttitudeEulerResponse], error)
 	// Subscribe to 'ground speed' updates (NED).
 	SubscribeVelocityNed(ctx context.Context, in *SubscribeVelocityNedRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[VelocityNedResponse], error)
 	// Subscribe to 'GPS info' updates.
@@ -156,6 +151,8 @@ type TelemetryServiceClient interface {
 	SubscribeHeading(ctx context.Context, in *SubscribeHeadingRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[HeadingResponse], error)
 	// Subscribe to 'Altitude' updates.
 	SubscribeAltitude(ctx context.Context, in *SubscribeAltitudeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AltitudeResponse], error)
+	// Subscribe to 'Wind Estimated' updates.
+	SubscribeWind(ctx context.Context, in *SubscribeWindRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[WindResponse], error)
 	// Set rate to 'position' updates.
 	SetRatePosition(ctx context.Context, in *SetRatePositionRequest, opts ...grpc.CallOption) (*SetRatePositionResponse, error)
 	// Set rate to 'home position' updates.
@@ -171,7 +168,6 @@ type TelemetryServiceClient interface {
 	// Set rate to 'attitude quaternion' updates.
 	SetRateAttitudeEuler(ctx context.Context, in *SetRateAttitudeEulerRequest, opts ...grpc.CallOption) (*SetRateAttitudeEulerResponse, error)
 	// Set rate of camera attitude updates.
-	SetRateCameraAttitude(ctx context.Context, in *SetRateCameraAttitudeRequest, opts ...grpc.CallOption) (*SetRateCameraAttitudeResponse, error)
 	// Set rate to 'ground speed' updates (NED).
 	SetRateVelocityNed(ctx context.Context, in *SetRateVelocityNedRequest, opts ...grpc.CallOption) (*SetRateVelocityNedResponse, error)
 	// Set rate to 'GPS info' updates.
@@ -204,6 +200,8 @@ type TelemetryServiceClient interface {
 	SetRateDistanceSensor(ctx context.Context, in *SetRateDistanceSensorRequest, opts ...grpc.CallOption) (*SetRateDistanceSensorResponse, error)
 	// Set rate to 'Altitude' updates.
 	SetRateAltitude(ctx context.Context, in *SetRateAltitudeRequest, opts ...grpc.CallOption) (*SetRateAltitudeResponse, error)
+	// Set rate to 'Health' updates.
+	SetRateHealth(ctx context.Context, in *SetRateHealthRequest, opts ...grpc.CallOption) (*SetRateHealthResponse, error)
 	// Get the GPS location of where the estimator has been initialized.
 	GetGpsGlobalOrigin(ctx context.Context, in *GetGpsGlobalOriginRequest, opts ...grpc.CallOption) (*GetGpsGlobalOriginResponse, error)
 }
@@ -387,47 +385,9 @@ func (c *telemetryServiceClient) SubscribeAttitudeAngularVelocityBody(ctx contex
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type TelemetryService_SubscribeAttitudeAngularVelocityBodyClient = grpc.ServerStreamingClient[AttitudeAngularVelocityBodyResponse]
 
-func (c *telemetryServiceClient) SubscribeCameraAttitudeQuaternion(ctx context.Context, in *SubscribeCameraAttitudeQuaternionRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[CameraAttitudeQuaternionResponse], error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[9], TelemetryService_SubscribeCameraAttitudeQuaternion_FullMethodName, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &grpc.GenericClientStream[SubscribeCameraAttitudeQuaternionRequest, CameraAttitudeQuaternionResponse]{ClientStream: stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type TelemetryService_SubscribeCameraAttitudeQuaternionClient = grpc.ServerStreamingClient[CameraAttitudeQuaternionResponse]
-
-func (c *telemetryServiceClient) SubscribeCameraAttitudeEuler(ctx context.Context, in *SubscribeCameraAttitudeEulerRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[CameraAttitudeEulerResponse], error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[10], TelemetryService_SubscribeCameraAttitudeEuler_FullMethodName, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &grpc.GenericClientStream[SubscribeCameraAttitudeEulerRequest, CameraAttitudeEulerResponse]{ClientStream: stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type TelemetryService_SubscribeCameraAttitudeEulerClient = grpc.ServerStreamingClient[CameraAttitudeEulerResponse]
-
 func (c *telemetryServiceClient) SubscribeVelocityNed(ctx context.Context, in *SubscribeVelocityNedRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[VelocityNedResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[11], TelemetryService_SubscribeVelocityNed_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[9], TelemetryService_SubscribeVelocityNed_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -446,7 +406,7 @@ type TelemetryService_SubscribeVelocityNedClient = grpc.ServerStreamingClient[Ve
 
 func (c *telemetryServiceClient) SubscribeGpsInfo(ctx context.Context, in *SubscribeGpsInfoRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GpsInfoResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[12], TelemetryService_SubscribeGpsInfo_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[10], TelemetryService_SubscribeGpsInfo_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -465,7 +425,7 @@ type TelemetryService_SubscribeGpsInfoClient = grpc.ServerStreamingClient[GpsInf
 
 func (c *telemetryServiceClient) SubscribeRawGps(ctx context.Context, in *SubscribeRawGpsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[RawGpsResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[13], TelemetryService_SubscribeRawGps_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[11], TelemetryService_SubscribeRawGps_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -484,7 +444,7 @@ type TelemetryService_SubscribeRawGpsClient = grpc.ServerStreamingClient[RawGpsR
 
 func (c *telemetryServiceClient) SubscribeBattery(ctx context.Context, in *SubscribeBatteryRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[BatteryResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[14], TelemetryService_SubscribeBattery_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[12], TelemetryService_SubscribeBattery_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -503,7 +463,7 @@ type TelemetryService_SubscribeBatteryClient = grpc.ServerStreamingClient[Batter
 
 func (c *telemetryServiceClient) SubscribeFlightMode(ctx context.Context, in *SubscribeFlightModeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[FlightModeResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[15], TelemetryService_SubscribeFlightMode_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[13], TelemetryService_SubscribeFlightMode_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -522,7 +482,7 @@ type TelemetryService_SubscribeFlightModeClient = grpc.ServerStreamingClient[Fli
 
 func (c *telemetryServiceClient) SubscribeHealth(ctx context.Context, in *SubscribeHealthRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[HealthResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[16], TelemetryService_SubscribeHealth_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[14], TelemetryService_SubscribeHealth_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -541,7 +501,7 @@ type TelemetryService_SubscribeHealthClient = grpc.ServerStreamingClient[HealthR
 
 func (c *telemetryServiceClient) SubscribeRcStatus(ctx context.Context, in *SubscribeRcStatusRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[RcStatusResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[17], TelemetryService_SubscribeRcStatus_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[15], TelemetryService_SubscribeRcStatus_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -560,7 +520,7 @@ type TelemetryService_SubscribeRcStatusClient = grpc.ServerStreamingClient[RcSta
 
 func (c *telemetryServiceClient) SubscribeStatusText(ctx context.Context, in *SubscribeStatusTextRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[StatusTextResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[18], TelemetryService_SubscribeStatusText_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[16], TelemetryService_SubscribeStatusText_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -579,7 +539,7 @@ type TelemetryService_SubscribeStatusTextClient = grpc.ServerStreamingClient[Sta
 
 func (c *telemetryServiceClient) SubscribeActuatorControlTarget(ctx context.Context, in *SubscribeActuatorControlTargetRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ActuatorControlTargetResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[19], TelemetryService_SubscribeActuatorControlTarget_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[17], TelemetryService_SubscribeActuatorControlTarget_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -598,7 +558,7 @@ type TelemetryService_SubscribeActuatorControlTargetClient = grpc.ServerStreamin
 
 func (c *telemetryServiceClient) SubscribeActuatorOutputStatus(ctx context.Context, in *SubscribeActuatorOutputStatusRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ActuatorOutputStatusResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[20], TelemetryService_SubscribeActuatorOutputStatus_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[18], TelemetryService_SubscribeActuatorOutputStatus_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -617,7 +577,7 @@ type TelemetryService_SubscribeActuatorOutputStatusClient = grpc.ServerStreaming
 
 func (c *telemetryServiceClient) SubscribeOdometry(ctx context.Context, in *SubscribeOdometryRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[OdometryResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[21], TelemetryService_SubscribeOdometry_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[19], TelemetryService_SubscribeOdometry_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -636,7 +596,7 @@ type TelemetryService_SubscribeOdometryClient = grpc.ServerStreamingClient[Odome
 
 func (c *telemetryServiceClient) SubscribePositionVelocityNed(ctx context.Context, in *SubscribePositionVelocityNedRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[PositionVelocityNedResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[22], TelemetryService_SubscribePositionVelocityNed_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[20], TelemetryService_SubscribePositionVelocityNed_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -655,7 +615,7 @@ type TelemetryService_SubscribePositionVelocityNedClient = grpc.ServerStreamingC
 
 func (c *telemetryServiceClient) SubscribeGroundTruth(ctx context.Context, in *SubscribeGroundTruthRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GroundTruthResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[23], TelemetryService_SubscribeGroundTruth_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[21], TelemetryService_SubscribeGroundTruth_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -674,7 +634,7 @@ type TelemetryService_SubscribeGroundTruthClient = grpc.ServerStreamingClient[Gr
 
 func (c *telemetryServiceClient) SubscribeFixedwingMetrics(ctx context.Context, in *SubscribeFixedwingMetricsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[FixedwingMetricsResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[24], TelemetryService_SubscribeFixedwingMetrics_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[22], TelemetryService_SubscribeFixedwingMetrics_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -693,7 +653,7 @@ type TelemetryService_SubscribeFixedwingMetricsClient = grpc.ServerStreamingClie
 
 func (c *telemetryServiceClient) SubscribeImu(ctx context.Context, in *SubscribeImuRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ImuResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[25], TelemetryService_SubscribeImu_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[23], TelemetryService_SubscribeImu_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -712,7 +672,7 @@ type TelemetryService_SubscribeImuClient = grpc.ServerStreamingClient[ImuRespons
 
 func (c *telemetryServiceClient) SubscribeScaledImu(ctx context.Context, in *SubscribeScaledImuRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ScaledImuResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[26], TelemetryService_SubscribeScaledImu_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[24], TelemetryService_SubscribeScaledImu_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -731,7 +691,7 @@ type TelemetryService_SubscribeScaledImuClient = grpc.ServerStreamingClient[Scal
 
 func (c *telemetryServiceClient) SubscribeRawImu(ctx context.Context, in *SubscribeRawImuRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[RawImuResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[27], TelemetryService_SubscribeRawImu_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[25], TelemetryService_SubscribeRawImu_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -750,7 +710,7 @@ type TelemetryService_SubscribeRawImuClient = grpc.ServerStreamingClient[RawImuR
 
 func (c *telemetryServiceClient) SubscribeHealthAllOk(ctx context.Context, in *SubscribeHealthAllOkRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[HealthAllOkResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[28], TelemetryService_SubscribeHealthAllOk_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[26], TelemetryService_SubscribeHealthAllOk_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -769,7 +729,7 @@ type TelemetryService_SubscribeHealthAllOkClient = grpc.ServerStreamingClient[He
 
 func (c *telemetryServiceClient) SubscribeUnixEpochTime(ctx context.Context, in *SubscribeUnixEpochTimeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[UnixEpochTimeResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[29], TelemetryService_SubscribeUnixEpochTime_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[27], TelemetryService_SubscribeUnixEpochTime_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -788,7 +748,7 @@ type TelemetryService_SubscribeUnixEpochTimeClient = grpc.ServerStreamingClient[
 
 func (c *telemetryServiceClient) SubscribeDistanceSensor(ctx context.Context, in *SubscribeDistanceSensorRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[DistanceSensorResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[30], TelemetryService_SubscribeDistanceSensor_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[28], TelemetryService_SubscribeDistanceSensor_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -807,7 +767,7 @@ type TelemetryService_SubscribeDistanceSensorClient = grpc.ServerStreamingClient
 
 func (c *telemetryServiceClient) SubscribeScaledPressure(ctx context.Context, in *SubscribeScaledPressureRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ScaledPressureResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[31], TelemetryService_SubscribeScaledPressure_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[29], TelemetryService_SubscribeScaledPressure_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -826,7 +786,7 @@ type TelemetryService_SubscribeScaledPressureClient = grpc.ServerStreamingClient
 
 func (c *telemetryServiceClient) SubscribeHeading(ctx context.Context, in *SubscribeHeadingRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[HeadingResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[32], TelemetryService_SubscribeHeading_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[30], TelemetryService_SubscribeHeading_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -845,7 +805,7 @@ type TelemetryService_SubscribeHeadingClient = grpc.ServerStreamingClient[Headin
 
 func (c *telemetryServiceClient) SubscribeAltitude(ctx context.Context, in *SubscribeAltitudeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AltitudeResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[33], TelemetryService_SubscribeAltitude_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[31], TelemetryService_SubscribeAltitude_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -861,6 +821,25 @@ func (c *telemetryServiceClient) SubscribeAltitude(ctx context.Context, in *Subs
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type TelemetryService_SubscribeAltitudeClient = grpc.ServerStreamingClient[AltitudeResponse]
+
+func (c *telemetryServiceClient) SubscribeWind(ctx context.Context, in *SubscribeWindRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[WindResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &TelemetryService_ServiceDesc.Streams[32], TelemetryService_SubscribeWind_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribeWindRequest, WindResponse]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type TelemetryService_SubscribeWindClient = grpc.ServerStreamingClient[WindResponse]
 
 func (c *telemetryServiceClient) SetRatePosition(ctx context.Context, in *SetRatePositionRequest, opts ...grpc.CallOption) (*SetRatePositionResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
@@ -926,16 +905,6 @@ func (c *telemetryServiceClient) SetRateAttitudeEuler(ctx context.Context, in *S
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SetRateAttitudeEulerResponse)
 	err := c.cc.Invoke(ctx, TelemetryService_SetRateAttitudeEuler_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *telemetryServiceClient) SetRateCameraAttitude(ctx context.Context, in *SetRateCameraAttitudeRequest, opts ...grpc.CallOption) (*SetRateCameraAttitudeResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SetRateCameraAttitudeResponse)
-	err := c.cc.Invoke(ctx, TelemetryService_SetRateCameraAttitude_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1102,6 +1071,16 @@ func (c *telemetryServiceClient) SetRateAltitude(ctx context.Context, in *SetRat
 	return out, nil
 }
 
+func (c *telemetryServiceClient) SetRateHealth(ctx context.Context, in *SetRateHealthRequest, opts ...grpc.CallOption) (*SetRateHealthResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetRateHealthResponse)
+	err := c.cc.Invoke(ctx, TelemetryService_SetRateHealth_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *telemetryServiceClient) GetGpsGlobalOrigin(ctx context.Context, in *GetGpsGlobalOriginRequest, opts ...grpc.CallOption) (*GetGpsGlobalOriginResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetGpsGlobalOriginResponse)
@@ -1137,10 +1116,6 @@ type TelemetryServiceServer interface {
 	SubscribeAttitudeEuler(*SubscribeAttitudeEulerRequest, grpc.ServerStreamingServer[AttitudeEulerResponse]) error
 	// Subscribe to 'attitude' updates (angular velocity)
 	SubscribeAttitudeAngularVelocityBody(*SubscribeAttitudeAngularVelocityBodyRequest, grpc.ServerStreamingServer[AttitudeAngularVelocityBodyResponse]) error
-	// Subscribe to 'camera attitude' updates (quaternion).
-	SubscribeCameraAttitudeQuaternion(*SubscribeCameraAttitudeQuaternionRequest, grpc.ServerStreamingServer[CameraAttitudeQuaternionResponse]) error
-	// Subscribe to 'camera attitude' updates (Euler).
-	SubscribeCameraAttitudeEuler(*SubscribeCameraAttitudeEulerRequest, grpc.ServerStreamingServer[CameraAttitudeEulerResponse]) error
 	// Subscribe to 'ground speed' updates (NED).
 	SubscribeVelocityNed(*SubscribeVelocityNedRequest, grpc.ServerStreamingServer[VelocityNedResponse]) error
 	// Subscribe to 'GPS info' updates.
@@ -1187,6 +1162,8 @@ type TelemetryServiceServer interface {
 	SubscribeHeading(*SubscribeHeadingRequest, grpc.ServerStreamingServer[HeadingResponse]) error
 	// Subscribe to 'Altitude' updates.
 	SubscribeAltitude(*SubscribeAltitudeRequest, grpc.ServerStreamingServer[AltitudeResponse]) error
+	// Subscribe to 'Wind Estimated' updates.
+	SubscribeWind(*SubscribeWindRequest, grpc.ServerStreamingServer[WindResponse]) error
 	// Set rate to 'position' updates.
 	SetRatePosition(context.Context, *SetRatePositionRequest) (*SetRatePositionResponse, error)
 	// Set rate to 'home position' updates.
@@ -1202,7 +1179,6 @@ type TelemetryServiceServer interface {
 	// Set rate to 'attitude quaternion' updates.
 	SetRateAttitudeEuler(context.Context, *SetRateAttitudeEulerRequest) (*SetRateAttitudeEulerResponse, error)
 	// Set rate of camera attitude updates.
-	SetRateCameraAttitude(context.Context, *SetRateCameraAttitudeRequest) (*SetRateCameraAttitudeResponse, error)
 	// Set rate to 'ground speed' updates (NED).
 	SetRateVelocityNed(context.Context, *SetRateVelocityNedRequest) (*SetRateVelocityNedResponse, error)
 	// Set rate to 'GPS info' updates.
@@ -1235,6 +1211,8 @@ type TelemetryServiceServer interface {
 	SetRateDistanceSensor(context.Context, *SetRateDistanceSensorRequest) (*SetRateDistanceSensorResponse, error)
 	// Set rate to 'Altitude' updates.
 	SetRateAltitude(context.Context, *SetRateAltitudeRequest) (*SetRateAltitudeResponse, error)
+	// Set rate to 'Health' updates.
+	SetRateHealth(context.Context, *SetRateHealthRequest) (*SetRateHealthResponse, error)
 	// Get the GPS location of where the estimator has been initialized.
 	GetGpsGlobalOrigin(context.Context, *GetGpsGlobalOriginRequest) (*GetGpsGlobalOriginResponse, error)
 	mustEmbedUnimplementedTelemetryServiceServer()
@@ -1273,12 +1251,6 @@ func (UnimplementedTelemetryServiceServer) SubscribeAttitudeEuler(*SubscribeAtti
 }
 func (UnimplementedTelemetryServiceServer) SubscribeAttitudeAngularVelocityBody(*SubscribeAttitudeAngularVelocityBodyRequest, grpc.ServerStreamingServer[AttitudeAngularVelocityBodyResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeAttitudeAngularVelocityBody not implemented")
-}
-func (UnimplementedTelemetryServiceServer) SubscribeCameraAttitudeQuaternion(*SubscribeCameraAttitudeQuaternionRequest, grpc.ServerStreamingServer[CameraAttitudeQuaternionResponse]) error {
-	return status.Errorf(codes.Unimplemented, "method SubscribeCameraAttitudeQuaternion not implemented")
-}
-func (UnimplementedTelemetryServiceServer) SubscribeCameraAttitudeEuler(*SubscribeCameraAttitudeEulerRequest, grpc.ServerStreamingServer[CameraAttitudeEulerResponse]) error {
-	return status.Errorf(codes.Unimplemented, "method SubscribeCameraAttitudeEuler not implemented")
 }
 func (UnimplementedTelemetryServiceServer) SubscribeVelocityNed(*SubscribeVelocityNedRequest, grpc.ServerStreamingServer[VelocityNedResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeVelocityNed not implemented")
@@ -1349,6 +1321,9 @@ func (UnimplementedTelemetryServiceServer) SubscribeHeading(*SubscribeHeadingReq
 func (UnimplementedTelemetryServiceServer) SubscribeAltitude(*SubscribeAltitudeRequest, grpc.ServerStreamingServer[AltitudeResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeAltitude not implemented")
 }
+func (UnimplementedTelemetryServiceServer) SubscribeWind(*SubscribeWindRequest, grpc.ServerStreamingServer[WindResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeWind not implemented")
+}
 func (UnimplementedTelemetryServiceServer) SetRatePosition(context.Context, *SetRatePositionRequest) (*SetRatePositionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetRatePosition not implemented")
 }
@@ -1369,9 +1344,6 @@ func (UnimplementedTelemetryServiceServer) SetRateAttitudeQuaternion(context.Con
 }
 func (UnimplementedTelemetryServiceServer) SetRateAttitudeEuler(context.Context, *SetRateAttitudeEulerRequest) (*SetRateAttitudeEulerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetRateAttitudeEuler not implemented")
-}
-func (UnimplementedTelemetryServiceServer) SetRateCameraAttitude(context.Context, *SetRateCameraAttitudeRequest) (*SetRateCameraAttitudeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetRateCameraAttitude not implemented")
 }
 func (UnimplementedTelemetryServiceServer) SetRateVelocityNed(context.Context, *SetRateVelocityNedRequest) (*SetRateVelocityNedResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetRateVelocityNed not implemented")
@@ -1420,6 +1392,9 @@ func (UnimplementedTelemetryServiceServer) SetRateDistanceSensor(context.Context
 }
 func (UnimplementedTelemetryServiceServer) SetRateAltitude(context.Context, *SetRateAltitudeRequest) (*SetRateAltitudeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetRateAltitude not implemented")
+}
+func (UnimplementedTelemetryServiceServer) SetRateHealth(context.Context, *SetRateHealthRequest) (*SetRateHealthResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetRateHealth not implemented")
 }
 func (UnimplementedTelemetryServiceServer) GetGpsGlobalOrigin(context.Context, *GetGpsGlobalOriginRequest) (*GetGpsGlobalOriginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGpsGlobalOrigin not implemented")
@@ -1543,28 +1518,6 @@ func _TelemetryService_SubscribeAttitudeAngularVelocityBody_Handler(srv interfac
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type TelemetryService_SubscribeAttitudeAngularVelocityBodyServer = grpc.ServerStreamingServer[AttitudeAngularVelocityBodyResponse]
-
-func _TelemetryService_SubscribeCameraAttitudeQuaternion_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(SubscribeCameraAttitudeQuaternionRequest)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
-	}
-	return srv.(TelemetryServiceServer).SubscribeCameraAttitudeQuaternion(m, &grpc.GenericServerStream[SubscribeCameraAttitudeQuaternionRequest, CameraAttitudeQuaternionResponse]{ServerStream: stream})
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type TelemetryService_SubscribeCameraAttitudeQuaternionServer = grpc.ServerStreamingServer[CameraAttitudeQuaternionResponse]
-
-func _TelemetryService_SubscribeCameraAttitudeEuler_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(SubscribeCameraAttitudeEulerRequest)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
-	}
-	return srv.(TelemetryServiceServer).SubscribeCameraAttitudeEuler(m, &grpc.GenericServerStream[SubscribeCameraAttitudeEulerRequest, CameraAttitudeEulerResponse]{ServerStream: stream})
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type TelemetryService_SubscribeCameraAttitudeEulerServer = grpc.ServerStreamingServer[CameraAttitudeEulerResponse]
 
 func _TelemetryService_SubscribeVelocityNed_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(SubscribeVelocityNedRequest)
@@ -1819,6 +1772,17 @@ func _TelemetryService_SubscribeAltitude_Handler(srv interface{}, stream grpc.Se
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type TelemetryService_SubscribeAltitudeServer = grpc.ServerStreamingServer[AltitudeResponse]
 
+func _TelemetryService_SubscribeWind_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeWindRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TelemetryServiceServer).SubscribeWind(m, &grpc.GenericServerStream[SubscribeWindRequest, WindResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type TelemetryService_SubscribeWindServer = grpc.ServerStreamingServer[WindResponse]
+
 func _TelemetryService_SetRatePosition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetRatePositionRequest)
 	if err := dec(in); err != nil {
@@ -1941,24 +1905,6 @@ func _TelemetryService_SetRateAttitudeEuler_Handler(srv interface{}, ctx context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TelemetryServiceServer).SetRateAttitudeEuler(ctx, req.(*SetRateAttitudeEulerRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _TelemetryService_SetRateCameraAttitude_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetRateCameraAttitudeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TelemetryServiceServer).SetRateCameraAttitude(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: TelemetryService_SetRateCameraAttitude_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TelemetryServiceServer).SetRateCameraAttitude(ctx, req.(*SetRateCameraAttitudeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2251,6 +2197,24 @@ func _TelemetryService_SetRateAltitude_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TelemetryService_SetRateHealth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetRateHealthRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TelemetryServiceServer).SetRateHealth(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TelemetryService_SetRateHealth_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TelemetryServiceServer).SetRateHealth(ctx, req.(*SetRateHealthRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _TelemetryService_GetGpsGlobalOrigin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetGpsGlobalOriginRequest)
 	if err := dec(in); err != nil {
@@ -2303,10 +2267,6 @@ var TelemetryService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetRateAttitudeEuler",
 			Handler:    _TelemetryService_SetRateAttitudeEuler_Handler,
-		},
-		{
-			MethodName: "SetRateCameraAttitude",
-			Handler:    _TelemetryService_SetRateCameraAttitude_Handler,
 		},
 		{
 			MethodName: "SetRateVelocityNed",
@@ -2373,6 +2333,10 @@ var TelemetryService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TelemetryService_SetRateAltitude_Handler,
 		},
 		{
+			MethodName: "SetRateHealth",
+			Handler:    _TelemetryService_SetRateHealth_Handler,
+		},
+		{
 			MethodName: "GetGpsGlobalOrigin",
 			Handler:    _TelemetryService_GetGpsGlobalOrigin_Handler,
 		},
@@ -2421,16 +2385,6 @@ var TelemetryService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "SubscribeAttitudeAngularVelocityBody",
 			Handler:       _TelemetryService_SubscribeAttitudeAngularVelocityBody_Handler,
-			ServerStreams: true,
-		},
-		{
-			StreamName:    "SubscribeCameraAttitudeQuaternion",
-			Handler:       _TelemetryService_SubscribeCameraAttitudeQuaternion_Handler,
-			ServerStreams: true,
-		},
-		{
-			StreamName:    "SubscribeCameraAttitudeEuler",
-			Handler:       _TelemetryService_SubscribeCameraAttitudeEuler_Handler,
 			ServerStreams: true,
 		},
 		{
@@ -2546,6 +2500,11 @@ var TelemetryService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "SubscribeAltitude",
 			Handler:       _TelemetryService_SubscribeAltitude_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "SubscribeWind",
+			Handler:       _TelemetryService_SubscribeWind_Handler,
 			ServerStreams: true,
 		},
 	},

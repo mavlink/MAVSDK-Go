@@ -20,21 +20,23 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TelemetryServerService_PublishPosition_FullMethodName            = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishPosition"
-	TelemetryServerService_PublishHome_FullMethodName                = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishHome"
-	TelemetryServerService_PublishSysStatus_FullMethodName           = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishSysStatus"
-	TelemetryServerService_PublishExtendedSysState_FullMethodName    = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishExtendedSysState"
-	TelemetryServerService_PublishRawGps_FullMethodName              = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishRawGps"
-	TelemetryServerService_PublishBattery_FullMethodName             = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishBattery"
-	TelemetryServerService_PublishStatusText_FullMethodName          = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishStatusText"
-	TelemetryServerService_PublishOdometry_FullMethodName            = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishOdometry"
-	TelemetryServerService_PublishPositionVelocityNed_FullMethodName = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishPositionVelocityNed"
-	TelemetryServerService_PublishGroundTruth_FullMethodName         = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishGroundTruth"
-	TelemetryServerService_PublishImu_FullMethodName                 = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishImu"
-	TelemetryServerService_PublishScaledImu_FullMethodName           = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishScaledImu"
-	TelemetryServerService_PublishRawImu_FullMethodName              = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishRawImu"
-	TelemetryServerService_PublishUnixEpochTime_FullMethodName       = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishUnixEpochTime"
-	TelemetryServerService_PublishDistanceSensor_FullMethodName      = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishDistanceSensor"
+	TelemetryServerService_PublishPosition_FullMethodName             = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishPosition"
+	TelemetryServerService_PublishHome_FullMethodName                 = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishHome"
+	TelemetryServerService_PublishSysStatus_FullMethodName            = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishSysStatus"
+	TelemetryServerService_PublishExtendedSysState_FullMethodName     = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishExtendedSysState"
+	TelemetryServerService_PublishRawGps_FullMethodName               = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishRawGps"
+	TelemetryServerService_PublishBattery_FullMethodName              = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishBattery"
+	TelemetryServerService_PublishStatusText_FullMethodName           = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishStatusText"
+	TelemetryServerService_PublishOdometry_FullMethodName             = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishOdometry"
+	TelemetryServerService_PublishPositionVelocityNed_FullMethodName  = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishPositionVelocityNed"
+	TelemetryServerService_PublishGroundTruth_FullMethodName          = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishGroundTruth"
+	TelemetryServerService_PublishImu_FullMethodName                  = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishImu"
+	TelemetryServerService_PublishScaledImu_FullMethodName            = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishScaledImu"
+	TelemetryServerService_PublishRawImu_FullMethodName               = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishRawImu"
+	TelemetryServerService_PublishUnixEpochTime_FullMethodName        = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishUnixEpochTime"
+	TelemetryServerService_PublishDistanceSensor_FullMethodName       = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishDistanceSensor"
+	TelemetryServerService_PublishAttitude_FullMethodName             = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishAttitude"
+	TelemetryServerService_PublishVisualFlightRulesHud_FullMethodName = "/mavsdk.rpc.telemetry_server.TelemetryServerService/PublishVisualFlightRulesHud"
 )
 
 // TelemetryServerServiceClient is the client API for TelemetryServerService service.
@@ -74,6 +76,10 @@ type TelemetryServerServiceClient interface {
 	PublishUnixEpochTime(ctx context.Context, in *PublishUnixEpochTimeRequest, opts ...grpc.CallOption) (*PublishUnixEpochTimeResponse, error)
 	// Publish to "distance sensor" updates.
 	PublishDistanceSensor(ctx context.Context, in *PublishDistanceSensorRequest, opts ...grpc.CallOption) (*PublishDistanceSensorResponse, error)
+	// Publish to "attitude" updates.
+	PublishAttitude(ctx context.Context, in *PublishAttitudeRequest, opts ...grpc.CallOption) (*PublishAttitudeResponse, error)
+	// Publish to "Visual Flight Rules HUD" updates.
+	PublishVisualFlightRulesHud(ctx context.Context, in *PublishVisualFlightRulesHudRequest, opts ...grpc.CallOption) (*PublishVisualFlightRulesHudResponse, error)
 }
 
 type telemetryServerServiceClient struct {
@@ -234,6 +240,26 @@ func (c *telemetryServerServiceClient) PublishDistanceSensor(ctx context.Context
 	return out, nil
 }
 
+func (c *telemetryServerServiceClient) PublishAttitude(ctx context.Context, in *PublishAttitudeRequest, opts ...grpc.CallOption) (*PublishAttitudeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PublishAttitudeResponse)
+	err := c.cc.Invoke(ctx, TelemetryServerService_PublishAttitude_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *telemetryServerServiceClient) PublishVisualFlightRulesHud(ctx context.Context, in *PublishVisualFlightRulesHudRequest, opts ...grpc.CallOption) (*PublishVisualFlightRulesHudResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PublishVisualFlightRulesHudResponse)
+	err := c.cc.Invoke(ctx, TelemetryServerService_PublishVisualFlightRulesHud_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TelemetryServerServiceServer is the server API for TelemetryServerService service.
 // All implementations must embed UnimplementedTelemetryServerServiceServer
 // for forward compatibility.
@@ -271,6 +297,10 @@ type TelemetryServerServiceServer interface {
 	PublishUnixEpochTime(context.Context, *PublishUnixEpochTimeRequest) (*PublishUnixEpochTimeResponse, error)
 	// Publish to "distance sensor" updates.
 	PublishDistanceSensor(context.Context, *PublishDistanceSensorRequest) (*PublishDistanceSensorResponse, error)
+	// Publish to "attitude" updates.
+	PublishAttitude(context.Context, *PublishAttitudeRequest) (*PublishAttitudeResponse, error)
+	// Publish to "Visual Flight Rules HUD" updates.
+	PublishVisualFlightRulesHud(context.Context, *PublishVisualFlightRulesHudRequest) (*PublishVisualFlightRulesHudResponse, error)
 	mustEmbedUnimplementedTelemetryServerServiceServer()
 }
 
@@ -325,6 +355,12 @@ func (UnimplementedTelemetryServerServiceServer) PublishUnixEpochTime(context.Co
 }
 func (UnimplementedTelemetryServerServiceServer) PublishDistanceSensor(context.Context, *PublishDistanceSensorRequest) (*PublishDistanceSensorResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PublishDistanceSensor not implemented")
+}
+func (UnimplementedTelemetryServerServiceServer) PublishAttitude(context.Context, *PublishAttitudeRequest) (*PublishAttitudeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PublishAttitude not implemented")
+}
+func (UnimplementedTelemetryServerServiceServer) PublishVisualFlightRulesHud(context.Context, *PublishVisualFlightRulesHudRequest) (*PublishVisualFlightRulesHudResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PublishVisualFlightRulesHud not implemented")
 }
 func (UnimplementedTelemetryServerServiceServer) mustEmbedUnimplementedTelemetryServerServiceServer() {
 }
@@ -618,6 +654,42 @@ func _TelemetryServerService_PublishDistanceSensor_Handler(srv interface{}, ctx 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TelemetryServerService_PublishAttitude_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PublishAttitudeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TelemetryServerServiceServer).PublishAttitude(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TelemetryServerService_PublishAttitude_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TelemetryServerServiceServer).PublishAttitude(ctx, req.(*PublishAttitudeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TelemetryServerService_PublishVisualFlightRulesHud_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PublishVisualFlightRulesHudRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TelemetryServerServiceServer).PublishVisualFlightRulesHud(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TelemetryServerService_PublishVisualFlightRulesHud_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TelemetryServerServiceServer).PublishVisualFlightRulesHud(ctx, req.(*PublishVisualFlightRulesHudRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TelemetryServerService_ServiceDesc is the grpc.ServiceDesc for TelemetryServerService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -684,6 +756,14 @@ var TelemetryServerService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PublishDistanceSensor",
 			Handler:    _TelemetryServerService_PublishDistanceSensor_Handler,
+		},
+		{
+			MethodName: "PublishAttitude",
+			Handler:    _TelemetryServerService_PublishAttitude_Handler,
+		},
+		{
+			MethodName: "PublishVisualFlightRulesHud",
+			Handler:    _TelemetryServerService_PublishVisualFlightRulesHud_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -334,3 +334,39 @@ func (s *ServiceImpl) GetAllowableFlightModes(
 	}
 	return response, nil
 }
+
+/*
+SetArmedState Set/override the armed/disarmed state of the vehicle directly, and notify subscribers
+*/
+func (s *ServiceImpl) SetArmedState(
+	ctx context.Context,
+	isArmed bool,
+
+) (*SetArmedStateResponse, error) {
+	request := &SetArmedStateRequest{
+		IsArmed: isArmed,
+	}
+	response, err := s.Client.SetArmedState(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+/*
+SetFlightMode Set/override the flight mode of the vehicle directly, and notify subscribers
+*/
+func (s *ServiceImpl) SetFlightMode(
+	ctx context.Context,
+	flightMode *FlightMode,
+
+) (*SetFlightModeResponse, error) {
+	request := &SetFlightModeRequest{
+		FlightMode: *flightMode,
+	}
+	response, err := s.Client.SetFlightMode(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
