@@ -20,14 +20,15 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	GimbalService_SetAngles_FullMethodName              = "/mavsdk.rpc.gimbal.GimbalService/SetAngles"
-	GimbalService_SetPitchAndYaw_FullMethodName         = "/mavsdk.rpc.gimbal.GimbalService/SetPitchAndYaw"
-	GimbalService_SetPitchRateAndYawRate_FullMethodName = "/mavsdk.rpc.gimbal.GimbalService/SetPitchRateAndYawRate"
-	GimbalService_SetMode_FullMethodName                = "/mavsdk.rpc.gimbal.GimbalService/SetMode"
+	GimbalService_SetAngularRates_FullMethodName        = "/mavsdk.rpc.gimbal.GimbalService/SetAngularRates"
 	GimbalService_SetRoiLocation_FullMethodName         = "/mavsdk.rpc.gimbal.GimbalService/SetRoiLocation"
 	GimbalService_TakeControl_FullMethodName            = "/mavsdk.rpc.gimbal.GimbalService/TakeControl"
 	GimbalService_ReleaseControl_FullMethodName         = "/mavsdk.rpc.gimbal.GimbalService/ReleaseControl"
-	GimbalService_SubscribeControl_FullMethodName       = "/mavsdk.rpc.gimbal.GimbalService/SubscribeControl"
+	GimbalService_SubscribeGimbalList_FullMethodName    = "/mavsdk.rpc.gimbal.GimbalService/SubscribeGimbalList"
+	GimbalService_SubscribeControlStatus_FullMethodName = "/mavsdk.rpc.gimbal.GimbalService/SubscribeControlStatus"
+	GimbalService_GetControlStatus_FullMethodName       = "/mavsdk.rpc.gimbal.GimbalService/GetControlStatus"
 	GimbalService_SubscribeAttitude_FullMethodName      = "/mavsdk.rpc.gimbal.GimbalService/SubscribeAttitude"
+	GimbalService_GetAttitude_FullMethodName            = "/mavsdk.rpc.gimbal.GimbalService/GetAttitude"
 )
 
 // GimbalServiceClient is the client API for GimbalService service.
@@ -41,25 +42,17 @@ type GimbalServiceClient interface {
 	// This sets the desired roll, pitch and yaw angles of a gimbal.
 	// Will return when the command is accepted, however, it might
 	// take the gimbal longer to actually be set to the new angles.
+	//
+	// Note that the roll angle needs to be set to 0 when send_mode is Once.
 	SetAngles(ctx context.Context, in *SetAnglesRequest, opts ...grpc.CallOption) (*SetAnglesResponse, error)
-	// Set gimbal pitch and yaw angles.
+	// Set gimbal angular rates.
 	//
-	// This sets the desired pitch and yaw angles of a gimbal.
-	// Will return when the command is accepted, however, it might
-	// take the gimbal longer to actually be set to the new angles.
-	SetPitchAndYaw(ctx context.Context, in *SetPitchAndYawRequest, opts ...grpc.CallOption) (*SetPitchAndYawResponse, error)
-	// Set gimbal angular rates around pitch and yaw axes.
-	//
-	// This sets the desired angular rates around pitch and yaw axes of a gimbal.
+	// This sets the desired angular rates around roll, pitch and yaw axes of a gimbal.
 	// Will return when the command is accepted, however, it might
 	// take the gimbal longer to actually reach the angular rate.
-	SetPitchRateAndYawRate(ctx context.Context, in *SetPitchRateAndYawRateRequest, opts ...grpc.CallOption) (*SetPitchRateAndYawRateResponse, error)
-	// Set gimbal mode.
 	//
-	// This sets the desired yaw mode of a gimbal.
-	// Will return when the command is accepted. However, it might
-	// take the gimbal longer to actually be set to the new angles.
-	SetMode(ctx context.Context, in *SetModeRequest, opts ...grpc.CallOption) (*SetModeResponse, error)
+	// Note that the roll angle needs to be set to 0 when send_mode is Once.
+	SetAngularRates(ctx context.Context, in *SetAngularRatesRequest, opts ...grpc.CallOption) (*SetAngularRatesResponse, error)
 	// Set gimbal region of interest (ROI).
 	//
 	// This sets a region of interest that the gimbal will point to.
@@ -82,16 +75,25 @@ type GimbalServiceClient interface {
 	//
 	// Release control, such that other components can control the gimbal.
 	ReleaseControl(ctx context.Context, in *ReleaseControlRequest, opts ...grpc.CallOption) (*ReleaseControlResponse, error)
+	// Subscribe to list of gimbals.
+	//
+	// This allows to find out what gimbals are connected to the system.
+	// Based on the gimbal ID, we can then address a specific gimbal.
+	SubscribeGimbalList(ctx context.Context, in *SubscribeGimbalListRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GimbalListResponse], error)
 	// Subscribe to control status updates.
 	//
 	// This allows a component to know if it has primary, secondary or
 	// no control over the gimbal. Also, it gives the system and component ids
 	// of the other components in control (if any).
-	SubscribeControl(ctx context.Context, in *SubscribeControlRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ControlResponse], error)
+	SubscribeControlStatus(ctx context.Context, in *SubscribeControlStatusRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ControlStatusResponse], error)
+	// Get control status for specific gimbal.
+	GetControlStatus(ctx context.Context, in *GetControlStatusRequest, opts ...grpc.CallOption) (*GetControlStatusResponse, error)
 	// Subscribe to attitude updates.
 	//
 	// This gets you the gimbal's attitude and angular rate.
 	SubscribeAttitude(ctx context.Context, in *SubscribeAttitudeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AttitudeResponse], error)
+	// Get attitude for specific gimbal.
+	GetAttitude(ctx context.Context, in *GetAttitudeRequest, opts ...grpc.CallOption) (*GetAttitudeResponse, error)
 }
 
 type gimbalServiceClient struct {
@@ -112,30 +114,10 @@ func (c *gimbalServiceClient) SetAngles(ctx context.Context, in *SetAnglesReques
 	return out, nil
 }
 
-func (c *gimbalServiceClient) SetPitchAndYaw(ctx context.Context, in *SetPitchAndYawRequest, opts ...grpc.CallOption) (*SetPitchAndYawResponse, error) {
+func (c *gimbalServiceClient) SetAngularRates(ctx context.Context, in *SetAngularRatesRequest, opts ...grpc.CallOption) (*SetAngularRatesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SetPitchAndYawResponse)
-	err := c.cc.Invoke(ctx, GimbalService_SetPitchAndYaw_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *gimbalServiceClient) SetPitchRateAndYawRate(ctx context.Context, in *SetPitchRateAndYawRateRequest, opts ...grpc.CallOption) (*SetPitchRateAndYawRateResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SetPitchRateAndYawRateResponse)
-	err := c.cc.Invoke(ctx, GimbalService_SetPitchRateAndYawRate_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *gimbalServiceClient) SetMode(ctx context.Context, in *SetModeRequest, opts ...grpc.CallOption) (*SetModeResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SetModeResponse)
-	err := c.cc.Invoke(ctx, GimbalService_SetMode_FullMethodName, in, out, cOpts...)
+	out := new(SetAngularRatesResponse)
+	err := c.cc.Invoke(ctx, GimbalService_SetAngularRates_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -172,13 +154,13 @@ func (c *gimbalServiceClient) ReleaseControl(ctx context.Context, in *ReleaseCon
 	return out, nil
 }
 
-func (c *gimbalServiceClient) SubscribeControl(ctx context.Context, in *SubscribeControlRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ControlResponse], error) {
+func (c *gimbalServiceClient) SubscribeGimbalList(ctx context.Context, in *SubscribeGimbalListRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GimbalListResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &GimbalService_ServiceDesc.Streams[0], GimbalService_SubscribeControl_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &GimbalService_ServiceDesc.Streams[0], GimbalService_SubscribeGimbalList_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &grpc.GenericClientStream[SubscribeControlRequest, ControlResponse]{ClientStream: stream}
+	x := &grpc.GenericClientStream[SubscribeGimbalListRequest, GimbalListResponse]{ClientStream: stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -189,11 +171,40 @@ func (c *gimbalServiceClient) SubscribeControl(ctx context.Context, in *Subscrib
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type GimbalService_SubscribeControlClient = grpc.ServerStreamingClient[ControlResponse]
+type GimbalService_SubscribeGimbalListClient = grpc.ServerStreamingClient[GimbalListResponse]
+
+func (c *gimbalServiceClient) SubscribeControlStatus(ctx context.Context, in *SubscribeControlStatusRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ControlStatusResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &GimbalService_ServiceDesc.Streams[1], GimbalService_SubscribeControlStatus_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribeControlStatusRequest, ControlStatusResponse]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type GimbalService_SubscribeControlStatusClient = grpc.ServerStreamingClient[ControlStatusResponse]
+
+func (c *gimbalServiceClient) GetControlStatus(ctx context.Context, in *GetControlStatusRequest, opts ...grpc.CallOption) (*GetControlStatusResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetControlStatusResponse)
+	err := c.cc.Invoke(ctx, GimbalService_GetControlStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
 
 func (c *gimbalServiceClient) SubscribeAttitude(ctx context.Context, in *SubscribeAttitudeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AttitudeResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &GimbalService_ServiceDesc.Streams[1], GimbalService_SubscribeAttitude_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &GimbalService_ServiceDesc.Streams[2], GimbalService_SubscribeAttitude_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -210,6 +221,16 @@ func (c *gimbalServiceClient) SubscribeAttitude(ctx context.Context, in *Subscri
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type GimbalService_SubscribeAttitudeClient = grpc.ServerStreamingClient[AttitudeResponse]
 
+func (c *gimbalServiceClient) GetAttitude(ctx context.Context, in *GetAttitudeRequest, opts ...grpc.CallOption) (*GetAttitudeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetAttitudeResponse)
+	err := c.cc.Invoke(ctx, GimbalService_GetAttitude_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GimbalServiceServer is the server API for GimbalService service.
 // All implementations must embed UnimplementedGimbalServiceServer
 // for forward compatibility.
@@ -221,25 +242,17 @@ type GimbalServiceServer interface {
 	// This sets the desired roll, pitch and yaw angles of a gimbal.
 	// Will return when the command is accepted, however, it might
 	// take the gimbal longer to actually be set to the new angles.
+	//
+	// Note that the roll angle needs to be set to 0 when send_mode is Once.
 	SetAngles(context.Context, *SetAnglesRequest) (*SetAnglesResponse, error)
-	// Set gimbal pitch and yaw angles.
+	// Set gimbal angular rates.
 	//
-	// This sets the desired pitch and yaw angles of a gimbal.
-	// Will return when the command is accepted, however, it might
-	// take the gimbal longer to actually be set to the new angles.
-	SetPitchAndYaw(context.Context, *SetPitchAndYawRequest) (*SetPitchAndYawResponse, error)
-	// Set gimbal angular rates around pitch and yaw axes.
-	//
-	// This sets the desired angular rates around pitch and yaw axes of a gimbal.
+	// This sets the desired angular rates around roll, pitch and yaw axes of a gimbal.
 	// Will return when the command is accepted, however, it might
 	// take the gimbal longer to actually reach the angular rate.
-	SetPitchRateAndYawRate(context.Context, *SetPitchRateAndYawRateRequest) (*SetPitchRateAndYawRateResponse, error)
-	// Set gimbal mode.
 	//
-	// This sets the desired yaw mode of a gimbal.
-	// Will return when the command is accepted. However, it might
-	// take the gimbal longer to actually be set to the new angles.
-	SetMode(context.Context, *SetModeRequest) (*SetModeResponse, error)
+	// Note that the roll angle needs to be set to 0 when send_mode is Once.
+	SetAngularRates(context.Context, *SetAngularRatesRequest) (*SetAngularRatesResponse, error)
 	// Set gimbal region of interest (ROI).
 	//
 	// This sets a region of interest that the gimbal will point to.
@@ -262,16 +275,25 @@ type GimbalServiceServer interface {
 	//
 	// Release control, such that other components can control the gimbal.
 	ReleaseControl(context.Context, *ReleaseControlRequest) (*ReleaseControlResponse, error)
+	// Subscribe to list of gimbals.
+	//
+	// This allows to find out what gimbals are connected to the system.
+	// Based on the gimbal ID, we can then address a specific gimbal.
+	SubscribeGimbalList(*SubscribeGimbalListRequest, grpc.ServerStreamingServer[GimbalListResponse]) error
 	// Subscribe to control status updates.
 	//
 	// This allows a component to know if it has primary, secondary or
 	// no control over the gimbal. Also, it gives the system and component ids
 	// of the other components in control (if any).
-	SubscribeControl(*SubscribeControlRequest, grpc.ServerStreamingServer[ControlResponse]) error
+	SubscribeControlStatus(*SubscribeControlStatusRequest, grpc.ServerStreamingServer[ControlStatusResponse]) error
+	// Get control status for specific gimbal.
+	GetControlStatus(context.Context, *GetControlStatusRequest) (*GetControlStatusResponse, error)
 	// Subscribe to attitude updates.
 	//
 	// This gets you the gimbal's attitude and angular rate.
 	SubscribeAttitude(*SubscribeAttitudeRequest, grpc.ServerStreamingServer[AttitudeResponse]) error
+	// Get attitude for specific gimbal.
+	GetAttitude(context.Context, *GetAttitudeRequest) (*GetAttitudeResponse, error)
 	mustEmbedUnimplementedGimbalServiceServer()
 }
 
@@ -285,14 +307,8 @@ type UnimplementedGimbalServiceServer struct{}
 func (UnimplementedGimbalServiceServer) SetAngles(context.Context, *SetAnglesRequest) (*SetAnglesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetAngles not implemented")
 }
-func (UnimplementedGimbalServiceServer) SetPitchAndYaw(context.Context, *SetPitchAndYawRequest) (*SetPitchAndYawResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetPitchAndYaw not implemented")
-}
-func (UnimplementedGimbalServiceServer) SetPitchRateAndYawRate(context.Context, *SetPitchRateAndYawRateRequest) (*SetPitchRateAndYawRateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetPitchRateAndYawRate not implemented")
-}
-func (UnimplementedGimbalServiceServer) SetMode(context.Context, *SetModeRequest) (*SetModeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetMode not implemented")
+func (UnimplementedGimbalServiceServer) SetAngularRates(context.Context, *SetAngularRatesRequest) (*SetAngularRatesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetAngularRates not implemented")
 }
 func (UnimplementedGimbalServiceServer) SetRoiLocation(context.Context, *SetRoiLocationRequest) (*SetRoiLocationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetRoiLocation not implemented")
@@ -303,11 +319,20 @@ func (UnimplementedGimbalServiceServer) TakeControl(context.Context, *TakeContro
 func (UnimplementedGimbalServiceServer) ReleaseControl(context.Context, *ReleaseControlRequest) (*ReleaseControlResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReleaseControl not implemented")
 }
-func (UnimplementedGimbalServiceServer) SubscribeControl(*SubscribeControlRequest, grpc.ServerStreamingServer[ControlResponse]) error {
-	return status.Errorf(codes.Unimplemented, "method SubscribeControl not implemented")
+func (UnimplementedGimbalServiceServer) SubscribeGimbalList(*SubscribeGimbalListRequest, grpc.ServerStreamingServer[GimbalListResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeGimbalList not implemented")
+}
+func (UnimplementedGimbalServiceServer) SubscribeControlStatus(*SubscribeControlStatusRequest, grpc.ServerStreamingServer[ControlStatusResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeControlStatus not implemented")
+}
+func (UnimplementedGimbalServiceServer) GetControlStatus(context.Context, *GetControlStatusRequest) (*GetControlStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetControlStatus not implemented")
 }
 func (UnimplementedGimbalServiceServer) SubscribeAttitude(*SubscribeAttitudeRequest, grpc.ServerStreamingServer[AttitudeResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeAttitude not implemented")
+}
+func (UnimplementedGimbalServiceServer) GetAttitude(context.Context, *GetAttitudeRequest) (*GetAttitudeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAttitude not implemented")
 }
 func (UnimplementedGimbalServiceServer) mustEmbedUnimplementedGimbalServiceServer() {}
 func (UnimplementedGimbalServiceServer) testEmbeddedByValue()                       {}
@@ -348,56 +373,20 @@ func _GimbalService_SetAngles_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GimbalService_SetPitchAndYaw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetPitchAndYawRequest)
+func _GimbalService_SetAngularRates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetAngularRatesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GimbalServiceServer).SetPitchAndYaw(ctx, in)
+		return srv.(GimbalServiceServer).SetAngularRates(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: GimbalService_SetPitchAndYaw_FullMethodName,
+		FullMethod: GimbalService_SetAngularRates_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GimbalServiceServer).SetPitchAndYaw(ctx, req.(*SetPitchAndYawRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _GimbalService_SetPitchRateAndYawRate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetPitchRateAndYawRateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GimbalServiceServer).SetPitchRateAndYawRate(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: GimbalService_SetPitchRateAndYawRate_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GimbalServiceServer).SetPitchRateAndYawRate(ctx, req.(*SetPitchRateAndYawRateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _GimbalService_SetMode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetModeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GimbalServiceServer).SetMode(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: GimbalService_SetMode_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GimbalServiceServer).SetMode(ctx, req.(*SetModeRequest))
+		return srv.(GimbalServiceServer).SetAngularRates(ctx, req.(*SetAngularRatesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -456,16 +445,45 @@ func _GimbalService_ReleaseControl_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GimbalService_SubscribeControl_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(SubscribeControlRequest)
+func _GimbalService_SubscribeGimbalList_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeGimbalListRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(GimbalServiceServer).SubscribeControl(m, &grpc.GenericServerStream[SubscribeControlRequest, ControlResponse]{ServerStream: stream})
+	return srv.(GimbalServiceServer).SubscribeGimbalList(m, &grpc.GenericServerStream[SubscribeGimbalListRequest, GimbalListResponse]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type GimbalService_SubscribeControlServer = grpc.ServerStreamingServer[ControlResponse]
+type GimbalService_SubscribeGimbalListServer = grpc.ServerStreamingServer[GimbalListResponse]
+
+func _GimbalService_SubscribeControlStatus_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeControlStatusRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(GimbalServiceServer).SubscribeControlStatus(m, &grpc.GenericServerStream[SubscribeControlStatusRequest, ControlStatusResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type GimbalService_SubscribeControlStatusServer = grpc.ServerStreamingServer[ControlStatusResponse]
+
+func _GimbalService_GetControlStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetControlStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GimbalServiceServer).GetControlStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GimbalService_GetControlStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GimbalServiceServer).GetControlStatus(ctx, req.(*GetControlStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
 
 func _GimbalService_SubscribeAttitude_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(SubscribeAttitudeRequest)
@@ -477,6 +495,24 @@ func _GimbalService_SubscribeAttitude_Handler(srv interface{}, stream grpc.Serve
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type GimbalService_SubscribeAttitudeServer = grpc.ServerStreamingServer[AttitudeResponse]
+
+func _GimbalService_GetAttitude_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAttitudeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GimbalServiceServer).GetAttitude(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GimbalService_GetAttitude_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GimbalServiceServer).GetAttitude(ctx, req.(*GetAttitudeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
 
 // GimbalService_ServiceDesc is the grpc.ServiceDesc for GimbalService service.
 // It's only intended for direct use with grpc.RegisterService,
@@ -490,16 +526,8 @@ var GimbalService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _GimbalService_SetAngles_Handler,
 		},
 		{
-			MethodName: "SetPitchAndYaw",
-			Handler:    _GimbalService_SetPitchAndYaw_Handler,
-		},
-		{
-			MethodName: "SetPitchRateAndYawRate",
-			Handler:    _GimbalService_SetPitchRateAndYawRate_Handler,
-		},
-		{
-			MethodName: "SetMode",
-			Handler:    _GimbalService_SetMode_Handler,
+			MethodName: "SetAngularRates",
+			Handler:    _GimbalService_SetAngularRates_Handler,
 		},
 		{
 			MethodName: "SetRoiLocation",
@@ -513,11 +541,24 @@ var GimbalService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "ReleaseControl",
 			Handler:    _GimbalService_ReleaseControl_Handler,
 		},
+		{
+			MethodName: "GetControlStatus",
+			Handler:    _GimbalService_GetControlStatus_Handler,
+		},
+		{
+			MethodName: "GetAttitude",
+			Handler:    _GimbalService_GetAttitude_Handler,
+		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "SubscribeControl",
-			Handler:       _GimbalService_SubscribeControl_Handler,
+			StreamName:    "SubscribeGimbalList",
+			Handler:       _GimbalService_SubscribeGimbalList_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "SubscribeControlStatus",
+			Handler:       _GimbalService_SubscribeControlStatus_Handler,
 			ServerStreams: true,
 		},
 		{

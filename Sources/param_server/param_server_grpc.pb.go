@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	ParamServerService_SetProtocol_FullMethodName                 = "/mavsdk.rpc.param_server.ParamServerService/SetProtocol"
 	ParamServerService_RetrieveParamInt_FullMethodName            = "/mavsdk.rpc.param_server.ParamServerService/RetrieveParamInt"
 	ParamServerService_ProvideParamInt_FullMethodName             = "/mavsdk.rpc.param_server.ParamServerService/ProvideParamInt"
 	ParamServerService_RetrieveParamFloat_FullMethodName          = "/mavsdk.rpc.param_server.ParamServerService/RetrieveParamFloat"
@@ -37,6 +38,12 @@ const (
 //
 // Provide raw access to retrieve and provide server parameters.
 type ParamServerServiceClient interface {
+	// Set param protocol.
+	//
+	// The extended param protocol is used by default. This allows to use the previous/normal one.
+	//
+	// Note that camera definition files are meant to implement/use the extended protocol.
+	SetProtocol(ctx context.Context, in *SetProtocolRequest, opts ...grpc.CallOption) (*SetProtocolResponse, error)
 	// Retrieve an int parameter.
 	//
 	// If the type is wrong, the result will be `WRONG_TYPE`.
@@ -77,6 +84,16 @@ type paramServerServiceClient struct {
 
 func NewParamServerServiceClient(cc grpc.ClientConnInterface) ParamServerServiceClient {
 	return &paramServerServiceClient{cc}
+}
+
+func (c *paramServerServiceClient) SetProtocol(ctx context.Context, in *SetProtocolRequest, opts ...grpc.CallOption) (*SetProtocolResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetProtocolResponse)
+	err := c.cc.Invoke(ctx, ParamServerService_SetProtocol_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *paramServerServiceClient) RetrieveParamInt(ctx context.Context, in *RetrieveParamIntRequest, opts ...grpc.CallOption) (*RetrieveParamIntResponse, error) {
@@ -212,6 +229,12 @@ type ParamServerService_SubscribeChangedParamCustomClient = grpc.ServerStreaming
 //
 // Provide raw access to retrieve and provide server parameters.
 type ParamServerServiceServer interface {
+	// Set param protocol.
+	//
+	// The extended param protocol is used by default. This allows to use the previous/normal one.
+	//
+	// Note that camera definition files are meant to implement/use the extended protocol.
+	SetProtocol(context.Context, *SetProtocolRequest) (*SetProtocolResponse, error)
 	// Retrieve an int parameter.
 	//
 	// If the type is wrong, the result will be `WRONG_TYPE`.
@@ -254,6 +277,9 @@ type ParamServerServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedParamServerServiceServer struct{}
 
+func (UnimplementedParamServerServiceServer) SetProtocol(context.Context, *SetProtocolRequest) (*SetProtocolResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetProtocol not implemented")
+}
 func (UnimplementedParamServerServiceServer) RetrieveParamInt(context.Context, *RetrieveParamIntRequest) (*RetrieveParamIntResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RetrieveParamInt not implemented")
 }
@@ -303,6 +329,24 @@ func RegisterParamServerServiceServer(s grpc.ServiceRegistrar, srv ParamServerSe
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&ParamServerService_ServiceDesc, srv)
+}
+
+func _ParamServerService_SetProtocol_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetProtocolRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ParamServerServiceServer).SetProtocol(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ParamServerService_SetProtocol_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ParamServerServiceServer).SetProtocol(ctx, req.(*SetProtocolRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _ParamServerService_RetrieveParamInt_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -471,6 +515,10 @@ var ParamServerService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "mavsdk.rpc.param_server.ParamServerService",
 	HandlerType: (*ParamServerServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "SetProtocol",
+			Handler:    _ParamServerService_SetProtocol_Handler,
+		},
 		{
 			MethodName: "RetrieveParamInt",
 			Handler:    _ParamServerService_RetrieveParamInt_Handler,

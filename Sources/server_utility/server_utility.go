@@ -2,33 +2,36 @@ package server_utility
 
 import (
 	"context"
+	"fmt"
+	"io"
 )
 
-type ServiceImpl struct {
-	Client ServerUtilityServiceClient
+type ServiceImpl struct{
+    Client ServerUtilityServiceClient
 }
+    /*
+         Sends a statustext.
 
-/*
-   Sends a statustext.
+         Parameters
+         ----------
+         type *StatusTextType 
+            
 
-   Parameters
-   ----------
-   type *StatusTextType
+         text string
 
+         
+    */
 
-   text string
+    func(s *ServiceImpl)SendStatusText(ctx context.Context, type *StatusTextType , text string)(*SendStatusTextResponse, error){
+        
+        request := &SendStatusTextRequest{}
+    	request.Type = *type
+        request.Text = text
+        response, err := s.Client.SendStatusText(ctx, request)
+        if err != nil {
+    		return nil, err
+        }
+        return response, nil
+    }
 
-
-*/
-
-func (s *ServiceImpl) SendStatusText(ctx context.Context, statusTextType *StatusTextType, text string) (*SendStatusTextResponse, error) {
-
-	request := &SendStatusTextRequest{}
-	request.Type = *statusTextType
-	request.Text = text
-	response, err := s.Client.SendStatusText(ctx, request)
-	if err != nil {
-		return nil, err
-	}
-	return response, nil
-}
+       

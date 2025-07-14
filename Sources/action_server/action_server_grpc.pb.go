@@ -31,6 +31,8 @@ const (
 	ActionServerService_SetDisarmable_FullMethodName             = "/mavsdk.rpc.action_server.ActionServerService/SetDisarmable"
 	ActionServerService_SetAllowableFlightModes_FullMethodName   = "/mavsdk.rpc.action_server.ActionServerService/SetAllowableFlightModes"
 	ActionServerService_GetAllowableFlightModes_FullMethodName   = "/mavsdk.rpc.action_server.ActionServerService/GetAllowableFlightModes"
+	ActionServerService_SetArmedState_FullMethodName             = "/mavsdk.rpc.action_server.ActionServerService/SetArmedState"
+	ActionServerService_SetFlightMode_FullMethodName             = "/mavsdk.rpc.action_server.ActionServerService/SetFlightMode"
 )
 
 // ActionServerServiceClient is the client API for ActionServerService service.
@@ -63,6 +65,10 @@ type ActionServerServiceClient interface {
 	SetAllowableFlightModes(ctx context.Context, in *SetAllowableFlightModesRequest, opts ...grpc.CallOption) (*SetAllowableFlightModesResponse, error)
 	// Get which modes the vehicle can transition to (Manual always allowed)
 	GetAllowableFlightModes(ctx context.Context, in *GetAllowableFlightModesRequest, opts ...grpc.CallOption) (*GetAllowableFlightModesResponse, error)
+	// Set/override the armed/disarmed state of the vehicle directly, and notify subscribers
+	SetArmedState(ctx context.Context, in *SetArmedStateRequest, opts ...grpc.CallOption) (*SetArmedStateResponse, error)
+	// Set/override the flight mode of the vehicle directly, and notify subscribers
+	SetFlightMode(ctx context.Context, in *SetFlightModeRequest, opts ...grpc.CallOption) (*SetFlightModeResponse, error)
 }
 
 type actionServerServiceClient struct {
@@ -256,6 +262,26 @@ func (c *actionServerServiceClient) GetAllowableFlightModes(ctx context.Context,
 	return out, nil
 }
 
+func (c *actionServerServiceClient) SetArmedState(ctx context.Context, in *SetArmedStateRequest, opts ...grpc.CallOption) (*SetArmedStateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetArmedStateResponse)
+	err := c.cc.Invoke(ctx, ActionServerService_SetArmedState_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *actionServerServiceClient) SetFlightMode(ctx context.Context, in *SetFlightModeRequest, opts ...grpc.CallOption) (*SetFlightModeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetFlightModeResponse)
+	err := c.cc.Invoke(ctx, ActionServerService_SetFlightMode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ActionServerServiceServer is the server API for ActionServerService service.
 // All implementations must embed UnimplementedActionServerServiceServer
 // for forward compatibility.
@@ -286,6 +312,10 @@ type ActionServerServiceServer interface {
 	SetAllowableFlightModes(context.Context, *SetAllowableFlightModesRequest) (*SetAllowableFlightModesResponse, error)
 	// Get which modes the vehicle can transition to (Manual always allowed)
 	GetAllowableFlightModes(context.Context, *GetAllowableFlightModesRequest) (*GetAllowableFlightModesResponse, error)
+	// Set/override the armed/disarmed state of the vehicle directly, and notify subscribers
+	SetArmedState(context.Context, *SetArmedStateRequest) (*SetArmedStateResponse, error)
+	// Set/override the flight mode of the vehicle directly, and notify subscribers
+	SetFlightMode(context.Context, *SetFlightModeRequest) (*SetFlightModeResponse, error)
 	mustEmbedUnimplementedActionServerServiceServer()
 }
 
@@ -331,6 +361,12 @@ func (UnimplementedActionServerServiceServer) SetAllowableFlightModes(context.Co
 }
 func (UnimplementedActionServerServiceServer) GetAllowableFlightModes(context.Context, *GetAllowableFlightModesRequest) (*GetAllowableFlightModesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllowableFlightModes not implemented")
+}
+func (UnimplementedActionServerServiceServer) SetArmedState(context.Context, *SetArmedStateRequest) (*SetArmedStateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetArmedState not implemented")
+}
+func (UnimplementedActionServerServiceServer) SetFlightMode(context.Context, *SetFlightModeRequest) (*SetFlightModeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetFlightMode not implemented")
 }
 func (UnimplementedActionServerServiceServer) mustEmbedUnimplementedActionServerServiceServer() {}
 func (UnimplementedActionServerServiceServer) testEmbeddedByValue()                             {}
@@ -520,6 +556,42 @@ func _ActionServerService_GetAllowableFlightModes_Handler(srv interface{}, ctx c
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ActionServerService_SetArmedState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetArmedStateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActionServerServiceServer).SetArmedState(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ActionServerService_SetArmedState_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActionServerServiceServer).SetArmedState(ctx, req.(*SetArmedStateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ActionServerService_SetFlightMode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetFlightModeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActionServerServiceServer).SetFlightMode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ActionServerService_SetFlightMode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActionServerServiceServer).SetFlightMode(ctx, req.(*SetFlightModeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ActionServerService_ServiceDesc is the grpc.ServiceDesc for ActionServerService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -546,6 +618,14 @@ var ActionServerService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllowableFlightModes",
 			Handler:    _ActionServerService_GetAllowableFlightModes_Handler,
+		},
+		{
+			MethodName: "SetArmedState",
+			Handler:    _ActionServerService_SetArmedState_Handler,
+		},
+		{
+			MethodName: "SetFlightMode",
+			Handler:    _ActionServerService_SetFlightMode_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

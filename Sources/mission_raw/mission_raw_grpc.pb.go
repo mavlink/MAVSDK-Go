@@ -24,6 +24,8 @@ const (
 	MissionRawService_UploadRallyPoints_FullMethodName                     = "/mavsdk.rpc.mission_raw.MissionRawService/UploadRallyPoints"
 	MissionRawService_CancelMissionUpload_FullMethodName                   = "/mavsdk.rpc.mission_raw.MissionRawService/CancelMissionUpload"
 	MissionRawService_DownloadMission_FullMethodName                       = "/mavsdk.rpc.mission_raw.MissionRawService/DownloadMission"
+	MissionRawService_DownloadGeofence_FullMethodName                      = "/mavsdk.rpc.mission_raw.MissionRawService/DownloadGeofence"
+	MissionRawService_DownloadRallypoints_FullMethodName                   = "/mavsdk.rpc.mission_raw.MissionRawService/DownloadRallypoints"
 	MissionRawService_CancelMissionDownload_FullMethodName                 = "/mavsdk.rpc.mission_raw.MissionRawService/CancelMissionDownload"
 	MissionRawService_StartMission_FullMethodName                          = "/mavsdk.rpc.mission_raw.MissionRawService/StartMission"
 	MissionRawService_PauseMission_FullMethodName                          = "/mavsdk.rpc.mission_raw.MissionRawService/PauseMission"
@@ -54,6 +56,10 @@ type MissionRawServiceClient interface {
 	CancelMissionUpload(ctx context.Context, in *CancelMissionUploadRequest, opts ...grpc.CallOption) (*CancelMissionUploadResponse, error)
 	// Download a list of raw mission items from the system (asynchronous).
 	DownloadMission(ctx context.Context, in *DownloadMissionRequest, opts ...grpc.CallOption) (*DownloadMissionResponse, error)
+	// Download a list of raw geofence items from the system (asynchronous).
+	DownloadGeofence(ctx context.Context, in *DownloadGeofenceRequest, opts ...grpc.CallOption) (*DownloadGeofenceResponse, error)
+	// Download a list of raw rallypoint items from the system (asynchronous).
+	DownloadRallypoints(ctx context.Context, in *DownloadRallypointsRequest, opts ...grpc.CallOption) (*DownloadRallypointsResponse, error)
 	// Cancel an ongoing mission download.
 	CancelMissionDownload(ctx context.Context, in *CancelMissionDownloadRequest, opts ...grpc.CallOption) (*CancelMissionDownloadResponse, error)
 	// Start the mission.
@@ -76,7 +82,6 @@ type MissionRawServiceClient interface {
 	SetCurrentMissionItem(ctx context.Context, in *SetCurrentMissionItemRequest, opts ...grpc.CallOption) (*SetCurrentMissionItemResponse, error)
 	// Subscribe to mission progress updates.
 	SubscribeMissionProgress(ctx context.Context, in *SubscribeMissionProgressRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[MissionProgressResponse], error)
-	// *
 	// Subscribes to mission changed.
 	//
 	// This notification can be used to be informed if a ground station has
@@ -154,6 +159,26 @@ func (c *missionRawServiceClient) DownloadMission(ctx context.Context, in *Downl
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(DownloadMissionResponse)
 	err := c.cc.Invoke(ctx, MissionRawService_DownloadMission_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *missionRawServiceClient) DownloadGeofence(ctx context.Context, in *DownloadGeofenceRequest, opts ...grpc.CallOption) (*DownloadGeofenceResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DownloadGeofenceResponse)
+	err := c.cc.Invoke(ctx, MissionRawService_DownloadGeofence_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *missionRawServiceClient) DownloadRallypoints(ctx context.Context, in *DownloadRallypointsRequest, opts ...grpc.CallOption) (*DownloadRallypointsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DownloadRallypointsResponse)
+	err := c.cc.Invoke(ctx, MissionRawService_DownloadRallypoints_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -287,6 +312,10 @@ type MissionRawServiceServer interface {
 	CancelMissionUpload(context.Context, *CancelMissionUploadRequest) (*CancelMissionUploadResponse, error)
 	// Download a list of raw mission items from the system (asynchronous).
 	DownloadMission(context.Context, *DownloadMissionRequest) (*DownloadMissionResponse, error)
+	// Download a list of raw geofence items from the system (asynchronous).
+	DownloadGeofence(context.Context, *DownloadGeofenceRequest) (*DownloadGeofenceResponse, error)
+	// Download a list of raw rallypoint items from the system (asynchronous).
+	DownloadRallypoints(context.Context, *DownloadRallypointsRequest) (*DownloadRallypointsResponse, error)
 	// Cancel an ongoing mission download.
 	CancelMissionDownload(context.Context, *CancelMissionDownloadRequest) (*CancelMissionDownloadResponse, error)
 	// Start the mission.
@@ -309,7 +338,6 @@ type MissionRawServiceServer interface {
 	SetCurrentMissionItem(context.Context, *SetCurrentMissionItemRequest) (*SetCurrentMissionItemResponse, error)
 	// Subscribe to mission progress updates.
 	SubscribeMissionProgress(*SubscribeMissionProgressRequest, grpc.ServerStreamingServer[MissionProgressResponse]) error
-	// *
 	// Subscribes to mission changed.
 	//
 	// This notification can be used to be informed if a ground station has
@@ -357,6 +385,12 @@ func (UnimplementedMissionRawServiceServer) CancelMissionUpload(context.Context,
 }
 func (UnimplementedMissionRawServiceServer) DownloadMission(context.Context, *DownloadMissionRequest) (*DownloadMissionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DownloadMission not implemented")
+}
+func (UnimplementedMissionRawServiceServer) DownloadGeofence(context.Context, *DownloadGeofenceRequest) (*DownloadGeofenceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DownloadGeofence not implemented")
+}
+func (UnimplementedMissionRawServiceServer) DownloadRallypoints(context.Context, *DownloadRallypointsRequest) (*DownloadRallypointsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DownloadRallypoints not implemented")
 }
 func (UnimplementedMissionRawServiceServer) CancelMissionDownload(context.Context, *CancelMissionDownloadRequest) (*CancelMissionDownloadResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelMissionDownload not implemented")
@@ -492,6 +526,42 @@ func _MissionRawService_DownloadMission_Handler(srv interface{}, ctx context.Con
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MissionRawServiceServer).DownloadMission(ctx, req.(*DownloadMissionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MissionRawService_DownloadGeofence_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DownloadGeofenceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MissionRawServiceServer).DownloadGeofence(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MissionRawService_DownloadGeofence_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MissionRawServiceServer).DownloadGeofence(ctx, req.(*DownloadGeofenceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MissionRawService_DownloadRallypoints_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DownloadRallypointsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MissionRawServiceServer).DownloadRallypoints(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MissionRawService_DownloadRallypoints_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MissionRawServiceServer).DownloadRallypoints(ctx, req.(*DownloadRallypointsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -670,6 +740,14 @@ var MissionRawService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DownloadMission",
 			Handler:    _MissionRawService_DownloadMission_Handler,
+		},
+		{
+			MethodName: "DownloadGeofence",
+			Handler:    _MissionRawService_DownloadGeofence_Handler,
+		},
+		{
+			MethodName: "DownloadRallypoints",
+			Handler:    _MissionRawService_DownloadRallypoints_Handler,
 		},
 		{
 			MethodName: "CancelMissionDownload",

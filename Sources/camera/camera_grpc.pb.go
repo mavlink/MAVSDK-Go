@@ -19,7 +19,6 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CameraService_Prepare_FullMethodName                         = "/mavsdk.rpc.camera.CameraService/Prepare"
 	CameraService_TakePhoto_FullMethodName                       = "/mavsdk.rpc.camera.CameraService/TakePhoto"
 	CameraService_StartPhotoInterval_FullMethodName              = "/mavsdk.rpc.camera.CameraService/StartPhotoInterval"
 	CameraService_StopPhotoInterval_FullMethodName               = "/mavsdk.rpc.camera.CameraService/StopPhotoInterval"
@@ -29,17 +28,21 @@ const (
 	CameraService_StopVideoStreaming_FullMethodName              = "/mavsdk.rpc.camera.CameraService/StopVideoStreaming"
 	CameraService_SetMode_FullMethodName                         = "/mavsdk.rpc.camera.CameraService/SetMode"
 	CameraService_ListPhotos_FullMethodName                      = "/mavsdk.rpc.camera.CameraService/ListPhotos"
+	CameraService_SubscribeCameraList_FullMethodName             = "/mavsdk.rpc.camera.CameraService/SubscribeCameraList"
 	CameraService_SubscribeMode_FullMethodName                   = "/mavsdk.rpc.camera.CameraService/SubscribeMode"
-	CameraService_SubscribeInformation_FullMethodName            = "/mavsdk.rpc.camera.CameraService/SubscribeInformation"
+	CameraService_GetMode_FullMethodName                         = "/mavsdk.rpc.camera.CameraService/GetMode"
 	CameraService_SubscribeVideoStreamInfo_FullMethodName        = "/mavsdk.rpc.camera.CameraService/SubscribeVideoStreamInfo"
+	CameraService_GetVideoStreamInfo_FullMethodName              = "/mavsdk.rpc.camera.CameraService/GetVideoStreamInfo"
 	CameraService_SubscribeCaptureInfo_FullMethodName            = "/mavsdk.rpc.camera.CameraService/SubscribeCaptureInfo"
-	CameraService_SubscribeStatus_FullMethodName                 = "/mavsdk.rpc.camera.CameraService/SubscribeStatus"
+	CameraService_SubscribeStorage_FullMethodName                = "/mavsdk.rpc.camera.CameraService/SubscribeStorage"
+	CameraService_GetStorage_FullMethodName                      = "/mavsdk.rpc.camera.CameraService/GetStorage"
 	CameraService_SubscribeCurrentSettings_FullMethodName        = "/mavsdk.rpc.camera.CameraService/SubscribeCurrentSettings"
+	CameraService_GetCurrentSettings_FullMethodName              = "/mavsdk.rpc.camera.CameraService/GetCurrentSettings"
 	CameraService_SubscribePossibleSettingOptions_FullMethodName = "/mavsdk.rpc.camera.CameraService/SubscribePossibleSettingOptions"
+	CameraService_GetPossibleSettingOptions_FullMethodName       = "/mavsdk.rpc.camera.CameraService/GetPossibleSettingOptions"
 	CameraService_SetSetting_FullMethodName                      = "/mavsdk.rpc.camera.CameraService/SetSetting"
 	CameraService_GetSetting_FullMethodName                      = "/mavsdk.rpc.camera.CameraService/GetSetting"
 	CameraService_FormatStorage_FullMethodName                   = "/mavsdk.rpc.camera.CameraService/FormatStorage"
-	CameraService_SelectCamera_FullMethodName                    = "/mavsdk.rpc.camera.CameraService/SelectCamera"
 	CameraService_ResetSettings_FullMethodName                   = "/mavsdk.rpc.camera.CameraService/ResetSettings"
 	CameraService_ZoomInStart_FullMethodName                     = "/mavsdk.rpc.camera.CameraService/ZoomInStart"
 	CameraService_ZoomOutStart_FullMethodName                    = "/mavsdk.rpc.camera.CameraService/ZoomOutStart"
@@ -66,8 +69,6 @@ const (
 // instantiated separately for every camera and the camera selected using
 // `select_camera`.
 type CameraServiceClient interface {
-	// Prepare the camera plugin (e.g. download the camera definition, etc).
-	Prepare(ctx context.Context, in *PrepareRequest, opts ...grpc.CallOption) (*PrepareResponse, error)
 	// Take one photo.
 	TakePhoto(ctx context.Context, in *TakePhotoRequest, opts ...grpc.CallOption) (*TakePhotoResponse, error)
 	// Start photo timelapse with a given interval.
@@ -85,21 +86,38 @@ type CameraServiceClient interface {
 	// Set camera mode.
 	SetMode(ctx context.Context, in *SetModeRequest, opts ...grpc.CallOption) (*SetModeResponse, error)
 	// List photos available on the camera.
+	//
+	// Note that this might need to be called initially to set the PhotosRange accordingly.
+	// Once set to 'all' rather than 'since connection', it will try to request the previous
+	// images over time.
 	ListPhotos(ctx context.Context, in *ListPhotosRequest, opts ...grpc.CallOption) (*ListPhotosResponse, error)
+	// Subscribe to list of cameras.
+	//
+	// This allows to find out what cameras are connected to the system.
+	// Based on the camera ID, we can then address a specific camera.
+	SubscribeCameraList(ctx context.Context, in *SubscribeCameraListRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[CameraListResponse], error)
 	// Subscribe to camera mode updates.
 	SubscribeMode(ctx context.Context, in *SubscribeModeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ModeResponse], error)
-	// Subscribe to camera information updates.
-	SubscribeInformation(ctx context.Context, in *SubscribeInformationRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[InformationResponse], error)
+	// Get camera mode.
+	GetMode(ctx context.Context, in *GetModeRequest, opts ...grpc.CallOption) (*GetModeResponse, error)
 	// Subscribe to video stream info updates.
 	SubscribeVideoStreamInfo(ctx context.Context, in *SubscribeVideoStreamInfoRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[VideoStreamInfoResponse], error)
+	// Get video stream info.
+	GetVideoStreamInfo(ctx context.Context, in *GetVideoStreamInfoRequest, opts ...grpc.CallOption) (*GetVideoStreamInfoResponse, error)
 	// Subscribe to capture info updates.
 	SubscribeCaptureInfo(ctx context.Context, in *SubscribeCaptureInfoRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[CaptureInfoResponse], error)
-	// Subscribe to camera status updates.
-	SubscribeStatus(ctx context.Context, in *SubscribeStatusRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[StatusResponse], error)
+	// Subscribe to camera's storage status updates.
+	SubscribeStorage(ctx context.Context, in *SubscribeStorageRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[StorageResponse], error)
+	// Get camera's storage status.
+	GetStorage(ctx context.Context, in *GetStorageRequest, opts ...grpc.CallOption) (*GetStorageResponse, error)
 	// Get the list of current camera settings.
 	SubscribeCurrentSettings(ctx context.Context, in *SubscribeCurrentSettingsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[CurrentSettingsResponse], error)
+	// Get current settings.
+	GetCurrentSettings(ctx context.Context, in *GetCurrentSettingsRequest, opts ...grpc.CallOption) (*GetCurrentSettingsResponse, error)
 	// Get the list of settings that can be changed.
 	SubscribePossibleSettingOptions(ctx context.Context, in *SubscribePossibleSettingOptionsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[PossibleSettingOptionsResponse], error)
+	// Get possible setting options.
+	GetPossibleSettingOptions(ctx context.Context, in *GetPossibleSettingOptionsRequest, opts ...grpc.CallOption) (*GetPossibleSettingOptionsResponse, error)
 	// Set a setting to some value.
 	//
 	// Only setting_id of setting and option_id of option needs to be set.
@@ -112,10 +130,6 @@ type CameraServiceClient interface {
 	//
 	// This will delete all content of the camera storage!
 	FormatStorage(ctx context.Context, in *FormatStorageRequest, opts ...grpc.CallOption) (*FormatStorageResponse, error)
-	// Select current camera .
-	//
-	// Bind the plugin instance to a specific camera_id
-	SelectCamera(ctx context.Context, in *SelectCameraRequest, opts ...grpc.CallOption) (*SelectCameraResponse, error)
 	// Reset all settings in camera.
 	//
 	// This will reset all camera settings to default value
@@ -150,16 +164,6 @@ type cameraServiceClient struct {
 
 func NewCameraServiceClient(cc grpc.ClientConnInterface) CameraServiceClient {
 	return &cameraServiceClient{cc}
-}
-
-func (c *cameraServiceClient) Prepare(ctx context.Context, in *PrepareRequest, opts ...grpc.CallOption) (*PrepareResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(PrepareResponse)
-	err := c.cc.Invoke(ctx, CameraService_Prepare_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *cameraServiceClient) TakePhoto(ctx context.Context, in *TakePhotoRequest, opts ...grpc.CallOption) (*TakePhotoResponse, error) {
@@ -252,9 +256,28 @@ func (c *cameraServiceClient) ListPhotos(ctx context.Context, in *ListPhotosRequ
 	return out, nil
 }
 
+func (c *cameraServiceClient) SubscribeCameraList(ctx context.Context, in *SubscribeCameraListRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[CameraListResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &CameraService_ServiceDesc.Streams[0], CameraService_SubscribeCameraList_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribeCameraListRequest, CameraListResponse]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CameraService_SubscribeCameraListClient = grpc.ServerStreamingClient[CameraListResponse]
+
 func (c *cameraServiceClient) SubscribeMode(ctx context.Context, in *SubscribeModeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ModeResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &CameraService_ServiceDesc.Streams[0], CameraService_SubscribeMode_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &CameraService_ServiceDesc.Streams[1], CameraService_SubscribeMode_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -271,24 +294,15 @@ func (c *cameraServiceClient) SubscribeMode(ctx context.Context, in *SubscribeMo
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CameraService_SubscribeModeClient = grpc.ServerStreamingClient[ModeResponse]
 
-func (c *cameraServiceClient) SubscribeInformation(ctx context.Context, in *SubscribeInformationRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[InformationResponse], error) {
+func (c *cameraServiceClient) GetMode(ctx context.Context, in *GetModeRequest, opts ...grpc.CallOption) (*GetModeResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &CameraService_ServiceDesc.Streams[1], CameraService_SubscribeInformation_FullMethodName, cOpts...)
+	out := new(GetModeResponse)
+	err := c.cc.Invoke(ctx, CameraService_GetMode_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &grpc.GenericClientStream[SubscribeInformationRequest, InformationResponse]{ClientStream: stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
+	return out, nil
 }
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type CameraService_SubscribeInformationClient = grpc.ServerStreamingClient[InformationResponse]
 
 func (c *cameraServiceClient) SubscribeVideoStreamInfo(ctx context.Context, in *SubscribeVideoStreamInfoRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[VideoStreamInfoResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
@@ -309,6 +323,16 @@ func (c *cameraServiceClient) SubscribeVideoStreamInfo(ctx context.Context, in *
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CameraService_SubscribeVideoStreamInfoClient = grpc.ServerStreamingClient[VideoStreamInfoResponse]
 
+func (c *cameraServiceClient) GetVideoStreamInfo(ctx context.Context, in *GetVideoStreamInfoRequest, opts ...grpc.CallOption) (*GetVideoStreamInfoResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetVideoStreamInfoResponse)
+	err := c.cc.Invoke(ctx, CameraService_GetVideoStreamInfo_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *cameraServiceClient) SubscribeCaptureInfo(ctx context.Context, in *SubscribeCaptureInfoRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[CaptureInfoResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &CameraService_ServiceDesc.Streams[3], CameraService_SubscribeCaptureInfo_FullMethodName, cOpts...)
@@ -328,13 +352,13 @@ func (c *cameraServiceClient) SubscribeCaptureInfo(ctx context.Context, in *Subs
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CameraService_SubscribeCaptureInfoClient = grpc.ServerStreamingClient[CaptureInfoResponse]
 
-func (c *cameraServiceClient) SubscribeStatus(ctx context.Context, in *SubscribeStatusRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[StatusResponse], error) {
+func (c *cameraServiceClient) SubscribeStorage(ctx context.Context, in *SubscribeStorageRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[StorageResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &CameraService_ServiceDesc.Streams[4], CameraService_SubscribeStatus_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &CameraService_ServiceDesc.Streams[4], CameraService_SubscribeStorage_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &grpc.GenericClientStream[SubscribeStatusRequest, StatusResponse]{ClientStream: stream}
+	x := &grpc.GenericClientStream[SubscribeStorageRequest, StorageResponse]{ClientStream: stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -345,7 +369,17 @@ func (c *cameraServiceClient) SubscribeStatus(ctx context.Context, in *Subscribe
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type CameraService_SubscribeStatusClient = grpc.ServerStreamingClient[StatusResponse]
+type CameraService_SubscribeStorageClient = grpc.ServerStreamingClient[StorageResponse]
+
+func (c *cameraServiceClient) GetStorage(ctx context.Context, in *GetStorageRequest, opts ...grpc.CallOption) (*GetStorageResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetStorageResponse)
+	err := c.cc.Invoke(ctx, CameraService_GetStorage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
 
 func (c *cameraServiceClient) SubscribeCurrentSettings(ctx context.Context, in *SubscribeCurrentSettingsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[CurrentSettingsResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
@@ -366,6 +400,16 @@ func (c *cameraServiceClient) SubscribeCurrentSettings(ctx context.Context, in *
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CameraService_SubscribeCurrentSettingsClient = grpc.ServerStreamingClient[CurrentSettingsResponse]
 
+func (c *cameraServiceClient) GetCurrentSettings(ctx context.Context, in *GetCurrentSettingsRequest, opts ...grpc.CallOption) (*GetCurrentSettingsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetCurrentSettingsResponse)
+	err := c.cc.Invoke(ctx, CameraService_GetCurrentSettings_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *cameraServiceClient) SubscribePossibleSettingOptions(ctx context.Context, in *SubscribePossibleSettingOptionsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[PossibleSettingOptionsResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &CameraService_ServiceDesc.Streams[6], CameraService_SubscribePossibleSettingOptions_FullMethodName, cOpts...)
@@ -384,6 +428,16 @@ func (c *cameraServiceClient) SubscribePossibleSettingOptions(ctx context.Contex
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CameraService_SubscribePossibleSettingOptionsClient = grpc.ServerStreamingClient[PossibleSettingOptionsResponse]
+
+func (c *cameraServiceClient) GetPossibleSettingOptions(ctx context.Context, in *GetPossibleSettingOptionsRequest, opts ...grpc.CallOption) (*GetPossibleSettingOptionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPossibleSettingOptionsResponse)
+	err := c.cc.Invoke(ctx, CameraService_GetPossibleSettingOptions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
 
 func (c *cameraServiceClient) SetSetting(ctx context.Context, in *SetSettingRequest, opts ...grpc.CallOption) (*SetSettingResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
@@ -409,16 +463,6 @@ func (c *cameraServiceClient) FormatStorage(ctx context.Context, in *FormatStora
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(FormatStorageResponse)
 	err := c.cc.Invoke(ctx, CameraService_FormatStorage_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *cameraServiceClient) SelectCamera(ctx context.Context, in *SelectCameraRequest, opts ...grpc.CallOption) (*SelectCameraResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SelectCameraResponse)
-	err := c.cc.Invoke(ctx, CameraService_SelectCamera_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -557,8 +601,6 @@ func (c *cameraServiceClient) FocusRange(ctx context.Context, in *FocusRangeRequ
 // instantiated separately for every camera and the camera selected using
 // `select_camera`.
 type CameraServiceServer interface {
-	// Prepare the camera plugin (e.g. download the camera definition, etc).
-	Prepare(context.Context, *PrepareRequest) (*PrepareResponse, error)
 	// Take one photo.
 	TakePhoto(context.Context, *TakePhotoRequest) (*TakePhotoResponse, error)
 	// Start photo timelapse with a given interval.
@@ -576,21 +618,38 @@ type CameraServiceServer interface {
 	// Set camera mode.
 	SetMode(context.Context, *SetModeRequest) (*SetModeResponse, error)
 	// List photos available on the camera.
+	//
+	// Note that this might need to be called initially to set the PhotosRange accordingly.
+	// Once set to 'all' rather than 'since connection', it will try to request the previous
+	// images over time.
 	ListPhotos(context.Context, *ListPhotosRequest) (*ListPhotosResponse, error)
+	// Subscribe to list of cameras.
+	//
+	// This allows to find out what cameras are connected to the system.
+	// Based on the camera ID, we can then address a specific camera.
+	SubscribeCameraList(*SubscribeCameraListRequest, grpc.ServerStreamingServer[CameraListResponse]) error
 	// Subscribe to camera mode updates.
 	SubscribeMode(*SubscribeModeRequest, grpc.ServerStreamingServer[ModeResponse]) error
-	// Subscribe to camera information updates.
-	SubscribeInformation(*SubscribeInformationRequest, grpc.ServerStreamingServer[InformationResponse]) error
+	// Get camera mode.
+	GetMode(context.Context, *GetModeRequest) (*GetModeResponse, error)
 	// Subscribe to video stream info updates.
 	SubscribeVideoStreamInfo(*SubscribeVideoStreamInfoRequest, grpc.ServerStreamingServer[VideoStreamInfoResponse]) error
+	// Get video stream info.
+	GetVideoStreamInfo(context.Context, *GetVideoStreamInfoRequest) (*GetVideoStreamInfoResponse, error)
 	// Subscribe to capture info updates.
 	SubscribeCaptureInfo(*SubscribeCaptureInfoRequest, grpc.ServerStreamingServer[CaptureInfoResponse]) error
-	// Subscribe to camera status updates.
-	SubscribeStatus(*SubscribeStatusRequest, grpc.ServerStreamingServer[StatusResponse]) error
+	// Subscribe to camera's storage status updates.
+	SubscribeStorage(*SubscribeStorageRequest, grpc.ServerStreamingServer[StorageResponse]) error
+	// Get camera's storage status.
+	GetStorage(context.Context, *GetStorageRequest) (*GetStorageResponse, error)
 	// Get the list of current camera settings.
 	SubscribeCurrentSettings(*SubscribeCurrentSettingsRequest, grpc.ServerStreamingServer[CurrentSettingsResponse]) error
+	// Get current settings.
+	GetCurrentSettings(context.Context, *GetCurrentSettingsRequest) (*GetCurrentSettingsResponse, error)
 	// Get the list of settings that can be changed.
 	SubscribePossibleSettingOptions(*SubscribePossibleSettingOptionsRequest, grpc.ServerStreamingServer[PossibleSettingOptionsResponse]) error
+	// Get possible setting options.
+	GetPossibleSettingOptions(context.Context, *GetPossibleSettingOptionsRequest) (*GetPossibleSettingOptionsResponse, error)
 	// Set a setting to some value.
 	//
 	// Only setting_id of setting and option_id of option needs to be set.
@@ -603,10 +662,6 @@ type CameraServiceServer interface {
 	//
 	// This will delete all content of the camera storage!
 	FormatStorage(context.Context, *FormatStorageRequest) (*FormatStorageResponse, error)
-	// Select current camera .
-	//
-	// Bind the plugin instance to a specific camera_id
-	SelectCamera(context.Context, *SelectCameraRequest) (*SelectCameraResponse, error)
 	// Reset all settings in camera.
 	//
 	// This will reset all camera settings to default value
@@ -643,9 +698,6 @@ type CameraServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedCameraServiceServer struct{}
 
-func (UnimplementedCameraServiceServer) Prepare(context.Context, *PrepareRequest) (*PrepareResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Prepare not implemented")
-}
 func (UnimplementedCameraServiceServer) TakePhoto(context.Context, *TakePhotoRequest) (*TakePhotoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TakePhoto not implemented")
 }
@@ -673,26 +725,41 @@ func (UnimplementedCameraServiceServer) SetMode(context.Context, *SetModeRequest
 func (UnimplementedCameraServiceServer) ListPhotos(context.Context, *ListPhotosRequest) (*ListPhotosResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListPhotos not implemented")
 }
+func (UnimplementedCameraServiceServer) SubscribeCameraList(*SubscribeCameraListRequest, grpc.ServerStreamingServer[CameraListResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeCameraList not implemented")
+}
 func (UnimplementedCameraServiceServer) SubscribeMode(*SubscribeModeRequest, grpc.ServerStreamingServer[ModeResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeMode not implemented")
 }
-func (UnimplementedCameraServiceServer) SubscribeInformation(*SubscribeInformationRequest, grpc.ServerStreamingServer[InformationResponse]) error {
-	return status.Errorf(codes.Unimplemented, "method SubscribeInformation not implemented")
+func (UnimplementedCameraServiceServer) GetMode(context.Context, *GetModeRequest) (*GetModeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMode not implemented")
 }
 func (UnimplementedCameraServiceServer) SubscribeVideoStreamInfo(*SubscribeVideoStreamInfoRequest, grpc.ServerStreamingServer[VideoStreamInfoResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeVideoStreamInfo not implemented")
 }
+func (UnimplementedCameraServiceServer) GetVideoStreamInfo(context.Context, *GetVideoStreamInfoRequest) (*GetVideoStreamInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetVideoStreamInfo not implemented")
+}
 func (UnimplementedCameraServiceServer) SubscribeCaptureInfo(*SubscribeCaptureInfoRequest, grpc.ServerStreamingServer[CaptureInfoResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeCaptureInfo not implemented")
 }
-func (UnimplementedCameraServiceServer) SubscribeStatus(*SubscribeStatusRequest, grpc.ServerStreamingServer[StatusResponse]) error {
-	return status.Errorf(codes.Unimplemented, "method SubscribeStatus not implemented")
+func (UnimplementedCameraServiceServer) SubscribeStorage(*SubscribeStorageRequest, grpc.ServerStreamingServer[StorageResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeStorage not implemented")
+}
+func (UnimplementedCameraServiceServer) GetStorage(context.Context, *GetStorageRequest) (*GetStorageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetStorage not implemented")
 }
 func (UnimplementedCameraServiceServer) SubscribeCurrentSettings(*SubscribeCurrentSettingsRequest, grpc.ServerStreamingServer[CurrentSettingsResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribeCurrentSettings not implemented")
 }
+func (UnimplementedCameraServiceServer) GetCurrentSettings(context.Context, *GetCurrentSettingsRequest) (*GetCurrentSettingsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCurrentSettings not implemented")
+}
 func (UnimplementedCameraServiceServer) SubscribePossibleSettingOptions(*SubscribePossibleSettingOptionsRequest, grpc.ServerStreamingServer[PossibleSettingOptionsResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method SubscribePossibleSettingOptions not implemented")
+}
+func (UnimplementedCameraServiceServer) GetPossibleSettingOptions(context.Context, *GetPossibleSettingOptionsRequest) (*GetPossibleSettingOptionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPossibleSettingOptions not implemented")
 }
 func (UnimplementedCameraServiceServer) SetSetting(context.Context, *SetSettingRequest) (*SetSettingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetSetting not implemented")
@@ -702,9 +769,6 @@ func (UnimplementedCameraServiceServer) GetSetting(context.Context, *GetSettingR
 }
 func (UnimplementedCameraServiceServer) FormatStorage(context.Context, *FormatStorageRequest) (*FormatStorageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FormatStorage not implemented")
-}
-func (UnimplementedCameraServiceServer) SelectCamera(context.Context, *SelectCameraRequest) (*SelectCameraResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SelectCamera not implemented")
 }
 func (UnimplementedCameraServiceServer) ResetSettings(context.Context, *ResetSettingsRequest) (*ResetSettingsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ResetSettings not implemented")
@@ -761,24 +825,6 @@ func RegisterCameraServiceServer(s grpc.ServiceRegistrar, srv CameraServiceServe
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&CameraService_ServiceDesc, srv)
-}
-
-func _CameraService_Prepare_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PrepareRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CameraServiceServer).Prepare(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: CameraService_Prepare_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CameraServiceServer).Prepare(ctx, req.(*PrepareRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _CameraService_TakePhoto_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -943,6 +989,17 @@ func _CameraService_ListPhotos_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CameraService_SubscribeCameraList_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeCameraListRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(CameraServiceServer).SubscribeCameraList(m, &grpc.GenericServerStream[SubscribeCameraListRequest, CameraListResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CameraService_SubscribeCameraListServer = grpc.ServerStreamingServer[CameraListResponse]
+
 func _CameraService_SubscribeMode_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(SubscribeModeRequest)
 	if err := stream.RecvMsg(m); err != nil {
@@ -954,16 +1011,23 @@ func _CameraService_SubscribeMode_Handler(srv interface{}, stream grpc.ServerStr
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CameraService_SubscribeModeServer = grpc.ServerStreamingServer[ModeResponse]
 
-func _CameraService_SubscribeInformation_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(SubscribeInformationRequest)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+func _CameraService_GetMode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetModeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
 	}
-	return srv.(CameraServiceServer).SubscribeInformation(m, &grpc.GenericServerStream[SubscribeInformationRequest, InformationResponse]{ServerStream: stream})
+	if interceptor == nil {
+		return srv.(CameraServiceServer).GetMode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CameraService_GetMode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CameraServiceServer).GetMode(ctx, req.(*GetModeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type CameraService_SubscribeInformationServer = grpc.ServerStreamingServer[InformationResponse]
 
 func _CameraService_SubscribeVideoStreamInfo_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(SubscribeVideoStreamInfoRequest)
@@ -976,6 +1040,24 @@ func _CameraService_SubscribeVideoStreamInfo_Handler(srv interface{}, stream grp
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CameraService_SubscribeVideoStreamInfoServer = grpc.ServerStreamingServer[VideoStreamInfoResponse]
 
+func _CameraService_GetVideoStreamInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetVideoStreamInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CameraServiceServer).GetVideoStreamInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CameraService_GetVideoStreamInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CameraServiceServer).GetVideoStreamInfo(ctx, req.(*GetVideoStreamInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CameraService_SubscribeCaptureInfo_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(SubscribeCaptureInfoRequest)
 	if err := stream.RecvMsg(m); err != nil {
@@ -987,16 +1069,34 @@ func _CameraService_SubscribeCaptureInfo_Handler(srv interface{}, stream grpc.Se
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CameraService_SubscribeCaptureInfoServer = grpc.ServerStreamingServer[CaptureInfoResponse]
 
-func _CameraService_SubscribeStatus_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(SubscribeStatusRequest)
+func _CameraService_SubscribeStorage_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeStorageRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(CameraServiceServer).SubscribeStatus(m, &grpc.GenericServerStream[SubscribeStatusRequest, StatusResponse]{ServerStream: stream})
+	return srv.(CameraServiceServer).SubscribeStorage(m, &grpc.GenericServerStream[SubscribeStorageRequest, StorageResponse]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type CameraService_SubscribeStatusServer = grpc.ServerStreamingServer[StatusResponse]
+type CameraService_SubscribeStorageServer = grpc.ServerStreamingServer[StorageResponse]
+
+func _CameraService_GetStorage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetStorageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CameraServiceServer).GetStorage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CameraService_GetStorage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CameraServiceServer).GetStorage(ctx, req.(*GetStorageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
 
 func _CameraService_SubscribeCurrentSettings_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(SubscribeCurrentSettingsRequest)
@@ -1009,6 +1109,24 @@ func _CameraService_SubscribeCurrentSettings_Handler(srv interface{}, stream grp
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CameraService_SubscribeCurrentSettingsServer = grpc.ServerStreamingServer[CurrentSettingsResponse]
 
+func _CameraService_GetCurrentSettings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCurrentSettingsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CameraServiceServer).GetCurrentSettings(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CameraService_GetCurrentSettings_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CameraServiceServer).GetCurrentSettings(ctx, req.(*GetCurrentSettingsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CameraService_SubscribePossibleSettingOptions_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(SubscribePossibleSettingOptionsRequest)
 	if err := stream.RecvMsg(m); err != nil {
@@ -1019,6 +1137,24 @@ func _CameraService_SubscribePossibleSettingOptions_Handler(srv interface{}, str
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CameraService_SubscribePossibleSettingOptionsServer = grpc.ServerStreamingServer[PossibleSettingOptionsResponse]
+
+func _CameraService_GetPossibleSettingOptions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPossibleSettingOptionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CameraServiceServer).GetPossibleSettingOptions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CameraService_GetPossibleSettingOptions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CameraServiceServer).GetPossibleSettingOptions(ctx, req.(*GetPossibleSettingOptionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
 
 func _CameraService_SetSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetSettingRequest)
@@ -1070,24 +1206,6 @@ func _CameraService_FormatStorage_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CameraServiceServer).FormatStorage(ctx, req.(*FormatStorageRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _CameraService_SelectCamera_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SelectCameraRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CameraServiceServer).SelectCamera(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: CameraService_SelectCamera_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CameraServiceServer).SelectCamera(ctx, req.(*SelectCameraRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1316,10 +1434,6 @@ var CameraService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*CameraServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Prepare",
-			Handler:    _CameraService_Prepare_Handler,
-		},
-		{
 			MethodName: "TakePhoto",
 			Handler:    _CameraService_TakePhoto_Handler,
 		},
@@ -1356,6 +1470,26 @@ var CameraService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _CameraService_ListPhotos_Handler,
 		},
 		{
+			MethodName: "GetMode",
+			Handler:    _CameraService_GetMode_Handler,
+		},
+		{
+			MethodName: "GetVideoStreamInfo",
+			Handler:    _CameraService_GetVideoStreamInfo_Handler,
+		},
+		{
+			MethodName: "GetStorage",
+			Handler:    _CameraService_GetStorage_Handler,
+		},
+		{
+			MethodName: "GetCurrentSettings",
+			Handler:    _CameraService_GetCurrentSettings_Handler,
+		},
+		{
+			MethodName: "GetPossibleSettingOptions",
+			Handler:    _CameraService_GetPossibleSettingOptions_Handler,
+		},
+		{
 			MethodName: "SetSetting",
 			Handler:    _CameraService_SetSetting_Handler,
 		},
@@ -1366,10 +1500,6 @@ var CameraService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FormatStorage",
 			Handler:    _CameraService_FormatStorage_Handler,
-		},
-		{
-			MethodName: "SelectCamera",
-			Handler:    _CameraService_SelectCamera_Handler,
 		},
 		{
 			MethodName: "ResetSettings",
@@ -1422,13 +1552,13 @@ var CameraService_ServiceDesc = grpc.ServiceDesc{
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "SubscribeMode",
-			Handler:       _CameraService_SubscribeMode_Handler,
+			StreamName:    "SubscribeCameraList",
+			Handler:       _CameraService_SubscribeCameraList_Handler,
 			ServerStreams: true,
 		},
 		{
-			StreamName:    "SubscribeInformation",
-			Handler:       _CameraService_SubscribeInformation_Handler,
+			StreamName:    "SubscribeMode",
+			Handler:       _CameraService_SubscribeMode_Handler,
 			ServerStreams: true,
 		},
 		{
@@ -1442,8 +1572,8 @@ var CameraService_ServiceDesc = grpc.ServiceDesc{
 			ServerStreams: true,
 		},
 		{
-			StreamName:    "SubscribeStatus",
-			Handler:       _CameraService_SubscribeStatus_Handler,
+			StreamName:    "SubscribeStorage",
+			Handler:       _CameraService_SubscribeStorage_Handler,
 			ServerStreams: true,
 		},
 		{

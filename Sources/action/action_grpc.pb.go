@@ -37,8 +37,6 @@ const (
 	ActionService_TransitionToMulticopter_FullMethodName   = "/mavsdk.rpc.action.ActionService/TransitionToMulticopter"
 	ActionService_GetTakeoffAltitude_FullMethodName        = "/mavsdk.rpc.action.ActionService/GetTakeoffAltitude"
 	ActionService_SetTakeoffAltitude_FullMethodName        = "/mavsdk.rpc.action.ActionService/SetTakeoffAltitude"
-	ActionService_GetMaximumSpeed_FullMethodName           = "/mavsdk.rpc.action.ActionService/GetMaximumSpeed"
-	ActionService_SetMaximumSpeed_FullMethodName           = "/mavsdk.rpc.action.ActionService/SetMaximumSpeed"
 	ActionService_GetReturnToLaunchAltitude_FullMethodName = "/mavsdk.rpc.action.ActionService/GetReturnToLaunchAltitude"
 	ActionService_SetReturnToLaunchAltitude_FullMethodName = "/mavsdk.rpc.action.ActionService/SetReturnToLaunchAltitude"
 	ActionService_SetCurrentSpeed_FullMethodName           = "/mavsdk.rpc.action.ActionService/SetCurrentSpeed"
@@ -142,10 +140,6 @@ type ActionServiceClient interface {
 	GetTakeoffAltitude(ctx context.Context, in *GetTakeoffAltitudeRequest, opts ...grpc.CallOption) (*GetTakeoffAltitudeResponse, error)
 	// Set takeoff altitude (in meters above ground).
 	SetTakeoffAltitude(ctx context.Context, in *SetTakeoffAltitudeRequest, opts ...grpc.CallOption) (*SetTakeoffAltitudeResponse, error)
-	// Get the vehicle maximum speed (in metres/second).
-	GetMaximumSpeed(ctx context.Context, in *GetMaximumSpeedRequest, opts ...grpc.CallOption) (*GetMaximumSpeedResponse, error)
-	// Set vehicle maximum speed (in metres/second).
-	SetMaximumSpeed(ctx context.Context, in *SetMaximumSpeedRequest, opts ...grpc.CallOption) (*SetMaximumSpeedResponse, error)
 	// Get the return to launch minimum return altitude (in meters).
 	GetReturnToLaunchAltitude(ctx context.Context, in *GetReturnToLaunchAltitudeRequest, opts ...grpc.CallOption) (*GetReturnToLaunchAltitudeResponse, error)
 	// Set the return to launch minimum return altitude (in meters).
@@ -345,26 +339,6 @@ func (c *actionServiceClient) SetTakeoffAltitude(ctx context.Context, in *SetTak
 	return out, nil
 }
 
-func (c *actionServiceClient) GetMaximumSpeed(ctx context.Context, in *GetMaximumSpeedRequest, opts ...grpc.CallOption) (*GetMaximumSpeedResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetMaximumSpeedResponse)
-	err := c.cc.Invoke(ctx, ActionService_GetMaximumSpeed_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *actionServiceClient) SetMaximumSpeed(ctx context.Context, in *SetMaximumSpeedRequest, opts ...grpc.CallOption) (*SetMaximumSpeedResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SetMaximumSpeedResponse)
-	err := c.cc.Invoke(ctx, ActionService_SetMaximumSpeed_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *actionServiceClient) GetReturnToLaunchAltitude(ctx context.Context, in *GetReturnToLaunchAltitudeRequest, opts ...grpc.CallOption) (*GetReturnToLaunchAltitudeResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetReturnToLaunchAltitudeResponse)
@@ -493,10 +467,6 @@ type ActionServiceServer interface {
 	GetTakeoffAltitude(context.Context, *GetTakeoffAltitudeRequest) (*GetTakeoffAltitudeResponse, error)
 	// Set takeoff altitude (in meters above ground).
 	SetTakeoffAltitude(context.Context, *SetTakeoffAltitudeRequest) (*SetTakeoffAltitudeResponse, error)
-	// Get the vehicle maximum speed (in metres/second).
-	GetMaximumSpeed(context.Context, *GetMaximumSpeedRequest) (*GetMaximumSpeedResponse, error)
-	// Set vehicle maximum speed (in metres/second).
-	SetMaximumSpeed(context.Context, *SetMaximumSpeedRequest) (*SetMaximumSpeedResponse, error)
 	// Get the return to launch minimum return altitude (in meters).
 	GetReturnToLaunchAltitude(context.Context, *GetReturnToLaunchAltitudeRequest) (*GetReturnToLaunchAltitudeResponse, error)
 	// Set the return to launch minimum return altitude (in meters).
@@ -569,12 +539,6 @@ func (UnimplementedActionServiceServer) GetTakeoffAltitude(context.Context, *Get
 }
 func (UnimplementedActionServiceServer) SetTakeoffAltitude(context.Context, *SetTakeoffAltitudeRequest) (*SetTakeoffAltitudeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetTakeoffAltitude not implemented")
-}
-func (UnimplementedActionServiceServer) GetMaximumSpeed(context.Context, *GetMaximumSpeedRequest) (*GetMaximumSpeedResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetMaximumSpeed not implemented")
-}
-func (UnimplementedActionServiceServer) SetMaximumSpeed(context.Context, *SetMaximumSpeedRequest) (*SetMaximumSpeedResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetMaximumSpeed not implemented")
 }
 func (UnimplementedActionServiceServer) GetReturnToLaunchAltitude(context.Context, *GetReturnToLaunchAltitudeRequest) (*GetReturnToLaunchAltitudeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetReturnToLaunchAltitude not implemented")
@@ -930,42 +894,6 @@ func _ActionService_SetTakeoffAltitude_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ActionService_GetMaximumSpeed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetMaximumSpeedRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ActionServiceServer).GetMaximumSpeed(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ActionService_GetMaximumSpeed_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ActionServiceServer).GetMaximumSpeed(ctx, req.(*GetMaximumSpeedRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ActionService_SetMaximumSpeed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetMaximumSpeedRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ActionServiceServer).SetMaximumSpeed(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ActionService_SetMaximumSpeed_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ActionServiceServer).SetMaximumSpeed(ctx, req.(*SetMaximumSpeedRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _ActionService_GetReturnToLaunchAltitude_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetReturnToLaunchAltitudeRequest)
 	if err := dec(in); err != nil {
@@ -1098,14 +1026,6 @@ var ActionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetTakeoffAltitude",
 			Handler:    _ActionService_SetTakeoffAltitude_Handler,
-		},
-		{
-			MethodName: "GetMaximumSpeed",
-			Handler:    _ActionService_GetMaximumSpeed_Handler,
-		},
-		{
-			MethodName: "SetMaximumSpeed",
-			Handler:    _ActionService_SetMaximumSpeed_Handler,
 		},
 		{
 			MethodName: "GetReturnToLaunchAltitude",
