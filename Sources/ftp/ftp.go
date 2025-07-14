@@ -2,11 +2,11 @@ package ftp
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	codes "google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,19 +14,21 @@ type ServiceImpl struct {
 }
 
 /*
-   Downloads a file to local directory.
-
-   Parameters
-   ----------
-   remoteFilePath string, localDir string, useBurst bool
+Download Downloads a file to local directory.
 */
+func (a *ServiceImpl) Download(
+	ctx context.Context,
+	remoteFilePath string,
+	localDir string,
+	useBurst bool,
 
-func (a *ServiceImpl) Download(ctx context.Context, remoteFilePath string, localDir string, useBurst bool) (<-chan *ProgressData, error) {
+) (<-chan *ProgressData, error) {
 	ch := make(chan *ProgressData)
-	request := &SubscribeDownloadRequest{}
-	request.RemoteFilePath = remoteFilePath
-	request.LocalDir = localDir
-	request.UseBurst = useBurst
+	request := &SubscribeDownloadRequest{
+		RemoteFilePath: remoteFilePath,
+		LocalDir:       localDir,
+		UseBurst:       useBurst,
+	}
 	stream, err := a.Client.SubscribeDownload(ctx, request)
 	if err != nil {
 		return nil, err
@@ -43,8 +45,7 @@ func (a *ServiceImpl) Download(ctx context.Context, remoteFilePath string, local
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Download messages, err: %v\n", err)
-				break
+				log.Fatalf("Unable to receive Download messages, err: %v", err)
 			}
 			ch <- m.GetProgressData()
 		}
@@ -53,18 +54,19 @@ func (a *ServiceImpl) Download(ctx context.Context, remoteFilePath string, local
 }
 
 /*
-   Uploads local file to remote directory.
-
-   Parameters
-   ----------
-   localFilePath string, remoteDir string
+Upload Uploads local file to remote directory.
 */
+func (a *ServiceImpl) Upload(
+	ctx context.Context,
+	localFilePath string,
+	remoteDir string,
 
-func (a *ServiceImpl) Upload(ctx context.Context, localFilePath string, remoteDir string) (<-chan *ProgressData, error) {
+) (<-chan *ProgressData, error) {
 	ch := make(chan *ProgressData)
-	request := &SubscribeUploadRequest{}
-	request.LocalFilePath = localFilePath
-	request.RemoteDir = remoteDir
+	request := &SubscribeUploadRequest{
+		LocalFilePath: localFilePath,
+		RemoteDir:     remoteDir,
+	}
 	stream, err := a.Client.SubscribeUpload(ctx, request)
 	if err != nil {
 		return nil, err
@@ -81,8 +83,7 @@ func (a *ServiceImpl) Upload(ctx context.Context, localFilePath string, remoteDi
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Upload messages, err: %v\n", err)
-				break
+				log.Fatalf("Unable to receive Upload messages, err: %v", err)
 			}
 			ch <- m.GetProgressData()
 		}
@@ -91,46 +92,34 @@ func (a *ServiceImpl) Upload(ctx context.Context, localFilePath string, remoteDi
 }
 
 /*
-   Lists items from a remote directory.
-
-   Parameters
-   ----------
-   remoteDir string
-
-   Returns
-   -------
-   True
-   Paths : []*string
-        The found directory contents.
-
-
+ListDirectory Lists items from a remote directory.
 */
+func (s *ServiceImpl) ListDirectory(
+	ctx context.Context,
+	remoteDir string,
 
-func (s *ServiceImpl) ListDirectory(ctx context.Context, remoteDir string) (*ListDirectoryResponse, error) {
-	request := &ListDirectoryRequest{}
-	request.RemoteDir = remoteDir
+) (*ListDirectoryResponse, error) {
+	request := &ListDirectoryRequest{
+		RemoteDir: remoteDir,
+	}
 	response, err := s.Client.ListDirectory(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Creates a remote directory.
-
-   Parameters
-   ----------
-   remoteDir string
-
-
+CreateDirectory Creates a remote directory.
 */
+func (s *ServiceImpl) CreateDirectory(
+	ctx context.Context,
+	remoteDir string,
 
-func (s *ServiceImpl) CreateDirectory(ctx context.Context, remoteDir string) (*CreateDirectoryResponse, error) {
-
-	request := &CreateDirectoryRequest{}
-	request.RemoteDir = remoteDir
+) (*CreateDirectoryResponse, error) {
+	request := &CreateDirectoryRequest{
+		RemoteDir: remoteDir,
+	}
 	response, err := s.Client.CreateDirectory(ctx, request)
 	if err != nil {
 		return nil, err
@@ -139,19 +128,16 @@ func (s *ServiceImpl) CreateDirectory(ctx context.Context, remoteDir string) (*C
 }
 
 /*
-   Removes a remote directory.
-
-   Parameters
-   ----------
-   remoteDir string
-
-
+RemoveDirectory Removes a remote directory.
 */
+func (s *ServiceImpl) RemoveDirectory(
+	ctx context.Context,
+	remoteDir string,
 
-func (s *ServiceImpl) RemoveDirectory(ctx context.Context, remoteDir string) (*RemoveDirectoryResponse, error) {
-
-	request := &RemoveDirectoryRequest{}
-	request.RemoteDir = remoteDir
+) (*RemoveDirectoryResponse, error) {
+	request := &RemoveDirectoryRequest{
+		RemoteDir: remoteDir,
+	}
 	response, err := s.Client.RemoveDirectory(ctx, request)
 	if err != nil {
 		return nil, err
@@ -160,19 +146,16 @@ func (s *ServiceImpl) RemoveDirectory(ctx context.Context, remoteDir string) (*R
 }
 
 /*
-   Removes a remote file.
-
-   Parameters
-   ----------
-   remoteFilePath string
-
-
+RemoveFile Removes a remote file.
 */
+func (s *ServiceImpl) RemoveFile(
+	ctx context.Context,
+	remoteFilePath string,
 
-func (s *ServiceImpl) RemoveFile(ctx context.Context, remoteFilePath string) (*RemoveFileResponse, error) {
-
-	request := &RemoveFileRequest{}
-	request.RemoteFilePath = remoteFilePath
+) (*RemoveFileResponse, error) {
+	request := &RemoveFileRequest{
+		RemoteFilePath: remoteFilePath,
+	}
 	response, err := s.Client.RemoveFile(ctx, request)
 	if err != nil {
 		return nil, err
@@ -181,22 +164,18 @@ func (s *ServiceImpl) RemoveFile(ctx context.Context, remoteFilePath string) (*R
 }
 
 /*
-   Renames a remote file or remote directory.
-
-   Parameters
-   ----------
-   remoteFromPath string
-
-   remoteToPath string
-
-
+Rename Renames a remote file or remote directory.
 */
+func (s *ServiceImpl) Rename(
+	ctx context.Context,
+	remoteFromPath string,
+	remoteToPath string,
 
-func (s *ServiceImpl) Rename(ctx context.Context, remoteFromPath string, remoteToPath string) (*RenameResponse, error) {
-
-	request := &RenameRequest{}
-	request.RemoteFromPath = remoteFromPath
-	request.RemoteToPath = remoteToPath
+) (*RenameResponse, error) {
+	request := &RenameRequest{
+		RemoteFromPath: remoteFromPath,
+		RemoteToPath:   remoteToPath,
+	}
 	response, err := s.Client.Rename(ctx, request)
 	if err != nil {
 		return nil, err
@@ -205,47 +184,36 @@ func (s *ServiceImpl) Rename(ctx context.Context, remoteFromPath string, remoteT
 }
 
 /*
-   Compares a local file to a remote file using a CRC32 checksum.
-
-   Parameters
-   ----------
-   localFilePath stringremoteFilePath string
-
-   Returns
-   -------
-   False
-   AreIdentical : bool
-        Whether the files are identical.
-
-
+AreFilesIdentical Compares a local file to a remote file using a CRC32 checksum.
 */
+func (s *ServiceImpl) AreFilesIdentical(
+	ctx context.Context,
+	localFilePath string,
+	remoteFilePath string,
 
-func (s *ServiceImpl) AreFilesIdentical(ctx context.Context, localFilePath string, remoteFilePath string) (*AreFilesIdenticalResponse, error) {
-	request := &AreFilesIdenticalRequest{}
-	request.LocalFilePath = localFilePath
-	request.RemoteFilePath = remoteFilePath
+) (*AreFilesIdenticalResponse, error) {
+	request := &AreFilesIdenticalRequest{
+		LocalFilePath:  localFilePath,
+		RemoteFilePath: remoteFilePath,
+	}
 	response, err := s.Client.AreFilesIdentical(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Set target component ID. By default it is the autopilot.
-
-   Parameters
-   ----------
-   compid uint32
-
-
+SetTargetCompid Set target component ID. By default it is the autopilot.
 */
+func (s *ServiceImpl) SetTargetCompid(
+	ctx context.Context,
+	compid uint32,
 
-func (s *ServiceImpl) SetTargetCompid(ctx context.Context, compid uint32) (*SetTargetCompidResponse, error) {
-
-	request := &SetTargetCompidRequest{}
-	request.Compid = compid
+) (*SetTargetCompidResponse, error) {
+	request := &SetTargetCompidRequest{
+		Compid: compid,
+	}
 	response, err := s.Client.SetTargetCompid(ctx, request)
 	if err != nil {
 		return nil, err

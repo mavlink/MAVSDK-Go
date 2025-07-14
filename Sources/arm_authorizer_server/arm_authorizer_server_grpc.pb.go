@@ -8,6 +8,7 @@ package arm_authorizer_server
 
 import (
 	context "context"
+
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -27,6 +28,8 @@ const (
 // ArmAuthorizerServerServiceClient is the client API for ArmAuthorizerServerService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// Use arm authorization.
 type ArmAuthorizerServerServiceClient interface {
 	// Subscribe to arm authorization request messages. Each request received should respond to using RespondArmAuthorization
 	SubscribeArmAuthorization(ctx context.Context, in *SubscribeArmAuthorizationRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ArmAuthorizationResponse], error)
@@ -86,6 +89,8 @@ func (c *armAuthorizerServerServiceClient) RejectArmAuthorization(ctx context.Co
 // ArmAuthorizerServerServiceServer is the server API for ArmAuthorizerServerService service.
 // All implementations must embed UnimplementedArmAuthorizerServerServiceServer
 // for forward compatibility.
+//
+// Use arm authorization.
 type ArmAuthorizerServerServiceServer interface {
 	// Subscribe to arm authorization request messages. Each request received should respond to using RespondArmAuthorization
 	SubscribeArmAuthorization(*SubscribeArmAuthorizationRequest, grpc.ServerStreamingServer[ArmAuthorizationResponse]) error

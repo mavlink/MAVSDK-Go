@@ -9,24 +9,19 @@ type ServiceImpl struct {
 }
 
 /*
-   Upload geofences.
+UploadGeofence Upload geofences.
 
-   Polygon and Circular geofences are uploaded to a drone. Once uploaded, the geofence will remain
-   on the drone even if a connection is lost.
-
-   Parameters
-   ----------
-   geofenceData *GeofenceData
-
-
-
+	Polygon and Circular geofences are uploaded to a drone. Once uploaded, the geofence will remain
+	on the drone even if a connection is lost.
 */
+func (s *ServiceImpl) UploadGeofence(
+	ctx context.Context,
+	geofenceData *GeofenceData,
 
-func (s *ServiceImpl) UploadGeofence(ctx context.Context, geofenceData *GeofenceData) (*UploadGeofenceResponse, error) {
-
-	request := &UploadGeofenceRequest{}
-	request.GeofenceData = geofenceData
-
+) (*UploadGeofenceResponse, error) {
+	request := &UploadGeofenceRequest{
+		GeofenceData: geofenceData,
+	}
 	response, err := s.Client.UploadGeofence(ctx, request)
 	if err != nil {
 		return nil, err
@@ -35,13 +30,12 @@ func (s *ServiceImpl) UploadGeofence(ctx context.Context, geofenceData *Geofence
 }
 
 /*
-   Clear all geofences saved on the vehicle.
-
-
+ClearGeofence Clear all geofences saved on the vehicle.
 */
+func (s *ServiceImpl) ClearGeofence(
+	ctx context.Context,
 
-func (s *ServiceImpl) ClearGeofence(ctx context.Context) (*ClearGeofenceResponse, error) {
-
+) (*ClearGeofenceResponse, error) {
 	request := &ClearGeofenceRequest{}
 	response, err := s.Client.ClearGeofence(ctx, request)
 	if err != nil {

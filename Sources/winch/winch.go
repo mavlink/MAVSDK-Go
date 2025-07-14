@@ -2,11 +2,11 @@ package winch
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	codes "google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,12 +14,12 @@ type ServiceImpl struct {
 }
 
 /*
-   Subscribe to 'winch status' updates.
-
-
+Status Subscribe to 'winch status' updates.
 */
+func (a *ServiceImpl) Status(
+	ctx context.Context,
 
-func (a *ServiceImpl) Status(ctx context.Context) (<-chan *Status, error) {
+) (<-chan *Status, error) {
 	ch := make(chan *Status)
 	request := &SubscribeStatusRequest{}
 	stream, err := a.Client.SubscribeStatus(ctx, request)
@@ -38,8 +38,7 @@ func (a *ServiceImpl) Status(ctx context.Context) (<-chan *Status, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Status messages, err: %v\n", err)
-				break
+				log.Fatalf("Unable to receive Status messages, err: %v", err)
 			}
 			ch <- m.GetStatus()
 		}
@@ -48,19 +47,16 @@ func (a *ServiceImpl) Status(ctx context.Context) (<-chan *Status, error) {
 }
 
 /*
-   Allow motor to freewheel.
-
-   Parameters
-   ----------
-   instance uint32
-
-
+Relax Allow motor to freewheel.
 */
+func (s *ServiceImpl) Relax(
+	ctx context.Context,
+	instance uint32,
 
-func (s *ServiceImpl) Relax(ctx context.Context, instance uint32) (*RelaxResponse, error) {
-
-	request := &RelaxRequest{}
-	request.Instance = instance
+) (*RelaxResponse, error) {
+	request := &RelaxRequest{
+		Instance: instance,
+	}
 	response, err := s.Client.Relax(ctx, request)
 	if err != nil {
 		return nil, err
@@ -69,25 +65,20 @@ func (s *ServiceImpl) Relax(ctx context.Context, instance uint32) (*RelaxRespons
 }
 
 /*
-   Wind or unwind specified length of line, optionally using specified rate.
-
-   Parameters
-   ----------
-   instance uint32
-
-   lengthM float32
-
-   rateMS float32
-
-
+RelativeLengthControl Wind or unwind specified length of line, optionally using specified rate.
 */
+func (s *ServiceImpl) RelativeLengthControl(
+	ctx context.Context,
+	instance uint32,
+	lengthM float32,
+	rateMS float32,
 
-func (s *ServiceImpl) RelativeLengthControl(ctx context.Context, instance uint32, lengthM float32, rateMS float32) (*RelativeLengthControlResponse, error) {
-
-	request := &RelativeLengthControlRequest{}
-	request.Instance = instance
-	request.LengthM = lengthM
-	request.RateMS = rateMS
+) (*RelativeLengthControlResponse, error) {
+	request := &RelativeLengthControlRequest{
+		Instance: instance,
+		LengthM:  lengthM,
+		RateMS:   rateMS,
+	}
 	response, err := s.Client.RelativeLengthControl(ctx, request)
 	if err != nil {
 		return nil, err
@@ -96,22 +87,18 @@ func (s *ServiceImpl) RelativeLengthControl(ctx context.Context, instance uint32
 }
 
 /*
-   Wind or unwind line at specified rate.
-
-   Parameters
-   ----------
-   instance uint32
-
-   rateMS float32
-
-
+RateControl Wind or unwind line at specified rate.
 */
+func (s *ServiceImpl) RateControl(
+	ctx context.Context,
+	instance uint32,
+	rateMS float32,
 
-func (s *ServiceImpl) RateControl(ctx context.Context, instance uint32, rateMS float32) (*RateControlResponse, error) {
-
-	request := &RateControlRequest{}
-	request.Instance = instance
-	request.RateMS = rateMS
+) (*RateControlResponse, error) {
+	request := &RateControlRequest{
+		Instance: instance,
+		RateMS:   rateMS,
+	}
 	response, err := s.Client.RateControl(ctx, request)
 	if err != nil {
 		return nil, err
@@ -120,19 +107,16 @@ func (s *ServiceImpl) RateControl(ctx context.Context, instance uint32, rateMS f
 }
 
 /*
-   Perform the locking sequence to relieve motor while in the fully retracted position.
-
-   Parameters
-   ----------
-   instance uint32
-
-
+Lock Perform the locking sequence to relieve motor while in the fully retracted position.
 */
+func (s *ServiceImpl) Lock(
+	ctx context.Context,
+	instance uint32,
 
-func (s *ServiceImpl) Lock(ctx context.Context, instance uint32) (*LockResponse, error) {
-
-	request := &LockRequest{}
-	request.Instance = instance
+) (*LockResponse, error) {
+	request := &LockRequest{
+		Instance: instance,
+	}
 	response, err := s.Client.Lock(ctx, request)
 	if err != nil {
 		return nil, err
@@ -141,19 +125,16 @@ func (s *ServiceImpl) Lock(ctx context.Context, instance uint32) (*LockResponse,
 }
 
 /*
-   Sequence of drop, slow down, touch down, reel up, lock.
-
-   Parameters
-   ----------
-   instance uint32
-
-
+Deliver Sequence of drop, slow down, touch down, reel up, lock.
 */
+func (s *ServiceImpl) Deliver(
+	ctx context.Context,
+	instance uint32,
 
-func (s *ServiceImpl) Deliver(ctx context.Context, instance uint32) (*DeliverResponse, error) {
-
-	request := &DeliverRequest{}
-	request.Instance = instance
+) (*DeliverResponse, error) {
+	request := &DeliverRequest{
+		Instance: instance,
+	}
 	response, err := s.Client.Deliver(ctx, request)
 	if err != nil {
 		return nil, err
@@ -162,19 +143,16 @@ func (s *ServiceImpl) Deliver(ctx context.Context, instance uint32) (*DeliverRes
 }
 
 /*
-   Engage motor and hold current position.
-
-   Parameters
-   ----------
-   instance uint32
-
-
+Hold Engage motor and hold current position.
 */
+func (s *ServiceImpl) Hold(
+	ctx context.Context,
+	instance uint32,
 
-func (s *ServiceImpl) Hold(ctx context.Context, instance uint32) (*HoldResponse, error) {
-
-	request := &HoldRequest{}
-	request.Instance = instance
+) (*HoldResponse, error) {
+	request := &HoldRequest{
+		Instance: instance,
+	}
 	response, err := s.Client.Hold(ctx, request)
 	if err != nil {
 		return nil, err
@@ -183,19 +161,16 @@ func (s *ServiceImpl) Hold(ctx context.Context, instance uint32) (*HoldResponse,
 }
 
 /*
-   Return the reel to the fully retracted position.
-
-   Parameters
-   ----------
-   instance uint32
-
-
+Retract Return the reel to the fully retracted position.
 */
+func (s *ServiceImpl) Retract(
+	ctx context.Context,
+	instance uint32,
 
-func (s *ServiceImpl) Retract(ctx context.Context, instance uint32) (*RetractResponse, error) {
-
-	request := &RetractRequest{}
-	request.Instance = instance
+) (*RetractResponse, error) {
+	request := &RetractRequest{
+		Instance: instance,
+	}
 	response, err := s.Client.Retract(ctx, request)
 	if err != nil {
 		return nil, err
@@ -204,21 +179,18 @@ func (s *ServiceImpl) Retract(ctx context.Context, instance uint32) (*RetractRes
 }
 
 /*
-   Load the reel with line.
+LoadLine Load the reel with line.
 
-   The winch will calculate the total loaded length and stop when the tension exceeds a threshold.
-
-   Parameters
-   ----------
-   instance uint32
-
-
+	The winch will calculate the total loaded length and stop when the tension exceeds a threshold.
 */
+func (s *ServiceImpl) LoadLine(
+	ctx context.Context,
+	instance uint32,
 
-func (s *ServiceImpl) LoadLine(ctx context.Context, instance uint32) (*LoadLineResponse, error) {
-
-	request := &LoadLineRequest{}
-	request.Instance = instance
+) (*LoadLineResponse, error) {
+	request := &LoadLineRequest{
+		Instance: instance,
+	}
 	response, err := s.Client.LoadLine(ctx, request)
 	if err != nil {
 		return nil, err
@@ -227,19 +199,16 @@ func (s *ServiceImpl) LoadLine(ctx context.Context, instance uint32) (*LoadLineR
 }
 
 /*
-   Spool out the entire length of the line.
-
-   Parameters
-   ----------
-   instance uint32
-
-
+AbandonLine Spool out the entire length of the line.
 */
+func (s *ServiceImpl) AbandonLine(
+	ctx context.Context,
+	instance uint32,
 
-func (s *ServiceImpl) AbandonLine(ctx context.Context, instance uint32) (*AbandonLineResponse, error) {
-
-	request := &AbandonLineRequest{}
-	request.Instance = instance
+) (*AbandonLineResponse, error) {
+	request := &AbandonLineRequest{
+		Instance: instance,
+	}
 	response, err := s.Client.AbandonLine(ctx, request)
 	if err != nil {
 		return nil, err
@@ -248,19 +217,16 @@ func (s *ServiceImpl) AbandonLine(ctx context.Context, instance uint32) (*Abando
 }
 
 /*
-   Spools out just enough to present the hook to the user to load the payload.
-
-   Parameters
-   ----------
-   instance uint32
-
-
+LoadPayload Spools out just enough to present the hook to the user to load the payload.
 */
+func (s *ServiceImpl) LoadPayload(
+	ctx context.Context,
+	instance uint32,
 
-func (s *ServiceImpl) LoadPayload(ctx context.Context, instance uint32) (*LoadPayloadResponse, error) {
-
-	request := &LoadPayloadRequest{}
-	request.Instance = instance
+) (*LoadPayloadResponse, error) {
+	request := &LoadPayloadRequest{
+		Instance: instance,
+	}
 	response, err := s.Client.LoadPayload(ctx, request)
 	if err != nil {
 		return nil, err

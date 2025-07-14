@@ -2,11 +2,11 @@ package log_files
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	codes "google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,43 +14,36 @@ type ServiceImpl struct {
 }
 
 /*
-   Get List of log files.
-
-
-
-   Returns
-   -------
-   True
-   Entries : []*Entry
-        List of entries
-
-
+GetEntries Get List of log files.
 */
+func (s *ServiceImpl) GetEntries(
+	ctx context.Context,
 
-func (s *ServiceImpl) GetEntries(ctx context.Context) (*GetEntriesResponse, error) {
+) (*GetEntriesResponse, error) {
 	request := &GetEntriesRequest{}
 	response, err := s.Client.GetEntries(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Download log file.
-
-   Parameters
-   ----------
-   entry *Entry , path string
+DownloadLogFile Download log file.
 */
+func (a *ServiceImpl) DownloadLogFile(
+	ctx context.Context,
+	entry *Entry,
 
-func (a *ServiceImpl) DownloadLogFile(ctx context.Context, entry *Entry, path string) (<-chan *ProgressData, error) {
+	path string,
+
+) (<-chan *ProgressData, error) {
 	ch := make(chan *ProgressData)
-	request := &SubscribeDownloadLogFileRequest{}
-	request.Entry = entry
+	request := &SubscribeDownloadLogFileRequest{
+		Entry: entry,
 
-	request.Path = path
+		Path: path,
+	}
 	stream, err := a.Client.SubscribeDownloadLogFile(ctx, request)
 	if err != nil {
 		return nil, err
@@ -67,8 +60,7 @@ func (a *ServiceImpl) DownloadLogFile(ctx context.Context, entry *Entry, path st
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive DownloadLogFile messages, err: %v\n", err)
-				break
+				log.Fatalf("Unable to receive DownloadLogFile messages, err: %v", err)
 			}
 			ch <- m.GetProgress()
 		}
@@ -77,13 +69,12 @@ func (a *ServiceImpl) DownloadLogFile(ctx context.Context, entry *Entry, path st
 }
 
 /*
-   Erase all log files.
-
-
+EraseAllLogFiles Erase all log files.
 */
+func (s *ServiceImpl) EraseAllLogFiles(
+	ctx context.Context,
 
-func (s *ServiceImpl) EraseAllLogFiles(ctx context.Context) (*EraseAllLogFilesResponse, error) {
-
+) (*EraseAllLogFilesResponse, error) {
 	request := &EraseAllLogFilesRequest{}
 	response, err := s.Client.EraseAllLogFiles(ctx, request)
 	if err != nil {

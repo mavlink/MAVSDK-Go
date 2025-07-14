@@ -1,47 +1,17 @@
-/*
- {{ indent(method_description, 1) }}
-
-     {% if params -%}
-     Parameters
-     ----------
-     {% for param in params %}
-        {%- if param.type_info.is_primitive -%}
-            {{ param.name.lower_camel_case }} {{ param.type_info.name }}
-        {%- elif param.type_info.is_repeated -%}
-            {{ param.name.lower_camel_case }} {{ param.type_info.name }} 
-        {%- else -%} 
-            {{ param.name.lower_camel_case }} *{{ param.type_info.name }} 
-        {% endif -%}
-     {% endfor %}
-     {%- endif %}
-
-     Returns
-     -------
-     {{return_type.is_repeated}}
-     {{ return_name.upper_camel_case }} : {{ return_type.name }}
-         {{ return_description }}
-     {% if has_result -%}
-     {%- endif %}
-*/
-
-
-func(s *ServiceImpl){{ name.upper_camel_case }}(ctx context.Context, {% for param in params %}{%- if param.type_info.is_primitive -%}{{ param.name.lower_camel_case }} {{ param.type_info.name }}{%- elif param.type_info.is_repeated -%} {{ param.name.lower_camel_case }} {{ param.type_info.name }} {%- else -%} {{ param.name.lower_camel_case }} *{{ param.type_info.name }} {% endif %}{{ ", " if not loop.last }}{% endfor %}) (*{{ name.upper_camel_case }}Response, error){
-    request := &{{ name.upper_camel_case }}Request{}
-	{% for param in params %}
-        {%- if param.type_info.is_primitive -%}
-    		request.{{ param.name.upper_camel_case }} = {{ param.name.lower_camel_case }}
-        {%- elif param.type_info.is_enum -%}
-            request.{{ param.name.upper_camel_case }} = *{{ param.name.lower_camel_case }}
-        {%- else -%}
-    		request.{{param.name.upper_camel_case}} = {{param.name.lower_camel_case}}
-        {% endif %}
-    {% endfor -%}
+{% include 'func_desc_macro.j2' %}
+func(s *ServiceImpl) {{ name.upper_camel_case }}(
+    ctx context.Context,
+	{% include 'func_param_macro.j2' %}
+) (*{{ name.upper_camel_case }}Response, error) {
+    request := &{{ name.upper_camel_case }}Request{
+        {% include 'object_init_macro.j2' %}
+    }
     response, err := s.Client.{{ name.upper_camel_case }}(ctx, request)
     if err != nil {
-		return nil, err
-	}
+        return nil, err
+    }
     return response, nil
-
 }
+
 
    

@@ -2,11 +2,11 @@ package arm_authorizer_server
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	codes "google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,12 +14,12 @@ type ServiceImpl struct {
 }
 
 /*
-   Subscribe to arm authorization request messages. Each request received should respond to using RespondArmAuthorization
-
-
+ArmAuthorization Subscribe to arm authorization request messages. Each request received should respond to using RespondArmAuthorization
 */
+func (a *ServiceImpl) ArmAuthorization(
+	ctx context.Context,
 
-func (a *ServiceImpl) ArmAuthorization(ctx context.Context) (<-chan uint32, error) {
+) (<-chan uint32, error) {
 	ch := make(chan uint32)
 	request := &SubscribeArmAuthorizationRequest{}
 	stream, err := a.Client.SubscribeArmAuthorization(ctx, request)
@@ -38,8 +38,7 @@ func (a *ServiceImpl) ArmAuthorization(ctx context.Context) (<-chan uint32, erro
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive ArmAuthorization messages, err: %v\n", err)
-				break
+				log.Fatalf("Unable to receive ArmAuthorization messages, err: %v", err)
 			}
 			ch <- m.GetSystemId()
 		}
@@ -48,19 +47,16 @@ func (a *ServiceImpl) ArmAuthorization(ctx context.Context) (<-chan uint32, erro
 }
 
 /*
-   Authorize arm for the specific time
-
-   Parameters
-   ----------
-   validTimeS int32
-
-
+AcceptArmAuthorization Authorize arm for the specific time
 */
+func (s *ServiceImpl) AcceptArmAuthorization(
+	ctx context.Context,
+	validTimeS int32,
 
-func (s *ServiceImpl) AcceptArmAuthorization(ctx context.Context, validTimeS int32) (*AcceptArmAuthorizationResponse, error) {
-
-	request := &AcceptArmAuthorizationRequest{}
-	request.ValidTimeS = validTimeS
+) (*AcceptArmAuthorizationResponse, error) {
+	request := &AcceptArmAuthorizationRequest{
+		ValidTimeS: validTimeS,
+	}
 	response, err := s.Client.AcceptArmAuthorization(ctx, request)
 	if err != nil {
 		return nil, err
@@ -69,26 +65,21 @@ func (s *ServiceImpl) AcceptArmAuthorization(ctx context.Context, validTimeS int
 }
 
 /*
-   Reject arm authorization request
-
-   Parameters
-   ----------
-   temporarily bool
-
-   reason *RejectionReason
-
-
-   extraInfo int32
-
-
+RejectArmAuthorization Reject arm authorization request
 */
+func (s *ServiceImpl) RejectArmAuthorization(
+	ctx context.Context,
+	temporarily bool,
+	reason *RejectionReason,
 
-func (s *ServiceImpl) RejectArmAuthorization(ctx context.Context, temporarily bool, reason *RejectionReason, extraInfo int32) (*RejectArmAuthorizationResponse, error) {
+	extraInfo int32,
 
-	request := &RejectArmAuthorizationRequest{}
-	request.Temporarily = temporarily
-	request.Reason = *reason
-	request.ExtraInfo = extraInfo
+) (*RejectArmAuthorizationResponse, error) {
+	request := &RejectArmAuthorizationRequest{
+		Temporarily: temporarily,
+		Reason:      *reason,
+		ExtraInfo:   extraInfo,
+	}
 	response, err := s.Client.RejectArmAuthorization(ctx, request)
 	if err != nil {
 		return nil, err

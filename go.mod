@@ -1,6 +1,6 @@
 module github.com/mavlink/MAVSDK-Go
 
-go 1.22.3
+go 1.24.4
 
 require (
 	google.golang.org/grpc v1.65.0

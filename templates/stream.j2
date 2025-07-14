@@ -1,46 +1,33 @@
-
- /*
- {{ indent(method_description, 1) }}
-
-     {% if params -%}
-     Parameters
-     ----------
-     {% for param in params %}{%- if param.type_info.is_primitive -%}{{ param.name.lower_camel_case }} {{ param.type_info.name }}{%- elif param.type_info.is_repeated -%} {{ param.name.lower_camel_case }} {{ param.type_info.name }} {%- else -%} {{ param.name.lower_camel_case }} *{{ param.type_info.name }} {% endif %}{{ ", " if not loop.last }}{% endfor %}
-
-     {%- endif %}
-*/
-
-func (a *ServiceImpl) {{ name.upper_camel_case }}(ctx context.Context, {% for param in params %}{%- if param.type_info.is_primitive -%}{{ param.name.lower_camel_case }} {{ param.type_info.name }}{%- elif param.type_info.is_repeated -%} {{ param.name.lower_camel_case }} {{ param.type_info.name }} {%- else -%} {{ param.name.lower_camel_case }} *{{ param.type_info.name }} {% endif %}{{ ", " if not loop.last }}{% endfor %}) (<-chan {% if return_type.is_repeated or return_type.is_primitive or return_type.is_enum %}  {{ return_type.name }}  {% else %} *{{ return_type.name }} {% endif %}, error){
-		ch := make(chan {% if return_type.is_repeated or return_type.is_primitive or return_type.is_enum %}  {{ return_type.name }}  {% else %} *{{ return_type.name }} {% endif %})
-		request := &Subscribe{{ name.upper_camel_case }}Request{}
-		{% for param in params %}
-        	{%- if param.type_info.is_primitive -%}
-    			request.{{ param.name.upper_camel_case }} = {{ param.name.lower_camel_case }}
-        	{%- else -%}
-    			request.{{param.name.upper_camel_case}} = {{param.name.lower_camel_case}}
-        	{% endif %}
-    	{% endfor -%}
-		stream, err := a.Client.Subscribe{{ name.upper_camel_case }}(ctx, request)
-		if err != nil {
-			return nil, err
-		}
-		go func() {
-			defer close(ch)
-			for {
-				m := &{{ name.upper_camel_case }}Response{}
-				err := stream.RecvMsg(m)
-				if err == io.EOF {
-					return
-				}
-				if err != nil {
-					if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
-						return
-					}
-					fmt.Printf("Unable to receive {{ name.upper_camel_case }} messages, err: %v\n", err)
-					break
-				}
-				ch <- m.Get{{ return_name.upper_camel_case }}()
-			}
-		}()	
-	return ch, nil
+{% include 'func_desc_macro.j2' %}
+func (a *ServiceImpl) {{ name.upper_camel_case }}(
+    ctx context.Context,
+	{% include 'func_param_macro.j2' %}
+) (<-chan {% if return_type.is_repeated or return_type.is_primitive or return_type.is_enum %} {{ return_type.name }}, {% else %} *{{ return_type.name }}, {% endif %} error) {
+    ch := make(chan {% if return_type.is_repeated or return_type.is_primitive or return_type.is_enum %} {{ return_type.name }} {% else %} *{{ return_type.name }} {% endif %})
+    request := &Subscribe{{ name.upper_camel_case }}Request{
+        {% include 'object_init_macro.j2' %}
+    }
+    stream, err := a.Client.Subscribe{{ name.upper_camel_case }}(ctx, request)
+    if err != nil {
+        return nil, err
+    }
+    go func() {
+        defer close(ch)
+        for {
+            m := &{{ name.upper_camel_case }}Response{}
+            err := stream.RecvMsg(m)
+            if err == io.EOF {
+                return
+            }
+            if err != nil {
+                if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+                    return
+                }
+                log.Fatalf("Unable to receive {{ name.upper_camel_case }} messages, err: %v", err)
+            }
+            ch <- m.Get{{ return_name.upper_camel_case }}()
+        }
+    }()    
+    return ch, nil
 }
+

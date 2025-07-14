@@ -2,11 +2,11 @@ package shell
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	codes "google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,19 +14,16 @@ type ServiceImpl struct {
 }
 
 /*
-   Send a command line.
-
-   Parameters
-   ----------
-   command string
-
-
+Send Send a command line.
 */
+func (s *ServiceImpl) Send(
+	ctx context.Context,
+	command string,
 
-func (s *ServiceImpl) Send(ctx context.Context, command string) (*SendResponse, error) {
-
-	request := &SendRequest{}
-	request.Command = command
+) (*SendResponse, error) {
+	request := &SendRequest{
+		Command: command,
+	}
 	response, err := s.Client.Send(ctx, request)
 	if err != nil {
 		return nil, err
@@ -35,14 +32,14 @@ func (s *ServiceImpl) Send(ctx context.Context, command string) (*SendResponse, 
 }
 
 /*
-   Receive feedback from a sent command line.
+Receive Receive feedback from a sent command line.
 
-   This subscription needs to be made before a command line is sent, otherwise, no response will be sent.
-
-
+	This subscription needs to be made before a command line is sent, otherwise, no response will be sent.
 */
+func (a *ServiceImpl) Receive(
+	ctx context.Context,
 
-func (a *ServiceImpl) Receive(ctx context.Context) (<-chan string, error) {
+) (<-chan string, error) {
 	ch := make(chan string)
 	request := &SubscribeReceiveRequest{}
 	stream, err := a.Client.SubscribeReceive(ctx, request)
@@ -61,8 +58,7 @@ func (a *ServiceImpl) Receive(ctx context.Context) (<-chan string, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Receive messages, err: %v\n", err)
-				break
+				log.Fatalf("Unable to receive Receive messages, err: %v", err)
 			}
 			ch <- m.GetData()
 		}

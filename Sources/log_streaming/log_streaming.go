@@ -2,11 +2,11 @@ package log_streaming
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	codes "google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,13 +14,12 @@ type ServiceImpl struct {
 }
 
 /*
-   Start streaming logging data.
-
-
+StartLogStreaming Start streaming logging data.
 */
+func (s *ServiceImpl) StartLogStreaming(
+	ctx context.Context,
 
-func (s *ServiceImpl) StartLogStreaming(ctx context.Context) (*StartLogStreamingResponse, error) {
-
+) (*StartLogStreamingResponse, error) {
 	request := &StartLogStreamingRequest{}
 	response, err := s.Client.StartLogStreaming(ctx, request)
 	if err != nil {
@@ -30,13 +29,12 @@ func (s *ServiceImpl) StartLogStreaming(ctx context.Context) (*StartLogStreaming
 }
 
 /*
-   Stop streaming logging data.
-
-
+StopLogStreaming Stop streaming logging data.
 */
+func (s *ServiceImpl) StopLogStreaming(
+	ctx context.Context,
 
-func (s *ServiceImpl) StopLogStreaming(ctx context.Context) (*StopLogStreamingResponse, error) {
-
+) (*StopLogStreamingResponse, error) {
 	request := &StopLogStreamingRequest{}
 	response, err := s.Client.StopLogStreaming(ctx, request)
 	if err != nil {
@@ -46,12 +44,12 @@ func (s *ServiceImpl) StopLogStreaming(ctx context.Context) (*StopLogStreamingRe
 }
 
 /*
-   Subscribe to logging messages
-
-
+LogStreamingRaw Subscribe to logging messages
 */
+func (a *ServiceImpl) LogStreamingRaw(
+	ctx context.Context,
 
-func (a *ServiceImpl) LogStreamingRaw(ctx context.Context) (<-chan *LogStreamingRaw, error) {
+) (<-chan *LogStreamingRaw, error) {
 	ch := make(chan *LogStreamingRaw)
 	request := &SubscribeLogStreamingRawRequest{}
 	stream, err := a.Client.SubscribeLogStreamingRaw(ctx, request)
@@ -70,8 +68,7 @@ func (a *ServiceImpl) LogStreamingRaw(ctx context.Context) (<-chan *LogStreaming
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive LogStreamingRaw messages, err: %v\n", err)
-				break
+				log.Fatalf("Unable to receive LogStreamingRaw messages, err: %v", err)
 			}
 			ch <- m.GetLoggingRaw()
 		}

@@ -9,53 +9,40 @@ type ServiceImpl struct {
 }
 
 /*
-   Get an int parameter.
+GetParamInt Get an int parameter.
 
-   If the type is wrong, the result will be `WRONG_TYPE`.
-
-   Parameters
-   ----------
-   name string
-
-   Returns
-   -------
-   False
-   Value : int32
-        Value of the requested parameter
-
-
+	If the type is wrong, the result will be `WRONG_TYPE`.
 */
+func (s *ServiceImpl) GetParamInt(
+	ctx context.Context,
+	name string,
 
-func (s *ServiceImpl) GetParamInt(ctx context.Context, name string) (*GetParamIntResponse, error) {
-	request := &GetParamIntRequest{}
-	request.Name = name
+) (*GetParamIntResponse, error) {
+	request := &GetParamIntRequest{
+		Name: name,
+	}
 	response, err := s.Client.GetParamInt(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Set an int parameter.
+SetParamInt Set an int parameter.
 
-   If the type is wrong, the result will be `WRONG_TYPE`.
-
-   Parameters
-   ----------
-   name string
-
-   value int32
-
-
+	If the type is wrong, the result will be `WRONG_TYPE`.
 */
+func (s *ServiceImpl) SetParamInt(
+	ctx context.Context,
+	name string,
+	value int32,
 
-func (s *ServiceImpl) SetParamInt(ctx context.Context, name string, value int32) (*SetParamIntResponse, error) {
-
-	request := &SetParamIntRequest{}
-	request.Name = name
-	request.Value = value
+) (*SetParamIntResponse, error) {
+	request := &SetParamIntRequest{
+		Name:  name,
+		Value: value,
+	}
 	response, err := s.Client.SetParamInt(ctx, request)
 	if err != nil {
 		return nil, err
@@ -64,53 +51,40 @@ func (s *ServiceImpl) SetParamInt(ctx context.Context, name string, value int32)
 }
 
 /*
-   Get a float parameter.
+GetParamFloat Get a float parameter.
 
-   If the type is wrong, the result will be `WRONG_TYPE`.
-
-   Parameters
-   ----------
-   name string
-
-   Returns
-   -------
-   False
-   Value : float32
-        Value of the requested parameter
-
-
+	If the type is wrong, the result will be `WRONG_TYPE`.
 */
+func (s *ServiceImpl) GetParamFloat(
+	ctx context.Context,
+	name string,
 
-func (s *ServiceImpl) GetParamFloat(ctx context.Context, name string) (*GetParamFloatResponse, error) {
-	request := &GetParamFloatRequest{}
-	request.Name = name
+) (*GetParamFloatResponse, error) {
+	request := &GetParamFloatRequest{
+		Name: name,
+	}
 	response, err := s.Client.GetParamFloat(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Set a float parameter.
+SetParamFloat Set a float parameter.
 
-   If the type is wrong, the result will be `WRONG_TYPE`.
-
-   Parameters
-   ----------
-   name string
-
-   value float32
-
-
+	If the type is wrong, the result will be `WRONG_TYPE`.
 */
+func (s *ServiceImpl) SetParamFloat(
+	ctx context.Context,
+	name string,
+	value float32,
 
-func (s *ServiceImpl) SetParamFloat(ctx context.Context, name string, value float32) (*SetParamFloatResponse, error) {
-
-	request := &SetParamFloatRequest{}
-	request.Name = name
-	request.Value = value
+) (*SetParamFloatResponse, error) {
+	request := &SetParamFloatRequest{
+		Name:  name,
+		Value: value,
+	}
 	response, err := s.Client.SetParamFloat(ctx, request)
 	if err != nil {
 		return nil, err
@@ -119,53 +93,40 @@ func (s *ServiceImpl) SetParamFloat(ctx context.Context, name string, value floa
 }
 
 /*
-   Get a custom parameter.
+GetParamCustom Get a custom parameter.
 
-   If the type is wrong, the result will be `WRONG_TYPE`.
-
-   Parameters
-   ----------
-   name string
-
-   Returns
-   -------
-   False
-   Value : string
-        Value of the requested parameter
-
-
+	If the type is wrong, the result will be `WRONG_TYPE`.
 */
+func (s *ServiceImpl) GetParamCustom(
+	ctx context.Context,
+	name string,
 
-func (s *ServiceImpl) GetParamCustom(ctx context.Context, name string) (*GetParamCustomResponse, error) {
-	request := &GetParamCustomRequest{}
-	request.Name = name
+) (*GetParamCustomResponse, error) {
+	request := &GetParamCustomRequest{
+		Name: name,
+	}
 	response, err := s.Client.GetParamCustom(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Set a custom parameter.
+SetParamCustom Set a custom parameter.
 
-   If the type is wrong, the result will be `WRONG_TYPE`.
-
-   Parameters
-   ----------
-   name string
-
-   value string
-
-
+	If the type is wrong, the result will be `WRONG_TYPE`.
 */
+func (s *ServiceImpl) SetParamCustom(
+	ctx context.Context,
+	name string,
+	value string,
 
-func (s *ServiceImpl) SetParamCustom(ctx context.Context, name string, value string) (*SetParamCustomResponse, error) {
-
-	request := &SetParamCustomRequest{}
-	request.Name = name
-	request.Value = value
+) (*SetParamCustomResponse, error) {
+	request := &SetParamCustomRequest{
+		Name:  name,
+		Value: value,
+	}
 	response, err := s.Client.SetParamCustom(ctx, request)
 	if err != nil {
 		return nil, err
@@ -174,49 +135,35 @@ func (s *ServiceImpl) SetParamCustom(ctx context.Context, name string, value str
 }
 
 /*
-   Get all parameters.
-
-
-
-   Returns
-   -------
-   False
-   Params : AllParams
-        Collection of all parameters
-
-
+GetAllParams Get all parameters.
 */
+func (s *ServiceImpl) GetAllParams(
+	ctx context.Context,
 
-func (s *ServiceImpl) GetAllParams(ctx context.Context) (*GetAllParamsResponse, error) {
+) (*GetAllParamsResponse, error) {
 	request := &GetAllParamsRequest{}
 	response, err := s.Client.GetAllParams(ctx, request)
 	if err != nil {
 		return nil, err
 	}
 	return response, nil
-
 }
 
 /*
-   Select component ID of parameter component to talk to and param protocol version.
+SelectComponent Select component ID of parameter component to talk to and param protocol version.
 
-   Default is the autopilot component (1), and Version (0).
-
-   Parameters
-   ----------
-   componentId int32
-
-   protocolVersion *ProtocolVersion
-
-
-
+	Default is the autopilot component (1), and Version (0).
 */
+func (s *ServiceImpl) SelectComponent(
+	ctx context.Context,
+	componentId int32,
+	protocolVersion *ProtocolVersion,
 
-func (s *ServiceImpl) SelectComponent(ctx context.Context, componentId int32, protocolVersion *ProtocolVersion) (*SelectComponentResponse, error) {
-
-	request := &SelectComponentRequest{}
-	request.ComponentId = componentId
-	request.ProtocolVersion = *protocolVersion
+) (*SelectComponentResponse, error) {
+	request := &SelectComponentRequest{
+		ComponentId:     componentId,
+		ProtocolVersion: *protocolVersion,
+	}
 	response, err := s.Client.SelectComponent(ctx, request)
 	if err != nil {
 		return nil, err

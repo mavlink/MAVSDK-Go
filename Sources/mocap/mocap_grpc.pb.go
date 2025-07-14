@@ -8,6 +8,7 @@ package mocap
 
 import (
 	context "context"
+
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -20,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	MocapService_SetVisionPositionEstimate_FullMethodName = "/mavsdk.rpc.mocap.MocapService/SetVisionPositionEstimate"
+	MocapService_SetVisionSpeedEstimate_FullMethodName    = "/mavsdk.rpc.mocap.MocapService/SetVisionSpeedEstimate"
 	MocapService_SetAttitudePositionMocap_FullMethodName  = "/mavsdk.rpc.mocap.MocapService/SetAttitudePositionMocap"
 	MocapService_SetOdometry_FullMethodName               = "/mavsdk.rpc.mocap.MocapService/SetOdometry"
 )
@@ -28,13 +30,14 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// *
 // Allows interfacing a vehicle with a motion capture system in
 // order to allow navigation without global positioning sources available
 // (e.g. indoors, or when flying under a bridge. etc.).
 type MocapServiceClient interface {
 	// Send Global position/attitude estimate from a vision source.
 	SetVisionPositionEstimate(ctx context.Context, in *SetVisionPositionEstimateRequest, opts ...grpc.CallOption) (*SetVisionPositionEstimateResponse, error)
+	// Send Global speed estimate from a vision source.
+	SetVisionSpeedEstimate(ctx context.Context, in *SetVisionSpeedEstimateRequest, opts ...grpc.CallOption) (*SetVisionSpeedEstimateResponse, error)
 	// Send motion capture attitude and position.
 	SetAttitudePositionMocap(ctx context.Context, in *SetAttitudePositionMocapRequest, opts ...grpc.CallOption) (*SetAttitudePositionMocapResponse, error)
 	// Send odometry information with an external interface.
@@ -53,6 +56,16 @@ func (c *mocapServiceClient) SetVisionPositionEstimate(ctx context.Context, in *
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SetVisionPositionEstimateResponse)
 	err := c.cc.Invoke(ctx, MocapService_SetVisionPositionEstimate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mocapServiceClient) SetVisionSpeedEstimate(ctx context.Context, in *SetVisionSpeedEstimateRequest, opts ...grpc.CallOption) (*SetVisionSpeedEstimateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetVisionSpeedEstimateResponse)
+	err := c.cc.Invoke(ctx, MocapService_SetVisionSpeedEstimate_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -83,13 +96,14 @@ func (c *mocapServiceClient) SetOdometry(ctx context.Context, in *SetOdometryReq
 // All implementations must embed UnimplementedMocapServiceServer
 // for forward compatibility.
 //
-// *
 // Allows interfacing a vehicle with a motion capture system in
 // order to allow navigation without global positioning sources available
 // (e.g. indoors, or when flying under a bridge. etc.).
 type MocapServiceServer interface {
 	// Send Global position/attitude estimate from a vision source.
 	SetVisionPositionEstimate(context.Context, *SetVisionPositionEstimateRequest) (*SetVisionPositionEstimateResponse, error)
+	// Send Global speed estimate from a vision source.
+	SetVisionSpeedEstimate(context.Context, *SetVisionSpeedEstimateRequest) (*SetVisionSpeedEstimateResponse, error)
 	// Send motion capture attitude and position.
 	SetAttitudePositionMocap(context.Context, *SetAttitudePositionMocapRequest) (*SetAttitudePositionMocapResponse, error)
 	// Send odometry information with an external interface.
@@ -106,6 +120,9 @@ type UnimplementedMocapServiceServer struct{}
 
 func (UnimplementedMocapServiceServer) SetVisionPositionEstimate(context.Context, *SetVisionPositionEstimateRequest) (*SetVisionPositionEstimateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetVisionPositionEstimate not implemented")
+}
+func (UnimplementedMocapServiceServer) SetVisionSpeedEstimate(context.Context, *SetVisionSpeedEstimateRequest) (*SetVisionSpeedEstimateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetVisionSpeedEstimate not implemented")
 }
 func (UnimplementedMocapServiceServer) SetAttitudePositionMocap(context.Context, *SetAttitudePositionMocapRequest) (*SetAttitudePositionMocapResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetAttitudePositionMocap not implemented")
@@ -148,6 +165,24 @@ func _MocapService_SetVisionPositionEstimate_Handler(srv interface{}, ctx contex
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MocapServiceServer).SetVisionPositionEstimate(ctx, req.(*SetVisionPositionEstimateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MocapService_SetVisionSpeedEstimate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetVisionSpeedEstimateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MocapServiceServer).SetVisionSpeedEstimate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MocapService_SetVisionSpeedEstimate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MocapServiceServer).SetVisionSpeedEstimate(ctx, req.(*SetVisionSpeedEstimateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -198,6 +233,10 @@ var MocapService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetVisionPositionEstimate",
 			Handler:    _MocapService_SetVisionPositionEstimate_Handler,
+		},
+		{
+			MethodName: "SetVisionSpeedEstimate",
+			Handler:    _MocapService_SetVisionSpeedEstimate_Handler,
 		},
 		{
 			MethodName: "SetAttitudePositionMocap",

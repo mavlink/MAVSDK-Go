@@ -2,11 +2,11 @@ package transponder
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
-	"google.golang.org/grpc/status"
 	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,12 +14,12 @@ type ServiceImpl struct {
 }
 
 /*
-   Subscribe to 'transponder' updates.
-
-
+Transponder Subscribe to 'transponder' updates.
 */
+func (a *ServiceImpl) Transponder(
+	ctx context.Context,
 
-func (a *ServiceImpl) Transponder(ctx context.Context) (<-chan *AdsbVehicle, error) {
+) (<-chan *AdsbVehicle, error) {
 	ch := make(chan *AdsbVehicle)
 	request := &SubscribeTransponderRequest{}
 	stream, err := a.Client.SubscribeTransponder(ctx, request)
@@ -38,8 +38,7 @@ func (a *ServiceImpl) Transponder(ctx context.Context) (<-chan *AdsbVehicle, err
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive Transponder messages, err: %v\n", err)
-				break
+				log.Fatalf("Unable to receive Transponder messages, err: %v", err)
 			}
 			ch <- m.GetTransponder()
 		}
@@ -48,19 +47,16 @@ func (a *ServiceImpl) Transponder(ctx context.Context) (<-chan *AdsbVehicle, err
 }
 
 /*
-   Set rate to 'transponder' updates.
-
-   Parameters
-   ----------
-   rateHz float64
-
-
+SetRateTransponder Set rate to 'transponder' updates.
 */
+func (s *ServiceImpl) SetRateTransponder(
+	ctx context.Context,
+	rateHz float64,
 
-func (s *ServiceImpl) SetRateTransponder(ctx context.Context, rateHz float64) (*SetRateTransponderResponse, error) {
-
-	request := &SetRateTransponderRequest{}
-	request.RateHz = rateHz
+) (*SetRateTransponderResponse, error) {
+	request := &SetRateTransponderRequest{
+		RateHz: rateHz,
+	}
 	response, err := s.Client.SetRateTransponder(ctx, request)
 	if err != nil {
 		return nil, err

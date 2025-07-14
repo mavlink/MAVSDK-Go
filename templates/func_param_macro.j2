@@ -1,0 +1,13 @@
+{% for param in params %}
+    {%- if param.name.lower_camel_case == 'range' %}
+        rangeVar {{ param.type_info.name }},
+    {%- elif param.name.lower_camel_case == 'type' %}
+        typeVar {{ param.type_info.name }},
+    {%- elif param.type_info.is_primitive -%}
+        {{ param.name.lower_camel_case }} {{ param.type_info.name }},
+    {%- elif param.type_info.is_repeated -%}
+        {{ param.name.lower_camel_case }} {{ param.type_info.name }},
+    {%- else -%}
+        {{ param.name.lower_camel_case }} *{{ param.type_info.name }},
+    {% endif %}
+{% endfor %}

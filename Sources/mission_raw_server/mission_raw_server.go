@@ -2,11 +2,11 @@ package mission_raw_server
 
 import (
 	"context"
-	"fmt"
 	"io"
+	"log"
 
 	codes "google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	status "google.golang.org/grpc/status"
 )
 
 type ServiceImpl struct {
@@ -14,12 +14,12 @@ type ServiceImpl struct {
 }
 
 /*
-   Subscribe to when a new mission is uploaded (asynchronous).
-
-
+IncomingMission Subscribe to when a new mission is uploaded (asynchronous).
 */
+func (a *ServiceImpl) IncomingMission(
+	ctx context.Context,
 
-func (a *ServiceImpl) IncomingMission(ctx context.Context) (<-chan *MissionPlan, error) {
+) (<-chan *MissionPlan, error) {
 	ch := make(chan *MissionPlan)
 	request := &SubscribeIncomingMissionRequest{}
 	stream, err := a.Client.SubscribeIncomingMission(ctx, request)
@@ -38,8 +38,7 @@ func (a *ServiceImpl) IncomingMission(ctx context.Context) (<-chan *MissionPlan,
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive IncomingMission messages, err: %v\n", err)
-				break
+				log.Fatalf("Unable to receive IncomingMission messages, err: %v", err)
 			}
 			ch <- m.GetMissionPlan()
 		}
@@ -48,12 +47,12 @@ func (a *ServiceImpl) IncomingMission(ctx context.Context) (<-chan *MissionPlan,
 }
 
 /*
-   Subscribe to when a new current item is set
-
-
+CurrentItemChanged Subscribe to when a new current item is set
 */
+func (a *ServiceImpl) CurrentItemChanged(
+	ctx context.Context,
 
-func (a *ServiceImpl) CurrentItemChanged(ctx context.Context) (<-chan *MissionItem, error) {
+) (<-chan *MissionItem, error) {
 	ch := make(chan *MissionItem)
 	request := &SubscribeCurrentItemChangedRequest{}
 	stream, err := a.Client.SubscribeCurrentItemChanged(ctx, request)
@@ -72,8 +71,7 @@ func (a *ServiceImpl) CurrentItemChanged(ctx context.Context) (<-chan *MissionIt
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive CurrentItemChanged messages, err: %v\n", err)
-				break
+				log.Fatalf("Unable to receive CurrentItemChanged messages, err: %v", err)
 			}
 			ch <- m.GetMissionItem()
 		}
@@ -82,13 +80,12 @@ func (a *ServiceImpl) CurrentItemChanged(ctx context.Context) (<-chan *MissionIt
 }
 
 /*
-   Set Current item as completed
-
-
+SetCurrentItemComplete Set Current item as completed
 */
+func (s *ServiceImpl) SetCurrentItemComplete(
+	ctx context.Context,
 
-func (s *ServiceImpl) SetCurrentItemComplete(ctx context.Context) (*SetCurrentItemCompleteResponse, error) {
-
+) (*SetCurrentItemCompleteResponse, error) {
 	request := &SetCurrentItemCompleteRequest{}
 	response, err := s.Client.SetCurrentItemComplete(ctx, request)
 	if err != nil {
@@ -98,12 +95,12 @@ func (s *ServiceImpl) SetCurrentItemComplete(ctx context.Context) (*SetCurrentIt
 }
 
 /*
-   Subscribe when a MISSION_CLEAR_ALL is received
-
-
+ClearAll Subscribe when a MISSION_CLEAR_ALL is received
 */
+func (a *ServiceImpl) ClearAll(
+	ctx context.Context,
 
-func (a *ServiceImpl) ClearAll(ctx context.Context) (<-chan uint32, error) {
+) (<-chan uint32, error) {
 	ch := make(chan uint32)
 	request := &SubscribeClearAllRequest{}
 	stream, err := a.Client.SubscribeClearAll(ctx, request)
@@ -122,8 +119,7 @@ func (a *ServiceImpl) ClearAll(ctx context.Context) (<-chan uint32, error) {
 				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
 					return
 				}
-				fmt.Printf("Unable to receive ClearAll messages, err: %v\n", err)
-				break
+				log.Fatalf("Unable to receive ClearAll messages, err: %v", err)
 			}
 			ch <- m.GetClearType()
 		}
