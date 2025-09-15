@@ -198,7 +198,7 @@ func (a *ServiceImpl) ChangedParamInt(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive ChangedParamInt messages, err: %v", err)
@@ -231,7 +231,7 @@ func (a *ServiceImpl) ChangedParamFloat(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive ChangedParamFloat messages, err: %v", err)
@@ -264,7 +264,7 @@ func (a *ServiceImpl) ChangedParamCustom(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive ChangedParamCustom messages, err: %v", err)

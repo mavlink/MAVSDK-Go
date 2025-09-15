@@ -214,7 +214,7 @@ func (a *ServiceImpl) CameraList(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive CameraList messages, err: %v", err)
@@ -247,7 +247,7 @@ func (a *ServiceImpl) Mode(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive Mode messages, err: %v", err)
@@ -298,7 +298,7 @@ func (a *ServiceImpl) VideoStreamInfo(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive VideoStreamInfo messages, err: %v", err)
@@ -349,7 +349,7 @@ func (a *ServiceImpl) CaptureInfo(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive CaptureInfo messages, err: %v", err)
@@ -382,7 +382,7 @@ func (a *ServiceImpl) Storage(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive Storage messages, err: %v", err)
@@ -433,7 +433,7 @@ func (a *ServiceImpl) CurrentSettings(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive CurrentSettings messages, err: %v", err)
@@ -484,7 +484,7 @@ func (a *ServiceImpl) PossibleSettingOptions(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive PossibleSettingOptions messages, err: %v", err)

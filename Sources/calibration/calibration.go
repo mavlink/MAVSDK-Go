@@ -35,7 +35,7 @@ func (a *ServiceImpl) CalibrateGyro(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive CalibrateGyro messages, err: %v", err)
@@ -68,7 +68,7 @@ func (a *ServiceImpl) CalibrateAccelerometer(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive CalibrateAccelerometer messages, err: %v", err)
@@ -101,7 +101,7 @@ func (a *ServiceImpl) CalibrateMagnetometer(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive CalibrateMagnetometer messages, err: %v", err)
@@ -134,7 +134,7 @@ func (a *ServiceImpl) CalibrateLevelHorizon(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive CalibrateLevelHorizon messages, err: %v", err)
@@ -167,7 +167,7 @@ func (a *ServiceImpl) CalibrateGimbalAccelerometer(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive CalibrateGimbalAccelerometer messages, err: %v", err)

@@ -35,7 +35,7 @@ func (a *ServiceImpl) IncomingMission(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive IncomingMission messages, err: %v", err)
@@ -68,7 +68,7 @@ func (a *ServiceImpl) CurrentItemChanged(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive CurrentItemChanged messages, err: %v", err)
@@ -116,7 +116,7 @@ func (a *ServiceImpl) ClearAll(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive ClearAll messages, err: %v", err)

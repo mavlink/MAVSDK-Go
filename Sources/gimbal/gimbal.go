@@ -186,7 +186,7 @@ func (a *ServiceImpl) GimbalList(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive GimbalList messages, err: %v", err)
@@ -223,7 +223,7 @@ func (a *ServiceImpl) ControlStatus(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive ControlStatus messages, err: %v", err)
@@ -276,7 +276,7 @@ func (a *ServiceImpl) Attitude(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive Attitude messages, err: %v", err)

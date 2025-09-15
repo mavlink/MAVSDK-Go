@@ -62,7 +62,7 @@ func (a *ServiceImpl) UploadMissionWithProgress(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive UploadMissionWithProgress messages, err: %v", err)
@@ -131,7 +131,7 @@ func (a *ServiceImpl) DownloadMissionWithProgress(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive DownloadMissionWithProgress messages, err: %v", err)
@@ -270,7 +270,7 @@ func (a *ServiceImpl) MissionProgress(
 				return
 			}
 			if err != nil {
-				if s, ok := status.FromError(err); ok && s.Code() == codes.Canceled {
+				if s, ok := status.FromError(err); ok && (s.Code() == codes.Canceled || s.Code() == codes.Unimplemented) {
 					return
 				}
 				log.Fatalf("Unable to receive MissionProgress messages, err: %v", err)
